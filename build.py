@@ -191,10 +191,10 @@ def write_zip(destination, items):
 
 def source_files(packs):
     result = {ROOT / "build.py", ROOT / "build.sh"}
-    for name in ("README.md", ".gitignore", ".gitattributes", "CONTRIBUTING.md", "CHANGELOG.md"):
+    for name in ("README.md", ".gitignore", ".gitattributes", ".nvmrc", "AGENTS.md", "CONTRIBUTING.md", "CHANGELOG.md"):
         if (ROOT / name).is_file():
             result.add(ROOT / name)
-    for pattern in ("docs/*.md", ".github/workflows/*.yml", ".github/workflows/*.yaml", "tests/*.cjs"):
+    for pattern in ("docs/*.md", "scripts/codex/*.sh", ".github/workflows/*.yml", ".github/workflows/*.yaml", "tests/*.cjs"):
         result.update(ROOT.glob(pattern))
     for pack in packs:
         manifest = read_manifest(pack)
