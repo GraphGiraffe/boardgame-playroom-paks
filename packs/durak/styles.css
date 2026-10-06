@@ -1,0 +1,97 @@
+.game-tile[data-game=durak]{background:#e8ded7}.durak-scene{background:#e8ecde}.playing-card{width:66px;min-width:66px;height:97px;position:relative;display:block;background:#fffcf2;border:1px solid #e2decf;border-radius:10px;box-shadow:0 5px 0 #bdc7af;color:#375f4c;cursor:pointer;padding:0;overflow:hidden}.playing-card.red-suit{color:#d97459}.playing-card .card-corner{position:absolute;top:5px;left:7px;font-size:17px;line-height:1;font-weight:900;z-index:1}.playing-card .card-corner small{display:block;font-size:12px;text-align:center;line-height:1.2;margin-top:2px}.playing-card .card-corner.bottom{top:auto;left:auto;bottom:5px;right:7px;transform:rotate(180deg)}.playing-card .card-suit{font-size:40px;line-height:1;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}.durak-stock{display:flex;gap:13px;align-items:center;justify-content:center;min-height:45px}.trump-stack{position:relative;width:74px;height:39px;margin-right:9px}.trump-stack>.playing-card{position:absolute;left:22px;top:-13px;transform:rotate(90deg) scale(.59);transform-origin:50% 50%;pointer-events:none}.trump-stack>.piece-back{width:34px;height:49px;min-width:34px;position:absolute;left:0;top:-4px;border-width:3px;border-radius:6px;box-shadow:0 3px 0 #b5c4a7}.trump-stack>.piece-back span{font-size:21px}.trump-stack>.pile-count{left:-9px;right:auto;top:-10px;font-size:9px;z-index:2}.trump-caption{font-size:10px;color:#6e8360;display:flex;gap:8px;align-items:center}.trump-caption b{font-size:22px;color:#3c6651}.trump-caption b.red-suit{color:#d8795e}.durak-table{flex:1;min-height:139px;display:flex;justify-content:center;align-items:center;align-content:center;flex-wrap:wrap;gap:20px 19px;padding:14px 10px 24px;border:1px dashed #becdaf;border-radius:22px;margin-top:4px;background:#e3e9d6}.durak-pair{position:relative;width:93px;height:110px;flex-shrink:0}.durak-pair .playing-card{width:59px;min-width:59px;height:85px;pointer-events:none}.attack-card{position:absolute;left:0;top:0;transform:rotate(-7deg)}.defense-card{position:absolute;left:29px;top:22px;transform:rotate(9deg);z-index:1}.defense-slot{position:absolute;left:32px;top:24px;width:57px;height:82px;border:1px dashed #aebf9c;border-radius:9px;pointer-events:none}.defend-target{position:absolute;left:30px;top:22px;width:61px;height:88px;border:2px dashed #5b845e;background:#f3f5dcdd;border-radius:9px;z-index:2;font-size:11px;line-height:1.6;font-weight:750;color:#4b754d;cursor:pointer}.defend-target:hover{background:#fffbe9}.durak-role{text-align:center;font-size:10px;color:#738664}.durak-empty{text-align:center;color:#8a9c78}.durak-empty>span{font-size:48px;color:#b7c8a5;line-height:1}.durak-empty p{font-size:11px;margin:9px 0 0}.durak-scene .mini-hand .playing-card .card-corner small{display:none}.durak-scene .mini-hand .playing-card .card-corner{font-size:11px!important}.durak-scene .mini-hand .playing-card .card-suit{font-size:22px!important}.durak-scene .hand-track{min-height:119px}@media(max-width:760px){.playing-card{width:60px;min-width:60px;height:88px}.playing-card .card-corner{font-size:15px;left:6px}.playing-card .card-corner small{font-size:11px}.playing-card .card-suit{font-size:34px}.durak-table{gap:16px 10px;padding:13px 4px 20px;min-height:131px;border-radius:18px}.durak-pair{width:92px;height:107px}.durak-scene .hand-track{min-height:111px}.durak-stock{min-height:39px}.durak-role{font-size:9px}}@media(max-height:710px) and (orientation:portrait){.durak-table{min-height:123px}.durak-role{display:none}.durak-stock{margin-top:3px}.durak-scene .hand-track{min-height:105px}}
+
+@media(max-width:370px){.durak-table{gap:14px 8px}.durak-pair{width:78px;height:98px}.durak-pair .playing-card{width:52px;min-width:52px;height:76px}.defense-card{left:24px;top:19px}.defense-slot{left:24px;top:19px;width:52px;height:76px}.defend-target{left:22px;top:18px;width:56px;height:78px}}
+
+/* Rank and suit share one exposed line, including two-digit ranks. */
+.durak-scene .mini-hand.is-open{--public-peek:24px;--public-row-step:16px;--public-card-width:34px;--public-card-height:46px;--public-reserve:64px}
+.durak-scene .mini-hand.is-open .playing-card .card-corner{display:flex;gap:1px;font-size:9px!important;line-height:10px}
+.durak-scene .mini-hand.is-open .playing-card .card-corner small{display:inline;margin:0;font-size:9px;line-height:10px}
+.durak-scene:has(.is-open-hand){gap:7px;padding-top:8px;padding-bottom:8px}
+@media(max-width:760px) and (max-height:710px) and (orientation:portrait){
+ .durak-scene:has(.is-open-hand){gap:3px;padding:6px 8px}
+ .durak-scene:has(.is-open-hand) .durak-stock{min-height:35px;margin-top:0}
+ .durak-scene:has(.is-open-hand) .durak-table{min-height:120px;padding:9px 4px 10px}
+}
+
+/* A bout shares a fixed-height scene with the hand; extra pairs use table space only. */
+.durak-scene{height:100%;min-height:0}
+.durak-scene .durak-table{--durak-table-min:calc(var(--durak-rows) * 64px + (var(--durak-rows) - 1) * 8px + 20px);min-height:var(--durak-table-min);display:grid;grid-template-columns:repeat(var(--durak-columns),minmax(0,77px));grid-template-rows:repeat(var(--durak-rows),minmax(0,1fr));justify-content:center;align-content:stretch;gap:8px 12px;padding:8px 6px 12px}
+.durak-scene .durak-pair{width:100%;height:100%;max-height:105px;min-height:64px;align-self:center}
+.durak-scene .durak-pair :is(.attack-card,.defense-card,.defense-slot,.defend-target){position:absolute;top:0;left:0;height:calc(100% - 20px);max-height:85px;aspect-ratio:59/85;width:auto;min-width:44px;max-width:calc(100% - 18px);transform:none}
+.durak-scene .durak-pair :is(.defense-card,.defense-slot,.defend-target){top:20px;left:18px}
+.durak-scene .durak-pair .playing-card{width:100%;min-width:0;height:100%;border-radius:7px;box-shadow:0 3px 0 #bdc7af}
+.durak-scene .durak-pair .card-corner{display:flex;align-items:center;gap:1px;left:4px;top:4px;font-size:13px;line-height:14px}
+.durak-scene .durak-pair .card-corner small{display:inline;margin:0;font-size:11px;line-height:14px}
+.durak-scene .durak-pair .card-corner.bottom{display:none}
+.durak-scene .durak-pair .card-suit{font-size:26px;top:60%}
+.durak-scene .durak-pair .defend-target{font-size:10px;line-height:1.3;border-radius:7px;padding:0}
+
+/* Put the opponent and stock side by side instead of charging two rows to the table. */
+@media(max-width:760px) and (orientation:portrait){
+ .durak-scene,.durak-scene:has(.is-open-hand){display:grid;grid-template-columns:minmax(0,1fr) 112px;grid-template-rows:auto minmax(0,1fr) auto 44px auto;gap:6px 8px;padding:8px}
+ .durak-scene>.opponent-hands{grid-column:1;grid-row:1;align-self:center}
+ .durak-scene>.durak-stock{grid-column:2;grid-row:1;display:grid;grid-template-columns:auto auto;grid-template-rows:49px 22px;gap:0 5px;min-height:0;margin:0;padding-top:5px}
+ .durak-scene .trump-stack{grid-column:1/-1;grid-row:1;align-self:center;justify-self:center;margin:0;transform:scale(.85)}
+ .durak-scene .trump-caption{font-size:9px;gap:4px}
+ .durak-scene .trump-caption b{font-size:18px}
+ .durak-scene .durak-stock .table-chip{padding:3px 5px;font-size:9px;white-space:nowrap}
+ .durak-scene .durak-table,.durak-scene:has(.is-open-hand) .durak-table{grid-column:1/-1;grid-row:2;min-height:var(--durak-table-min);margin:0;padding:6px 4px 10px;gap:6px 8px}
+ .durak-scene>.durak-role{grid-column:1/-1;grid-row:3}
+ .durak-scene>.scene-actions{grid-column:1/-1;grid-row:4;min-height:44px}
+ .durak-scene>.own-hand{grid-column:1/-1;grid-row:5;margin:0}
+}
+@media(min-width:761px) and (min-height:541px) and (max-height:650px){
+ .table-shell:has(.table-header):has(.durak-scene .is-open-hand){height:100dvh;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(170px,30%);grid-template-rows:44px minmax(0,1fr) 44px;gap:6px 12px;padding:8px 12px}
+ .table-shell:has(.durak-scene .is-open-hand) .table-header{grid-column:1;grid-row:1;min-width:0}
+ .table-shell:has(.durak-scene .is-open-hand) .table-header .icon-btn{width:44px;min-width:44px;height:44px}
+ .table-shell:has(.durak-scene .is-open-hand) .table-heading{min-width:0;gap:8px}
+ .table-shell:has(.durak-scene .is-open-hand) .table-status{grid-column:2;grid-row:1;min-width:0;min-height:44px;padding:4px 8px;gap:3px;flex-direction:column;justify-content:center}
+ .table-shell:has(.durak-scene .is-open-hand) .turn-extra{font-size:9px}
+ .table-shell:has(.durak-scene .is-open-hand) .scene{grid-column:1/-1;grid-row:2;min-height:0}
+ .table-shell:has(.durak-scene .is-open-hand) .player-strip{grid-column:1;grid-row:3;position:static;max-width:none;min-width:0;justify-content:flex-start;flex-wrap:nowrap}
+ .table-shell:has(.durak-scene .is-open-hand) .table-bottom{grid-column:2;grid-row:3;min-width:0;gap:6px}
+ .table-shell:has(.durak-scene .is-open-hand) .auto-saved{display:none}
+ .durak-scene:has(.is-open-hand){display:grid;grid-template-columns:minmax(0,1fr) 170px;grid-template-rows:auto minmax(0,1fr) auto;gap:6px 12px;height:100%;min-height:0}
+ .durak-scene:has(.is-open-hand) .opponent-hands{grid-column:1/-1;grid-row:1}
+ .durak-scene:has(.is-open-hand) .durak-table{grid-column:1;grid-row:2;margin-top:0;min-height:var(--durak-table-min)}
+ .durak-scene:has(.is-open-hand) .durak-stock{grid-column:2;grid-row:2;align-self:start;flex-wrap:wrap;gap:8px}
+ .durak-scene:has(.is-open-hand) .durak-role{grid-column:2;grid-row:2;align-self:center;line-height:1.4}
+ .durak-scene:has(.is-open-hand) .scene-actions{grid-column:2;grid-row:2;align-self:end}
+ .durak-scene:has(.is-open-hand) .own-hand{grid-column:1/-1;grid-row:3}
+}
+
+/* Keep a fixed hand height; compress gaps into overlapping, exposed rank/suit corners. */
+.durak-scene .own-hand .hand-track.is-fan{--fan-card-width:66px;--fan-card-height:97px;height:122px;min-height:122px;padding:17px 6px 8px}
+.durak-scene .own-hand .hand-card{width:var(--fan-card-width);min-width:var(--fan-card-width);height:var(--fan-card-height)}
+@media(max-width:760px){
+ .durak-scene .own-hand .hand-track.is-fan{--fan-card-width:60px;--fan-card-height:88px;height:112px;min-height:112px;padding:17px 6px 7px}
+}
+@media(max-height:710px) and (orientation:portrait){
+ .durak-scene .own-hand .hand-track.is-fan{height:105px;min-height:105px;padding:12px 6px 5px}
+ .durak-scene .own-hand .hand-track.is-fan .hand-card:is(.is-selected,:focus,.is-hand-preview){transform:translateY(-6px)!important}
+}
+@media(max-height:710px) and (orientation:portrait) and (hover:hover){
+ .durak-scene .own-hand .hand-track.is-fan .hand-card:hover{transform:translateY(-6px)}
+}
+
+/* The table and hand remain visible together when a phone is turned sideways. */
+@media(orientation:landscape) and (max-height:540px){
+ .table-shell:has(.table-header) .scene .durak-scene{height:100%;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) clamp(146px,38%,180px);grid-template-rows:44px minmax(0,1fr) 44px;gap:4px 8px;padding:4px}
+ .table-shell:has(.table-header) .scene .durak-stock{grid-column:1;grid-row:1;min-height:0;align-self:center;flex-wrap:nowrap;gap:5px}
+ .table-shell:has(.table-header) .scene .trump-stack{width:60px;margin-right:3px;transform:scale(.8);transform-origin:center}
+ .table-shell:has(.table-header) .scene .trump-caption{font-size:9px;gap:4px}
+ .table-shell:has(.table-header) .scene .trump-caption b{font-size:18px}
+ .table-shell:has(.table-header) .scene .durak-stock .table-chip{padding:4px 5px;font-size:9px}
+ .table-shell:has(.table-header) .scene .durak-table{grid-column:1;grid-row:2/4;min-height:var(--durak-table-min);height:100%;margin:0;padding:6px 4px;gap:2px 3px;align-items:center;align-content:center;border-radius:14px}
+ .table-shell:has(.table-header) .scene .durak-role{display:none}
+ .table-shell:has(.table-header) .scene .durak-scene>.opponent-hands{grid-column:2;grid-row:1;align-self:start}
+ .table-shell:has(.table-header) .scene .durak-scene .mini-hand.is-open{--public-card-height:40px;--public-reserve:44px;--public-row-step:16px}
+ .table-shell:has(.table-header) .scene .durak-scene>.own-hand{grid-column:2;grid-row:2;align-self:end;max-height:calc(100% - 16px);min-height:0;margin:16px 0 0}
+ .table-shell:has(.table-header) .scene .durak-scene .own-hand .hand-track.is-fan{--fan-card-width:56px;--fan-card-height:84px;--fan-row-step:28px;height:auto;min-height:0;padding:12px 4px 3px}
+ .table-shell:has(.table-header) .scene .durak-scene .own-hand .card-corner{display:flex;align-items:center;gap:1px;left:4px;font-size:13px;line-height:14px}
+ .table-shell:has(.table-header) .scene .durak-scene .own-hand .card-corner small{display:inline;margin:0;font-size:10px;line-height:14px}
+ .table-shell:has(.table-header) .scene .durak-scene .own-hand .card-corner.bottom{left:auto;right:4px}
+ .table-shell:has(.table-header) .scene .durak-scene>.scene-actions{grid-column:2;grid-row:3;align-self:stretch;min-height:44px;gap:4px}
+ .table-shell:has(.table-header) .scene .durak-scene>.scene-actions .scene-button{min-width:44px;min-height:44px;padding:8px 6px}
+ .table-shell:has(.table-header) .scene .durak-scene .scene-hint{font-size:9px;line-height:1.3}
+}
