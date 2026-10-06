@@ -1,0 +1,138 @@
+/* Use the desktop's width for table chrome, keeping the field in the viewport. */
+@media(min-width:560px) and (orientation:landscape){
+ .table-shell:has(.table-header):has(.domino-scene){height:100dvh;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(160px,30%);grid-template-rows:44px minmax(0,1fr) 44px;gap:8px 14px;padding:10px 14px}
+ .table-shell:has(.table-header):has(.domino-scene) .table-header{grid-column:1;grid-row:1;min-width:0;flex-wrap:nowrap}
+ .table-shell:has(.table-header):has(.domino-scene) .table-heading{flex:1;min-width:0;gap:8px}
+ .table-shell:has(.table-header):has(.domino-scene) .table-title p{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .table-shell:has(.table-header):has(.domino-scene) .table-tools{gap:4px}
+ .table-shell:has(.table-header):has(.domino-scene) .table-header .icon-btn{width:40px;min-width:40px;height:40px}
+ .table-shell:has(.table-header):has(.domino-scene) .table-status{grid-column:2;grid-row:1;min-height:44px;min-width:0;padding:4px 9px;gap:3px;flex-direction:column;justify-content:center}
+ .table-shell:has(.table-header):has(.domino-scene) .turn-label{font-size:11px}.table-shell:has(.table-header):has(.domino-scene) .turn-extra{font-size:9px}
+ .table-shell:has(.table-header):has(.domino-scene) .scene{grid-column:1/-1;grid-row:2;min-height:0}
+ .table-shell:has(.table-header):has(.domino-scene) .player-strip{grid-column:1;grid-row:3;position:static;max-width:none;justify-content:flex-start;flex-wrap:nowrap;min-width:0;gap:4px}
+ .table-shell:has(.table-header):has(.domino-scene) .player-token{min-width:0;max-width:48%;padding:4px 7px;font-size:10px}.table-shell:has(.table-header):has(.domino-scene) .player-token>span:last-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ .table-shell:has(.table-header):has(.domino-scene) .table-bottom{grid-column:2;grid-row:3;min-width:0;gap:8px}.table-shell:has(.table-header):has(.domino-scene) .table-bottom .text-btn{padding:5px 0;min-height:40px}
+ .table-shell:has(.table-header):has(.domino-scene) .auto-saved{display:none}
+ .table-shell:has(.table-header):has(.domino-scene) .history-panel{position:fixed;bottom:60px;left:10%;right:10%;z-index:15;box-shadow:0 10px 30px #20352d30}
+}
+@media(min-width:560px) and (max-height:500px) and (orientation:landscape){.table-shell:has(.table-header):has(.domino-scene){gap:6px 10px;padding:8px 10px}}
+
+
+.game-tile[data-game=domino]{background:#e8e4d9}
+.domino-scene{background:#e5e9d8}
+.domino-board{flex:1;min-height:128px;display:flex;flex-direction:column;justify-content:center;position:relative;min-width:0;border:1px dashed #bfccad;border-radius:24px;background:#e9eddd;margin:3px 0;padding:15px 7px 9px}
+.domino-play-row{width:100%;min-width:0}
+.domino-chain{--domino-row-height:62px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(var(--domino-rows),var(--domino-row-height));position:relative;width:100%;max-width:440px;margin:0 auto;min-width:0;overflow:visible}
+.domino-chain>.domino-connections{position:absolute;inset:0;width:100%;height:100%;overflow:hidden;pointer-events:none}
+.domino-connections path{fill:none;stroke:#aec099;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.domino-node{position:relative;z-index:1;min-width:0;display:flex;align-items:center;justify-content:center}
+.domino-tile{height:98px;width:56px;min-width:56px;background:#fffcf0;border:1px solid #e5deca;box-shadow:0 4px 0 #c4c7b3;border-radius:8px;padding:7px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;cursor:pointer;box-sizing:border-box}
+.domino-half{width:33px;height:33px;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:3px;flex-shrink:0}
+.domino-half i{border-radius:50%;background:none;width:100%;height:100%;min-width:0;min-height:0}
+.domino-half .pip{background:#365f4c}
+.domino-divider{height:1px;background:#dedcca;width:100%;display:block;flex-shrink:0}
+.domino-node>.domino-tile{width:calc(100% - 10px);max-width:68px;min-width:0;height:36px;flex-direction:row;padding:4px;pointer-events:none;gap:3px;box-shadow:0 3px 0 #c4c7b3}
+.domino-node>.domino-tile .domino-half{width:calc((100% - 7px)/2);height:auto;aspect-ratio:1;max-width:26px;gap:2px}
+.domino-node>.domino-tile .domino-divider{height:100%;width:1px}
+.domino-node>.domino-tile.double{width:32px;height:54px;flex-direction:column;gap:2px}
+.domino-node>.domino-tile.double .domino-half{width:100%;max-width:20px}
+.domino-node>.domino-tile.double .domino-divider{height:1px;width:100%}
+.domino-node.reverse>.domino-tile:not(.double),.domino-node.reverse .domino-preview:not(.double){flex-direction:row-reverse}
+.domino-end-slot{position:relative;min-width:0;display:flex;align-items:center;justify-content:center;width:100%}
+.domino-end-label{position:absolute;left:50%;top:-12px;transform:translateX(-50%);white-space:nowrap;font-size:9px;line-height:12px;color:#637b53;background:#e9eddd;padding:0 3px;border-radius:4px;pointer-events:none}
+.domino-end-label b{font-size:11px;color:#345d3e}
+.domino-drop-target,.domino-drop-placeholder{width:48px;height:48px;min-width:44px;min-height:44px;border:1px dashed #8baa72;border-radius:10px;background:#f2f5e2;color:#456b45;display:flex;align-items:center;justify-content:center;padding:2px;box-sizing:border-box;flex-shrink:0}
+.domino-drop-target{cursor:pointer;box-shadow:inset 0 0 0 2px #fff9e870}
+.domino-drop-target:hover,.domino-drop-target:focus-visible,.domino-drop-target.is-drop-target{background:#d7e9bb;border-color:#436e43;box-shadow:inset 0 0 0 2px #9dbb81}
+.domino-drop-placeholder{border-color:#c5d1b4;background:#e9eddd;color:#a3b48e}
+.domino-drop-placeholder>span{font-size:22px;line-height:1;font-weight:300}
+.domino-drop-target .domino-preview{width:40px;min-width:0;height:25px;flex-direction:row;padding:3px;gap:2px;border-color:#bdcba9;background:#fffced;box-shadow:0 2px 0 #c0cdab99;opacity:.85;pointer-events:none;border-radius:5px}
+.domino-preview .domino-half{width:14px;height:14px;gap:1px}
+.domino-preview .domino-divider{width:1px;height:100%;background:#c5d2b3}
+.domino-drop-target .domino-preview.double{width:24px;height:38px;flex-direction:column}
+.domino-preview.double .domino-divider{width:100%;height:1px}
+.domino-drop-caption{display:none}
+.domino-opening{display:flex;align-items:center;flex-direction:column;justify-content:center;min-height:110px}
+.domino-opening>.domino-drop-target,.domino-opening>.domino-drop-placeholder{width:72px;height:60px}
+.domino-opening p{font-size:10px;line-height:1.4;max-width:260px;text-align:center;margin:10px 0 0;color:#819170}
+.domino-scene .mini-hand .domino-tile{padding:3px}
+.domino-scene .mini-hand .domino-half{width:13px;height:13px;gap:1px}
+.domino-scene .mini-hand .domino-divider{margin:2px 0}
+.domino-scene .piece-back{background:#53705d}
+.domino-scene .mini-hand .piece-back{width:23px!important;min-width:23px!important;margin-left:-8px!important}
+.domino-scene .hand-track{gap:12px}
+.domino-hand-fit .hand-track{display:grid;grid-template-columns:repeat(var(--domino-hand-count),minmax(0,1fr));gap:5px;overflow:visible;scroll-snap-type:none;width:100%;max-width:440px;min-height:94px;padding:10px 4px}
+.domino-hand-fit .hand-track:before,.domino-hand-fit .hand-track:after{display:none}
+.domino-hand-fit .hand-track>.domino-tile{width:100%;max-width:48px;min-width:0;height:74px;padding:5px;justify-self:center}
+.domino-hand-fit .hand-track .domino-half{width:100%;max-width:26px;height:auto;aspect-ratio:1;gap:2px}
+.domino-tile:disabled{opacity:1;cursor:default}
+@media(max-width:760px){.domino-board{min-height:116px;padding:14px 4px 6px;border-radius:16px}.domino-chain{--domino-row-height:52px;max-width:360px}.domino-node>.domino-tile{height:32px;max-width:58px;padding:3px;gap:2px}.domino-node>.domino-tile .domino-half{width:calc((100% - 5px)/2);max-width:24px;gap:1.5px}.domino-node>.domino-tile.double{width:28px;height:44px;padding:3px}.domino-node>.domino-tile.double .domino-half{max-width:17px}.domino-drop-target,.domino-drop-placeholder{width:44px;height:44px}.domino-end-label{top:-10px;font-size:8px;line-height:10px}.domino-end-label b{font-size:10px}.domino-hand-fit .hand-track{min-height:82px;gap:4px;padding:9px 4px}.domino-hand-fit .hand-track>.domino-tile{height:64px;max-width:42px;padding:4px}.domino-hand-fit .hand-track .domino-half{max-width:23px;gap:1.5px}.domino-opening{min-height:94px}}
+@media(max-width:370px){.domino-chain{--domino-row-height:48px}.domino-node>.domino-tile{width:calc(100% - 8px);height:28px;border-radius:5px}.domino-node>.domino-tile.double{width:26px;height:42px}.domino-chain-long{--domino-row-height:44px}.domino-chain-long .domino-end-label{top:-9px}.domino-hand-fit .hand-track{gap:3px}}
+
+.domino-node{grid-row:var(--node-row);grid-column:var(--node-column)}
+.domino-chain>.domino-connections-wide{display:none}
+/* A side tray leaves the full height available to a wider folded chain. */
+@media(min-width:560px) and (orientation:landscape){
+ .table-shell:has(.table-header) .domino-scene{height:100%;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 200px;grid-template-rows:auto auto minmax(0,1fr) auto;gap:6px 12px;padding:10px 12px}
+ .table-shell:has(.table-header) .domino-scene>.domino-board{grid-column:1;grid-row:1/5;min-height:0;height:100%;margin:0;padding:14px 7px 38px;border-radius:18px}
+ .table-shell:has(.table-header) .domino-scene>.opponent-hands{grid-column:2;grid-row:1;gap:6px}
+ .table-shell:has(.table-header) .domino-scene>.scene-meta{grid-column:1;grid-row:4;align-self:end;justify-self:center;z-index:2;margin-bottom:6px;gap:5px}
+ .table-shell:has(.table-header) .domino-scene>.scene-meta .table-chip{padding:5px 7px;font-size:9px}
+ .table-shell:has(.table-header) .domino-scene>.scene-actions{grid-column:2;grid-row:4;min-height:44px}
+ .table-shell:has(.table-header) .domino-scene>.own-hand{grid-column:2;grid-row:3;align-self:end;margin:0}
+ .table-shell:has(.table-header) .domino-scene .hand-heading{margin-bottom:3px}.table-shell:has(.table-header) .domino-scene .hand-heading>span{display:none}
+ .table-shell:has(.table-header) .domino-scene .opponent-label{font-size:10px;margin-bottom:3px}.table-shell:has(.table-header) .domino-scene .mini-hand:not(.is-open){height:32px;padding-bottom:2px}.table-shell:has(.table-header) .domino-scene .mini-hand:not(.is-open)>*{height:29px!important;min-height:29px!important;width:22px!important;min-width:22px!important;border-width:2px!important}
+ .table-shell:has(.table-header) .domino-scene .mini-hand .domino-tile{padding:2px}.table-shell:has(.table-header) .domino-scene .mini-hand .domino-half{width:10px;height:10px;gap:1px}
+ .table-shell:has(.table-header) .domino-chain{--domino-row-height:44px;grid-template-columns:repeat(7,minmax(0,1fr));grid-template-rows:repeat(var(--domino-wide-rows),var(--domino-row-height));max-width:680px}
+ .table-shell:has(.table-header) .domino-node{grid-row:var(--node-wide-row);grid-column:var(--node-wide-column)}
+ .table-shell:has(.table-header) .domino-chain>.domino-connections-normal{display:none}.table-shell:has(.table-header) .domino-chain>.domino-connections-wide{display:block}
+ .table-shell:has(.table-header) .domino-scene .domino-chain .domino-node>.domino-tile:not(.double),.table-shell:has(.table-header) .domino-scene .domino-node .domino-preview:not(.double){flex-direction:var(--node-wide-direction)}
+ .table-shell:has(.table-header) .domino-node>.domino-tile{height:30px;padding:3px;gap:2px}.table-shell:has(.table-header) .domino-node>.domino-tile .domino-half{max-width:22px;gap:1.5px}.table-shell:has(.table-header) .domino-node>.domino-tile.double{width:28px;height:44px;padding:3px;gap:2px}.table-shell:has(.table-header) .domino-node>.domino-tile.double .domino-half{max-width:17px}
+ .table-shell:has(.table-header) .domino-drop-target,.table-shell:has(.table-header) .domino-drop-placeholder{width:44px;height:44px}.table-shell:has(.table-header) .domino-end-label{top:-10px;font-size:8px;line-height:10px}
+ .table-shell:has(.table-header) .domino-hand-fit .hand-track{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;min-height:0;padding:5px 2px;overflow:visible}
+ .table-shell:has(.table-header) .domino-hand-fit .hand-track>.domino-tile{height:64px;max-width:44px;padding:4px}.table-shell:has(.table-header) .domino-hand-fit .hand-track .domino-half{max-width:18px;gap:1.5px}
+ .table-shell:has(.table-header) .domino-scene:not(.domino-hand-fit) .hand-track{min-height:94px;padding:8px 4px;max-width:100%;gap:7px}.table-shell:has(.table-header) .domino-scene:not(.domino-hand-fit) .hand-track>.domino-tile{width:44px;min-width:44px;height:76px;padding:5px}.table-shell:has(.table-header) .domino-scene:not(.domino-hand-fit) .hand-track .domino-half{width:26px;height:26px}
+}
+
+/* Both ends remain readable in the exposed corner of each public domino. */
+.domino-scene .mini-hand.is-open{--public-card-width:30px;--public-card-height:48px;--public-peek:22px;--public-row-step:18px;--public-reserve:64px}
+.domino-scene .mini-hand.is-open .public-card>.domino-tile{padding:12px 3px 3px}
+.domino-scene .mini-hand.is-open .public-card .domino-half{width:12px;height:12px;gap:1px}
+.domino-scene .mini-hand.is-open .public-card .domino-divider{margin:1px 0}
+@media(min-width:560px) and (orientation:landscape){
+ .table-shell:has(.table-header) .domino-scene:has(.is-open-hand){grid-template-rows:auto minmax(0,1fr) auto auto}
+ .table-shell:has(.table-header) .domino-scene:has(.is-open-hand)>.opponent-hands{grid-column:1;grid-row:1}
+ .table-shell:has(.table-header) .domino-scene:has(.is-open-hand)>.domino-board{grid-row:2/5}
+ .table-shell:has(.table-header) .domino-scene:has(.is-open-hand)>.own-hand{grid-row:1/4}
+}
+
+@media(orientation:landscape) and (max-height:540px){
+ .table-shell:has(.table-header) .scene .domino-scene{--landscape-tray:clamp(160px,35%,186px);height:100%;min-height:0;position:relative;display:grid;grid-template-columns:minmax(0,1fr) var(--landscape-tray);grid-template-rows:auto minmax(0,1fr) 44px;gap:4px 8px;padding:4px}
+ .table-shell:has(.table-header) .scene .domino-scene>.opponent-hands{grid-column:1;grid-row:1;align-self:start}
+ .table-shell:has(.table-header) .scene .domino-scene>.domino-board{grid-column:1;grid-row:2/4;height:100%;min-height:0;margin:0;padding:12px 4px 24px;border-radius:14px}
+ .table-shell:has(.table-header) .scene .domino-scene>.scene-meta{grid-column:1;grid-row:3;align-self:end;margin-bottom:2px;gap:3px}
+ .table-shell:has(.table-header) .scene .domino-scene .table-chip{padding:3px 5px;font-size:8px}
+ .table-shell:has(.table-header) .scene .domino-scene>.own-hand{grid-column:2;grid-row:1/3;align-self:end;min-height:0;margin:0}
+ .table-shell:has(.table-header) .scene .domino-scene>.scene-actions{grid-column:2;grid-row:3;min-height:44px;align-self:stretch;gap:3px}
+ .table-shell:has(.table-header) .scene .domino-scene .scene-actions .scene-button{min-height:44px;padding:8px 6px}
+ .table-shell:has(.table-header) .scene .domino-scene .scene-hint{font-size:9px;line-height:1.3}
+ .table-shell:has(.table-header) .scene .domino-scene .mini-hand.is-open{--public-card-height:44px;--public-row-step:16px;--public-peek:20px;--public-reserve:48px}
+ .table-shell:has(.table-header) .scene .domino-scene .hand-track{display:flex;gap:4px;width:100%;max-width:100%;min-height:80px;height:80px;padding:12px 4px 8px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+ .table-shell:has(.table-header) .scene .domino-scene .hand-track:before,.table-shell:has(.table-header) .scene .domino-scene .hand-track:after{display:none}
+ .table-shell:has(.table-header) .scene .domino-scene .hand-track>.domino-tile{width:34px;min-width:34px;max-width:34px;height:60px;padding:4px}
+ .table-shell:has(.table-header) .scene .domino-scene .hand-track .domino-half{width:23px;height:23px;max-width:23px;gap:1.5px}
+ .table-shell:has(.table-header) .scene .domino-hand-fit .hand-track{display:grid;grid-template-columns:repeat(4,minmax(32px,1fr));height:auto;min-height:0;gap:2px 4px;padding:12px 4px 4px;overflow:visible}
+ .table-shell:has(.table-header) .scene .domino-hand-fit .hand-heading{height:12px;min-height:12px;line-height:12px;margin-bottom:1px}
+ .table-shell:has(.table-header) .scene .domino-hand-fit .hand-heading strong{font-size:10px;line-height:12px}
+ .table-shell:has(.table-header) .scene .domino-scene:has(.domino-chain-long){grid-template-rows:auto minmax(0,1fr) 16px}
+ .table-shell:has(.table-header) .scene .domino-scene:has(.domino-chain-long)>.domino-board{grid-row:1/4}
+ .table-shell:has(.table-header) .scene .domino-scene:has(.domino-chain-long)>.opponent-hands{grid-column:2;grid-row:1}
+ .table-shell:has(.table-header) .scene .domino-scene:has(.domino-chain-long)>.own-hand{grid-row:2;align-self:end}
+ .table-shell:has(.table-header) .scene .domino-scene:has(.domino-chain-long)>.scene-actions{position:absolute;left:4px;bottom:23px;width:calc(100% - var(--landscape-tray) - 16px)}
+ .table-shell:has(.table-header) .scene .domino-scene:has(.domino-chain-long)>.scene-actions:not(:has(button)){display:none}
+ .table-shell:has(.table-header) .scene .domino-scene:has(.domino-chain-long):has(>.scene-actions button)>.domino-board{padding-bottom:68px}
+ .table-shell:has(.table-header) .scene .domino-scene:has(.domino-chain-long) .table-chip{padding-block:2px}
+ .table-shell:has(.table-header) .scene .domino-opening{min-height:0;height:100%}
+ .table-shell:has(.table-header) .scene .domino-opening>.domino-drop-target,.table-shell:has(.table-header) .scene .domino-opening>.domino-drop-placeholder{width:60px;height:44px}
+ .table-shell:has(.table-header) .scene .domino-opening p{margin-top:5px;font-size:9px}
+}

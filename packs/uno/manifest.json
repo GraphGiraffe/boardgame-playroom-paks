@@ -1,0 +1,35 @@
+{
+  "id": "uno",
+  "version": "0.1.0",
+  "category": "cards",
+  "estimatedDuration": "10–20 мин",
+  "tagline": "Цвет меняется. Азарт остаётся.",
+  "badge": "БЫСТРЫЙ СТАРТ",
+  "capabilities": {
+    "hands": true
+  },
+  "rules": "rules.js",
+  "view": "view.js",
+  "styles": "styles.css",
+  "settings": [
+    {
+      "key": "unoMode",
+      "label": "Объявление UNO",
+      "default": "manual",
+      "options": [
+        {
+          "value": "manual",
+          "label": "Вручную · можно ошибаться"
+        },
+        {
+          "value": "auto",
+          "label": "Автоматически"
+        }
+      ]
+    }
+  ],
+  "name": "UNO",
+  "engineApi": 1,
+  "stateVersion": 1,
+  "sounds": "sounds.js"
+}

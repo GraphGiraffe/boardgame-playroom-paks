@@ -1,0 +1,17 @@
+{
+  "id": "snakes",
+  "version": "0.1.0",
+  "category": "board",
+  "estimatedDuration": "5–15 мин",
+  "tagline": "Вверх по лестнице. Навстречу удаче.",
+  "badge": "НА УДАЧУ",
+  "capabilities": {
+    "hands": false
+  },
+  "rules": "rules.js",
+  "view": "view.js",
+  "styles": "styles.css",
+  "name": "Змеи и лестницы",
+  "engineApi": 1,
+  "stateVersion": 1
+}
