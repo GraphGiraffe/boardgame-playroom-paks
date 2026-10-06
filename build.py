@@ -1,0 +1,244 @@
+#!/usr/bin/env python3
+"""Собрать переносимые паки Playroom: JSON, коллекцию ZIP и исходники."""
+
+import argparse
+import base64
+import hashlib
+import json
+import mimetypes
+from pathlib import Path, PurePosixPath
+import re
+import zipfile
+
+
+ROOT = Path(__file__).resolve().parent
+VERSION = "0.1.0"
+# Portable format 1: keep these checks aligned with core/packs.js.
+MAX_PACK_BYTES = 4 * 1024 * 1024
+MAX_PACK_FILES = 128
+MAX_SAFE_INTEGER = 9007199254740991
+TEXT_EXTENSIONS = {".css", ".js", ".json", ".md", ".svg", ".txt"}
+ID = re.compile(r"[a-z][a-z0-9_-]{0,63}", re.ASCII)
+SEMVER = re.compile(
+    r"(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)"
+    r"(?:-((?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*)"
+    r"(?:\.(?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*))*))?"
+    r"(?:\+([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?", re.ASCII)
+DATA_URL = re.compile(
+    r"data:(?:(?:image|audio|font)/[\w.+-]+|application/(?:octet-stream|json|font-[\w-]+))"
+    r"(?:;[\w=.+-]+)*(?:;base64)?,", re.IGNORECASE | re.ASCII)
+PACK_ASSET_URL = re.compile(r"url\(\s*(?:(['\"])(.*?)\1|([^)]*))\s*\)", re.IGNORECASE | re.DOTALL)
+ENTRY_POINTS = {"rules": "rules.js", "view": "view.js", "styles": "styles.css"}
+
+
+def json_text(value):
+    return json.dumps(value, ensure_ascii=False, separators=(",", ":"), allow_nan=False) + "\n"
+
+
+def parse_json(text):
+    def invalid_constant(value):
+        raise ValueError(f"Недопустимое значение JSON: {value}")
+    return json.loads(text, parse_constant=invalid_constant)
+
+
+def path_ok(name):
+    return (isinstance(name, str) and len(name) <= 180 and not name.startswith("/") and "\\" not in name
+            and all(part not in {"", ".", ".."} and re.fullmatch(r"[A-Za-z0-9_. -]+", part)
+                    for part in name.split("/")))
+
+
+def number_equals(value, expected):
+    return type(value) in (int, float) and value == expected
+
+
+def js_trim(value):
+    return value.strip("\u0009\u000a\u000b\u000c\u000d\u0020\u00a0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u2028\u2029\u202f\u205f\u3000\ufeff")
+
+
+def validate_manifest(manifest, label):
+    if not isinstance(manifest, dict):
+        raise ValueError(f"Нет manifest: {label}")
+    ident, version = manifest.get("id"), manifest.get("version")
+    if not isinstance(ident, str) or not ID.fullmatch(ident) or not isinstance(version, str) or not SEMVER.fullmatch(version):
+        raise ValueError(f"Некорректные ID/версия пака: {label}")
+    state = manifest.get("stateVersion")
+    if (not number_equals(manifest.get("engineApi"), 1) or type(state) not in (int, float)
+            or not 1 <= state <= MAX_SAFE_INTEGER or int(state) != state):
+        raise ValueError(f"Неподдерживаемый API/состояние пака: {label}")
+    name = manifest.get("name")
+    if not isinstance(name, str) or not js_trim(name) or len(name.encode("utf-16-le", "surrogatepass")) // 2 > 120:
+        raise ValueError(f"Нет названия пака или оно длиннее 120 символов: {label}")
+    for key, filename in {**ENTRY_POINTS, "sounds": "sounds.js"}.items():
+        if key in manifest and manifest[key] != filename:
+            raise ValueError(f"Неподдерживаемая точка входа {key}: {label}")
+    return manifest
+
+
+def validate_asset(files, name):
+    if not path_ok(name) or name not in files:
+        raise ValueError(f"Ресурс отсутствует в паке: {name}")
+    value = files[name]
+    if re.match(r"data:", value, re.IGNORECASE):
+        if not DATA_URL.match(value):
+            raise ValueError(f"Неподдерживаемый встроенный ресурс: {name}")
+    elif Path(name).suffix.lower() not in TEXT_EXTENSIONS:
+        raise ValueError(f"Двоичный ресурс должен быть data URL: {name}")
+
+
+def validate_bundle(bundle, label, raw=None):
+    text = json_text(bundle) if raw is None else raw
+    if len(text.encode("utf-8")) > MAX_PACK_BYTES:
+        raise ValueError(f"Пак больше 4 MiB: {label}")
+    if not isinstance(bundle, dict) or bundle.get("format") != "playroom-pack" or not number_equals(bundle.get("formatVersion"), 1):
+        raise ValueError(f"Некорректный формат пака: {label}")
+    manifest = validate_manifest(bundle.get("manifest"), label)
+    files = bundle.get("files")
+    if not isinstance(files, dict) or len(files) > MAX_PACK_FILES:
+        raise ValueError(f"Нет files или в паке больше 128 файлов: {label}")
+    for name, value in files.items():
+        if not path_ok(name) or not isinstance(value, str):
+            raise ValueError(f"Недопустимый файл пака: {label}")
+        if Path(name).suffix.lower() not in TEXT_EXTENSIONS:
+            validate_asset(files, name)
+    for key, filename in ENTRY_POINTS.items():
+        if filename not in files or not js_trim(files[filename]):
+            raise ValueError(f"Нет {filename} в паке: {label}")
+    if manifest.get("sounds") and not files.get("sounds.js"):
+        raise ValueError(f"Нет sounds.js в паке: {label}")
+    css = files["styles.css"]
+    uncommented = re.sub(r"/\*[\s\S]*?\*/", "", css)
+    if re.search(r"@import\b|expression\s*\(", uncommented, re.IGNORECASE):
+        raise ValueError(f"CSS пака не должен загружать внешние стили: {label}")
+    for match in PACK_ASSET_URL.finditer(css):
+        url = js_trim(match.group(2) if match.group(1) else match.group(3))
+        if url.startswith("#"):
+            continue
+        if re.match(r"data:", url, re.IGNORECASE):
+            if not re.match(r"data:(?:image|font|application)/", url, re.IGNORECASE):
+                raise ValueError(f"Неподдерживаемый CSS ресурс: {label}")
+        else:
+            validate_asset(files, url[2:] if url.startswith("./") else url)
+    return bundle
+
+
+
+def local_file(root, name):
+    path = PurePosixPath(name)
+    if not path_ok(name):
+        raise ValueError(f"Недопустимый путь пака: {name!r}")
+    result = root.joinpath(*path.parts)
+    if result.is_symlink() or not result.is_file() or not result.resolve().is_relative_to(root.resolve()):
+        raise ValueError(f"Нет локального файла пака: {name}")
+    return result
+
+
+def read_manifest(pack):
+    manifest = validate_manifest(parse_json(local_file(pack, "manifest.json").read_text(encoding="utf-8")), pack.name)
+    if manifest["id"] != pack.name:
+        raise ValueError(f"ID и имя папки различаются: {pack.name}")
+    for filename in ENTRY_POINTS.values():
+        local_file(pack, filename)
+    if manifest.get("sounds"):
+        local_file(pack, "sounds.js")
+    return manifest
+
+
+def pack_files(pack, manifest):
+    files = {local_file(pack, filename) for filename in ENTRY_POINTS.values()}
+    if manifest.get("sounds") or (pack / "sounds.js").is_file():
+        files.add(local_file(pack, "sounds.js"))
+    for folder in ("assets", "config"):
+        if (pack / folder).is_dir():
+            for path in (pack / folder).rglob("*"):
+                if path.is_file():
+                    files.add(local_file(pack, path.relative_to(pack).as_posix()))
+    for path in pack.glob("*.json"):
+        if path.name != "manifest.json":
+            files.add(local_file(pack, path.name))
+    return sorted(files)
+
+
+def build_pack(pack):
+    manifest = read_manifest(pack)
+    files = {}
+    for path in pack_files(pack, manifest):
+        if path.suffix.lower() in TEXT_EXTENSIONS:
+            value = path.read_text(encoding="utf-8")
+        else:
+            mime = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
+            value = f"data:{mime};base64," + base64.b64encode(path.read_bytes()).decode("ascii")
+        files[path.relative_to(pack).as_posix()] = value
+    return validate_bundle({"format": "playroom-pack", "formatVersion": 1, "manifest": manifest, "files": files}, pack.name)
+
+
+def compatibility_manifest(manifest):
+    data = json.dumps(manifest, ensure_ascii=False, indent=2)
+    key = json.dumps(manifest["id"])
+    return ("// Generated by build.py from manifest.json. Edit manifest.json instead.\n"
+            "(function (root) {\n  'use strict';\n  root.PlayroomCatalog ||= {};\n"
+            f"  root.PlayroomCatalog[{key}] = {data};\n}})(globalThis);\n")
+
+
+def write_zip(destination, items):
+    """Stable timestamps and ordering make repeated builds reproducible."""
+    with zipfile.ZipFile(destination, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        for name, content in sorted(items):
+            info = zipfile.ZipInfo(name, (2020, 1, 1, 0, 0, 0))
+            info.compress_type = zipfile.ZIP_DEFLATED
+            info.external_attr = (0o100755 if name.endswith(".sh") else 0o100644) << 16
+            archive.writestr(info, content)
+
+
+def source_files(packs):
+    result = {ROOT / "build.py", ROOT / "build.sh"}
+    for name in ("README.md", ".gitignore", ".gitattributes", "CONTRIBUTING.md", "CHANGELOG.md"):
+        if (ROOT / name).is_file():
+            result.add(ROOT / name)
+    for pattern in ("docs/*.md", ".github/workflows/*.yml", ".github/workflows/*.yaml", "tests/*.cjs"):
+        result.update(ROOT.glob(pattern))
+    for pack in packs:
+        manifest = read_manifest(pack)
+        result.update(pack_files(pack, manifest))
+        result.update(pack / name for name in ("manifest.json", "manifest.js"))
+    for path in sorted(result):
+        if path.is_symlink() or not path.is_file() or not path.resolve().is_relative_to(ROOT):
+            raise ValueError(f"Неподдерживаемый исходный файл: {path}")
+        yield path
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output-dir", type=Path, default=ROOT / "dist", help="Каталог результата (по умолчанию: dist/ рядом со скриптом)")
+    args = parser.parse_args()
+    packs = sorted(path.parent for path in (ROOT / "packs").glob("*/manifest.json"))
+    if not packs:
+        parser.error("В packs/ не найдено manifest.json")
+    bundles = [build_pack(pack) for pack in packs]
+    output = args.output_dir.resolve()
+    output.mkdir(parents=True, exist_ok=True)
+    artifacts = []
+    for pack, bundle in zip(packs, bundles):
+        wrapper = compatibility_manifest(bundle["manifest"])
+        target = pack / "manifest.js"
+        if not target.is_file() or target.read_text(encoding="utf-8") != wrapper:
+            target.write_text(wrapper, encoding="utf-8")
+        destination = output / f"{bundle['manifest']['id']}-{bundle['manifest']['version']}.playroom-pack.json"
+        destination.write_text(json_text(bundle), encoding="utf-8")
+        artifacts.append(destination)
+    collection = output / f"playroom-paks-{VERSION}.zip"
+    write_zip(collection, [(path.name, path.read_bytes()) for path in artifacts])
+    source = output / "playroom-paks-source.zip"
+    write_zip(source, [("playroom-paks/" + path.relative_to(ROOT).as_posix(), path.read_bytes()) for path in source_files(packs)])
+    artifacts.extend([collection, source])
+    checksums = output / "SHA256SUMS"
+    checksums.write_text("".join(f"{hashlib.sha256(path.read_bytes()).hexdigest()}  {path.name}\n" for path in sorted(artifacts)), encoding="ascii")
+    print(f"Паки: {len(bundles)} файлов *.playroom-pack.json в {output}")
+    print(f"Коллекция: {collection.name}; исходники: {source.name}; контрольные суммы: {checksums.name}")
+    print("В Playroom откройте управление играми и выберите нужные JSON-файлы паков.")
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except (ValueError, OSError) as error:
+        raise SystemExit(f"Ошибка сборки: {error}") from error
