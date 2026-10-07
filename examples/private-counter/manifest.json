@@ -1,0 +1,11 @@
+{
+  "id": "private-counter",
+  "name": "Учебный счётчик",
+  "version": "0.1.0",
+  "engineApi": 1,
+  "stateVersion": 1,
+  "rules": "rules.js",
+  "view": "view.js",
+  "styles": "styles.css",
+  "capabilities": {"surfaces": ["combined", "table", "player"]}
+}

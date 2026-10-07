@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["durak"] = {
   "id": "durak",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Козырь ещё пригодится.",

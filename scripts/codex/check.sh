@@ -47,12 +47,19 @@ from pathlib import Path
 import subprocess
 import sys
 
-scripts = sorted((Path(sys.argv[1]) / "packs").rglob("*.js"))
+scripts = sorted((Path(sys.argv[1]) / "packs").rglob("*.js")) + sorted((Path(sys.argv[1]) / "examples").rglob("*.js"))
 if not scripts:
     raise SystemExit("No pack JavaScript files found")
 for script in scripts:
     subprocess.run(["node", "--check", str(script)], check=True)
 print(f"JavaScript syntax: {len(scripts)} files checked.")
+import importlib.util
+spec = importlib.util.spec_from_file_location("pack_build", Path(sys.argv[1]) / "build.py")
+module = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(module)
+for manifest in sorted((Path(sys.argv[1]) / "examples").glob("*/manifest.json")):
+    module.build_pack(manifest.parent)
+    print(f"Example bundle validated: {manifest.parent.name}")
 PY
 
 bash "$repo_dir/build.sh"

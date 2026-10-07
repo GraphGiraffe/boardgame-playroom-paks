@@ -157,7 +157,7 @@
         E.finish(s, actor, `${name} побеждает: ${points} очков`, points);
       }
     },
-    project(out, viewer) { if (viewer !== out.turn) out.data.drawn = out.data.drawn == null ? null : true; },
+    project(out, viewer) { if(out.data.uno)delete out.data.uno.pending; if (viewer !== out.turn) out.data.drawn = out.data.drawn == null ? null : true; },
     botReaction(s, actor, actions) {
       const u = unoState(s);
       if (s.data.hands[actor].length === 1 && !u.declared[actor]) return actions.find(a => a.type === 'declare-uno');

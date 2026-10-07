@@ -60,3 +60,20 @@ npm test
 Действующий формат описан в [PACK-FORMAT.md приложения](https://github.com/GraphGiraffe/boardgame-playroom/blob/main/docs/PACK-FORMAT.md), механики — в [PACKS.md](https://github.com/GraphGiraffe/boardgame-playroom/blob/main/docs/PACKS.md). Подробный учебник, шаблон, рекомендации по адаптивной сцене, форматам и стилистике ассетов [запланированы отдельно](https://github.com/GraphGiraffe/boardgame-playroom/blob/main/docs/AUTHORING-PLAN.md).
 
 Порядок работы с ветками и релизами: [CONTRIBUTING.md](CONTRIBUTING.md).
+
+
+## Следующий блок: preview для телефона и ПК
+
+В `feature/authority-responsive-preview`: UNO 0.2.0, дурак 0.1.1; коллекция 0.2.0-preview.1 ещё не опубликована. Приложение companion — одноимённая ветка boardgame-playroom, 0.14.0-preview.1. Две дополнительные поверхности пока только у UNO. Старые 0.1.0-партии требуют старый установленный пак; обновление не переписывает его.
+
+Общий helper H.art задаёт каноническую геометрию. В mini-hand callback получает `{variant:'compact'}`; при отсутствии компактного рисунка используется основной. Интерактивные кнопки сохраняют собственную геометрию/доступность. UNO и дурак содержат оба рисунка, без новых ID компонентов.
+
+Учебный пример: [examples/private-counter](examples/private-counter/README.md). `python3 build.py --include-examples` дополнительно собирает его JSON; обычный build сохраняет коллекцию из пяти игр. Пример не копирует код ядра в паки.
+
+Для LAN-проверки из каталога приложения:
+
+```sh
+node dev/server.cjs --packs-dir ../boardgame-playroom-paks/packs --lan --players 4
+```
+
+Это тестовая партия в памяти Node, только доверенная сеть. Подробная инструкция находится в `boardgame-playroom/docs/PREVIEW-TESTING.md`; контракты — SESSION-AUTHORITY.md и CARD-ART.md рядом с ней.

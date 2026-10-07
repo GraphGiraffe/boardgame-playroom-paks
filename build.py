@@ -12,7 +12,7 @@ import zipfile
 
 
 ROOT = Path(__file__).resolve().parent
-VERSION = "0.1.0"
+VERSION = "0.2.0-preview.1"
 # Portable format 1: keep these checks aligned with core/packs.js.
 MAX_PACK_BYTES = 4 * 1024 * 1024
 MAX_PACK_FILES = 128
@@ -209,10 +209,13 @@ def source_files(packs):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-dir", type=Path, default=ROOT / "dist", help="Каталог результата (по умолчанию: dist/ рядом со скриптом)")
+    parser.add_argument("--include-examples", action="store_true", help="Дополнительно собрать учебные примеры из examples/")
     args = parser.parse_args()
     packs = sorted(path.parent for path in (ROOT / "packs").glob("*/manifest.json"))
     if not packs:
         parser.error("В packs/ не найдено manifest.json")
+    if args.include_examples:
+        packs += sorted(path.parent for path in (ROOT / "examples").glob("*/manifest.json"))
     bundles = [build_pack(pack) for pack in packs]
     output = args.output_dir.resolve()
     output.mkdir(parents=True, exist_ok=True)
