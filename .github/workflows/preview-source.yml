@@ -1,0 +1,22 @@
+name: Preview source snapshot
+on:
+  push:
+    branches: [feature/authority-responsive-preview]
+    paths: [.github/workflows/preview-source.yml]
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Archive tracked source only
+        run: git archive --format=zip --output=playroom-paks-source.zip HEAD
+      - uses: actions/upload-artifact@v4
+        with:
+          name: playroom-paks-source
+          path: playroom-paks-source.zip
+          retention-days: 7
