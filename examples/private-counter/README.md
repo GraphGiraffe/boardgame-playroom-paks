@@ -5,7 +5,8 @@
 Для проверки вместе с веткой приложения:
 
 ```sh
-node ../boardgame-playroom/dev/server.cjs --packs-dir examples --game private-counter --players 2
+python3 build.py --include-examples
+node ../boardgame-playroom/dev/serve-preview.cjs --pack dist/private-counter-0.1.0.playroom-pack.json --players 2
 ```
 
 Откройте напечатанные общий и личные адреса в разных окнах. В JSON общего клиента и другого игрока нет закрытого значения. История также фильтруется.

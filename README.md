@@ -73,7 +73,9 @@ npm test
 Для LAN-проверки из каталога приложения:
 
 ```sh
-node dev/server.cjs --packs-dir ../boardgame-playroom-paks/packs --lan --players 4
+python3 dev/package-preview.py --packs-dir ../boardgame-playroom-paks/packs
+cd dist/preview/playroom-preview
+node dev/serve-preview.cjs --lan --players 4
 ```
 
-Это тестовая партия в памяти Node, только доверенная сеть. Подробная инструкция находится в `boardgame-playroom/docs/PREVIEW-TESTING.md`; контракты — SESSION-AUTHORITY.md и CARD-ART.md рядом с ней.
+Это тестовая партия в памяти Node, только доверенная сеть. Подробная инструкция находится в `boardgame-playroom/docs/PREVIEW-TESTING.md`; контракты — MULTIVIEW.md рядом с ней.
