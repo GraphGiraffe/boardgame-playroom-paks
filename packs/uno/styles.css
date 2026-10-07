@@ -175,7 +175,7 @@
 .uno-card.art-card .uno-art-face .card-corner.bottom{top:auto!important;left:auto!important;right:5px!important;bottom:3px!important;transform:rotate(180deg)}
 .uno-card.art-card .uno-art-face .uno-oval{position:absolute;inset:18px 9px;border-radius:50%;transform:rotate(28deg);display:grid;place-items:center;background:#fff9ed;color:var(--card-color)}
 .uno-card.art-card .uno-art-face .face-value{font:900 37px/1 system-ui,sans-serif!important;transform:rotate(-28deg)}
-.uno-card.art-card .uno-art-compact .card-corner{font-size:26px!important;top:2px!important;left:3px!important;z-index:1}
+.uno-card.art-card .uno-art-compact .card-corner{font-size:19px!important;top:2px!important;left:3px!important;z-index:1}
 .uno-card.art-card .uno-art-compact .uno-oval{inset:28px 6px 9px}
 .uno-card.art-card .uno-art-compact .face-value{font-size:32px!important}
 .uno-player-targets{display:flex;flex-wrap:wrap;justify-content:center;gap:5px;flex-shrink:0}
