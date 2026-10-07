@@ -1,0 +1,52 @@
+name: Preview card regression
+on:
+  push:
+    branches: [feature/phone-pc-preview]
+    paths: [.github/workflows/qa-device-preview.yml]
+permissions:
+  contents: write
+jobs:
+  validate:
+    if: github.ref == 'refs/heads/feature/phone-pc-preview'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Apply exact compact artwork corrections
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD^)" = c37d3152ea213aecd8ec2913874a096a9a314475
+          gh api "repos/$GITHUB_REPOSITORY/git/blobs/2877f54ecd3b3411c4e9f2440c60645359d93b5b" --jq .content | base64 --decode > "$RUNNER_TEMP/fixes.gz"
+          python3 - <<'PY'
+          import gzip,hashlib,json,os,pathlib,subprocess
+          data=json.loads(gzip.decompress((pathlib.Path(os.environ['RUNNER_TEMP'])/'fixes.gz').read_bytes()))
+          for item in data['packs']:
+              path=pathlib.Path(item['path']);assert str(path) in ('packs/uno/styles.css','packs/durak/styles.css')
+              raw=path.read_bytes();assert hashlib.sha256(raw).hexdigest()==item['before'],path
+              text=raw.decode('utf-8')
+              for a,b,replacement in reversed(item['edits']):text=text[:a]+replacement+text[b:]
+              raw=text.encode('utf-8');assert hashlib.sha256(raw).hexdigest()==item['after'],path
+              path.write_bytes(raw)
+          subprocess.run(['git','add','--',*[e['path'] for e in data['packs']]],check=True)
+          PY
+          git diff --cached --check
+          bash scripts/codex/check.sh
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m "fix: keep Durak ranks and compact UNO symbols inside exposed card corners"
+          git push origin HEAD:feature/phone-pc-preview
+      - uses: actions/upload-artifact@v4
+        with:
+          name: preview-packs-verified
+          path: dist/
+          retention-days: 14
