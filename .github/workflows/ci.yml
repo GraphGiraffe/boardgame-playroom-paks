@@ -2,9 +2,13 @@ name: Pack checks
 on:
   pull_request:
     branches: [dev, main]
+    types: [ready_for_review]
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: pack-checks-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 jobs:
   packs:
     runs-on: ubuntu-latest
