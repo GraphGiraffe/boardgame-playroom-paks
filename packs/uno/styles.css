@@ -168,3 +168,37 @@
  #app .uno-scene .mini-hand:not(.is-open){height:35px;--uno-mini-height:32px}
  #app .uno-scene .opponent-hands .is-open-hand{--public-peek:17px;--public-card-width:29px;--public-card-height:41px;--public-row-step:17px;--public-reserve:41px;min-width:0}
 }
+
+/* Canonical card faces, including the frame. Never resize child decoration in mini hands. */
+.uno-card.art-card .uno-art-face{position:relative;width:72px;height:103px;border:5px solid #fff9ed;border-radius:12px;background:var(--card-color);color:#fff9ed;overflow:hidden}
+.uno-card.art-card .uno-art-face .card-corner{position:absolute!important;top:3px!important;left:5px!important;right:auto!important;bottom:auto!important;font:850 14px/1 system-ui,sans-serif!important;letter-spacing:0!important;display:block!important}
+.uno-card.art-card .uno-art-face .card-corner.bottom{top:auto!important;left:auto!important;right:5px!important;bottom:3px!important;transform:rotate(180deg)}
+.uno-card.art-card .uno-art-face .uno-oval{position:absolute;inset:18px 9px;border-radius:50%;transform:rotate(28deg);display:grid;place-items:center;background:#fff9ed;color:var(--card-color)}
+.uno-card.art-card .uno-art-face .face-value{font:900 37px/1 system-ui,sans-serif!important;transform:rotate(-28deg)}
+.uno-card.art-card .uno-art-compact .card-corner{font-size:19px!important;top:2px!important;left:3px!important;z-index:1}
+.uno-card.art-card .uno-art-compact .uno-oval{inset:28px 6px 9px}
+.uno-card.art-card .uno-art-compact .face-value{font-size:32px!important}
+.uno-player-targets{display:flex;flex-wrap:wrap;justify-content:center;gap:5px;flex-shrink:0}
+.uno-player-targets .scene-button{min-height:44px;padding:6px 9px}
+.uno-scene.surface-table{min-height:100%;height:100%}
+.uno-scene.surface-table .uno-play-area{flex:1;min-height:0}
+.uno-scene.surface-player{min-height:100%;height:auto;gap:8px;padding:10px}
+.uno-scene.surface-player .uno-play-area{flex:1;min-height:140px;gap:8px}
+.uno-scene.surface-player .uno-center{gap:28px;padding:0 14px}
+.uno-scene.surface-player .uno-center .uno-card,.uno-scene.surface-player .uno-center .piece-back{width:54px;min-width:54px;height:78px}
+.uno-scene.surface-player .uno-bottom-dock{flex-shrink:0}
+.uno-scene.surface-player :is(.scene-button,.uno-call,.uno-card-help,.color-choice){min-height:44px}
+@media(orientation:landscape) and (max-height:550px){
+ .uno-scene.surface-player{display:grid;grid-template-columns:160px minmax(0,1fr);grid-template-rows:minmax(120px,1fr) auto;align-content:start;align-items:center;min-height:100%;height:auto;gap:5px 10px}
+ .uno-scene.surface-player .uno-play-area{grid-column:1;grid-row:1;min-height:120px}
+ .uno-scene.surface-player .uno-center{gap:14px;padding:0}
+ .uno-scene.surface-player .own-hand{grid-column:2;grid-row:1;width:100%;margin:0}
+ .uno-scene.surface-player .uno-bottom-dock{grid-column:2;grid-row:2}
+ .uno-scene.surface-player .uno-player-targets{grid-column:1;grid-row:2;gap:3px}
+ .uno-scene.surface-player .uno-player-targets .scene-button{font-size:10px;padding:3px 5px;min-height:44px}
+ .uno-scene.surface-player .uno-center :is(.uno-card,.piece-back){width:40px;min-width:40px;height:58px}
+ .uno-scene.surface-player .uno-play-area .uno-flow{margin:0}
+ .uno-scene.surface-player .uno-play-area small{font-size:8px}
+}
+
+.uno-card.art-card{border-radius:16.67%/11.65%!important}

@@ -95,3 +95,16 @@
  .table-shell:has(.table-header) .scene .durak-scene>.scene-actions .scene-button{min-width:44px;min-height:44px;padding:8px 6px}
  .table-shell:has(.table-header) .scene .durak-scene .scene-hint{font-size:9px;line-height:1.3}
 }
+
+/* Same artwork geometry in stock, hand, table and compact public hands. */
+.playing-card.art-card .durak-art-face{position:relative;width:66px;height:97px;border:2px solid #fffbed;border-radius:10px;background:#fffbed;color:#385e49;overflow:hidden}
+.playing-card.art-card.red-suit .durak-art-face{color:#d56b52}
+.playing-card.art-card .durak-art-face .card-corner{position:absolute!important;display:flex!important;align-items:center;gap:0;top:5px!important;left:2px!important;right:auto!important;bottom:auto!important;font:850 13px/1 system-ui,sans-serif!important;letter-spacing:0!important}
+.playing-card.art-card .durak-art-face .card-corner small{display:inline!important;font:850 10px/1 system-ui,sans-serif!important;margin:0!important}
+.playing-card.art-card .durak-art-face .card-corner.bottom{top:auto!important;left:auto!important;bottom:5px!important;right:4px!important;transform:rotate(180deg)}
+.playing-card.art-card .durak-art-face .card-suit{position:absolute;inset:0;display:grid;place-items:center;font:700 40px/1 system-ui,sans-serif!important;transform:none!important}
+.playing-card.art-card .durak-art-compact .card-corner{font-size:21px!important;top:2px!important;left:2px!important;z-index:1;display:block!important}
+.playing-card.art-card .durak-art-compact .card-corner small{display:block!important;font-size:20px!important}
+.playing-card.art-card .durak-art-compact .card-suit{padding-top:25px;font-size:35px!important}
+
+.playing-card.art-card{border-radius:15.15%/10.31%!important}
