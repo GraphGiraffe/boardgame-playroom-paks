@@ -23,7 +23,7 @@
     return `<button class="uno-card ${H.art?'art-card':''} ${cls}" style="--card-color:${colors[c.color]||colors.wild}" ${attrs} data-entity="card-${H.esc(c.id)}" data-tooltip="${H.esc(help(c))}" aria-label="${H.esc((names[c.color]||'Любой цвет')+' '+value(c))}">${H.art?H.art({main,compact,width:72,height:103},variant):legacy}</button>`;
   }
   (globalThis.PlayroomCatalog ||= {}).uno ||= {};
-  globalThis.PlayroomCatalog.uno.playerBadge=(state,index)=>state.data.uno?.declared?.[index]?' · UNO!':'';
+  globalThis.PlayroomCatalog.uno.playerBadge=(state,index)=>state.data.uno?.declared?.[index]?{label:'UNO!',tone:'success'}:'';
   function render(s,viewer,actions,ui={}){
     const surface=ui.surface||'combined';
     if(surface==='table')actions=[];
@@ -32,11 +32,11 @@
     const other=actions.filter(a=>!a.card&&!['draw','declare-uno','accuse-uno'].includes(a.type));
     const badge=player=>d.uno?.declared?.[player]?'<span class="uno-declared" aria-label="UNO объявлено">UNO!</span>':'';
     const opponents=H.opponents(s,viewer,(c,attrs,context)=>card(c,attrs,'',context?.variant),{
-      playerAttrs:(i,p)=>manual&&actions.some(a=>a.type==='accuse-uno'&&a.target===i)?`data-accuse-player="${i}" role="button" tabindex="0" aria-label="Действия игрока ${H.esc(p.name)}"`:'',
+      playerAttrs:(i,p)=>manual&&actions.some(a=>a.type==='accuse-uno'&&a.target===i)?`data-accuse-player="${i}" role="button" tabindex="0" aria-label="Обвинить ${H.esc(p.name)} в пропуске UNO"`:'',
       playerBadge:badge
     });
     const drop=chosen.length?`<button class="uno-drop-target" ${H.target(ui.selected,chosen.length===1?chosen[0]:null)} aria-label="${chosen.length===1?'Положить выбранную карту на сброс':'Положить карту на сброс и выбрать цвет'}"><span>На сброс ↓</span></button>`:'';
-    const call=manual?`<button class="scene-button uno-call" ${declare?H.actionAttr(declare):'disabled'} aria-label="Объявить UNO" data-tooltip="UNO! объявляется вручную. Нажмите имя или руку игрока для проверки.">UNO!</button>`:'';
+    const call=manual?`<button class="scene-button uno-call" ${declare?H.actionAttr(declare):'disabled'} aria-label="Объявить UNO" data-tooltip="UNO! объявляется вручную. Нажмите имя или руку соперника, затем кнопку UNO! за 2 секунды.">UNO!</button>`:'';
     const ordinary=draw?[draw,...other]:other;
     const controls=chosen.length>1?`<div class="uno-color-picker" aria-label="Выберите цвет">${chosen.map(a=>`<button class="color-choice" ${H.target(a.card,a)} style="--choice:${colors[a.color]||colors.wild}" aria-label="${H.esc(a.label)}"><i></i>${H.esc(names[a.color]||a.label)}</button>`).join('')}</div>`:ordinary.map(a=>H.actionButton(a)).join('');
     const hint=!controls?`<span class="scene-hint">${viewer===s.turn?'Коснитесь подсвеченной карты':'Ждём следующий ход'}</span>`:'';

@@ -23,9 +23,9 @@
     }
     return received;
   }
-  function penalty(s, who) {
+  function penalty(s, who, notice) {
     const cards = draw(s, who, 2);
-    E.event(s, `${s.players[who].name} берёт ${cards.length} штрафных карт${cards.length < 2 ? ': колода опустела' : ''}`, who, 'draw', { sound: { id: 'penalty', target: who } });
+    E.event(s, `${s.players[who].name} берёт ${cards.length} штрафных карт${cards.length < 2 ? ': колода опустела' : ''}`, who, 'draw', { sound: { id: 'penalty', target: who }, ...(notice?{notice:{title:notice.title,detail:notice.detail(cards.length),tone:notice.tone}}:{}) });
   }
   function react(s, actor, action) {
     const d = s.data, u = d.uno, name = s.players[actor].name;
@@ -34,10 +34,10 @@
         const repeated = u.declared[actor];
         u.declared[actor] = true;
         if (u.pending === actor) u.pending = null;
-        E.event(s, `${name}: UNO!${repeated ? ' (повторное объявление)' : ''}`, actor, 'uno', { sound: { id: 'uno.call' } });
+        E.event(s, `${name}: UNO!${repeated ? ' (повторное объявление)' : ''}`, actor, 'uno', { sound: { id: 'uno.call' },notice:{title:`${name}: UNO!`,detail:repeated?'Повторное объявление':'Осталась одна карта',tone:'success'} });
       } else {
         u.declared[actor] = false;
-        E.event(s, `${name} ошибочно объявляет UNO: в руке ${d.hands[actor].length} карт. Без штрафа за раннее объявление.`, actor, 'false-uno', { sound: { id: 'uno.call' } });
+        E.event(s, `${name} ошибочно объявляет UNO: в руке ${d.hands[actor].length} карт. Без штрафа за раннее объявление.`, actor, 'false-uno', { sound: { id: 'uno.call' },notice:{title:`${name}: UNO! слишком рано`,detail:'За ранний выкрик штрафа нет',tone:'warning'} });
       }
       return;
     }
@@ -45,11 +45,11 @@
     if (u.pending === target && d.hands[target].length === 1 && !u.declared[target]) {
       u.pending = null;
       E.event(s, `${name} поймал ${targetName}: UNO не объявлено`, actor, 'uno-caught', { target });
-      penalty(s, target);
+      penalty(s, target,{title:`${targetName} пропустил UNO!`,detail:count=>`${name} прав · штраф ${targetName}: +${count} карт`,tone:'warning'});
     } else {
       const reason = d.hands[target].length !== 1 ? `у ${targetName} ${d.hands[target].length} карт, а не одна` : u.declared[target] ? `${targetName} уже объявил UNO` : u.pending === null ? 'окно обвинения уже закрыто' : `окно обвинения открыто для ${s.players[u.pending].name}`;
       E.event(s, `${name} ошибочно обвиняет ${targetName}: ${reason}. Штраф обвиняющему — 2 карты.`, actor, 'false-accusation', { target });
-      penalty(s, actor);
+      penalty(s, actor,{title:'Ложное обвинение UNO!',detail:count=>`${name}: штраф +${count} карт`,tone:'danger'});
     }
   }
   function canPlay(s, actor, card) {
@@ -59,10 +59,10 @@
     return card.color === 'wild' || card.color === d.color || card.value === top.value;
   }
   E.register({
-    id: 'uno', version: '0.2.0', name: 'UNO', min: 2, max: 4, scoreLabel: 'очки',
+    id: 'uno', version: '0.2.1', name: 'UNO', min: 2, max: 4, scoreLabel: 'очки',
     description: 'Цвета, цифры и внезапные развороты. Освободите руку первым.',
     presets: [{ id: 'classic', label: 'Классика · 7 карт' }, { id: 'quick', label: 'Быстро · 5 карт' }],
-    rules: ['Совпадение по цвету или значению; чёрная карта меняет цвет.', 'После добора можно сыграть только взятую карту или пропустить ход.', '+4 разрешена, если нет карт текущего цвета. Без накопления штрафов и оспаривания.', 'Штраф последней карты применяется. Первый сброс — цифровая карта.', 'UNO: автоматическое объявление по умолчанию или ручной режим в настройках партии.', 'В ручном режиме объявите UNO с одной картой. Поймать забывшего можно до следующего обычного розыгрыша, добора или пропуска; пойманный берёт 2 карты.', 'Правила ошибок этого набора: ложное обвинение — 2 карты обвиняющему; раннее объявление UNO — запись в журнал без штрафа. Реакции доступны вне своего хода.', 'Числа дают номинал, действия — 20, чёрные карты — 50 очков победителю.'],
+    rules: ['Совпадение по цвету или значению; чёрная карта меняет цвет.', 'После добора можно сыграть только взятую карту или пропустить ход.', '+4 разрешена, если нет карт текущего цвета. Без накопления штрафов и оспаривания.', 'Штраф последней карты применяется. Первый сброс — цифровая карта.', 'UNO: автоматическое объявление по умолчанию или ручной режим в настройках партии.', 'В ручном режиме нажмите «UNO!» при одной карте. Чтобы обвинить соперника в пропуске выкрика, коснитесь его имени или руки, затем за 2 секунды нажмите появившуюся кнопку «UNO!» (или коснитесь выбранной области снова). Поймать забывшего можно до следующего розыгрыша, добора или пропуска; штраф — 2 карты.', 'Правила ошибок этого набора: ложное обвинение — 2 карты обвиняющему; раннее объявление UNO — запись в журнал без штрафа. Реакции доступны вне своего хода.', 'Числа дают номинал, действия — 20, чёрные карты — 50 очков победителю.'],
     create(s, options = {}) {
       if (options.unoMode !== undefined && !['auto', 'manual'].includes(options.unoMode)) throw Error('Неизвестный режим объявления UNO');
       let deck = [], id = 0;
@@ -111,7 +111,7 @@
     },
     reactions(s, actor) {
       if (unoState(s).mode !== 'manual') return [];
-      return [{ type: 'declare-uno', label: 'UNO!', notify: true }, ...s.players.flatMap((player, target) => target === actor ? [] : [{ type: 'accuse-uno', target, notify: true, confirmation: 'Обвинить игрока в пропущенном объявлении UNO? Если обвинение ошибочно или опоздало, вы возьмёте две карты.', label: `${player.name} не сказал UNO!` }])];
+      return [{ type: 'declare-uno', label: 'UNO!', notify: true }, ...s.players.flatMap((player, target) => target === actor ? [] : [{ type: 'accuse-uno', target, notify: true, confirmation: 'Обвинить в пропуске UNO? Штраф за ошибку: +2 карты.', targetPrompt: 'UNO!', label: `${player.name} не сказал UNO!` }])];
     },
     apply(s, actor, a) {
       const d = s.data, name = s.players[actor].name;
@@ -150,7 +150,7 @@
       d.uno.declared[actor] = false;
       if (d.hands[actor].length === 1) {
         if (d.uno.mode === 'manual') d.uno.pending = actor;
-        else { d.uno.declared[actor] = true; E.event(s, `${name}: UNO!`, actor, 'uno', { sound: { id: 'uno.call' } }); }
+        else { d.uno.declared[actor] = true; E.event(s, `${name}: UNO!`, actor, 'uno', { sound: { id: 'uno.call' },notice:{title:`${name}: UNO!`,detail:'Автоматическое объявление',tone:'success'} }); }
       }
       if (!d.hands[actor].length) {
         const points = d.hands.flat().reduce((sum, c) => sum + (c.color === 'wild' ? 50 : /^\d$/.test(c.value) ? Number(c.value) : 20), 0);
