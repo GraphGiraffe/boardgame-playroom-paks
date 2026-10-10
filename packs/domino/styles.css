@@ -80,19 +80,14 @@
 .domino-tile.hand-card{padding:4px;gap:3px}.domino-tile.hand-card .domino-half{width:min(100%,22px);height:auto;aspect-ratio:1;gap:2px;min-height:0;min-width:0}
 
 .domino-board{container-type:inline-size}
-@container(min-width:250px){.domino-chain-long{grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(var(--domino-wide-rows),46px)}.domino-chain-long>.domino-node{grid-row:var(--node-wide-row);grid-column:var(--node-wide-column)}.domino-chain-long>.domino-connections-normal{display:none}.domino-chain-long>.domino-connections-wide{display:block}.domino-chain-long .domino-tile:not(.double){flex-direction:var(--node-wide-direction)}}
+@container(min-width:350px){.domino-chain-long{grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(var(--domino-wide-rows),46px)}.domino-chain-long>.domino-node{grid-row:var(--node-wide-row);grid-column:var(--node-wide-column)}.domino-chain-long>.domino-connections-normal{display:none}.domino-chain-long>.domino-connections-wide{display:block}.domino-chain-long .domino-tile:not(.double){flex-direction:var(--node-wide-direction)}}
 
-@container(min-width:250px){.domino-chain-long .domino-node>.domino-tile:not(.double){height:32px}}
+@container(min-width:350px){.domino-chain-long .domino-node>.domino-tile:not(.double){height:32px}}
 
-@container(min-width:250px){.domino-chain-long{padding:6px}.domino-chain-long .domino-node>.domino-tile:not(.double){height:34px}.domino-chain-long .domino-node>.domino-tile.double{width:34px}}
+@container(min-width:350px){.domino-chain-long{padding:6px}.domino-chain-long .domino-node>.domino-tile:not(.double){height:34px}.domino-chain-long .domino-node>.domino-tile.double{width:34px}}
 
-/* Intrinsic field geometry; placement belongs to the application. */
-.domino-scene .domino-board{min-height:0;max-width:none;margin:0;width:100%}
-.domino-scene .domino-chain{grid-template-columns:repeat(5,72px);width:360px;max-width:100%;justify-content:center}
-.domino-scene .domino-node>.domino-tile:not(.double){width:60px!important;min-width:60px!important;height:34px!important;aspect-ratio:30/17}
-.domino-scene .domino-node>.domino-tile.double{width:30px!important;min-width:30px!important;height:52px!important}
-.domino-scene .domino-node{grid-row:var(--node-row)!important;grid-column:var(--node-column)!important}
-.domino-scene .domino-connections-wide{display:none!important}
-.domino-scene .domino-connections-normal{display:block!important}
-.domino-scene .domino-board{min-width:380px;padding:8px}
-.domino-scene .domino-chain{width:360px;max-width:none;justify-content:start}
+.domino-scene .domino-board{min-height:0;min-width:0;max-width:none;margin:0;width:100%}
+/* The chain fits its columns without stretching horizontal or double tiles. */
+.domino-scene .domino-node>.domino-tile:not(.double){min-width:0;width:min(58px,calc(100% - 4px));height:auto;aspect-ratio:60/34}
+.domino-scene .domino-node>.domino-tile.double{min-width:0;width:30px;height:auto;aspect-ratio:30/52}
+.domino-node>.domino-tile .domino-half{min-width:0;min-height:0;flex:1;height:auto;aspect-ratio:1}

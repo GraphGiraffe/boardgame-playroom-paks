@@ -23,3 +23,7 @@
  .checker-piece.owner-1{box-shadow:0 2px 0 #294f38}
  .checker-piece.king span{font-size:20px}
 }
+
+/* The app draws the interaction outline; use the opposing piece colour. */
+.checker-piece{--ui-action-outline:#294f38}
+.checker-piece.owner-1{--ui-action-outline:#ffdc93}
