@@ -1,6 +1,6 @@
 {
   "id": "uno",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Цвет меняется. Азарт остаётся.",
@@ -36,5 +36,6 @@
   "name": "UNO",
   "engineApi": 1,
   "stateVersion": 1,
-  "sounds": "sounds.js"
+  "sounds": "sounds.js",
+  "viewApi": 2
 }

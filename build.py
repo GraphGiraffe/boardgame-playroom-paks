@@ -12,7 +12,7 @@ import zipfile
 
 
 ROOT = Path(__file__).resolve().parent
-VERSION = "0.2.0-preview.1"
+VERSION = "0.3.0-preview.1"
 # Portable format 1: keep these checks aligned with core/packs.js.
 MAX_PACK_BYTES = 4 * 1024 * 1024
 MAX_PACK_FILES = 128
@@ -61,6 +61,8 @@ def validate_manifest(manifest, label):
     ident, version = manifest.get("id"), manifest.get("version")
     if not isinstance(ident, str) or not ID.fullmatch(ident) or not isinstance(version, str) or not SEMVER.fullmatch(version):
         raise ValueError(f"Некорректные ID/версия пака: {label}")
+    if not number_equals(manifest.get("viewApi"), 2):
+        raise ValueError(f"Требуется viewApi 2: {label}")
     state = manifest.get("stateVersion")
     if (not number_equals(manifest.get("engineApi"), 1) or type(state) not in (int, float)
             or not 1 <= state <= MAX_SAFE_INTEGER or int(state) != state):
@@ -106,6 +108,8 @@ def validate_bundle(bundle, label, raw=None):
     if manifest.get("sounds") and not files.get("sounds.js"):
         raise ValueError(f"Нет sounds.js в паке: {label}")
     css = files["styles.css"]
+    if re.search(r"(?:#app\b|\.(?:table-shell|table-header|player-strip|game-layout-slot|app-game-layout|own-hand|hand-track|opponent-hands|scene-actions)(?![-\w]))", re.sub(r"/\*[\s\S]*?\*/", "", css)):
+        raise ValueError(f"Компоновка общих элементов принадлежит приложению: {label}")
     uncommented = re.sub(r"/\*[\s\S]*?\*/", "", css)
     if re.search(r"@import\b|expression\s*\(", uncommented, re.IGNORECASE):
         raise ValueError(f"CSS пака не должен загружать внешние стили: {label}")
