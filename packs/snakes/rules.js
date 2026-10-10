@@ -1,11 +1,12 @@
 (function (E) {
   'use strict';
   E.register({
-    id: 'snakes', version: '0.2.0', name: 'Змеи и лестницы', min: 2, max: 4, scoreLabel: 'победы',
+    id: 'snakes', version: '0.3.0', name: 'Змеи и лестницы', min: 2, max: 4, scoreLabel: 'победы',
     description: 'Один бросок — и всё меняется. Дорога к вершине в вашем кармане.',
     presets: [{ id: 'classic', label: 'Классика · 100 клеток' }, { id: 'quick', label: 'Быстро · 64 клетки' }],
     rules: ['Бросайте d6 и двигайтесь к финишу. Шестёрка не даёт дополнительного хода.', 'Лестница поднимает, змея опускает. Срабатывает один переход за ход.', 'До финиша нужно дойти точно: лишние шаги отскакивают назад.', 'Быстрый набор использует поле 8×8, классический — 10×10.'],
-    create(s) {
+    create(s, options = {}) {
+      if(options.resolvedFirstPlayer!=null)s.turn=options.resolvedFirstPlayer;
       const quick = s.preset === 'quick';
       s.data = { positions: s.players.map(() => 0), dice: null, sides: 6, finish: quick ? 64 : 100, links: quick ? { 3: 15, 8: 26, 20: 34, 31: 49, 43: 58, 22: 7, 39: 18, 52: 36, 61: 45 } : { 3: 22, 8: 30, 20: 41, 28: 55, 50: 67, 71: 92, 17: 4, 39: 19, 54: 31, 62: 43, 87: 64, 96: 75 } };
     },

@@ -6,7 +6,7 @@
 
 ```sh
 python3 build.py --include-examples
-node ../boardgame-playroom/dev/serve-preview.cjs --pack dist/private-counter-0.2.0.playroom-pack.json --players 2
+node ../boardgame-playroom/dev/serve-preview.cjs --pack dist/private-counter-0.3.0.playroom-pack.json --players 2
 ```
 
 Откройте напечатанные общий и личные адреса в разных окнах. В JSON общего клиента и другого игрока нет закрытого значения. История также фильтруется.

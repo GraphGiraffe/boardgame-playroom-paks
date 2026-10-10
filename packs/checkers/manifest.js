@@ -4,13 +4,18 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["checkers"] = {
   "id": "checkers",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "category": "board",
   "estimatedDuration": "15–30 мин",
   "tagline": "На один ход ближе к победе.",
   "badge": "СТРАТЕГИЯ",
   "capabilities": {
-    "hands": false
+    "hands": false,
+    "surfaces": [
+      "combined",
+      "table",
+      "player"
+    ]
   },
   "rules": "rules.js",
   "view": "view.js",

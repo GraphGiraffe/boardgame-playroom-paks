@@ -31,7 +31,7 @@
     for (const from of own) {
       const piece = d.board[from], row = Math.floor(from / 8), col = from % 8;
       for (const [dr, dc] of dirs) {
-        if (!piece.king && dr !== (actor === 0 ? -1 : 1)) continue;
+        if (!piece.king && dr !== (actor === (d.lightPlayer??0) ? -1 : 1)) continue;
         for (let r = row + dr, c = col + dc; inside(r, c); r += dr, c += dc) {
           const to = r * 8 + c;
           if (d.board[to]) break;
@@ -44,18 +44,20 @@
   }
   function positionKey(s) { return `${s.turn}:` + s.data.board.map(p => p ? `${p.owner}${p.king ? 'K' : 'm'}` : '.').join(''); }
   E.register({
-    id: 'checkers', version: '0.2.0', name: 'Шашки', min: 2, max: 2, scoreLabel: 'победы',
+    id: 'checkers', version: '0.3.0', name: 'Шашки', min: 2, max: 2, scoreLabel: 'победы',
     description: 'Обязательные взятия, длинные цепочки и летающие дамки.',
     presets: [{ id: 'classic', label: 'Русские · 12 шашек' }, { id: 'quick', label: 'Мини · 8 шашек' }],
     rules: ['Русские шашки на доске 8×8. Белые начинают. Мини-набор: по 8 шашек.', 'Простые ходят вперёд на одну клетку; бьют вперёд и назад.', 'Взятие обязательно, серию нужно завершить. При выборе не обязательно брать максимум.', 'Дамка ходит и бьёт по всей диагонали. Превращение во время серии действует сразу.', 'Сбитые шашки снимаются в конце серии; через уже сбитую прыгнуть повторно нельзя.', 'Победа: у соперника нет шашек или ходов. Ничья при трёх повторениях позиции или 30 полуходах только дамками без взятий (прототип).'],
-    create(s) {
+    create(s, options = {}) {
+      const lightPlayer=options.resolvedFirstPlayer??0;s.turn=lightPlayer;
       const board = Array(64).fill(null), rows = s.preset === 'quick' ? 2 : 3;
-      for (let r = 0; r < 8; r++) for (let c = 0; c < 8; c++) if ((r + c) % 2 && (r < rows || r >= 8 - rows)) board[r * 8 + c] = { id: `checker-${r * 8 + c}`, owner: r < rows ? 1 : 0, king: false };
-      s.data = { board, forced: null, captured: [], quiet: 0, repetitions: {} };
+      for (let r = 0; r < 8; r++) for (let c = 0; c < 8; c++) if ((r + c) % 2 && (r < rows || r >= 8 - rows)) board[r * 8 + c] = { id: `checker-${r * 8 + c}`, owner: r < rows ? 1-lightPlayer : lightPlayer, king: false };
+      s.data = { lightPlayer, board, forced: null, captured: [], quiet: 0, repetitions: {} };
       s.data.repetitions[positionKey(s)] = 1;
     },
     validateState(s) {
       const d = s.data;
+      E.assertState(d.lightPlayer===undefined||[0,1].includes(d.lightPlayer),'цвет шашек');
       E.assertState(Array.isArray(d.board) && d.board.length === 64 && Array.isArray(d.captured), 'поле шашек');
       const pieces = d.board.filter(p => p !== null);
       E.assertState(pieces.length <= (s.preset === 'quick' ? 16 : 24) && pieces.every(p => p && typeof p.id === 'string' && /^checker-\d+$/.test(p.id) && [0, 1].includes(p.owner) && typeof p.king === 'boolean'), 'шашки');
@@ -69,7 +71,7 @@
     apply(s, actor, a) {
       const d = s.data, move = moves(s, actor).find(m => m.from === a.from && m.to === a.to), piece = d.board[a.from], wasKing = piece.king;
       d.board[a.to] = piece; d.board[a.from] = null;
-      if (Math.floor(a.to / 8) === (actor === 0 ? 0 : 7)) piece.king = true;
+      if (Math.floor(a.to / 8) === (actor === (d.lightPlayer??0) ? 0 : 7)) piece.king = true;
       if (move.victim != null) d.captured.push(move.victim);
       const sound = move.victim != null ? { id: 'attack.capture', target: d.board[move.victim].owner }
         : { id: piece.king && !wasKing ? 'notify' : 'move' };
@@ -86,7 +88,7 @@
     bot(s, actor, actions) {
       const candidates = actions.map(a => {
         const piece = s.data.board[a.from], row = Math.floor(a.to / 8), col = a.to % 8;
-        const promotion = !piece.king && row === (actor === 0 ? 0 : 7);
+        const promotion = !piece.king && row === (actor === (s.data.lightPlayer??0) ? 0 : 7);
         let risk = 0;
         const trial = E.clone(s.data); trial.board[a.to] = trial.board[a.from]; trial.board[a.from] = null;
         const take = moves(s, actor).find(m => m.from === a.from && m.to === a.to);
@@ -94,7 +96,7 @@
         if (promotion) trial.board[a.to].king = true;
         trial.captured = [];
         for (let i = 0; i < 64; i++) if (trial.board[i]?.owner === 1 - actor && captures(trial, i).some(m => m.victim === a.to)) risk = 5;
-        return { a, value: (promotion ? 10 : 0) + (take.victim != null ? 4 : 0) - risk + (piece.king ? 0 : (actor === 0 ? 7 - row : row) * 0.15) + (col > 1 && col < 6 ? 0.1 : 0) };
+        return { a, value: (promotion ? 10 : 0) + (take.victim != null ? 4 : 0) - risk + (piece.king ? 0 : (actor === (s.data.lightPlayer??0) ? 7 - row : row) * 0.15) + (col > 1 && col < 6 ? 0.1 : 0) };
       });
       const best = Math.max(...candidates.map(c => c.value));
       const chosen = candidates.filter(c => c.value === best);
