@@ -1,53 +1,25 @@
-/* Use the desktop's width for table chrome, keeping the field in the viewport. */
+
 @media(min-width:560px) and (orientation:landscape){
- .table-shell:has(.table-header):has(.checkers-scene){height:100dvh;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(160px,30%);grid-template-rows:44px minmax(0,1fr) 44px;gap:8px 14px;padding:10px 14px}
- .table-shell:has(.table-header):has(.checkers-scene) .table-header{grid-column:1;grid-row:1;min-width:0;flex-wrap:nowrap}
- .table-shell:has(.table-header):has(.checkers-scene) .table-heading{flex:1;min-width:0;gap:8px}
- .table-shell:has(.table-header):has(.checkers-scene) .table-title p{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
- .table-shell:has(.table-header):has(.checkers-scene) .table-tools{gap:4px}
- .table-shell:has(.table-header):has(.checkers-scene) .table-header .icon-btn{width:40px;min-width:40px;height:40px}
- .table-shell:has(.table-header):has(.checkers-scene) .table-status{grid-column:2;grid-row:1;min-height:44px;min-width:0;padding:4px 9px;gap:3px;flex-direction:column;justify-content:center}
- .table-shell:has(.table-header):has(.checkers-scene) .turn-label{font-size:11px}.table-shell:has(.table-header):has(.checkers-scene) .turn-extra{font-size:9px}
- .table-shell:has(.table-header):has(.checkers-scene) .scene{grid-column:1/-1;grid-row:2;min-height:0}
- .table-shell:has(.table-header):has(.checkers-scene) .player-strip{grid-column:1;grid-row:3;position:static;max-width:none;justify-content:flex-start;flex-wrap:nowrap;min-width:0;gap:4px}
- .table-shell:has(.table-header):has(.checkers-scene) .player-token{min-width:0;max-width:48%;padding:4px 7px;font-size:10px}.table-shell:has(.table-header):has(.checkers-scene) .player-token>span:last-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
- .table-shell:has(.table-header):has(.checkers-scene) .table-bottom{grid-column:2;grid-row:3;min-width:0;gap:8px}.table-shell:has(.table-header):has(.checkers-scene) .table-bottom .text-btn{padding:5px 0;min-height:40px}
- .table-shell:has(.table-header):has(.checkers-scene) .auto-saved{display:none}
- .table-shell:has(.table-header):has(.checkers-scene) .history-panel{position:fixed;bottom:60px;left:10%;right:10%;z-index:15;box-shadow:0 10px 30px #20352d30}
 }
-@media(min-width:560px) and (max-height:500px) and (orientation:landscape){.table-shell:has(.table-header):has(.checkers-scene){gap:6px 10px;padding:8px 10px}}
+@media(min-width:560px) and (max-height:500px) and (orientation:landscape){}
 
 
-.game-tile[data-game=checkers]{background:#dce4e0}.checkers-scene{align-items:center;background:#e4e9db;justify-content:center;gap:13px}.checkers-summary{display:flex;justify-content:center;gap:30px;font-size:11px;color:#647b58}.checker-count{display:flex;gap:7px;align-items:center}.checker-count b{color:#355842}.checker-mini{height:18px;width:18px;border-radius:50%;display:inline-block;background:#ebbd70;border:2px solid #f6d696;box-shadow:0 2px 0 #bd9255}.checker-mini.owner-1{background:#47705b;border-color:#74957a;box-shadow:0 2px 0 #2c513c}.checker-board-wrap{width:min(100%,440px);padding:11px;background:#fffae9;border-radius:17px;box-shadow:0 7px 0 #bdc9ac;border:1px solid #d4d8c3;flex-shrink:0}.checker-board{aspect-ratio:1;display:grid;grid-template-columns:repeat(8,1fr);border-radius:8px;overflow:hidden;width:100%}.checker-cell{padding:0;border:0;aspect-ratio:1;position:relative;display:grid;place-items:center;background:#e5e5cc;min-width:0;cursor:pointer}.checker-cell.dark{background:#84a286}.checker-cell.selected{background:#a5bc72;box-shadow:inset 0 0 0 3px #638041}.checker-cell.destination{background:#afc99a}.checker-cell:focus-visible{outline:3px solid #f6cf78!important;outline-offset:-4px!important;z-index:2}.checker-piece{width:75%;height:75%;border-radius:50%;background:#eac079;border:3px solid #f3d596;box-shadow:0 4px 0 #b99054;display:grid;place-items:center;position:relative;pointer-events:none}.checker-piece>i{border:2px solid #d6ac67;border-radius:50%;height:70%;width:70%;display:block}.checker-piece.owner-1{background:#3f6b52;border-color:#73967a;box-shadow:0 4px 0 #294f38}.checker-piece.owner-1>i{border-color:#2f5941}.checker-piece.movable:after{content:"";position:absolute;right:-4px;top:-3px;width:8px;height:8px;border:2px solid #fffcdf;border-radius:50%;background:#f2d276}.checker-piece.king span{color:#86652b;font-size:27px;line-height:1}.checker-piece.owner-1.king span{color:#e3e9c4}.destination-dot{width:25%;height:25%;border-radius:50%;background:#426e4d;box-shadow:0 0 0 5px #4c7c3f15}.coord-file,.coord-rank{position:absolute;font-size:8px;color:#496b4f;z-index:1;line-height:1}.coord-file{bottom:3px;right:4px}.coord-rank{left:3px;top:4px}.checker-guide{font-size:11px;color:#718463;display:flex;gap:7px;align-items:center;text-align:center;min-height:23px}.guide-dot{display:inline-block;height:7px;width:7px;background:#caa858;border-radius:50%;flex-shrink:0}@media(max-width:760px){.checkers-scene{padding:14px 12px;gap:14px}.checker-board-wrap{padding:8px;border-radius:14px;max-width:400px}.checker-piece{border-width:2px;box-shadow:0 3px 0 #b99054}.checker-piece.owner-1{box-shadow:0 3px 0 #294f38}.checker-piece.king span{font-size:23px}.checker-guide{font-size:10px}.checker-piece.movable:after{width:7px;height:7px;right:-3px;top:-3px}.checkers-summary{font-size:10px;gap:20px}}@media(min-width:761px){.checker-board-wrap{width:min(52dvh,440px)}}@media(max-height:740px) and (orientation:portrait){.checkers-scene{gap:10px}.checker-board-wrap{width:min(100%,47dvh)}.checker-guide{min-height:16px}.checkers-scene .scene-meta{display:none}}
+.game-tile[data-game=checkers]{background:#dce4e0}.checker-count{display:flex;gap:7px;align-items:center}.checker-count b{color:#355842}.checker-mini{height:18px;width:18px;border-radius:50%;display:inline-block;background:#ebbd70;border:2px solid #f6d696;box-shadow:0 2px 0 #bd9255}.checker-mini.owner-1{background:#47705b;border-color:#74957a;box-shadow:0 2px 0 #2c513c}.checker-board-wrap{width:min(100%,440px);padding:11px;background:#fffae9;border-radius:17px;box-shadow:0 7px 0 #bdc9ac;border:1px solid #d4d8c3;flex-shrink:0}.checker-board{aspect-ratio:1;display:grid;grid-template-columns:repeat(8,1fr);border-radius:8px;overflow:hidden;width:100%}.checker-cell{padding:0;border:0;aspect-ratio:1;position:relative;display:grid;place-items:center;background:#e5e5cc;min-width:0;cursor:pointer}.checker-cell.dark{background:#84a286}.checker-cell.selected{background:#a5bc72;box-shadow:inset 0 0 0 3px #638041}.checker-cell.destination{background:#afc99a}.checker-cell:focus-visible{outline:3px solid #f6cf78!important;outline-offset:-4px!important;z-index:2}.checker-piece{width:75%;height:75%;border-radius:50%;background:#eac079;border:3px solid #f3d596;box-shadow:0 4px 0 #b99054;display:grid;place-items:center;position:relative;pointer-events:none}.checker-piece>i{border:2px solid #d6ac67;border-radius:50%;height:70%;width:70%;display:block}.checker-piece.owner-1{background:#3f6b52;border-color:#73967a;box-shadow:0 4px 0 #294f38}.checker-piece.owner-1>i{border-color:#2f5941}.checker-piece.movable:after{content:"";position:absolute;right:-4px;top:-3px;width:8px;height:8px;border:2px solid #fffcdf;border-radius:50%;background:#f2d276}.checker-piece.king span{color:#86652b;font-size:27px;line-height:1}.checker-piece.owner-1.king span{color:#e3e9c4}.destination-dot{width:25%;height:25%;border-radius:50%;background:#426e4d;box-shadow:0 0 0 5px #4c7c3f15}.coord-file,.coord-rank{position:absolute;font-size:8px;color:#496b4f;z-index:1;line-height:1}.coord-file{bottom:3px;right:4px}.coord-rank{left:3px;top:4px}.guide-dot{display:inline-block;height:7px;width:7px;background:#caa858;border-radius:50%;flex-shrink:0}@media(max-width:760px){.checker-board-wrap{padding:8px;border-radius:14px;max-width:400px}.checker-piece{border-width:2px;box-shadow:0 3px 0 #b99054}.checker-piece.owner-1{box-shadow:0 3px 0 #294f38}.checker-piece.king span{font-size:23px}.checker-piece.movable:after{width:7px;height:7px;right:-3px;top:-3px}}@media(min-width:761px){.checker-board-wrap{width:min(52dvh,440px)}}@media(max-height:740px) and (orientation:portrait){.checker-board-wrap{width:min(100%,47dvh)}}
 
-.checker-piece.captured{opacity:.4;filter:grayscale(.6)}
-
-.checkers-summary{min-width:0;width:100%}.checker-count{min-width:0;max-width:48%}.checker-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.checker-count>i,.checker-count>b{flex-shrink:0}.checker-board .checker-cell:disabled{opacity:1;cursor:default}
+.checker-piece.captured{opacity:.4;filter:grayscale(.6)}.checker-count{min-width:0;max-width:48%}.checker-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.checker-count>i,.checker-count>b{flex-shrink:0}.checker-board .checker-cell:disabled{opacity:1;cursor:default}
 
 .checker-piece[data-drag-piece]{pointer-events:auto;touch-action:none;cursor:grab}.checker-piece[data-drag-piece]>*{pointer-events:none}
 
-/* On a wide, short viewport the guide sits beside the actual-height-sized board. */
+
 @media(min-width:560px) and (orientation:landscape){
- .table-shell:has(.table-header) .scene:has(.checkers-scene){container-type:size}
- .table-shell:has(.table-header) .checkers-scene{height:100%;min-height:0;display:grid;grid-template-columns:minmax(0,min(440px,calc(100cqh - 32px))) minmax(130px,200px);grid-template-rows:1fr auto 1fr;align-items:center;align-content:center;justify-content:center;gap:12px 20px;padding:12px 16px 16px}
- .table-shell:has(.table-header) .checkers-scene .checker-board-wrap{grid-column:1;grid-row:1/4;width:100%;max-width:none}
- .table-shell:has(.table-header) .checkers-scene .checkers-summary{grid-column:2;grid-row:1;align-self:end;flex-wrap:wrap;gap:10px}
- .table-shell:has(.table-header) .checkers-scene .checker-count{max-width:100%}
- .table-shell:has(.table-header) .checkers-scene .checker-guide{grid-column:2;grid-row:2;line-height:1.5;justify-content:center}
- .table-shell:has(.table-header) .checkers-scene .scene-meta{grid-column:2;grid-row:3;align-self:start;flex-direction:column;align-items:center;gap:8px}
- .table-shell:has(.table-header) .checkers-scene .table-chip{max-width:100%;text-align:center;justify-content:center}
 }
 
-/* Use the landscape height for all eight ranks; guidance occupies a side column. */
+
 @media(orientation:landscape) and (max-height:540px){
- .table-shell:has(.table-header) .scene .checkers-scene{height:100%;min-height:0;grid-template-columns:minmax(0,min(440px,calc(100cqh - 14px))) minmax(92px,140px);grid-template-rows:1fr auto 1fr;gap:6px 10px;padding:4px 6px 8px}
- .table-shell:has(.table-header) .scene .checker-board-wrap{padding:6px;border-radius:12px;box-shadow:0 4px 0 #bdc9ac}
- .table-shell:has(.table-header) .scene .checkers-summary{flex-direction:column;align-items:center;gap:8px;font-size:10px}
- .table-shell:has(.table-header) .scene .checker-count{max-width:100%;gap:4px}
- .table-shell:has(.table-header) .scene .checker-guide{font-size:10px;line-height:1.35;min-height:0}
- .table-shell:has(.table-header) .scene .checkers-scene .scene-meta{gap:5px}
- .table-shell:has(.table-header) .scene .checkers-scene .table-chip{font-size:9px;padding:5px 6px}
- .table-shell:has(.table-header) .scene .checker-piece{border-width:2px;box-shadow:0 2px 0 #b99054}
- .table-shell:has(.table-header) .scene .checker-piece.owner-1{box-shadow:0 2px 0 #294f38}
- .table-shell:has(.table-header) .scene .checker-piece.king span{font-size:20px}
+ .checker-board-wrap{padding:6px;border-radius:12px;box-shadow:0 4px 0 #bdc9ac}
+ .checker-count{max-width:100%;gap:4px}
+ .checkers-scene .table-chip{font-size:9px;padding:5px 6px}
+ .checker-piece{border-width:2px;box-shadow:0 2px 0 #b99054}
+ .checker-piece.owner-1{box-shadow:0 2px 0 #294f38}
+ .checker-piece.king span{font-size:20px}
 }

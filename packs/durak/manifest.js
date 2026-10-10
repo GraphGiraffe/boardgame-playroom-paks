@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["durak"] = {
   "id": "durak",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Козырь ещё пригодится.",
@@ -17,6 +17,7 @@
   "styles": "styles.css",
   "name": "Дурак",
   "engineApi": 1,
-  "stateVersion": 1
+  "stateVersion": 1,
+  "viewApi": 2
 };
 })(globalThis);
