@@ -108,7 +108,7 @@ def validate_bundle(bundle, label, raw=None):
     if manifest.get("sounds") and not files.get("sounds.js"):
         raise ValueError(f"Нет sounds.js в паке: {label}")
     css = files["styles.css"]
-    if re.search(r"(?:#app\b|\.(?:table-shell|table-header|player-strip|game-layout-slot|app-game-layout|own-hand|hand-track|opponent-hands|scene-actions)(?![-\w]))", re.sub(r"/\*[\s\S]*?\*/", "", css)):
+    if re.search(r"(?:#app\b|\.(?:table-shell|table-header|player-strip|game-layout-slot|app-game-layout|own-hand|hand-track|opponent-hands|scene-actions|player-panel|player-info|player-details|player-badges|mini-hand|hand-heading|hand-tools|opponent-hand|opponent-label|is-open-hand)(?![-\w]))", re.sub(r"/\*[\s\S]*?\*/", "", css)):
         raise ValueError(f"Компоновка общих элементов принадлежит приложению: {label}")
     uncommented = re.sub(r"/\*[\s\S]*?\*/", "", css)
     if re.search(r"@import\b|expression\s*\(", uncommented, re.IGNORECASE):
