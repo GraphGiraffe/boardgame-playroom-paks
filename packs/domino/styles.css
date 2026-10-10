@@ -85,3 +85,14 @@
 @container(min-width:250px){.domino-chain-long .domino-node>.domino-tile:not(.double){height:32px}}
 
 @container(min-width:250px){.domino-chain-long{padding:6px}.domino-chain-long .domino-node>.domino-tile:not(.double){height:34px}.domino-chain-long .domino-node>.domino-tile.double{width:34px}}
+
+/* Intrinsic field geometry; placement belongs to the application. */
+.domino-scene .domino-board{min-height:0;max-width:none;margin:0;width:100%}
+.domino-scene .domino-chain{grid-template-columns:repeat(5,72px);width:360px;max-width:100%;justify-content:center}
+.domino-scene .domino-node>.domino-tile:not(.double){width:60px!important;min-width:60px!important;height:34px!important;aspect-ratio:30/17}
+.domino-scene .domino-node>.domino-tile.double{width:30px!important;min-width:30px!important;height:52px!important}
+.domino-scene .domino-node{grid-row:var(--node-row)!important;grid-column:var(--node-column)!important}
+.domino-scene .domino-connections-wide{display:none!important}
+.domino-scene .domino-connections-normal{display:block!important}
+.domino-scene .domino-board{min-width:380px;padding:8px}
+.domino-scene .domino-chain{width:360px;max-width:none;justify-content:start}

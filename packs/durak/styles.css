@@ -62,3 +62,6 @@
 .playing-card.art-card .durak-art-compact .card-suit{padding-top:25px;font-size:35px!important}
 
 .playing-card.art-card{border-radius:15.15%/10.31%!important}
+
+/* Stock geometry belongs to the pack; the app positions the group. */
+.field-group-stock .durak-stock{display:flex;flex-direction:column;gap:12px;align-items:center;padding:12px 10px;min-width:0}.field-group-stock .trump-stack{flex:none;margin:0 0 0 9px}.field-group-stock .trump-caption{flex-wrap:wrap;justify-content:center}

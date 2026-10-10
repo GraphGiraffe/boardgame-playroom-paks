@@ -4,13 +4,18 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["durak"] = {
   "id": "durak",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Козырь ещё пригодится.",
   "badge": "НА ДВОИХ",
   "capabilities": {
-    "hands": true
+    "hands": true,
+    "surfaces": [
+      "combined",
+      "table",
+      "player"
+    ]
   },
   "rules": "rules.js",
   "view": "view.js",

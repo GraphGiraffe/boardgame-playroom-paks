@@ -129,3 +129,6 @@
 }
 
 .uno-card.art-card{border-radius:16.67%/11.65%!important}
+.uno-color-picker{flex-wrap:wrap;max-width:100%;justify-content:center}
+
+.uno-color-picker{gap:2px}

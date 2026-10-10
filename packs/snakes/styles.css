@@ -12,3 +12,6 @@
  .snakes-cell.finish-cell>span{font-size:16px;left:50%;top:50%}
  .snakes-token:not(.crowded){width:17px;height:17px;font-size:8px;border-width:1px}
 }
+
+/* Intrinsic field geometry; placement belongs to the application. */
+.snakes-scene .die{display:grid;cursor:pointer;flex:none;padding:9px;gap:5px;width:58px;height:58px;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr)}
