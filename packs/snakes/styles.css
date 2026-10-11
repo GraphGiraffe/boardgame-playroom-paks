@@ -15,3 +15,9 @@
 
 /* Intrinsic field geometry; placement belongs to the application. */
 .snakes-scene .die{display:grid;cursor:pointer;flex:none;padding:9px;gap:5px;width:58px;height:58px;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr)}
+
+/* A fixed dice footprint includes the resting rotation, outline and shadow. */
+.snakes-bottom{display:flex;justify-content:center;align-items:center;min-height:88px;width:100%;padding:10px;box-sizing:border-box}
+.snakes-bottom .dice-block{display:flex;align-items:center;justify-content:center;width:68px;height:68px;flex:none}
+.snakes-start{position:absolute;bottom:0;left:0;width:1px;height:1px;pointer-events:none}
+.snakes-scene .die i{width:6px;height:6px;justify-self:center;align-self:center}
