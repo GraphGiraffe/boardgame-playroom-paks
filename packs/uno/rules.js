@@ -5,7 +5,7 @@
   const title = card => ({ skip: 'Пропуск', reverse: 'Разворот', '+2': '+2', wild: 'Смена цвета', '+4': '+4' }[card.value] || card.value);
   const nextPlayer = (s, from, steps = 1) => (from + s.data.direction * steps + s.players.length * 4) % s.players.length;
   const reactionTypes = ['declare-uno', 'accuse-uno'];
-  function unoState(s) { return s.data.uno || { mode: 'auto', declared: s.players.map(() => false), pending: null }; }
+  function unoState(s) { return s.data.uno || { mode: 'auto', declared: s.players.map(() => false), pending: null, episode: 0, calls: [], penalty: false }; }
   function draw(s, who, count) {
     const d = s.data, received = [];
     for (let n = 0; n < count; n++) {
@@ -30,11 +30,11 @@
   function react(s, actor, action) {
     const d = s.data, u = d.uno, name = s.players[actor].name;
     if (action.type === 'declare-uno') {
+      (u.calls ||= []).push(actor);
       if (d.hands[actor].length === 1) {
-        const repeated = u.declared[actor];
         u.declared[actor] = true;
         if (u.pending === actor) u.pending = null;
-        E.event(s, `${name}: UNO!${repeated ? ' (повторное объявление)' : ''}`, actor, 'uno', { sound: { id: 'uno.call' },notice:{title:`${name}: UNO!`,detail:repeated?'Повторное объявление':'Осталась одна карта',tone:'success'} });
+        E.event(s, `${name}: UNO!`, actor, 'uno', { sound: { id: 'uno.call' },notice:{title:`${name}: UNO!`,detail:'Осталась одна карта',tone:'success'} });
       } else {
         u.declared[actor] = false;
         E.event(s, `${name} ошибочно объявляет UNO: в руке ${d.hands[actor].length} карт. Без штрафа за раннее объявление.`, actor, 'false-uno', { sound: { id: 'uno.call' },notice:{title:`${name}: UNO! слишком рано`,detail:'За ранний выкрик штрафа нет',tone:'warning'} });
@@ -42,6 +42,7 @@
       return;
     }
     const target = action.target, targetName = s.players[target].name;
+    u.penalty = true;
     if (u.pending === target && d.hands[target].length === 1 && !u.declared[target]) {
       u.pending = null;
       E.event(s, `${name} поймал ${targetName}: UNO не объявлено`, actor, 'uno-caught', { target });
@@ -59,10 +60,10 @@
     return card.color === 'wild' || card.color === d.color || card.value === top.value;
   }
   E.register({
-    id: 'uno', version: '0.4.2', name: 'UNO', min: 2, max: 4, scoreLabel: 'очки',
+    id: 'uno', version: '0.4.3', name: 'UNO', min: 2, max: 4, scoreLabel: 'очки',
     description: 'Цвета, цифры и внезапные развороты. Освободите руку первым.',
     presets: [{ id: 'classic', label: 'Классика · 7 карт' }, { id: 'quick', label: 'Быстро · 5 карт' }],
-    rules: ['Совпадение по цвету или значению; чёрная карта меняет цвет.', 'После добора можно сыграть только взятую карту или пропустить ход.', '+4 разрешена, если нет карт текущего цвета. Без накопления штрафов и оспаривания.', 'Штраф последней карты применяется. Первый сброс — цифровая карта.', 'В настройках партии по умолчанию выбран ручной выкрик UNO; можно переключить на автоматическое объявление.', 'В ручном режиме нажмите «UNO!» при одной карте. Чтобы обвинить соперника в пропуске выкрика, коснитесь его имени или руки, затем нажмите кнопку «UNO!» в меню игрока. Поймать забывшего можно до следующего розыгрыша, добора или пропуска; штраф — 2 карты.', 'Правила ошибок этого набора: ложное обвинение — 2 карты обвиняющему; раннее объявление UNO — запись в журнал без штрафа. Реакции доступны вне своего хода.', 'Числа дают номинал, действия — 20, чёрные карты — 50 очков победителю.'],
+    rules: ['Совпадение по цвету или значению; чёрная карта меняет цвет.', 'После добора можно сыграть только взятую карту или пропустить ход.', '+4 разрешена, если нет карт текущего цвета. Без накопления штрафов и оспаривания.', 'Штраф последней карты применяется. Первый сброс — цифровая карта.', 'В настройках партии по умолчанию выбран ручной выкрик UNO; можно переключить на автоматическое объявление.', 'В ручном режиме нажмите «UNO!» при одной карте. Чтобы обвинить соперника в пропуске выкрика, коснитесь его имени или руки, затем нажмите кнопку «UNO!» в меню игрока. Поймать забывшего можно до следующего розыгрыша, добора или пропуска; штраф — 2 карты.', 'После показа хода человеку даётся 1 секунда защиты от обвинений других людей по сети и 3 секунды от ботов. Раннее обвинение не действует и не штрафуется. Повторные и запоздалые реакции не наказываются.', 'За один эпизод назначается не более одного штрафа: забывшему UNO — 2 карты; за настоящее ложное обвинение — 2 карты только первому обвинителю. Повторное UNO не создаёт ход; раннее объявление без одной карты — запись без штрафа.', 'Числа дают номинал, действия — 20, чёрные карты — 50 очков победителю.'],
     create(s, options = {}) {
       if(options.resolvedFirstPlayer!=null)s.turn=options.resolvedFirstPlayer;
       if (options.unoMode !== undefined && !['auto', 'manual'].includes(options.unoMode)) throw Error('Неизвестный режим объявления UNO');
@@ -76,7 +77,7 @@
       const hands = s.players.map(() => []);
       for (let n = 0; n < (s.preset === 'quick' ? 5 : 7); n++) for (const hand of hands) hand.push(deck.pop());
       const first = deck.findIndex(c => /^\d$/.test(c.value)), discard = [deck.splice(first, 1)[0]];
-      s.data = { hands, drawPile: deck, discard, color: discard[0].color, direction: 1, drawn: null, noDraw: false, stalled: 0, uno: { mode: options.unoMode || 'auto', declared: s.players.map(() => false), pending: null } };
+      s.data = { hands, drawPile: deck, discard, color: discard[0].color, direction: 1, drawn: null, noDraw: false, stalled: 0, uno: { mode: options.unoMode || 'auto', declared: s.players.map(() => false), pending: null, episode: 0, calls: [], penalty: false } };
     },
     validateState(s) {
       const d = s.data;
@@ -99,6 +100,9 @@
         E.assertState(u && ['auto', 'manual'].includes(u.mode) && Array.isArray(u.declared) && u.declared.length === s.players.length && u.declared.every(value => typeof value === 'boolean'), 'объявления UNO');
         E.assertState(u.declared.every((value, player) => !value || d.hands[player].length === 1), 'объявление UNO без одной карты');
         E.assertState(u.pending === null || (u.mode === 'manual' && s.status === 'playing' && Number.isInteger(u.pending) && u.pending >= 0 && u.pending < s.players.length && d.hands[u.pending].length === 1 && !u.declared[u.pending]), 'окно обвинения UNO');
+        E.assertState(u.episode === undefined || (Number.isSafeInteger(u.episode) && u.episode >= 0 && u.episode <= s.move), 'эпизод UNO');
+        E.assertState(u.calls === undefined || (Array.isArray(u.calls) && new Set(u.calls).size === u.calls.length && u.calls.every(p => Number.isInteger(p) && p >= 0 && p < s.players.length)), 'реакции UNO');
+        E.assertState(u.penalty === undefined || typeof u.penalty === 'boolean', 'штраф эпизода UNO');
       }
     },
     legal(s, actor) {
@@ -110,9 +114,25 @@
       actions.push(d.drawn != null || d.noDraw ? { type: 'pass', label: 'Завершить ход' } : { type: 'draw', label: 'Взять карту' });
       return actions;
     },
+    reactionWindow(s) {
+      const u = unoState(s);
+      if (u.mode !== 'manual' || u.pending == null || u.penalty || s.players[u.pending].bot || s.status !== 'playing') return null;
+      return {id:`uno:${u.episode || 0}`,owner:u.pending,revision:u.episode || 0,humanMs:1000,botMs:3000,fallbackMs:10000};
+    },
+    reactionControl(s, actor, action) {
+      const u = unoState(s);
+      if (u.mode !== 'manual') return null;
+      if (!reactionTypes.includes(action.type)) return ['play','draw','pass'].includes(action.type) ? {kind:'advance'} : null;
+      if (action.type === 'accuse-uno' && (!Number.isInteger(action.target) || action.target < 0 || action.target >= s.players.length || action.target === actor)) return null;
+      const episode = u.episode || 0, supplied = action.episode === undefined ? episode : action.episode;
+      if (!Number.isSafeInteger(supplied) || supplied < 0 || supplied > episode) return null;
+      const kind = action.type === 'declare-uno' ? 'answer' : 'challenge';
+      const ignore = supplied < episode || (kind === 'answer' ? u.declared[actor] || (u.calls || []).includes(actor) || u.penalty : u.penalty || u.declared[action.target]);
+      return {kind,episode,ignore:!!ignore};
+    },
     reactions(s, actor) {
       if (unoState(s).mode !== 'manual') return [];
-      return [{ type: 'declare-uno', label: 'UNO!', notify: true }, ...s.players.flatMap((player, target) => target === actor ? [] : [{ type: 'accuse-uno', target, targetKind: 'player', notify: true, confirmation: 'Обвинить в пропуске UNO? Штраф за ошибку: +2 карты.', targetPrompt: 'UNO!', label: `${player.name} не сказал UNO!` }])];
+      return [{ type: 'declare-uno', episode: unoState(s).episode || 0, label: 'UNO!', notify: true }, ...s.players.flatMap((player, target) => target === actor ? [] : [{ type: 'accuse-uno', episode: unoState(s).episode || 0, target, targetKind: 'player', notify: true, confirmation: 'Обвинить в пропуске UNO? Штраф за ошибку: +2 карты.', targetPrompt: 'UNO!', label: `${player.name} не сказал UNO!` }])];
     },
     apply(s, actor, a) {
       const d = s.data, name = s.players[actor].name;
@@ -121,6 +141,7 @@
       // A reaction never consumes the next player's ordinary turn. The catch
       // window ends only when a normal action begins (or a call/catch resolves).
       d.uno.pending = null;
+      d.uno.episode = s.move; d.uno.calls = []; d.uno.penalty = false;
       if (a.type === 'draw') {
         const got = draw(s, actor, 1);
         d.drawn = got[0]?.id || null; d.noDraw = !got.length;
@@ -161,8 +182,8 @@
     project(out, viewer) { if(out.data.uno)delete out.data.uno.pending; if (viewer !== out.turn) out.data.drawn = out.data.drawn == null ? null : true; },
     botReaction(s, actor, actions) {
       const u = unoState(s);
-      if (s.data.hands[actor].length === 1 && !u.declared[actor]) return actions.find(a => a.type === 'declare-uno');
-      if (u.pending !== null && u.pending !== actor && s.data.hands[u.pending].length === 1 && !u.declared[u.pending]) return actions.find(a => a.type === 'accuse-uno' && a.target === u.pending);
+      if (!u.penalty && s.data.hands[actor].length === 1 && !u.declared[actor] && !(u.calls || []).includes(actor)) return actions.find(a => a.type === 'declare-uno');
+      if (!u.penalty && u.pending !== null && u.pending !== actor && s.data.hands[u.pending].length === 1 && !u.declared[u.pending]) return actions.find(a => a.type === 'accuse-uno' && a.target === u.pending);
       return null;
     },
     bot(s, actor, actions) {
