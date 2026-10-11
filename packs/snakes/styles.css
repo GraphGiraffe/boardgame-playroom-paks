@@ -21,3 +21,6 @@
 .snakes-bottom .dice-block{display:flex;align-items:center;justify-content:center;width:68px;height:68px;flex:none}
 .snakes-start{position:absolute;bottom:0;left:0;width:1px;height:1px;pointer-events:none}
 .snakes-scene .die i{width:6px;height:6px;justify-self:center;align-self:center}
+
+/* A shared result remains readable while rolling is unavailable. */
+.snakes-scene .die:disabled{opacity:1;cursor:default}
