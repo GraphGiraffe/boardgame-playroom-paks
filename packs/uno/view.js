@@ -36,7 +36,7 @@
     const ordinary=draw?[draw,...other]:other;
     const controls=chosen.length>1?`<div class="uno-color-picker" aria-label="Выберите цвет">${chosen.map(a=>`<button class="color-choice" ${H.target(a.card,a)} style="--choice:${colors[a.color]||colors.wild}" aria-label="${H.esc(a.label)}"><i></i>${H.esc(names[a.color]||a.label)}</button>`).join('')}</div>`:ordinary.map(a=>H.actionButton(a)).join('');
     const hint=!controls?`<span class="scene-hint">${viewer===s.turn?'Коснитесь подсвеченной карты':'Ждём следующий ход'}</span>`:'';
-    const direction=`<div class="uno-direction" data-direction="${d.direction}" role="img" aria-label="${H.esc('Очередность игроков: '+s.players.map(p=>p.name).join(d.direction===-1?' ← ':' → '))}"><svg viewBox="0 0 64 16" aria-hidden="true"><path d="M3 8H61M54 2L61 8L54 14"/></svg></div>`;
+    const direction=`<div class="uno-direction" data-direction="${d.direction}" role="img" aria-label="${H.esc(d.direction===-1?'Ход против часовой стрелки':'Ход по часовой стрелке')}"><svg viewBox="0 0 64 16" aria-hidden="true"><path d="M3 8H61M54 2L61 8L54 14"/></svg></div>`;
     const dock=H.actionGroups({start:call,primary:controls+hint,end:'<button class="uno-card-help" data-command="card-help" aria-label="Подсказки по картам">'+H.icon('help')+'</button>',exclusive:chosen.length>1});
     return {api:2,family:'cards',className:'uno-scene surface-'+surface,playerContent:H.playerContent(s,viewer,(c,attrs,ctx)=>card(c,attrs,'',ctx?.variant),{badges:i=>d.uno?.declared?.[i]?['UNO!']:[]}),elements:{
       participants:'',
