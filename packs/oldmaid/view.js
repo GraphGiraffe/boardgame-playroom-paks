@@ -1,0 +1,5 @@
+(function(){
+ 'use strict';const V=globalThis.PlayroomViews,H=V.helpers,C=globalThis.PlayroomShared;
+ const render=(s,viewer,actions)=>{const d=s.data,hand=d.hands[viewer]||[];return {api:2,family:'cards',className:'oldmaid-scene',playerContent:H.playerContent(s,viewer,null,{scoreLabel:'победы',badges:i=>[{label:`${d.hands[i].length} карт`}]}),elements:{field:`<div class="oldmaid-board"><p>Сброшено пар: ${d.discard.length/2}</p><div class="oldmaid-opponents">${d.hands.map((h,i)=>`<div><b>${H.esc(s.players[i].name)}</b><br>${h.length} карт</div>`).join('')}</div></div>`,shared:`<div class="oldmaid-hand">${hand.map(c=>C.card(c)).join('')}</div><div class="oldmaid-actions">${actions.map(a=>`<button class="btn" ${H.actionAttr(a)}>${H.esc(a.label)}</button>`).join('')}</div>`,auxiliary:''}};};
+ V.register('oldmaid',render,()=>H.svg('<rect x="100" y="30" width="98" height="142" rx="12" fill="#fff9e8"/><text x="120" y="72" font-size="30" fill="#2b534c">Д♠</text><text x="131" y="139" font-size="64" fill="#2b534c">♠</text>'),{surfaces:{table:(s,v,a)=>render(s,v,[]),player:render}});
+})();

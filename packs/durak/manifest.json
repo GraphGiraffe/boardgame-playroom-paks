@@ -1,10 +1,10 @@
 {
   "id": "durak",
-  "version": "0.3.5",
+  "version": "0.4.0",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Козырь ещё пригодится.",
-  "badge": "НА ДВОИХ",
+  "badge": "ДО 6 ИГРОКОВ",
   "capabilities": {
     "hands": true,
     "surfaces": [
@@ -17,7 +17,11 @@
   "view": "view.js",
   "styles": "styles.css",
   "name": "Дурак",
-  "engineApi": 1,
-  "stateVersion": 1,
+  "sharedUi": true,
+  "sharedAssets": [
+    "card-back.svg"
+  ],
+  "engineApi": 2,
+  "stateVersion": 2,
   "viewApi": 2
 }
