@@ -200,6 +200,9 @@ def source_files(packs):
             result.add(ROOT / name)
     for pattern in ("docs/*.md", "scripts/codex/*.sh", ".github/workflows/*.yml", ".github/workflows/*.yaml", "tests/*.cjs"):
         result.update(ROOT.glob(pattern))
+    # Ship runnable authoring examples in the source archive without adding
+    # them to the five-game installable collection.
+    result.update(path for path in (ROOT / "examples").rglob("*") if path.is_file())
     for pack in packs:
         manifest = read_manifest(pack)
         result.update(pack_files(pack, manifest))
