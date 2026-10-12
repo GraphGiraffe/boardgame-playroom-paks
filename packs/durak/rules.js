@@ -1,90 +1,30 @@
-(function (E) {
-  'use strict';
-  const face = card => `${({ 11: 'В', 12: 'Д', 13: 'К', 14: 'Т' })[card.rank] || card.rank}${card.suit}`;
-  const beats = (card, attack, trump) => card.suit === attack.suit ? card.rank > attack.rank : card.suit === trump && attack.suit !== trump;
-  function endBout(s) {
-    const d = s.data, oldAttacker = d.attacker, oldDefender = d.defender;
-    const cards = d.table.flatMap(pair => pair.defense ? [pair.attack, pair.defense] : [pair.attack]);
-    if (d.taking) {
-      d.hands[oldDefender].push(...cards);
-      E.event(s, `${s.players[oldDefender].name} забирает ${cards.length} карт`, oldDefender, 'take', { sound: { id: 'draw', target: oldDefender } });
-    } else {
-      d.discard.push(...cards);
-      E.event(s, 'Бито', oldDefender, 'discard', { sound: { id: 'defend' } });
-      [d.attacker, d.defender] = [oldDefender, oldAttacker];
-    }
-    for (const player of [oldAttacker, oldDefender]) while (d.hands[player].length < d.handSize && d.drawPile.length) d.hands[player].push(d.drawPile.pop());
-    d.table = []; d.taking = false; s.turn = d.attacker;
-    d.attackLimit = Math.min(d.handSize, d.hands[d.defender].length);
-    if (!d.drawPile.length) {
-      const empty = d.hands.map((h, i) => h.length ? -1 : i).filter(i => i >= 0);
-      if (empty.length === 2) E.finish(s, null, 'Ничья: оба игрока вышли');
-      else if (empty.length === 1) E.finish(s, empty[0], `${s.players[empty[0]].name} выходит; ${s.players[1 - empty[0]].name} остаётся с картами`);
-    }
-  }
-  E.register({
-    id: 'durak', version: '0.3.5', name: 'Дурак', min: 2, max: 2, scoreLabel: 'победы',
-    description: 'Подкидывайте, отбивайтесь и берегите козыри.',
-    presets: [{ id: 'classic', label: 'Классика · по 6 карт' }, { id: 'quick', label: 'Малая рука · по 5 карт' }],
-    rules: ['Подкидной дурак на двоих, 36 карт. Младший козырь начинает.', 'Побейте старшей картой той же масти или козырем. Козырь бьёт только старший козырь.', 'Подкидывать можно значения, уже лежащие на столе. Заходы чередуются с защитой.', 'Не больше размера стартовой руки защитника и не больше 6 (5 в малом наборе) атак за заход.', 'После «Беру» атакующий может подкинуть ещё или завершить. После защиты — «Бито».', 'Добор сначала атакующему, затем защитнику. Побеждает вышедший после окончания колоды и захода.'],
-    create(s, options = {}) {
-      let deck = [];
-      for (const suit of ['♠', '♥', '♦', '♣']) for (let rank = 6; rank <= 14; rank++) deck.push({ id: `${suit}${rank}`, suit, rank });
-      deck = E.shuffle(deck, s);
-      const hands = [[], []], handSize = s.preset === 'quick' ? 5 : 6;
-      for (let n = 0; n < handSize; n++) for (const hand of hands) hand.push(deck.pop());
-      const trump = { ...deck[0] };
-      let lowest = 15, attacker = 0;
-      hands.forEach((hand, p) => hand.forEach(c => { if (c.suit === trump.suit && c.rank < lowest) { lowest = c.rank; attacker = p; } }));
-      if(options.resolvedFirstPlayer!=null)attacker=options.resolvedFirstPlayer;
-      s.turn = attacker;
-      s.data = { hands, drawPile: deck, trump, table: [], attacker, defender: 1 - attacker, discard: [], taking: false, handSize, attackLimit: handSize };
-    },
-    validateState(s) {
-      const d = s.data, validCard = c => c && ['♠', '♥', '♦', '♣'].includes(c.suit) && Number.isInteger(c.rank) && c.rank >= 6 && c.rank <= 14 && c.id === `${c.suit}${c.rank}`;
-      E.assertState(Array.isArray(d.hands) && d.hands.length === 2 && Array.isArray(d.table), 'руки и стол дурака');
-      E.assertState(d.table.every(p => p && validCard(p.attack) && (p.defense === null || validCard(p.defense))), 'пары на столе');
-      E.validateComponents([...d.hands, d.drawPile, d.discard, d.table.flatMap(p => p.defense ? [p.attack, p.defense] : [p.attack])], validCard, 36);
-      E.assertState(validCard(d.trump) && (!d.drawPile.length || d.drawPile[0].id === d.trump.id), 'козырь');
-      E.assertState([0, 1].includes(d.attacker) && d.defender === 1 - d.attacker && typeof d.taking === 'boolean', 'роли дурака');
-      E.assertState(d.handSize === (s.preset === 'quick' ? 5 : 6) && Number.isInteger(d.attackLimit) && d.attackLimit >= 0 && d.attackLimit <= d.handSize && d.table.length <= d.attackLimit, 'лимит подкидывания');
-      E.assertState(d.table.every(p => !p.defense || beats(p.defense, p.attack, d.trump.suit)), 'неверная защита');
-      E.assertState(s.turn === (d.taking || d.table.every(p => p.defense) ? d.attacker : d.defender), 'очерёдность дурака');
-    },
-    legal(s, actor) {
-      const d = s.data, actions = [];
-      if (actor === d.attacker) {
-        const ranks = new Set(d.table.flatMap(p => p.defense ? [p.attack.rank, p.defense.rank] : [p.attack.rank]));
-        if (d.table.length < d.attackLimit) for (const card of d.hands[actor]) if (!d.table.length || ranks.has(card.rank)) actions.push({ type: 'attack', card: card.id, label: `Подкинуть ${face(card)}` });
-        if (d.table.length && (d.taking || d.table.every(p => p.defense))) actions.push({ type: 'done', label: d.taking ? 'Закончить подкидывать' : 'Бито' });
-      } else {
-        d.table.forEach((pair, target) => { if (!pair.defense) for (const card of d.hands[actor]) if (beats(card, pair.attack, d.trump.suit)) actions.push({ type: 'defend', card: card.id, target, label: `${face(card)} бьёт ${face(pair.attack)}` }); });
-        if (d.table.some(p => !p.defense)) actions.push({ type: 'take', label: 'Беру' });
-      }
-      return actions;
-    },
-    apply(s, actor, a) {
-      const d = s.data, name = s.players[actor].name;
-      if (a.type === 'done') { endBout(s); return; }
-      if (a.type === 'take') { d.taking = true; s.turn = d.attacker; E.event(s, `${name}: беру`, actor, 'take', { sound: { id: 'notify' } }); return; }
-      const card = d.hands[actor].splice(d.hands[actor].findIndex(c => c.id === a.card), 1)[0];
-      if (a.type === 'attack') {
-        d.table.push({ attack: card, defense: null });
-        E.event(s, `${name} атакует: ${face(card)}`, actor, 'attack', { sound: { id: 'attack', target: d.defender } });
-        s.turn = d.taking ? d.attacker : d.defender;
-      } else {
-        d.table[a.target].defense = card;
-        E.event(s, `${name}: ${face(card)} бьёт ${face(d.table[a.target].attack)}`, actor, 'defend', { sound: { id: 'defend' } });
-        s.turn = d.table.every(p => p.defense) ? d.attacker : d.defender;
-      }
-    },
-    bot(s, actor, actions) {
-      const d = s.data, cards = actions.filter(a => a.card);
-      if (!cards.length) return actions[0];
-      return cards.sort((a, b) => {
-        const ca = d.hands[actor].find(c => c.id === a.card), cb = d.hands[actor].find(c => c.id === b.card);
-        return (ca.rank + (ca.suit === d.trump.suit ? 20 : 0)) - (cb.rank + (cb.suit === d.trump.suit ? 20 : 0));
-      })[0];
-    }
-  });
+(function(E){
+ 'use strict';
+ const suits=['♠','♥','♦','♣'],color=s=>['♥','♦'].includes(s)?'red':'black';
+ const face=c=>c.joker?(c.color==='red'?'Красный джокер':'Чёрный джокер'):`${({11:'В',12:'Д',13:'К',14:'Т'})[c.rank]||c.rank}${c.suit}`;
+ function deck(size){const out=[];for(let rank=size===36?6:2;rank<=14;rank++)for(const suit of suits)out.push({id:`${suit}${rank}`,suit,rank});if(size===54)for(const c of ['red','black'])out.push({id:`joker-${c}`,suit:'★',rank:15,joker:true,color:c});return out;}
+ function spec(preset){return {size:preset==='classic'||preset==='quick'?36:preset==='full'?52:54,mode:preset==='jokerColor'?'color':'universal',handSize:preset==='quick'?5:6};}
+ function beats(card,attack,d){const trump=d.trump.suit;if(d.jokerMode==='universal'){if(card.joker)return !attack.joker||card.color==='red'&&attack.color==='black';if(attack.joker)return false;}else if(d.deckSize===54){const tc=color(trump);if(card.joker){if(attack.joker)return card.color===tc&&attack.color!==tc;return card.color===tc||color(attack.suit)===card.color&&attack.suit!==trump;}if(attack.joker)return attack.color!==tc&&card.suit===trump;}
+  return card.suit===attack.suit?card.rank>attack.rank:card.suit===trump&&attack.suit!==trump;}
+ function active(d){return d.hands.flatMap((h,i)=>h.length?[i]:[]);}
+ function next(d,from,exclude=[]){for(let k=1;k<=d.hands.length;k++){const i=(from+k)%d.hands.length;if(d.hands[i].length&&!exclude.includes(i))return i;}return null;}
+ function attackers(d){const out=[];for(let k=0;k<d.hands.length;k++){const i=(d.attacker+k)%d.hands.length;if(i!==d.defender&&(i===d.attacker||d.hands[i].length))out.push(i);}return out;}
+ function nextAttacker(d,from){const arr=attackers(d),at=arr.indexOf(from);return arr[(at+1)%arr.length];}
+ function endBout(s){const d=s.data,oldA=d.attacker,oldD=d.defender,wasTaking=d.taking,cards=d.table.flatMap(p=>p.defense?[p.attack,p.defense]:[p.attack]);if(wasTaking){d.hands[oldD].push(...cards);E.event(s,`${s.players[oldD].name} забирает ${cards.length} карт`,oldD,'take');}else{d.discard.push(...cards);E.event(s,'Бито',oldD,'discard');}
+  for(let k=0;k<d.hands.length;k++){const i=(oldA+k)%d.hands.length;if(i===oldD)continue;while(d.hands[i].length<d.handSize&&d.drawPile.length)d.hands[i].push(d.drawPile.pop());}while(d.hands[oldD].length<d.handSize&&d.drawPile.length)d.hands[oldD].push(d.drawPile.pop());
+  d.table=[];d.taking=false;d.passes=0;
+  if(!d.drawPile.length){const still=active(d);if(still.length===0){E.finish(s,null,'Ничья: все игроки вышли');return;}if(still.length===1){E.finish(s,s.players.flatMap((_,i)=>i===still[0]?[]:[i]),`${s.players[still[0]].name} остался с картами`);return;}}
+  d.attacker=wasTaking?next(d,oldD):oldD;
+  if(!d.hands[d.attacker].length)d.attacker=next(d,d.attacker);
+  d.defender=next(d,d.attacker);d.attackCursor=d.attacker;d.attackLimit=Math.min(d.handSize,d.hands[d.defender].length);s.turn=d.attacker;
+ }
+ E.register({id:'durak',version:'0.4.0',stateVersion:2,name:'Дурак',min:2,max:6,scoreLabel:'победы',description:'Подкидной дурак на 2–6 игроков с выбором колоды и джокеров.',
+  presets:[{id:'classic',label:'36 карт · по 6'},{id:'quick',label:'36 карт · по 5'},{id:'full',label:'52 карты · по 6'},{id:'jokerColor',label:'54 карты · джокеры по цвету'},{id:'jokerUniversal',label:'54 карты · универсальные джокеры'}],
+  rules:['Заход начинает обладатель младшего козыря; все, кроме защитника, могут подкидывать по очереди.','Подкидывают ранг уже лежащей карты. За заход — не больше карт, чем было в руке защитника, максимум шесть.','После «Беру» остальные могут подкинуть; добор идёт от первого атакующего по кругу, защитник добирает последним.','В цветном режиме джокер бьёт масти своего цвета; джокер цвета козыря старше всех. В универсальном режиме оба джокера бьют обычные карты, красный старше чёрного.','После опустошения колоды последний игрок с картами проигрывает, остальные побеждают.'],
+  create(s,o={}){const {size,mode,handSize}=spec(s.preset),cards=E.shuffle(deck(size),s),hands=s.players.map(()=>[]);if(cards[0].joker){const at=cards.findIndex(c=>!c.joker);[cards[0],cards[at]]=[cards[at],cards[0]];}const trump={...cards[0]};for(let n=0;n<handSize;n++)for(const hand of hands)if(cards.length)hand.push(cards.pop());let attacker=0,lowest=99;hands.forEach((h,p)=>h.forEach(c=>{if(!c.joker&&c.suit===trump.suit&&c.rank<lowest){lowest=c.rank;attacker=p;}}));attacker=o.resolvedFirstPlayer??attacker;s.turn=attacker;s.data={deckSize:size,jokerMode:mode,hands,drawPile:cards,trump,table:[],attacker,defender:(attacker+1)%hands.length,attackCursor:attacker,passes:0,discard:[],taking:false,handSize,attackLimit:Math.min(handSize,hands[(attacker+1)%hands.length].length)};},
+  validateState(s){const d=s.data,{size,mode,handSize}=spec(s.preset),valid=deck(size),same=c=>valid.some(x=>x.id===c?.id&&x.suit===c.suit&&x.rank===c.rank&&!!x.joker===!!c.joker&&x.color===c.color);E.assertState(d.deckSize===size&&d.jokerMode===mode&&d.handSize===handSize,'набор правил');E.assertState(Array.isArray(d.hands)&&d.hands.length===s.players.length&&Array.isArray(d.table)&&Array.isArray(d.drawPile)&&Array.isArray(d.discard),'зоны карт');E.validateComponents([...d.hands,d.drawPile,d.discard,d.table.flatMap(p=>p.defense?[p.attack,p.defense]:[p.attack])],same,size);E.assertState(same(d.trump)&&(!d.drawPile.length||d.drawPile[0].id===d.trump.id),'козырь');E.assertState(Number.isInteger(d.attacker)&&d.attacker>=0&&d.attacker<s.players.length&&Number.isInteger(d.defender)&&d.defender>=0&&d.defender<s.players.length&&d.attacker!==d.defender&&typeof d.taking==='boolean','роли');E.assertState(Number.isInteger(d.attackCursor)&&attackers(d).includes(d.attackCursor)&&Number.isInteger(d.passes)&&d.passes>=0&&d.passes<Math.max(1,attackers(d).length),'подкидчики');E.assertState(Number.isInteger(d.attackLimit)&&d.attackLimit>=0&&d.attackLimit<=handSize&&d.table.length<=d.attackLimit&&d.table.every(p=>p&&same(p.attack)&&(p.defense===null||same(p.defense)&&beats(p.defense,p.attack,d))),'стол');E.assertState(s.turn===(d.taking||d.table.every(p=>p.defense)?d.attackCursor:d.defender),'очерёдность');},
+  legal(s,actor){const d=s.data,actions=[];if(actor!==d.defender){const ranks=new Set(d.table.flatMap(p=>p.defense?[p.attack.rank,p.defense.rank]:[p.attack.rank]));if(d.table.length<d.attackLimit)for(const c of d.hands[actor])if((!d.table.length&&actor===d.attacker)||d.table.length&&ranks.has(c.rank))actions.push({type:'attack',card:c.id,label:`Подкинуть ${face(c)}`});if(d.table.length&&(d.taking||d.table.every(p=>p.defense)))actions.push({type:'done',label:d.taking?'Закончить подкидывать':s.players.length===2?'Бито':'Бито / пас'});}else{d.table.forEach((p,target)=>{if(!p.defense)for(const c of d.hands[actor])if(beats(c,p.attack,d))actions.push({type:'defend',card:c.id,target,label:`${face(c)} бьёт ${face(p.attack)}`});});if(d.table.some(p=>!p.defense))actions.push({type:'take',label:'Беру'});}return actions;},
+  apply(s,actor,a){const d=s.data,name=s.players[actor].name;if(a.type==='done'){d.passes++;if(d.passes>=attackers(d).length||d.table.length>=d.attackLimit){endBout(s);return;}d.attackCursor=nextAttacker(d,actor);s.turn=d.attackCursor;return;}if(a.type==='take'){d.taking=true;d.attackCursor=d.attacker;s.turn=d.attackCursor;E.event(s,`${name}: беру`,actor,'take');return;}const card=d.hands[actor].splice(d.hands[actor].findIndex(c=>c.id===a.card),1)[0];if(a.type==='attack'){d.table.push({attack:card,defense:null});d.passes=0;E.event(s,`${name} атакует: ${face(card)}`,actor,'attack');if(d.taking){d.attackCursor=nextAttacker(d,actor);s.turn=d.attackCursor;}else{d.attackCursor=nextAttacker(d,actor);s.turn=d.defender;}}else{d.table[a.target].defense=card;E.event(s,`${name}: ${face(card)} бьёт ${face(d.table[a.target].attack)}`,actor,'defend');s.turn=d.table.every(p=>p.defense)?d.attackCursor:d.defender;}},
+  bot(s,actor,actions){const d=s.data,cards=actions.filter(a=>a.card);if(!cards.length)return actions[0];return cards.sort((a,b)=>{const ca=d.hands[actor].find(c=>c.id===a.card),cb=d.hands[actor].find(c=>c.id===b.card),cost=c=>(c.joker?40+(c.color==='red'?1:0):c.rank+(c.suit===d.trump.suit?20:0));return cost(ca)-cost(cb);})[0];}
+ });
 })(globalThis.TabletopCore);

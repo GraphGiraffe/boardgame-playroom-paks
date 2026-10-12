@@ -1,0 +1,28 @@
+{
+  "id": "ludo",
+  "version": "0.1.0",
+  "name": "Лудо",
+  "category": "board",
+  "estimatedDuration": "20–40 мин",
+  "tagline": "Четыре фишки домой.",
+  "badge": "КОМАНДЫ",
+  "capabilities": {
+    "hands": false,
+    "surfaces": [
+      "combined",
+      "table",
+      "player"
+    ]
+  },
+  "rules": "rules.js",
+  "view": "view.js",
+  "styles": "styles.css",
+  "sharedUi": true,
+  "sharedAssets": [
+    "die.svg",
+    "token.svg"
+  ],
+  "engineApi": 2,
+  "stateVersion": 1,
+  "viewApi": 2
+}

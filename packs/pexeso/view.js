@@ -1,0 +1,5 @@
+(function(){
+ 'use strict';const V=globalThis.PlayroomViews,H=V.helpers,C=globalThis.PlayroomShared;
+ const render=(s,viewer,actions)=>{const d=s.data,continueAction=actions.find(a=>a.type==='continue');return {api:2,family:'cards',className:'pexeso-scene',playerContent:H.playerContent(s,viewer,null,{scoreLabel:'пары',badges:i=>[{label:`${d.scores[i]} пар`}]}),elements:{field:`<div class="pexeso-grid" style="--pexeso-count:${d.board.length}">${d.board.map((c,i)=>{const a=actions.find(x=>x.type==='flip'&&x.index===i),matched=d.matched.includes(i);return `<div class="pexeso-slot ${matched?'matched':''}">${C.card(c,a?H.actionAttr(a):'disabled')}</div>`;}).join('')}</div>`,shared:continueAction?`<button class="btn" ${H.actionAttr(continueAction)}>Продолжить</button>`:'',auxiliary:''}};};
+ V.register('pexeso',render,()=>H.svg('<rect x="60" y="35" width="80" height="115" rx="9" fill="#31594c"/><rect x="160" y="35" width="80" height="115" rx="9" fill="#fff9ea"/><text x="176" y="104" font-size="45" fill="#ce695c">♥</text>'),{surfaces:{table:(s,v,a)=>render(s,v,[]),player:render}});
+})();
