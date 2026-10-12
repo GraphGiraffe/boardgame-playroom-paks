@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["tictactoe"] = {
   "id": "tictactoe",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "name": "Крестики-нолики",
   "category": "board",
   "estimatedDuration": "2–5 мин",
@@ -23,6 +23,9 @@
   "styles": "styles.css",
   "engineApi": 1,
   "stateVersion": 1,
-  "viewApi": 2
+  "viewApi": 2,
+  "tileTheme": "coral",
+  "sharedUi": true,
+  "sharedAssets": []
 };
 })(globalThis);

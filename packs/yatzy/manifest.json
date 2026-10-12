@@ -1,6 +1,6 @@
 {
   "id": "yatzy",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "name": "Ятзи",
   "category": "dice",
   "estimatedDuration": "15–25 мин",
@@ -23,5 +23,6 @@
   ],
   "engineApi": 1,
   "stateVersion": 1,
-  "viewApi": 2
+  "viewApi": 2,
+  "tileTheme": "violet"
 }
