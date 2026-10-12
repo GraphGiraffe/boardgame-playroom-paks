@@ -1,17 +1,23 @@
 {
   "id": "checkers",
-  "version": "0.1.0",
+  "version": "0.3.2",
   "category": "board",
   "estimatedDuration": "15–30 мин",
   "tagline": "На один ход ближе к победе.",
   "badge": "СТРАТЕГИЯ",
   "capabilities": {
-    "hands": false
+    "hands": false,
+    "surfaces": [
+      "combined",
+      "table",
+      "player"
+    ]
   },
   "rules": "rules.js",
   "view": "view.js",
   "styles": "styles.css",
   "name": "Шашки",
   "engineApi": 1,
-  "stateVersion": 1
+  "stateVersion": 1,
+  "viewApi": 2
 }

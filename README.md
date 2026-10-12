@@ -1,56 +1,47 @@
-# ХОД · игровые паки
+# ХОД · игровые паки 0.4.0
 
-Отдельный репозиторий готовых игр для [приложения и движка](https://github.com/GraphGiraffe/boardgame-playroom): **UNO, домино, дурак, шашки, змеи и лестницы**.
+Стабильная коллекция для [ХОД 0.15.0](https://github.com/GraphGiraffe/boardgame-playroom/releases/tag/v0.15.0). Правила, варианты игры, бот, представление, стили и ресурсы принадлежат своему паку; приложение и движок поставляются отдельно.
 
-Первая поставка — **0.1.0**, API движка **1**. Правила, варианты игры, бот, представление, стили, звуки и ресурсы принадлежат соответствующему паку. Исходники приложения здесь не дублируются. Соседняя игра про магов не включена.
+| Игра | Версия |
+| --- | --- |
+| checkers | 0.3.2 |
+| domino | 0.3.4 |
+| durak | 0.3.5 |
+| snakes | 0.3.5 |
+| uno | 0.4.6 |
+
+API движка **1**, представления **2**, формат контейнера **1**, stateVersion **1**. Версия коллекции независима от версий игр. Существующие версии при переходе в stable не переписываются.
 
 ## Установка
 
-1. Скачайте `playroom.html` из релиза приложения и откройте в браузере.
-2. Из [релиза паков](https://github.com/GraphGiraffe/boardgame-playroom-paks/releases) скачайте нужный `.playroom-pack.json`.
-3. В приложении откройте **«Паки игр»**, выберите файл, просмотрите сведения и подтвердите установку.
+Скачайте `.playroom-pack.json` из [релиза 0.4.0](https://github.com/GraphGiraffe/boardgame-playroom-paks/releases/tag/v0.4.0), откройте в приложении «Паки игр» и подтвердите установку. Коллекционный ZIP сначала распакуйте. Пак содержит исполняемый код — устанавливайте доверенные файлы. После установки игры работают без CDN.
 
-Пак содержит исполняемый код: подтверждайте установку, если доверяете его автору. Интернет для дальнейшей игры не нужен. Архив `playroom-paks-0.1.0.zip` содержит все пять установочных файлов; перед установкой их нужно извлечь.
+Партия требует свою точную версию пака. Новая версия не мигрирует старые сохранения автоматически; view API 1 не поддерживается приложением 0.15. Старые релизные файлы остаются в истории.
 
-Чтобы обновить игру, установите её новый файл. Приложение хранит прежние версии для начатых партий и завершённых повторов. Версии приложения и игр не обязаны совпадать. Содержимое уже выпущенной версии не заменяется.
+## Исходники и проверка
 
-## Исходники
+Каждый `packs/<id>/` содержит manifest.json, rules.js, view.js, styles.css и опциональные sounds.js/assets/config. manifest.js генерируется из JSON и не редактируется независимо.
 
-```text
-packs/
-  uno/
-  domino/
-  durak/
-  checkers/
-  snakes/
-```
-
-В каждом паке: `manifest.json` — основной источник метаданных; `rules.js`, `view.js`, `styles.css`; при необходимости `sounds.js`, `assets/`. `manifest.js` генерируется для совместимости модульных проверок и не является независимым источником настройки.
-
-## Сборка и проверка
-
-Python 3.9+, без внешних производственных зависимостей:
+Python 3.9+ и Node.js 22+:
 
 ```sh
-./build.sh
-(cd dist && sha256sum -c SHA256SUMS)
+bash scripts/codex/setup.sh
+bash scripts/codex/check.sh
+python3 build.py --output-dir dist/release-0.4.0
+(cd dist/release-0.4.0 && sha256sum -c SHA256SUMS)
 ```
 
-В `dist/` появляются пять `.playroom-pack.json`, общий ZIP, архив исходников и контрольные суммы. `--output-dir` задаёт другую папку.
-
-CI проверяет синтаксис скриптов и сборку контейнеров. Полная проверка правил, мобильного интерфейса и обновлений выполняется вместе с приложением:
+Полная проверка с соседним checkout приложения:
 
 ```sh
-cd ../playroom
-./build.sh --packs-dir ../playroom-paks/packs --prepare-dev --all-games
-npm ci
-npm test
+bash scripts/codex/setup.sh --app-dir ../playroom
+bash scripts/codex/check.sh --full --app-dir ../playroom
 ```
 
-Для другого расположения checkout укажите свой `--packs-dir`. Совместные тесты используют установленный Chrome/Chromium; путь задаётся `CHROME_BIN`.
+Для других путей замените --app-dir. Самостоятельный check проверяет упаковку/JS, совместный — правила, приватность, сохранения и браузерный UI. [Cloud](docs/CODEX-CLOUD.md), [AGENTS](AGENTS.md), [CONTRIBUTING](CONTRIBUTING.md).
 
-## Создание своих игр
+## Создание игр
 
-Действующий формат описан в [PACK-FORMAT.md приложения](https://github.com/GraphGiraffe/boardgame-playroom/blob/main/docs/PACK-FORMAT.md), механики — в [PACKS.md](https://github.com/GraphGiraffe/boardgame-playroom/blob/main/docs/PACKS.md). Подробный учебник, шаблон, рекомендации по адаптивной сцене, форматам и стилистике ассетов [запланированы отдельно](https://github.com/GraphGiraffe/boardgame-playroom/blob/main/docs/AUTHORING-PLAN.md).
+[Руководство автора](docs/AUTHORING.md) объясняет цикл от учебного private-counter до установки собственного JSON. Контракты приложения: [правила](https://github.com/GraphGiraffe/boardgame-playroom/blob/v0.15.0/docs/PACKS.md), [контейнер](https://github.com/GraphGiraffe/boardgame-playroom/blob/v0.15.0/docs/PACK-FORMAT.md), [UI API 2](https://github.com/GraphGiraffe/boardgame-playroom/blob/v0.15.0/docs/GAME-ELEMENTS-API.md), [дизайн](https://github.com/GraphGiraffe/boardgame-playroom/blob/v0.15.0/docs/UI-DESIGN-SYSTEM.md).
 
-Порядок работы с ветками и релизами: [CONTRIBUTING.md](CONTRIBUTING.md).
+Дальнейшие SDK/ресурсы/игры перечислены в общем [Roadmap](https://github.com/GraphGiraffe/boardgame-playroom/blob/v0.15.0/docs/ROADMAP.md). Отдельного Node-host для production не требуется.

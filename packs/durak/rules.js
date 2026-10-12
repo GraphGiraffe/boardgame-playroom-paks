@@ -23,11 +23,11 @@
     }
   }
   E.register({
-    id: 'durak', name: 'Дурак', min: 2, max: 2, scoreLabel: 'победы',
+    id: 'durak', version: '0.3.5', name: 'Дурак', min: 2, max: 2, scoreLabel: 'победы',
     description: 'Подкидывайте, отбивайтесь и берегите козыри.',
     presets: [{ id: 'classic', label: 'Классика · по 6 карт' }, { id: 'quick', label: 'Малая рука · по 5 карт' }],
     rules: ['Подкидной дурак на двоих, 36 карт. Младший козырь начинает.', 'Побейте старшей картой той же масти или козырем. Козырь бьёт только старший козырь.', 'Подкидывать можно значения, уже лежащие на столе. Заходы чередуются с защитой.', 'Не больше размера стартовой руки защитника и не больше 6 (5 в малом наборе) атак за заход.', 'После «Беру» атакующий может подкинуть ещё или завершить. После защиты — «Бито».', 'Добор сначала атакующему, затем защитнику. Побеждает вышедший после окончания колоды и захода.'],
-    create(s) {
+    create(s, options = {}) {
       let deck = [];
       for (const suit of ['♠', '♥', '♦', '♣']) for (let rank = 6; rank <= 14; rank++) deck.push({ id: `${suit}${rank}`, suit, rank });
       deck = E.shuffle(deck, s);
@@ -36,6 +36,7 @@
       const trump = { ...deck[0] };
       let lowest = 15, attacker = 0;
       hands.forEach((hand, p) => hand.forEach(c => { if (c.suit === trump.suit && c.rank < lowest) { lowest = c.rank; attacker = p; } }));
+      if(options.resolvedFirstPlayer!=null)attacker=options.resolvedFirstPlayer;
       s.turn = attacker;
       s.data = { hands, drawPile: deck, trump, table: [], attacker, defender: 1 - attacker, discard: [], taking: false, handSize, attackLimit: handSize };
     },

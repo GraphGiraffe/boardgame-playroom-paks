@@ -2,11 +2,11 @@
   'use strict';
   const pips = hand => hand.reduce((n, tile) => n + tile.a + tile.b, 0);
   E.register({
-    id: 'domino', name: 'Домино', min: 2, max: 4, scoreLabel: 'очки',
+    id: 'domino', version: '0.3.4', name: 'Домино', min: 2, max: 4, scoreLabel: 'очки',
     description: 'Собирайте цепочку. Берегите дубли и считайте оставшиеся точки.',
     presets: [{ id: 'classic', label: 'Классика · 7 костей' }, { id: 'quick', label: 'Быстро · 5 костей' }],
     rules: ['Двойная шестёрка: 28 костей. Соединяйте одинаковое число точек.', 'Начинает игрок с наибольшим дублем; первой можно поставить любую кость.', 'Если хода нет, берите из базара по одной до подходящей кости. Пустой базар — пропуск.', 'Побеждает пустая рука. При рыбе — наименьшая сумма; равенство даёт ничью.', 'Очки победителя — сумма точек на руках соперников.'],
-    create(s) {
+    create(s, options = {}) {
       let stock = [];
       for (let a = 0; a <= 6; a++) for (let b = a; b <= 6; b++) stock.push({ id: `d${a}${b}`, a, b });
       stock = E.shuffle(stock, s);
@@ -15,6 +15,7 @@
       s.data = { hands, stock, chain: [], passes: 0 };
       let best = -1;
       hands.forEach((hand, player) => hand.forEach(t => { const rank = t.a === t.b ? 100 + t.a : t.a + t.b; if (rank > best) { best = rank; s.turn = player; } }));
+      if(options.resolvedFirstPlayer!=null)s.turn=options.resolvedFirstPlayer;
     },
     validateState(s) {
       const d = s.data;

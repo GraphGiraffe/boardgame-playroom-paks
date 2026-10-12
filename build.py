@@ -12,7 +12,7 @@ import zipfile
 
 
 ROOT = Path(__file__).resolve().parent
-VERSION = "0.1.0"
+VERSION = "0.4.0"
 # Portable format 1: keep these checks aligned with core/packs.js.
 MAX_PACK_BYTES = 4 * 1024 * 1024
 MAX_PACK_FILES = 128
@@ -61,6 +61,8 @@ def validate_manifest(manifest, label):
     ident, version = manifest.get("id"), manifest.get("version")
     if not isinstance(ident, str) or not ID.fullmatch(ident) or not isinstance(version, str) or not SEMVER.fullmatch(version):
         raise ValueError(f"Некорректные ID/версия пака: {label}")
+    if not number_equals(manifest.get("viewApi"), 2):
+        raise ValueError(f"Требуется viewApi 2: {label}")
     state = manifest.get("stateVersion")
     if (not number_equals(manifest.get("engineApi"), 1) or type(state) not in (int, float)
             or not 1 <= state <= MAX_SAFE_INTEGER or int(state) != state):
@@ -106,6 +108,8 @@ def validate_bundle(bundle, label, raw=None):
     if manifest.get("sounds") and not files.get("sounds.js"):
         raise ValueError(f"Нет sounds.js в паке: {label}")
     css = files["styles.css"]
+    if re.search(r"(?:#app\b|\.(?:table-shell|table-header|player-strip|game-layout-slot|app-game-layout|own-hand|hand-track|opponent-hands|scene-actions|piece-count|player-hand|player-panel|player-info|player-details|player-badges|mini-hand|hand-heading|hand-tools|opponent-hand|opponent-label|is-open-hand)(?![-\w]))", re.sub(r"/\*[\s\S]*?\*/", "", css)):
+        raise ValueError(f"Компоновка общих элементов принадлежит приложению: {label}")
     uncommented = re.sub(r"/\*[\s\S]*?\*/", "", css)
     if re.search(r"@import\b|expression\s*\(", uncommented, re.IGNORECASE):
         raise ValueError(f"CSS пака не должен загружать внешние стили: {label}")
@@ -191,11 +195,14 @@ def write_zip(destination, items):
 
 def source_files(packs):
     result = {ROOT / "build.py", ROOT / "build.sh"}
-    for name in ("README.md", ".gitignore", ".gitattributes", "CONTRIBUTING.md", "CHANGELOG.md"):
+    for name in ("README.md", ".gitignore", ".gitattributes", ".nvmrc", "AGENTS.md", "CONTRIBUTING.md", "CHANGELOG.md"):
         if (ROOT / name).is_file():
             result.add(ROOT / name)
-    for pattern in ("docs/*.md", ".github/workflows/*.yml", ".github/workflows/*.yaml", "tests/*.cjs"):
+    for pattern in ("docs/*.md", "scripts/codex/*.sh", ".github/workflows/*.yml", ".github/workflows/*.yaml", "tests/*.cjs"):
         result.update(ROOT.glob(pattern))
+    # Ship runnable authoring examples in the source archive without adding
+    # them to the five-game installable collection.
+    result.update(path for path in (ROOT / "examples").rglob("*") if path.is_file())
     for pack in packs:
         manifest = read_manifest(pack)
         result.update(pack_files(pack, manifest))
@@ -209,10 +216,13 @@ def source_files(packs):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-dir", type=Path, default=ROOT / "dist", help="Каталог результата (по умолчанию: dist/ рядом со скриптом)")
+    parser.add_argument("--include-examples", action="store_true", help="Дополнительно собрать учебные примеры из examples/")
     args = parser.parse_args()
     packs = sorted(path.parent for path in (ROOT / "packs").glob("*/manifest.json"))
     if not packs:
         parser.error("В packs/ не найдено manifest.json")
+    if args.include_examples:
+        packs += sorted(path.parent for path in (ROOT / "examples").glob("*/manifest.json"))
     bundles = [build_pack(pack) for pack in packs]
     output = args.output_dir.resolve()
     output.mkdir(parents=True, exist_ok=True)
