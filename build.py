@@ -12,7 +12,7 @@ import zipfile
 
 
 ROOT = Path(__file__).resolve().parent
-VERSION = "0.4.0-preview.8"
+VERSION = "0.4.0"
 # Portable format 1: keep these checks aligned with core/packs.js.
 MAX_PACK_BYTES = 4 * 1024 * 1024
 MAX_PACK_FILES = 128
@@ -200,6 +200,9 @@ def source_files(packs):
             result.add(ROOT / name)
     for pattern in ("docs/*.md", "scripts/codex/*.sh", ".github/workflows/*.yml", ".github/workflows/*.yaml", "tests/*.cjs"):
         result.update(ROOT.glob(pattern))
+    # Ship runnable authoring examples in the source archive without adding
+    # them to the five-game installable collection.
+    result.update(path for path in (ROOT / "examples").rglob("*") if path.is_file())
     for pack in packs:
         manifest = read_manifest(pack)
         result.update(pack_files(pack, manifest))
