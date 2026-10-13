@@ -14,7 +14,7 @@
   return groups.some(g=>g.n===5)?50:0;
  }
  function total(row){const upper=categories.slice(0,6).reduce((n,k)=>n+(row[k]||0),0);return categories.reduce((n,k)=>n+(row[k]||0),0)+(upper>=63?50:0);}
- E.register({id:'yatzy',version:'0.1.0',name:'Ятзи',min:2,max:4,scoreLabel:'победы',
+ E.register({id:'yatzy',version:'0.1.1',name:'Ятзи',min:2,max:4,scoreLabel:'победы',
   description:'Классический Ятзи: 15 категорий, три броска за ход и бонус 50 за верхнюю секцию.',
   presets:[{id:'classic',label:'Классика · 15 категорий'}],
   rules:['За ход можно бросить пять кубиков до трёх раз, придерживая нужные.','После броска заполните одну свободную категорию, даже если она принесёт ноль.','Верхняя секция даёт бонус 50 при сумме от 63. Ятзи из пяти одинаковых приносит 50.','Стриты: 1–5 = 15, 2–6 = 20. Фул-хаус — сумма пяти кубиков.'],
@@ -22,6 +22,7 @@
   validateState(s){const d=s.data;E.assertState(Array.isArray(d.dice)&&d.dice.length===5&&d.dice.every(n=>Number.isInteger(n)&&n>=1&&n<=6),'кубики');E.assertState(Array.isArray(d.held)&&d.held.length===5&&d.held.every(v=>typeof v==='boolean')&&Number.isInteger(d.rolls)&&d.rolls>=0&&d.rolls<=3,'броски');E.assertState(Array.isArray(d.scores)&&d.scores.length===s.players.length&&d.scores.every(row=>row&&typeof row==='object'&&Object.keys(row).every(k=>categories.includes(k)&&Number.isInteger(row[k])&&row[k]>=0&&row[k]<=50)),'таблица очков');E.assertState(Number.isInteger(d.round)&&d.round>=0&&d.round<=15*s.players.length,'раунд');},
   legal(s,actor){const d=s.data;if(d.rolls===0)return [{type:'roll',label:'Бросить кубики'}];const a=[];if(d.rolls<3){a.push({type:'roll',label:'Перебросить свободные'});d.held.forEach((_,index)=>a.push({type:'hold',index,label:`Придержать кубик ${index+1}`}));}categories.forEach((key,i)=>{if(d.scores[actor][key]===undefined)a.push({type:'score',key,label:`${labels[i]} · ${value(d.dice,key)}`});});return a;},
   apply(s,actor,a){const d=s.data;if(a.type==='hold'){d.held[a.index]=!d.held[a.index];return;}if(a.type==='roll'){d.dice=d.dice.map((n,i)=>d.rolls===0||!d.held[i]?E.rollDie(6,s):n);d.rolls++;E.event(s,`${s.players[actor].name} бросил кубики (${d.rolls}/3)`,actor,'roll');return;}d.scores[actor][a.key]=value(d.dice,a.key);E.event(s,`${s.players[actor].name}: ${a.label}`,actor,'action');d.round++;d.rolls=0;d.held.fill(false);if(d.round===15*s.players.length){const totals=d.scores.map(total),top=Math.max(...totals),winners=totals.flatMap((n,i)=>n===top?[i]:[]);E.finish(s,winners.length===1?winners[0]:winners.length===s.players.length?null:winners,`Игра окончена. Лучший результат: ${top}`);}else s.turn=(actor+1)%s.players.length;},
+  project(out){out.data.totals=out.data.scores.map(total);out.data.upper=out.data.scores.map(row=>categories.slice(0,6).reduce((sum,key)=>sum+(row[key]||0),0));out.data.bonuses=out.data.upper.map(n=>n>=63?50:0);},
   bot(s,actor,actions){const d=s.data;if(d.rolls===0)return actions.find(a=>a.type==='roll');if(d.rolls<3&&d.dice.filter(n=>n===Math.max(...d.dice)).length<4)return actions.find(a=>a.type==='roll');return actions.filter(a=>a.type==='score').sort((a,b)=>value(d.dice,b.key)-value(d.dice,a.key))[0];}
  });
 })(globalThis.TabletopCore);

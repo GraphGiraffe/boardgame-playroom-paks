@@ -3,7 +3,7 @@
  const suits=['♠','♥','♦','♣'];
  const pair=c=>c.joker?'joker':`${c.rank}-${['♥','♦'].includes(c.suit)?'red':'black'}`;
  function deck(size){const cards=[];for(let rank=size===36?6:2;rank<=14;rank++)for(const suit of suits)cards.push({id:`${suit}${rank}`,rank,suit});if(size===54)for(const color of ['red','black'])cards.push({id:`joker-${color}`,rank:15,suit:'★',joker:true,color});return cards;}
- E.register({id:'pexeso',version:'0.1.0',name:'Пексесо',min:2,max:4,scoreLabel:'победы',
+ E.register({id:'pexeso',version:'0.1.1',name:'Пексесо',min:2,max:4,scoreLabel:'победы',
   description:'Парная игра на память со стандартными игральными картами.',
   presets:[{id:'easy',label:'Легко · 8 пар'},{id:'medium',label:'Средне · 12 пар'},{id:'hard',label:'Сложно · 18 пар'},{id:'full',label:'Вся колода'}],
   rules:['Пара — одинаковый ранг и цвет масти: черви с бубнами, пики с трефами. Два джокера тоже образуют пару.','За ход откройте две карты. Совпали — заберите пару и ходите ещё; не совпали — запомните и передайте ход.','Побеждает собравший больше пар.'],

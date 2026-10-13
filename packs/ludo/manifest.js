@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["ludo"] = {
   "id": "ludo",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "name": "Лудо",
   "category": "board",
   "estimatedDuration": "20–40 мин",
@@ -28,6 +28,7 @@
   ],
   "engineApi": 2,
   "stateVersion": 1,
-  "viewApi": 2
+  "viewApi": 2,
+  "tileTheme": "green"
 };
 })(globalThis);

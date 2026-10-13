@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["pexeso"] = {
   "id": "pexeso",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "name": "Пексесо",
   "category": "cards",
   "estimatedDuration": "5–20 мин",
@@ -48,6 +48,7 @@
   ],
   "engineApi": 1,
   "stateVersion": 1,
-  "viewApi": 2
+  "viewApi": 2,
+  "tileTheme": "gold"
 };
 })(globalThis);
