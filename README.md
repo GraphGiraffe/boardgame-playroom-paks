@@ -9,7 +9,7 @@
 | durak | 0.4.0 |
 | battleship | 0.1.0 |
 | gofish | 0.1.0 |
-| ludo | 0.1.0 |
+| ludo | 0.1.3 |
 | oldmaid | 0.1.0 |
 | pexeso | 0.1.0 |
 | tictactoe | 0.1.0 |
