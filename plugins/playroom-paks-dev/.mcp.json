@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "playroom_paks_dev": {
+      "type": "stdio",
+      "command": "uv",
+      "args": [
+        "run",
+        "--no-project",
+        "--python",
+        ">=3.11",
+        "--with",
+        "mcp==1.30.0",
+        "python",
+        "${PLUGIN_ROOT}/server/mcp_server.py"
+      ],
+      "cwd": "${PLUGIN_ROOT}"
+    }
+  }
+}

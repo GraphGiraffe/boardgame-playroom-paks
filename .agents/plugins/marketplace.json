@@ -1,0 +1,20 @@
+{
+  "name": "playroom-paks-dev-local",
+  "interface": {
+    "displayName": "PlayRoom Packs Dev local"
+  },
+  "plugins": [
+    {
+      "name": "playroom-paks-dev",
+      "source": {
+        "source": "local",
+        "path": "./plugins/playroom-paks-dev"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "playroom-paks-dev",
+  "version": "0.1.0",
+  "description": "Local skills and tools for PlayRoom Packs Dev, scoped validation and release preparation.",
+  "author": {
+    "name": "GraphGiraffe"
+  },
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "PlayRoom Packs Dev",
+        "shortDescription": "Local PlayRoom development",
+        "developerName": "GraphGiraffe",
+        "category": "Developer Tools",
+        "capabilities": [
+          "Read",
+          "Write"
+        ],
+        "defaultPrompt": "Use this plugin for local PlayRoom development. Inspect the selected repositories, choose focused checks, and follow the project release policy.",
+        "logo": "./assets/icon.svg",
+        "composerIcon": "./assets/icon.svg"
+      }
+    }
+  }
+}
