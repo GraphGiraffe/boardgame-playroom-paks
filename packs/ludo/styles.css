@@ -2,6 +2,8 @@
 .ludo-scene .ludo-pawn.is-selected{outline:3px solid #e5b735;outline-offset:2px;z-index:5}
 .ludo-scene .ludo-pawn.is-playable::after{inset:-2px}
 .ludo-scene .ludo-cell{position:relative;padding:0;border-radius:0;box-shadow:none}
+.ludo-scene .ludo-safe{color:#55745e;background:#eef3e4}
+.ludo-scene .ludo-start-arrow{font-size:clamp(11px,2.7vmin,22px);line-height:1;color:#fffbea;text-shadow:0 1px 2px #29422f88}
 .ludo-scene .ludo-target{cursor:pointer;z-index:1;outline:2px solid var(--target-edge);outline-offset:-3px;background:var(--target-fill)!important}
 .ludo-scene .target-move{--target-fill:#f4d96c;--target-edge:#96720b}
 .ludo-scene .target-capture{--target-fill:#ee9a87;--target-edge:#ad392c}

@@ -14,7 +14,7 @@
   return groups.some(g=>g.n===5)?50:0;
  }
  function total(row){const upper=categories.slice(0,6).reduce((n,k)=>n+(row[k]||0),0);return categories.reduce((n,k)=>n+(row[k]||0),0)+(upper>=63?50:0);}
- E.register({id:'yatzy',version:'0.1.3',name:'Ятзи',min:2,max:4,scoreLabel:'победы',
+ E.register({id:'yatzy',version:'0.1.4',name:'Ятзи',min:2,max:4,scoreLabel:'победы',
   description:'Классический Ятзи: 15 категорий, три броска за ход и бонус 50 за верхнюю секцию.',
   presets:[{id:'classic',label:'Классика · 15 категорий'}],
   rules:['За ход можно бросить пять кубиков до трёх раз, придерживая нужные.','После броска заполните одну свободную категорию, даже если она принесёт ноль.','Верхняя секция даёт бонус 50 при сумме от 63. Ятзи из пяти одинаковых приносит 50.','Стриты: 1–5 = 15, 2–6 = 20. Фул-хаус — сумма пяти кубиков.'],
