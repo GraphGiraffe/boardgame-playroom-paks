@@ -4,11 +4,10 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["checkers"] = {
   "id": "checkers",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "category": "board",
   "estimatedDuration": "15–30 мин",
   "tagline": "На один ход ближе к победе.",
-  "badge": "СТРАТЕГИЯ",
   "capabilities": {
     "hands": false,
     "surfaces": [
@@ -23,6 +22,19 @@
   "name": "Шашки",
   "engineApi": 1,
   "stateVersion": 1,
-  "viewApi": 2
+  "viewApi": 2,
+  "tags": [
+    "board",
+    "logic"
+  ],
+  "playModes": [
+    {
+      "id": "individual",
+      "players": [
+        2
+      ],
+      "teams": false
+    }
+  ]
 };
 })(globalThis);

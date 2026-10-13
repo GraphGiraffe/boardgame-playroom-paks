@@ -12,7 +12,7 @@ import zipfile
 
 
 ROOT = Path(__file__).resolve().parent
-VERSION = "0.5.0-preview.2"
+VERSION = "0.5.0-preview.3"
 # Portable format 1: keep these checks aligned with core/packs.js.
 MAX_PACK_BYTES = 4 * 1024 * 1024
 MAX_PACK_FILES = 128
@@ -65,6 +65,20 @@ def validate_manifest(manifest, label):
         raise ValueError(f"Требуется viewApi 2: {label}")
     if "tileTheme" in manifest and manifest["tileTheme"] not in ("green", "coral", "blue", "gold", "violet"):
         raise ValueError(f"Некорректная тема карточки: {label}")
+    registry = parse_json((ROOT / "shared/tags.json").read_text(encoding="utf-8"))
+    known = {item["id"]: item for item in registry["tags"]}
+    tags = manifest.get("tags")
+    if "tags" in manifest and (not isinstance(tags, list) or not 1 <= len(tags) <= 3
+            or any(not isinstance(tag, str) or tag not in known for tag in tags)
+            or len(set(tags)) != len(tags) or not any(known[tag]["kind"] == "type" for tag in tags)):
+        raise ValueError(f"Некорректные теги пака: {label}")
+    modes = manifest.get("playModes")
+    if "playModes" in manifest and (not isinstance(modes, list) or not modes or any(
+            not isinstance(mode, dict) or not isinstance(mode.get("id"), str)
+            or not isinstance(mode.get("teams"), bool) or not isinstance(mode.get("players"), list)
+            or not mode["players"] or any(type(n) is not int or not 1 <= n <= 32 for n in mode["players"])
+            or len(set(mode["players"])) != len(mode["players"]) for mode in modes)):
+        raise ValueError(f"Некорректные составы игроков: {label}")
     state = manifest.get("stateVersion")
     if (manifest.get("engineApi") not in (1, 2) or type(state) not in (int, float)
             or not 1 <= state <= MAX_SAFE_INTEGER or int(state) != state):

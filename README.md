@@ -1,6 +1,6 @@
-# ХОД · игровые паки 0.5.0-preview.2
+# ХОД · игровые паки 0.5.0-preview.3
 
-Кандидат коллекции для ХОД 0.16.0-rc.3. Стабильная коллекция 0.4.0 для [ХОД 0.15.0](https://github.com/GraphGiraffe/boardgame-playroom/releases/tag/v0.15.0) остаётся доступной. Правила, варианты игры, бот, представление, стили и ресурсы принадлежат своему паку; приложение и движок поставляются отдельно.
+Кандидат коллекции для ХОД 0.16.0-rc.4. Стабильная коллекция 0.4.0 для [ХОД 0.15.0](https://github.com/GraphGiraffe/boardgame-playroom/releases/tag/v0.15.0) остаётся доступной. Правила, варианты игры, бот, представление, стили и ресурсы принадлежат своему паку; приложение и движок поставляются отдельно.
 
 | Игра | Версия |
 | --- | --- |
@@ -34,8 +34,8 @@ Python 3.9+ и Node.js 22+:
 ```sh
 bash scripts/codex/setup.sh
 bash scripts/codex/check.sh
-python3 build.py --output-dir dist/release-0.5.0-preview.2
-(cd dist/release-0.5.0-preview.2 && sha256sum -c SHA256SUMS)
+python3 build.py --output-dir dist/release-0.5.0-preview.3
+(cd dist/release-0.5.0-preview.3 && sha256sum -c SHA256SUMS)
 ```
 
 Полная проверка с соседним checkout приложения:

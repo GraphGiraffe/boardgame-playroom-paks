@@ -4,12 +4,11 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["yatzy"] = {
   "id": "yatzy",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "name": "Ятзи",
   "category": "dice",
   "estimatedDuration": "15–25 мин",
   "tagline": "Пять кубиков. Пятнадцать решений.",
-  "badge": "НА КУБИКАХ",
   "capabilities": {
     "hands": false,
     "surfaces": [
@@ -28,6 +27,21 @@
   "engineApi": 1,
   "stateVersion": 1,
   "viewApi": 2,
-  "tileTheme": "violet"
+  "tileTheme": "violet",
+  "tags": [
+    "dice",
+    "combinations"
+  ],
+  "playModes": [
+    {
+      "id": "individual",
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "teams": false
+    }
+  ]
 };
 })(globalThis);

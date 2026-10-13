@@ -1,6 +1,6 @@
 (function(E){
  'use strict';
- E.register({id:'private-counter', version: '0.3.0',name:'Учебный счётчик',min:2,max:4,scoreLabel:'очки',presets:[{id:'classic',label:'Восемь шагов'}],
+ E.register({id:'private-counter', version: '0.3.1',name:'Учебный счётчик',min:2,max:4,scoreLabel:'очки',presets:[{id:'classic',label:'Восемь шагов'}],
   create(s,options={}){s.turn=options.resolvedFirstPlayer??0;s.data={count:0,goals:s.players.map((_,i)=>({value:i+2}))};},
   legal(){return [{type:'increment',label:'Добавить 1'}];},
   apply(s,actor){s.data.count++;s.players[actor].score++;

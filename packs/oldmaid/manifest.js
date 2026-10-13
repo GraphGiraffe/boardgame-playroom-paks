@@ -4,12 +4,11 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["oldmaid"] = {
   "id": "oldmaid",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "name": "Акулина",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Сбрось пары. Не оставь даму.",
-  "badge": "КАРТОЧНАЯ",
   "capabilities": {
     "hands": true,
     "surfaces": [
@@ -44,11 +43,44 @@
           "label": "54 карты · 53 в игре"
         }
       ]
+    },
+    {
+      "key": "drawFrom",
+      "label": "У кого вытягивать карту",
+      "default": "any",
+      "options": [
+        {
+          "value": "any",
+          "label": "У любого соперника"
+        },
+        {
+          "value": "next",
+          "label": "У следующего по кругу"
+        }
+      ]
     }
   ],
   "engineApi": 2,
-  "stateVersion": 1,
+  "stateVersion": 2,
   "viewApi": 2,
-  "tileTheme": "coral"
+  "tileTheme": "coral",
+  "tags": [
+    "cards",
+    "combinations",
+    "shedding"
+  ],
+  "playModes": [
+    {
+      "id": "individual",
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "teams": false
+    }
+  ]
 };
 })(globalThis);
