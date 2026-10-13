@@ -1,5 +1,5 @@
 (function(){
- 'use strict';const V=globalThis.PlayroomViews,H=V.helpers,C=globalThis.PlayroomShared,colors=['#4c8060','#ce735d','#cfac4c','#668fad'];
+ 'use strict';const V=globalThis.PlayroomViews,H=V.helpers,C=globalThis.PlayroomShared,colors=['#4c8060','#ce735d','#668fad','#cfac4c'];
  const route=[[1,6],[2,6],[3,6],[4,6],[5,6],[6,5],[6,4],[6,3],[6,2],[6,1],[6,0],[7,0],[8,0],[8,1],[8,2],[8,3],[8,4],[8,5],[9,6],[10,6],[11,6],[12,6],[13,6],[14,6],[14,7],[14,8],[13,8],[12,8],[11,8],[10,8],[9,8],[8,9],[8,10],[8,11],[8,12],[8,13],[8,14],[7,14],[6,14],[6,13],[6,12],[6,11],[6,10],[6,9],[5,8],[4,8],[3,8],[2,8],[1,8],[0,8],[0,7],[0,6]];
  route.unshift(route.pop()); // Starts face the outer edge; the previous square leads into the home lane.
  const base=[[0,0],[9,0],[9,9],[0,9]],lane=(p,n)=>[[n+1,7],[7,n+1],[13-n,7],[7,13-n]][p];
