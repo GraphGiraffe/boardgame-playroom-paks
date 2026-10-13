@@ -16,3 +16,7 @@ Before tag/release, confirm app workflow pins and source SHA, compare downloaded
 ## Local tools
 
 Read [tools](../../references/TOOLS.md) before using the bundled MCP or CLI. Pass explicit app and pack checkout roots; never guess a sibling path in a worktree. Inspect both repositories and read their current AGENTS.md, CONTRIBUTING.md and relevant design contracts. The repo documentation is authoritative over this plugin. Use repository-workflow for GitHub operations and cleanup. Preserve active services, unrelated edits, published versions and pinned companion SHAs.
+
+## RC4 corrections
+
+Apply [RC4 constraints](../../references/RC4.md) whenever editing catalog, lobby, rules, effects or layout. The selected repositories and latest user decisions remain authoritative.

@@ -1,0 +1,10 @@
+# RC4 constraints to preserve
+
+Read the current application docs/RC4-CONTRACTS.md and companion docs/AUTHORING.md. Do not treat this plugin as evidence that a feature or release is complete.
+
+- Two tag kinds, 1–3 allowed IDs with a type; shared registry copies must match. Count filters are separate: real solo, strictly two/three, 2+/3+/4+/6+, actual teams. Types and compact counts use accessible icons; mechanics use text. Four rows, no visible headings.
+- Lobby shrink preserves in-range occupants and compacts only overflow into ascending free slots, retaining participant IDs including bots/offline humans. Excess participants reject atomically. First-player token binds an ID; shuffle resolves once before start, never on resume. Rules notices expire with their context.
+- Cards retain 5:7, cells/dice are square, action space remains reserved. Closed-card choice is a non-overlapping ordered grid in the field. Tables with fixed labels/footers use fieldSizing scroll and must actually scroll their own score region. Check the pinned total visually, not only DOM existence.
+- Public transfers and public pairs/books have distinct sequential effects. Hidden identity is never encoded by audio. privateTo/publicSound and sound:null must agree in host/client projections. Test a transfer that immediately disappears into a pair and repeated snapshots. New values in final hands alone are insufficient.
+- Battle follow-opponent is personal, not a room rule; last shot stays visible before turn transition. Fleet metadata and sunk sound honor announcement visibility. Bots must not inspect hidden fleets. Ludo uses independent dice and bounded base exit; Durak variants/decks/jokers/end are independent settings. Yatzy scores only on accepted category selection.
+- Bump changed stateVersion and exact pack versions; never rewrite released bytes. App + pack SHAs, generated installed packs, screenshots and release checks must correspond. No repetitive Actions; focused local regressions followed by the required final joint gate. Plugins stay on isolated tooling branches.

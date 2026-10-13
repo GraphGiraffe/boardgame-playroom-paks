@@ -16,3 +16,7 @@ Start a new Codex session to load the installed capabilities. Install does not r
 ## Scope
 
 The caller supplies exact checkout roots. Skills follow current project docs and user authorization. Public release verification does not claim a deployment. The CLI prints selected commands and final source provenance. See references/TOOLS.md and references/VIEWPORTS.md.
+
+## 0.1.1
+
+RC4 catalog/lobby/privacy/layout constraints; pack inspection reports unknown/missing tags and conditional rule fields. Local only; no app deployment.

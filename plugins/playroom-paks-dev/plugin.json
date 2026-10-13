@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "playroom-paks-dev",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Local skills and tools for PlayRoom Packs Dev, scoped validation and release preparation.",
   "author": {
     "name": "GraphGiraffe"

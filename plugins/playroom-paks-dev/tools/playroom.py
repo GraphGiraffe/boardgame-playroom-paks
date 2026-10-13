@@ -81,7 +81,12 @@ def inspect_pack(repo, pack_id):
     pack = (root / 'packs' / pack_id).resolve(strict=True)
     if pack.parent != root / 'packs': raise ValueError('Pack escapes repository')
     manifest = json.loads((pack / 'manifest.json').read_text())
-    return {'id':pack_id, 'manifest':manifest, 'files':sorted(str(p.relative_to(pack)) for p in pack.rglob('*') if p.is_file()),
+    registry=root/'shared/tags.json'
+    tags=json.loads(registry.read_text())['tags'] if registry.exists() else []
+    allowed={item['id']:item for item in tags}
+    selected=manifest.get('tags',[])
+    tag_issues=[] if 1<=len(selected)<=3 and len(set(selected))==len(selected) and all(t in allowed for t in selected) and any(allowed.get(t,{}).get('kind')=='type' for t in selected) else ['Tags missing or outside the current 1-3 type/mechanic contract']
+    return {'id':pack_id, 'manifest':manifest,'tag_issues':tag_issues,'conditional_settings':[f['key'] for f in manifest.get('settings',[]) if f.get('visibleWhen')], 'files':sorted(str(p.relative_to(pack)) for p in pack.rglob('*') if p.is_file()),
             'shared_assets':sorted(p.name for p in (root / 'shared/assets').glob('*') if p.is_file())}
 
 
