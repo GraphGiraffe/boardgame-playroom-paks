@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["oldmaid"] = {
   "id": "oldmaid",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "name": "Акулина",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
