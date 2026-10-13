@@ -25,7 +25,7 @@
 .durak-empty{text-align:center;color:#8a9c78}
 .durak-empty>span{font-size:48px;color:#b7c8a5;line-height:1}
 .durak-empty p{font-size:11px;margin:9px 0 0}
-@media(max-width:760px){.durak-scene .playing-card{width:60px;min-width:60px;height:88px}
+@media(max-width:760px){.durak-scene .playing-card{width:60px;min-width:60px;height:84px}
 .durak-scene .playing-card .card-corner{font-size:15px;left:6px}
 .durak-scene .playing-card .card-corner small{font-size:11px}
 .durak-scene .playing-card .card-suit{font-size:34px}
@@ -88,7 +88,7 @@
 /* Preserve full card proportions in the stock and the play area. */
 .field-group-stock .trump-stack{width:100px;height:104px;margin:0;transform:none}
 .durak-scene .field-group-stock .trump-stack>.playing-card{width:66px;min-width:66px;height:97px;left:24px;top:6px;transform:rotate(90deg);transform-origin:center}
-.field-group-stock .trump-stack>.piece-back{width:60px;min-width:60px;height:88px;left:0;top:8px;border-width:4px;border-radius:9px}
+.field-group-stock .trump-stack>.piece-back{width:60px;min-width:60px;height:84px;left:0;top:8px;border-width:4px;border-radius:9px}
 .field-group-stock .durak-stock{padding:6px 0;gap:8px}
 .field-group-play .durak-table{grid-template-columns:repeat(var(--durak-columns),minmax(0,90px));min-height:150px;gap:8px;padding:8px;align-content:center;grid-auto-rows:122px;grid-template-rows:none}
 .field-group-play .durak-pair{height:122px;min-height:122px;max-height:122px}
@@ -97,3 +97,4 @@
 }
 
 .durak-scene .defend-target svg{width:24px;height:24px;display:block;margin:auto}
+.durak-scene .trump-stack>.shared-card-back{position:absolute;left:0;top:8px;width:60px;height:84px;border-radius:9px;box-shadow:0 3px 0 #b5c4a7}

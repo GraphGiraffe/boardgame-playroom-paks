@@ -1,0 +1,38 @@
+{
+  "id": "tictactoe",
+  "version": "0.1.2",
+  "name": "Крестики-нолики",
+  "category": "board",
+  "estimatedDuration": "2–5 мин",
+  "tagline": "Три в ряд — и победа.",
+  "capabilities": {
+    "hands": false,
+    "surfaces": [
+      "combined",
+      "table",
+      "player"
+    ]
+  },
+  "rules": "rules.js",
+  "view": "view.js",
+  "styles": "styles.css",
+  "engineApi": 1,
+  "stateVersion": 1,
+  "viewApi": 2,
+  "tileTheme": "coral",
+  "sharedUi": true,
+  "sharedAssets": [],
+  "tags": [
+    "board",
+    "logic"
+  ],
+  "playModes": [
+    {
+      "id": "individual",
+      "players": [
+        2
+      ],
+      "teams": false
+    }
+  ]
+}

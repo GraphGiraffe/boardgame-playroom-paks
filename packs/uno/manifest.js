@@ -4,11 +4,10 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["uno"] = {
   "id": "uno",
-  "version": "0.4.6",
+  "version": "0.4.7",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Цвет меняется. Азарт остаётся.",
-  "badge": "БЫСТРЫЙ СТАРТ",
   "capabilities": {
     "hands": true,
     "surfaces": [
@@ -41,6 +40,21 @@
   "engineApi": 1,
   "stateVersion": 1,
   "sounds": "sounds.js",
-  "viewApi": 2
+  "viewApi": 2,
+  "tags": [
+    "cards",
+    "shedding"
+  ],
+  "playModes": [
+    {
+      "id": "individual",
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "teams": false
+    }
+  ]
 };
 })(globalThis);
