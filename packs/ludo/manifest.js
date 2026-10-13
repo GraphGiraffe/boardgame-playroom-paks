@@ -4,12 +4,11 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["ludo"] = {
   "id": "ludo",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "name": "Лудо",
   "category": "board",
   "estimatedDuration": "20–40 мин",
   "tagline": "Четыре фишки домой.",
-  "badge": "КОМАНДЫ",
   "capabilities": {
     "hands": false,
     "surfaces": [
@@ -27,8 +26,96 @@
     "token.svg"
   ],
   "engineApi": 2,
-  "stateVersion": 1,
+  "stateVersion": 2,
   "viewApi": 2,
-  "tileTheme": "green"
+  "tileTheme": "green",
+  "tags": [
+    "board",
+    "race"
+  ],
+  "playModes": [
+    {
+      "id": "individual",
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "teams": false
+    },
+    {
+      "id": "teams",
+      "players": [
+        4
+      ],
+      "teams": true
+    }
+  ],
+  "settings": [
+    {
+      "key": "diceCount",
+      "label": "Бросается N кубиков",
+      "default": "1",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "key": "sixReroll",
+      "label": "Перебрасывать шестёрки",
+      "default": "on",
+      "options": [
+        {
+          "value": "on",
+          "label": "Да"
+        },
+        {
+          "value": "off",
+          "label": "Нет"
+        }
+      ]
+    },
+    {
+      "key": "guaranteedExit",
+      "label": "Гарантированный выход после трёх неудач",
+      "default": "on",
+      "options": [
+        {
+          "value": "on",
+          "label": "Да"
+        },
+        {
+          "value": "off",
+          "label": "Нет"
+        }
+      ]
+    },
+    {
+      "key": "startPawn",
+      "label": "Одна фишка на старте",
+      "default": "off",
+      "options": [
+        {
+          "value": "off",
+          "label": "Нет"
+        },
+        {
+          "value": "on",
+          "label": "Да"
+        }
+      ]
+    }
+  ]
 };
 })(globalThis);

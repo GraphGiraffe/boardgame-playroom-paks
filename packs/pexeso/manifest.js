@@ -4,12 +4,11 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["pexeso"] = {
   "id": "pexeso",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "name": "Пексесо",
   "category": "cards",
   "estimatedDuration": "5–20 мин",
   "tagline": "Открой пару и запомни остальное.",
-  "badge": "ПАМЯТЬ",
   "capabilities": {
     "hands": false,
     "surfaces": [
@@ -49,6 +48,21 @@
   "engineApi": 1,
   "stateVersion": 1,
   "viewApi": 2,
-  "tileTheme": "gold"
+  "tileTheme": "gold",
+  "tags": [
+    "cards",
+    "memory"
+  ],
+  "playModes": [
+    {
+      "id": "individual",
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "teams": false
+    }
+  ]
 };
 })(globalThis);

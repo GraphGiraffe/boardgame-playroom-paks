@@ -4,12 +4,11 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["gofish"] = {
   "id": "gofish",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "name": "Спроси рыбу",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Есть у тебя семёрки?",
-  "badge": "КАРТОЧНАЯ",
   "capabilities": {
     "hands": true,
     "surfaces": [
@@ -49,6 +48,23 @@
   "engineApi": 1,
   "stateVersion": 1,
   "viewApi": 2,
-  "tileTheme": "blue"
+  "tileTheme": "blue",
+  "tags": [
+    "cards",
+    "combinations"
+  ],
+  "playModes": [
+    {
+      "id": "individual",
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "teams": false
+    }
+  ]
 };
 })(globalThis);

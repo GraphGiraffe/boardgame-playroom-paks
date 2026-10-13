@@ -4,12 +4,11 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["battleship"] = {
   "id": "battleship",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "name": "Морской бой",
   "category": "board",
   "estimatedDuration": "15–30 мин",
   "tagline": "Построй флот. Найди противника.",
-  "badge": "ДУЭЛЬ",
   "capabilities": {
     "hands": false,
     "surfaces": [
@@ -26,8 +25,38 @@
     "ship.svg"
   ],
   "engineApi": 1,
-  "stateVersion": 1,
+  "stateVersion": 2,
   "viewApi": 2,
-  "tileTheme": "blue"
+  "tileTheme": "blue",
+  "tags": [
+    "board"
+  ],
+  "playModes": [
+    {
+      "id": "individual",
+      "players": [
+        2
+      ],
+      "teams": false
+    }
+  ],
+  "settings": [
+    {
+      "key": "announceSinking",
+      "label": "Объявлять о потоплении",
+      "default": "on",
+      "options": [
+        {
+          "value": "on",
+          "label": "Да · отмечать окружение"
+        },
+        {
+          "value": "off",
+          "label": "Нет"
+        }
+      ]
+    }
+  ],
+  "sounds": "sounds.js"
 };
 })(globalThis);

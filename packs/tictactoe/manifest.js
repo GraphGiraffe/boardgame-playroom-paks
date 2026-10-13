@@ -4,12 +4,11 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["tictactoe"] = {
   "id": "tictactoe",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "name": "Крестики-нолики",
   "category": "board",
   "estimatedDuration": "2–5 мин",
   "tagline": "Три в ряд — и победа.",
-  "badge": "БЫСТРАЯ ИГРА",
   "capabilities": {
     "hands": false,
     "surfaces": [
@@ -26,6 +25,19 @@
   "viewApi": 2,
   "tileTheme": "coral",
   "sharedUi": true,
-  "sharedAssets": []
+  "sharedAssets": [],
+  "tags": [
+    "board",
+    "logic"
+  ],
+  "playModes": [
+    {
+      "id": "individual",
+      "players": [
+        2
+      ],
+      "teams": false
+    }
+  ]
 };
 })(globalThis);

@@ -4,11 +4,10 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["snakes"] = {
   "id": "snakes",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "category": "board",
   "estimatedDuration": "5–15 мин",
   "tagline": "Вверх по лестнице. Навстречу удаче.",
-  "badge": "НА УДАЧУ",
   "capabilities": {
     "hands": false,
     "surfaces": [
@@ -23,6 +22,21 @@
   "name": "Змеи и лестницы",
   "engineApi": 1,
   "stateVersion": 1,
-  "viewApi": 2
+  "viewApi": 2,
+  "tags": [
+    "board",
+    "race"
+  ],
+  "playModes": [
+    {
+      "id": "individual",
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "teams": false
+    }
+  ]
 };
 })(globalThis);

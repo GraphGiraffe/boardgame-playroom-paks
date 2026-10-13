@@ -1,0 +1,119 @@
+{
+  "version": 1,
+  "tags": [
+    {
+      "id": "cards",
+      "label": "Карточные",
+      "kind": "type",
+      "icon": "cards"
+    },
+    {
+      "id": "board",
+      "label": "На поле",
+      "kind": "type",
+      "icon": "board"
+    },
+    {
+      "id": "dice",
+      "label": "Кубики",
+      "kind": "type",
+      "icon": "dice"
+    },
+    {
+      "id": "pieces",
+      "label": "Фишки",
+      "kind": "type",
+      "icon": "pieces"
+    },
+    {
+      "id": "solitaire",
+      "label": "Пасьянсы",
+      "kind": "type",
+      "icon": "solitaire"
+    },
+    {
+      "id": "words",
+      "label": "Словесные",
+      "kind": "type",
+      "icon": "words"
+    },
+    {
+      "id": "drawing",
+      "label": "Рисование",
+      "kind": "type",
+      "icon": "edit"
+    },
+    {
+      "id": "quiz",
+      "label": "Викторины",
+      "kind": "type",
+      "icon": "help"
+    },
+    {
+      "id": "puzzle",
+      "label": "Головоломки",
+      "kind": "type",
+      "icon": "puzzle"
+    },
+    {
+      "id": "shedding",
+      "label": "Сброс карт",
+      "kind": "mechanic"
+    },
+    {
+      "id": "logic",
+      "label": "Логика",
+      "kind": "mechanic"
+    },
+    {
+      "id": "memory",
+      "label": "Память",
+      "kind": "mechanic"
+    },
+    {
+      "id": "combinations",
+      "label": "Комбинации",
+      "kind": "mechanic"
+    },
+    {
+      "id": "race",
+      "label": "Гонки",
+      "kind": "mechanic"
+    },
+    {
+      "id": "tricks",
+      "label": "Взятки",
+      "kind": "mechanic"
+    },
+    {
+      "id": "association",
+      "label": "Ассоциации",
+      "kind": "mechanic"
+    },
+    {
+      "id": "attention",
+      "label": "Внимание",
+      "kind": "mechanic"
+    },
+    {
+      "id": "reaction",
+      "label": "На реакцию",
+      "kind": "mechanic"
+    },
+    {
+      "id": "cooperative",
+      "label": "Кооперативные",
+      "kind": "mechanic"
+    },
+    {
+      "id": "economic",
+      "label": "Экономические",
+      "kind": "mechanic"
+    },
+    {
+      "id": "deduction",
+      "label": "Социальная дедукция",
+      "kind": "mechanic"
+    }
+  ]
+}
