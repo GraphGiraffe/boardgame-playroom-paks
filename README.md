@@ -1,22 +1,22 @@
-# ХОД · игровые паки 0.6.1
+# ХОД · игровые паки 0.6.2
 
-Коллекция для [ХОД 0.17.3](https://github.com/GraphGiraffe/boardgame-playroom/releases/tag/v0.17.3) из 12 игр опубликована как [релиз 0.6.1](https://github.com/GraphGiraffe/boardgame-playroom-paks/releases/tag/v0.6.1) и в защищённом каталоге R2. Правила, варианты игры, бот, представление, стили и ресурсы принадлежат своему паку; приложение и движок поставляются отдельно.
+Коллекция для [ХОД 0.17.4](https://github.com/GraphGiraffe/boardgame-playroom/releases/tag/v0.17.4) из 12 игр опубликована как [релиз 0.6.2](https://github.com/GraphGiraffe/boardgame-playroom-paks/releases/tag/v0.6.2) и в защищённом каталоге R2. Правила, варианты игры, бот, представление, стили и ресурсы принадлежат своему паку; приложение и движок поставляются отдельно.
 
-Отдельная [публикация R2 #38570573996](https://github.com/GraphGiraffe/boardgame-playroom-paks/actions/runs/38570573996) обновила только Лудо до 0.1.10; снимок каталога `5b1e1efc75a64bd45fb7e38fc4e4f7ac614a59dfeeda6a37dd2ddd1e9671b88e`. Все 14 файлов релиза скачаны и проверены по `SHA256SUMS`.
+Паки публикуются отдельно от оболочки приложения. Общие [игровые ассеты и правила масштабирования](shared/assets/README.md) входят в архив исходников коллекции и в отдельный `playroom-shared-assets-0.6.2.zip`.
 
 | Игра | Версия |
 | --- | --- |
-| checkers | 0.3.4 |
+| checkers | 0.3.5 |
 | domino | 0.3.7 |
 | durak | 0.4.4 |
 | battleship | 0.1.5 |
 | gofish | 0.1.4 |
-| ludo | 0.1.10 |
+| ludo | 0.1.11 |
 | oldmaid | 0.1.5 |
 | pexeso | 0.1.6 |
-| tictactoe | 0.1.2 |
+| tictactoe | 0.1.3 |
 | yatzy | 0.1.5 |
-| snakes | 0.3.8 |
+| snakes | 0.3.9 |
 | uno | 0.4.9 |
 
 API движка **1 и 2**, представления **2**, формат контейнера **1**; stateVersion задаётся каждым паком. Версия коллекции независима от версий игр. Существующие версии при переходе в stable не переписываются.
@@ -29,15 +29,15 @@ API движка **1 и 2**, представления **2**, формат ко
 
 ## Исходники и проверка
 
-Каждый `packs/<id>/` содержит manifest.json, rules.js, view.js, styles.css и опциональные sounds.js/assets/config. Общие исходники изображений и компонентов лежат в `shared/`; сборщик встраивает их по `sharedUi` и `sharedAssets` в конкретный автономный пак. manifest.js генерируется из JSON и не редактируется независимо.
+Каждый `packs/<id>/` содержит manifest.json, rules.js, view.js, styles.css и опциональные sounds.js/assets/config. Общие исходники изображений, таблиц, звуков и компонентов лежат в `shared/`; сборщик встраивает выбранные SVG по `sharedUi` и `sharedAssets` в конкретный автономный пак. Полная библиотека включена в архив исходников. manifest.js генерируется из JSON и не редактируется независимо.
 
 Python 3.9+ и Node.js 22+:
 
 ```sh
 bash scripts/codex/setup.sh
 bash scripts/codex/check.sh
-python3 build.py --output-dir dist/release-0.6.1
-(cd dist/release-0.6.1 && sha256sum -c SHA256SUMS)
+python3 build.py --output-dir dist/release-0.6.2
+(cd dist/release-0.6.2 && sha256sum -c SHA256SUMS)
 ```
 
 Полная проверка с соседним checkout приложения:
