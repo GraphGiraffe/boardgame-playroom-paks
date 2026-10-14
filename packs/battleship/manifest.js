@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["battleship"] = {
   "id": "battleship",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "name": "Морской бой",
   "category": "board",
   "estimatedDuration": "15–30 мин",
@@ -25,7 +25,7 @@
     "ship.svg"
   ],
   "engineApi": 1,
-  "stateVersion": 2,
+  "stateVersion": 3,
   "viewApi": 2,
   "tileTheme": "blue",
   "tags": [

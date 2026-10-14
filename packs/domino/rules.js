@@ -2,7 +2,7 @@
   'use strict';
   const pips = hand => hand.reduce((n, tile) => n + tile.a + tile.b, 0);
   E.register({
-    id: 'domino', version:'0.3.5', name: 'Домино', min: 2, max: 4, scoreLabel: 'очки',
+    id: 'domino', version:'0.3.6', name: 'Домино', min: 2, max: 4, scoreLabel: 'очки',
     description: 'Собирайте цепочку. Берегите дубли и считайте оставшиеся точки.',
     presets: [{ id: 'classic', label: 'Классика · 7 костей' }, { id: 'quick', label: 'Быстро · 5 костей' }],
     rules: ['Двойная шестёрка: 28 костей. Соединяйте одинаковое число точек.', 'Начинает игрок с наибольшим дублем; первой можно поставить любую кость.', 'Если хода нет, берите из базара по одной до подходящей кости. Пустой базар — пропуск.', 'Побеждает пустая рука. При рыбе — наименьшая сумма; равенство даёт ничью.', 'Очки победителя — сумма точек на руках соперников.'],
@@ -39,7 +39,7 @@
     apply(s, actor, a) {
       const d = s.data, name = s.players[actor].name;
       if (a.type === 'draw') { d.hands[actor].push(d.stock.pop()); E.event(s, `${name} берёт кость из базара`, actor, 'draw', { sound: { id: 'draw', target: actor } }); return; }
-      if (a.type === 'pass') { d.passes++; E.event(s, `${name}: хода нет`, actor, 'pass', { sound: { id: 'notify' } }); }
+      if (a.type === 'pass') { d.passes++; E.event(s, `${name}: хода нет`, actor, 'pass', { sound: { id: 'notify' },speech:{speaker:actor,text:'Пас'} }); }
       else {
         d.passes = 0;
         const tile = d.hands[actor].splice(d.hands[actor].findIndex(t => t.id === a.card), 1)[0];

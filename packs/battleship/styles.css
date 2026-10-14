@@ -3,3 +3,8 @@
 
 .battleship-scene .battle-fields{display:block;position:relative;overflow:hidden;container-type:size}.battleship-scene .battle-panel{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;position:absolute;inset:0;transition:transform 220ms ease;will-change:transform}.battleship-scene .battle-panel:first-child{transform:translateX(-100%)}.battleship-scene .battle-panel:last-child{transform:translateX(100%)}.battleship-scene .battle-panel.is-active{transform:translateX(0);display:flex}.battleship-scene .battle-panel .battle-grid{width:min(100cqw,calc(100cqh - 60px));height:auto;flex:none;margin-inline:auto}.battleship-scene .battle-panel>.player-indicators{flex:none;min-height:25px;max-width:100%;justify-content:center;align-items:center}.battleship-scene .battle-panel .player-indicator{font-size:clamp(10px,2vmin,14px)}.battleship-scene .battle-panel .player-indicator svg{width:22px;height:16px}.reduced-motion .battleship-scene .battle-panel{transition:none}@media(prefers-reduced-motion:reduce){.battleship-scene .battle-panel{transition:none}}
 .battleship-scene .battle-panel .player-indicator.fleet-indicator .fleet-ship-icon{width:auto;height:18px}
+.battleship-scene .fleet-indicator.is-complete{background:#d8edcf;border-color:#67945f;color:#2e623b}
+.battleship-scene .fleet-indicator.is-selected{outline:2px solid #d29a45;outline-offset:1px}
+.battleship-scene [data-drag-piece]{touch-action:none;cursor:grab}
+.battleship-scene .battle-cell.is-selected{box-shadow:inset 0 0 0 2px #efcb67}
+.battleship-scene .battle-grid [data-drop-piece].playroom-drop-hover{outline-offset:-3px!important}
