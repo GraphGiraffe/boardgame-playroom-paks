@@ -15,6 +15,10 @@ on:
       rollback:
         description: Prior catalog snapshot SHA256; set instead of release to roll back
         type: string
+      probe:
+        description: Verify R2 bucket access without publishing
+        type: boolean
+        default: false
 permissions:
   contents: read
 concurrency:
@@ -33,6 +37,7 @@ jobs:
       ONLY: ${{ inputs.only }}
       BOOTSTRAP: ${{ inputs.bootstrap }}
       ROLLBACK: ${{ inputs.rollback }}
+      PROBE: ${{ inputs.probe }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -47,6 +52,11 @@ jobs:
         run: |
           set -euo pipefail
           test -n "$PLAYROOM_PACKS_BUCKET"
+          if test "$PROBE" = true; then
+            test -z "$RELEASE" && test -z "$ONLY" && test -z "$ROLLBACK"
+            npx --yes wrangler@4.149.0 r2 bucket info "$PLAYROOM_PACKS_BUCKET"
+            exit 0
+          fi
           if test -n "$ROLLBACK"; then
             test -z "$RELEASE" && test -z "$ONLY"
             python3 scripts/publish-packs.py --bucket "$PLAYROOM_PACKS_BUCKET" --rollback "$ROLLBACK"
