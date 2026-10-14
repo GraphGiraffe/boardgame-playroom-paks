@@ -2,6 +2,8 @@
 
 Коллекция для [ХОД 0.17.3](https://github.com/GraphGiraffe/boardgame-playroom/releases/tag/v0.17.3) из 12 игр опубликована как [релиз 0.6.1](https://github.com/GraphGiraffe/boardgame-playroom-paks/releases/tag/v0.6.1) и в защищённом каталоге R2. Правила, варианты игры, бот, представление, стили и ресурсы принадлежат своему паку; приложение и движок поставляются отдельно.
 
+Отдельная [публикация R2 #38570573996](https://github.com/GraphGiraffe/boardgame-playroom-paks/actions/runs/38570573996) обновила только Лудо до 0.1.10; снимок каталога `5b1e1efc75a64bd45fb7e38fc4e4f7ac614a59dfeeda6a37dd2ddd1e9671b88e`. Все 14 файлов релиза скачаны и проверены по `SHA256SUMS`.
+
 | Игра | Версия |
 | --- | --- |
 | checkers | 0.3.4 |
