@@ -1,21 +1,21 @@
-# ХОД · игровые паки 0.5.2
+# ХОД · игровые паки 0.5.3
 
-Коллекция для ХОД 0.16.2 из 12 игр. Стабильная коллекция 0.4.0 для [ХОД 0.15.0](https://github.com/GraphGiraffe/boardgame-playroom/releases/tag/v0.15.0) остаётся доступной. Правила, варианты игры, бот, представление, стили и ресурсы принадлежат своему паку; приложение и движок поставляются отдельно.
+Коллекция для ХОД 0.16.3 из 12 игр. Стабильная коллекция 0.4.0 для [ХОД 0.15.0](https://github.com/GraphGiraffe/boardgame-playroom/releases/tag/v0.15.0) остаётся доступной. Правила, варианты игры, бот, представление, стили и ресурсы принадлежат своему паку; приложение и движок поставляются отдельно.
 
 | Игра | Версия |
 | --- | --- |
 | checkers | 0.3.4 |
-| domino | 0.3.5 |
-| durak | 0.4.2 |
-| battleship | 0.1.3 |
-| gofish | 0.1.2 |
-| ludo | 0.1.6 |
+| domino | 0.3.6 |
+| durak | 0.4.3 |
+| battleship | 0.1.4 |
+| gofish | 0.1.3 |
+| ludo | 0.1.7 |
 | oldmaid | 0.1.4 |
-| pexeso | 0.1.4 |
+| pexeso | 0.1.5 |
 | tictactoe | 0.1.2 |
 | yatzy | 0.1.4 |
 | snakes | 0.3.7 |
-| uno | 0.4.7 |
+| uno | 0.4.8 |
 
 API движка **1 и 2**, представления **2**, формат контейнера **1**; stateVersion задаётся каждым паком. Версия коллекции независима от версий игр. Существующие версии при переходе в stable не переписываются.
 
@@ -34,8 +34,8 @@ Python 3.9+ и Node.js 22+:
 ```sh
 bash scripts/codex/setup.sh
 bash scripts/codex/check.sh
-python3 build.py --output-dir dist/release-0.5.2
-(cd dist/release-0.5.2 && sha256sum -c SHA256SUMS)
+python3 build.py --output-dir dist/release-0.5.3
+(cd dist/release-0.5.3 && sha256sum -c SHA256SUMS)
 ```
 
 Полная проверка с соседним checkout приложения:
