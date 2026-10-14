@@ -1,0 +1,3 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 40" role="img" aria-label="Счётчик очков, образец">
+  <rect x="2" y="5" width="48" height="33" rx="7" fill="#becaa8"/><rect x="2" y="2" width="48" height="33" rx="7" fill="#fff9e8"/><text x="26" y="19" text-anchor="middle" dominant-baseline="central" font-family="system-ui, sans-serif" font-size="22" font-weight="800" fill="#45633d">12</text>
+</svg>

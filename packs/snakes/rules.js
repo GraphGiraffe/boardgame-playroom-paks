@@ -1,7 +1,7 @@
 (function (E) {
   'use strict';
   E.register({
-    id: 'snakes', version:'0.3.8', name: 'Змеи и лестницы', min: 2, max: 4, scoreLabel: 'победы',
+    id: 'snakes', version:'0.3.9', name: 'Змеи и лестницы', min: 2, max: 4, scoreLabel: 'победы',
     result(s){return {label:'Клетка',values:s.data.positions.slice()};},
     description: 'Один бросок — и всё меняется. Дорога к вершине в вашем кармане.',
     presets: [{ id: 'classic', label: 'Классика · 100 клеток' }, { id: 'quick', label: 'Быстро · 64 клетки' }],

@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["snakes"] = {
   "id": "snakes",
-  "version": "0.3.8",
+  "version": "0.3.9",
   "category": "board",
   "estimatedDuration": "5–15 мин",
   "tagline": "Вверх по лестнице. Навстречу удаче.",
