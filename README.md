@@ -1,4 +1,4 @@
-# ХОД · игровые паки 0.5.3
+# ХОД · игровые паки 0.5.4
 
 Коллекция для ХОД 0.16.3 из 12 игр. Стабильная коллекция 0.4.0 для [ХОД 0.15.0](https://github.com/GraphGiraffe/boardgame-playroom/releases/tag/v0.15.0) остаётся доступной. Правила, варианты игры, бот, представление, стили и ресурсы принадлежат своему паку; приложение и движок поставляются отдельно.
 
@@ -9,7 +9,7 @@
 | durak | 0.4.3 |
 | battleship | 0.1.4 |
 | gofish | 0.1.3 |
-| ludo | 0.1.7 |
+| ludo | 0.1.8 |
 | oldmaid | 0.1.4 |
 | pexeso | 0.1.5 |
 | tictactoe | 0.1.2 |
@@ -34,8 +34,8 @@ Python 3.9+ и Node.js 22+:
 ```sh
 bash scripts/codex/setup.sh
 bash scripts/codex/check.sh
-python3 build.py --output-dir dist/release-0.5.3
-(cd dist/release-0.5.3 && sha256sum -c SHA256SUMS)
+python3 build.py --output-dir dist/release-0.5.4
+(cd dist/release-0.5.4 && sha256sum -c SHA256SUMS)
 ```
 
 Полная проверка с соседним checkout приложения:
