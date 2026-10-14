@@ -45,10 +45,10 @@
       if (d.hands[actor].length === 1) {
         u.declared[actor] = true;
         u.situations[actor].open=false;u.situations[actor].settled=true;
-        E.event(s, `${name}: UNO!`, actor, 'uno', { sound: { id: 'uno.call' },notice:{title:`${name}: UNO!`,detail:'Осталась одна карта',tone:'success'} });
+        E.event(s, `${name}: UNO!`, actor, 'uno', { sound: { id: 'uno.call' },speech:{speaker:actor,text:'UNO!',result:'success'},notice:{title:`${name}: UNO!`,detail:'Осталась одна карта',tone:'success'} });
       } else {
         u.declared[actor] = false;
-        E.event(s, `${name} ошибочно объявляет UNO: в руке ${d.hands[actor].length} карт. Без штрафа за раннее объявление.`, actor, 'false-uno', { sound: { id: 'uno.call' },notice:{title:`${name}: UNO! слишком рано`,detail:'За ранний выкрик штрафа нет',tone:'warning'} });
+        E.event(s, `${name} ошибочно объявляет UNO: в руке ${d.hands[actor].length} карт. Без штрафа за раннее объявление.`, actor, 'false-uno', { sound: { id: 'uno.call' },speech:{speaker:actor,text:'UNO!',result:'error'},notice:{title:`${name}: UNO! слишком рано`,detail:'За ранний выкрик штрафа нет',tone:'warning'} });
       }
       syncPending(s);return;
     }
@@ -57,11 +57,11 @@
     const situation=u.situations[target];situation.settled=true;
     if (situation.open && d.hands[target].length === 1 && !u.declared[target]) {
       situation.open=false;
-      E.event(s, `${name} поймал ${targetName}: UNO не объявлено`, actor, 'uno-caught', { target });
+      E.event(s, `${name} поймал ${targetName}: UNO не объявлено`, actor, 'uno-caught', { target,speech:{speaker:actor,target,text:'UNO!',result:'success'} });
       penalty(s, target,{title:`${targetName} пропустил UNO!`,detail:count=>`${name} прав · штраф ${targetName}: +${count} карт`,tone:'warning'});
     } else {
       const reason = d.hands[target].length !== 1 ? `у ${targetName} ${d.hands[target].length} карт, а не одна` : u.declared[target] ? `${targetName} уже объявил UNO` : 'ситуация уже закрыта';
-      E.event(s, `${name} ошибочно обвиняет ${targetName}: ${reason}. Штраф обвиняющему — 2 карты.`, actor, 'false-accusation', { target });
+      E.event(s, `${name} ошибочно обвиняет ${targetName}: ${reason}. Штраф обвиняющему — 2 карты.`, actor, 'false-accusation', { target,speech:{speaker:actor,target,text:'UNO!',result:'error'} });
       penalty(s, actor,{title:'Ложное обвинение UNO!',detail:count=>`${name}: штраф +${count} карт`,tone:'danger'});
     }
     syncPending(s);
@@ -73,7 +73,7 @@
     return card.color === 'wild' || card.color === d.color || card.value === top.value;
   }
   E.register({
-    id: 'uno', version:'0.4.7', name: 'UNO', min: 2, max: 4, scoreLabel: 'очки',
+    id: 'uno', version:'0.4.8', name: 'UNO', min: 2, max: 4, scoreLabel: 'очки',
     description: 'Цвета, цифры и внезапные развороты. Освободите руку первым.',
     presets: [{ id: 'classic', label: 'Классика · 7 карт' }, { id: 'quick', label: 'Быстро · 5 карт' }],
     rules: ['Совпадение по цвету или значению; чёрная карта меняет цвет.', 'После добора можно сыграть только взятую карту или пропустить ход.', '+4 разрешена, если нет карт текущего цвета. Без накопления штрафов и оспаривания.', 'Штраф последней карты применяется. Первый сброс — цифровая карта.', 'В настройках партии по умолчанию выбран ручной выкрик UNO; можно переключить на автоматическое объявление.', 'В ручном режиме нажмите «UNO!» при одной карте. Чтобы обвинить соперника в пропуске выкрика, коснитесь его имени или руки, затем нажмите кнопку «UNO!» в меню игрока. Каждого забывшего можно поймать, пока у него одна карта и он не объявил UNO; чужие ходы не закрывают ситуацию. Штраф — 2 карты.', 'После показа хода человеку даётся 1 секунда защиты от обвинений других людей по сети и 3 секунды от ботов. Раннее обвинение не действует и не штрафуется. Повторные и запоздалые реакции не наказываются.', 'Для каждого обвиняемого в одном эпизоде назначается не более одного штрафа: забывшему UNO — 2 карты; за настоящее ложное обвинение — 2 карты только первому обвинителю. Повторное UNO не создаёт ход; раннее объявление без одной карты — запись без штрафа.', 'Числа дают номинал, действия — 20, чёрные карты — 50 очков победителю.'],

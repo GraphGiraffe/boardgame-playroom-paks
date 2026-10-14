@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["ludo"] = {
   "id": "ludo",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "name": "Лудо",
   "category": "board",
   "estimatedDuration": "20–40 мин",
@@ -115,6 +115,16 @@
           "label": "Да"
         }
       ]
+    }
+  ],
+  "teamBadges": [
+    {
+      "label": "синяя",
+      "color": "#668fad"
+    },
+    {
+      "label": "красная",
+      "color": "#ce735d"
     }
   ]
 };
