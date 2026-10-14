@@ -6,7 +6,8 @@
  function awardExit(s,i){const d=s.data;if(!d.hands[i].length&&!d.outOrder.includes(i)){d.outOrder.push(i);s.players[i].score+=s.players.length-d.outOrder.length;}}
  function settle(s){const d=s.data;for(let i=0;i<d.hands.length;i++)awardExit(s,i);
   const active=d.hands.flatMap((h,i)=>h.length?[i]:[]);if(active.length<=1){const loser=active[0];E.finish(s,d.outOrder,`${s.players[loser].name} остался с Акулиной`,0);return true;}return false;}
- E.register({id:'oldmaid',version:'0.1.4',stateVersion:3,name:'Акулина',min:2,max:6,scoreLabel:'очки',description:'Тяните карту вслепую у соперника и сбрасывайте пары.',
+ E.register({id:'oldmaid',version:'0.1.5',stateVersion:3,name:'Акулина',min:2,max:6,scoreLabel:'очки',description:'Тяните карту вслепую у соперника и сбрасывайте пары.',
+  result(s){return {label:'Очки за выход',values:s.players.map(player=>player.score)};},
   presets:[{id:'classic',label:'Классика'}],
   rules:['Из исходной колоды заранее убрана дама треф. Дама пик остаётся Акулиной.','Пары — одинаковый ранг и цвет масти; два джокера также пара.','В свой ход вслепую вытяните карту у выбранного соперника с картами (или следующего, если включено это правило). Участники обмена видны всем, карта остаётся закрытой. Совпавшая пара сразу сбрасывается.','Первый избавившийся от карт получает N−1 очков, следующий — N−2 и так далее. Оставшийся с Акулиной получает 0.'],
   create(s,o={}){const size=[36,52,54].includes(Number(o.deck))?Number(o.deck):36,cards=E.shuffle(deck(size),s),hands=s.players.map(()=>[]);cards.forEach((c,i)=>hands[i%hands.length].push(c));s.data={deckSize:size,drawFrom:o.drawFrom==='next'?'next':'any',hands,discard:[],outOrder:[]};for(let p=0;p<hands.length;p++)discard(s,p);s.turn=o.resolvedFirstPlayer??0;if(!hands[s.turn].length)s.turn=next(s.data,s.turn);settle(s);},

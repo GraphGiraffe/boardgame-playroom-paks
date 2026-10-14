@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["yatzy"] = {
   "id": "yatzy",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "name": "Ятзи",
   "category": "dice",
   "estimatedDuration": "15–25 мин",

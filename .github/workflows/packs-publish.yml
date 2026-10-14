@@ -1,0 +1,63 @@
+name: Publish independent game packs
+on:
+  workflow_dispatch:
+    inputs:
+      release:
+        description: Published pack collection release tag, for example v0.6.0
+        type: string
+      only:
+        description: Optional one pack ID; empty publishes the whole collection
+        type: string
+      bootstrap:
+        description: Initial catalog publication only
+        type: boolean
+        default: false
+      rollback:
+        description: Prior catalog snapshot SHA256; set instead of release to roll back
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: protected-pack-catalog
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+      PLAYROOM_PACKS_BUCKET: ${{ vars.PLAYROOM_PACKS_BUCKET }}
+      RELEASE: ${{ inputs.release }}
+      ONLY: ${{ inputs.only }}
+      BOOTSTRAP: ${{ inputs.bootstrap }}
+      ROLLBACK: ${{ inputs.rollback }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify input and release assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$PLAYROOM_PACKS_BUCKET"
+          if test -n "$ROLLBACK"; then
+            test -z "$RELEASE" && test -z "$ONLY"
+            python3 scripts/publish-packs.py --bucket "$PLAYROOM_PACKS_BUCKET" --rollback "$ROLLBACK"
+            exit 0
+          fi
+          [[ "$RELEASE" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          mkdir -p dist/packs-release
+          gh release view "$RELEASE" --repo "$GITHUB_REPOSITORY" --json tagName,isDraft --jq 'select(.tagName=="'"$RELEASE"'" and .isDraft==false) | .tagName' | grep -Fx "$RELEASE"
+          gh release download "$RELEASE" --repo "$GITHUB_REPOSITORY" --pattern '*.playroom-pack.json' --pattern SHA256SUMS --dir dist/packs-release
+          args=(--bucket "$PLAYROOM_PACKS_BUCKET" --assets dist/packs-release --collection "${RELEASE#v}")
+          if test -n "$ONLY"; then args+=(--only "$ONLY"); fi
+          if test "$BOOTSTRAP" = true; then args+=(--bootstrap); fi
+          python3 scripts/publish-packs.py "${args[@]}" --dry-run
+          python3 scripts/publish-packs.py "${args[@]}"
