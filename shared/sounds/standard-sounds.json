@@ -1,0 +1,637 @@
+{
+  "move": {
+    "label": "Ход",
+    "notes": [
+      {
+        "frequency": 660,
+        "at": 0,
+        "duration": 0.09,
+        "wave": "triangle",
+        "gain": 0.16,
+        "to": 480
+      },
+      {
+        "frequency": 980,
+        "at": 0.025,
+        "duration": 0.065,
+        "wave": "sine",
+        "gain": 0.075,
+        "to": 980
+      }
+    ]
+  },
+  "draw": {
+    "label": "Взять карту",
+    "notes": [
+      {
+        "frequency": 1600,
+        "at": 0,
+        "duration": 0.045,
+        "wave": "noise",
+        "gain": 0.12,
+        "to": 950
+      },
+      {
+        "frequency": 520,
+        "at": 0.025,
+        "duration": 0.1,
+        "wave": "sine",
+        "gain": 0.12,
+        "to": 700
+      }
+    ]
+  },
+  "victory": {
+    "label": "Победа",
+    "notes": [
+      {
+        "frequency": 523,
+        "at": 0,
+        "duration": 0.2,
+        "wave": "triangle",
+        "gain": 0.12,
+        "to": 523
+      },
+      {
+        "frequency": 659,
+        "at": 0.11,
+        "duration": 0.2,
+        "wave": "triangle",
+        "gain": 0.12,
+        "to": 659
+      },
+      {
+        "frequency": 784,
+        "at": 0.22,
+        "duration": 0.2,
+        "wave": "triangle",
+        "gain": 0.12,
+        "to": 784
+      },
+      {
+        "frequency": 1047,
+        "at": 0.34,
+        "duration": 0.38,
+        "wave": "sine",
+        "gain": 0.17,
+        "to": 1047
+      },
+      {
+        "frequency": 784,
+        "at": 0.34,
+        "duration": 0.36,
+        "wave": "sine",
+        "gain": 0.08,
+        "to": 784
+      }
+    ]
+  },
+  "defeat": {
+    "label": "Поражение",
+    "notes": [
+      {
+        "frequency": 440,
+        "at": 0,
+        "duration": 0.2,
+        "wave": "triangle",
+        "gain": 0.12,
+        "to": 440
+      },
+      {
+        "frequency": 349,
+        "at": 0.13,
+        "duration": 0.23,
+        "wave": "triangle",
+        "gain": 0.12,
+        "to": 349
+      },
+      {
+        "frequency": 262,
+        "at": 0.28,
+        "duration": 0.34,
+        "wave": "sine",
+        "gain": 0.15,
+        "to": 262
+      }
+    ]
+  },
+  "draw-game": {
+    "label": "Ничья",
+    "notes": [
+      {
+        "frequency": 523,
+        "at": 0,
+        "duration": 0.23,
+        "wave": "sine",
+        "gain": 0.12,
+        "to": 523
+      },
+      {
+        "frequency": 659,
+        "at": 0,
+        "duration": 0.23,
+        "wave": "sine",
+        "gain": 0.08,
+        "to": 659
+      },
+      {
+        "frequency": 523,
+        "at": 0.21,
+        "duration": 0.28,
+        "wave": "triangle",
+        "gain": 0.1,
+        "to": 523
+      }
+    ]
+  },
+  "attack.light": {
+    "label": "Лёгкая атака · +2",
+    "notes": [
+      {
+        "frequency": 300,
+        "at": 0,
+        "duration": 0.1,
+        "wave": "triangle",
+        "gain": 0.18,
+        "to": 220
+      },
+      {
+        "frequency": 600,
+        "at": 0.09,
+        "duration": 0.14,
+        "wave": "triangle",
+        "gain": 0.16,
+        "to": 420
+      }
+    ]
+  },
+  "attack.heavy": {
+    "label": "Сильная атака · +4",
+    "notes": [
+      {
+        "frequency": 190,
+        "at": 0,
+        "duration": 0.17,
+        "wave": "triangle",
+        "gain": 0.21,
+        "to": 90
+      },
+      {
+        "frequency": 1400,
+        "at": 0,
+        "duration": 0.08,
+        "wave": "noise",
+        "gain": 0.11,
+        "to": 500
+      },
+      {
+        "frequency": 380,
+        "at": 0.1,
+        "duration": 0.15,
+        "wave": "triangle",
+        "gain": 0.17,
+        "to": 250
+      },
+      {
+        "frequency": 570,
+        "at": 0.2,
+        "duration": 0.2,
+        "wave": "triangle",
+        "gain": 0.14,
+        "to": 330
+      }
+    ]
+  },
+  "attack.skip": {
+    "label": "Пропуск хода",
+    "notes": [
+      {
+        "frequency": 880,
+        "at": 0,
+        "duration": 0.065,
+        "wave": "sine",
+        "gain": 0.14,
+        "to": 880
+      },
+      {
+        "frequency": 440,
+        "at": 0.1,
+        "duration": 0.13,
+        "wave": "triangle",
+        "gain": 0.14,
+        "to": 330
+      }
+    ]
+  },
+  "attack.capture": {
+    "label": "Взятие фишки",
+    "notes": [
+      {
+        "frequency": 220,
+        "at": 0,
+        "duration": 0.15,
+        "wave": "triangle",
+        "gain": 0.2,
+        "to": 90
+      },
+      {
+        "frequency": 1800,
+        "at": 0,
+        "duration": 0.055,
+        "wave": "noise",
+        "gain": 0.14,
+        "to": 700
+      },
+      {
+        "frequency": 880,
+        "at": 0.045,
+        "duration": 0.13,
+        "wave": "sine",
+        "gain": 0.09,
+        "to": 880
+      }
+    ]
+  },
+  "attack": {
+    "label": "Атака",
+    "notes": [
+      {
+        "frequency": 260,
+        "at": 0,
+        "duration": 0.13,
+        "wave": "triangle",
+        "gain": 0.19,
+        "to": 160
+      },
+      {
+        "frequency": 1100,
+        "at": 0.015,
+        "duration": 0.045,
+        "wave": "noise",
+        "gain": 0.08,
+        "to": 1100
+      }
+    ]
+  },
+  "defend": {
+    "label": "Защита",
+    "notes": [
+      {
+        "frequency": 700,
+        "at": 0,
+        "duration": 0.18,
+        "wave": "sine",
+        "gain": 0.13,
+        "to": 700
+      },
+      {
+        "frequency": 1050,
+        "at": 0.015,
+        "duration": 0.2,
+        "wave": "sine",
+        "gain": 0.075,
+        "to": 1050
+      }
+    ]
+  },
+  "reverse": {
+    "label": "Смена направления",
+    "notes": [
+      {
+        "frequency": 420,
+        "at": 0,
+        "duration": 0.13,
+        "wave": "sine",
+        "gain": 0.14,
+        "to": 800
+      },
+      {
+        "frequency": 800,
+        "at": 0.1,
+        "duration": 0.19,
+        "wave": "sine",
+        "gain": 0.14,
+        "to": 420
+      }
+    ]
+  },
+  "dice": {
+    "label": "Бросок кубика",
+    "notes": [
+      {
+        "frequency": 1700,
+        "at": 0,
+        "duration": 0.035,
+        "wave": "noise",
+        "gain": 0.13,
+        "to": 1700
+      },
+      {
+        "frequency": 280,
+        "at": 0.012,
+        "duration": 0.06,
+        "wave": "triangle",
+        "gain": 0.13,
+        "to": 280
+      },
+      {
+        "frequency": 2000,
+        "at": 0.06,
+        "duration": 0.035,
+        "wave": "noise",
+        "gain": 0.11,
+        "to": 2000
+      },
+      {
+        "frequency": 240,
+        "at": 0.1,
+        "duration": 0.06,
+        "wave": "triangle",
+        "gain": 0.14,
+        "to": 240
+      },
+      {
+        "frequency": 1300,
+        "at": 0.15,
+        "duration": 0.045,
+        "wave": "noise",
+        "gain": 0.1,
+        "to": 1300
+      },
+      {
+        "frequency": 200,
+        "at": 0.22,
+        "duration": 0.11,
+        "wave": "triangle",
+        "gain": 0.17,
+        "to": 200
+      }
+    ]
+  },
+  "climb": {
+    "label": "Подъём",
+    "notes": [
+      {
+        "frequency": 440,
+        "at": 0,
+        "duration": 0.13,
+        "wave": "sine",
+        "gain": 0.13,
+        "to": 440
+      },
+      {
+        "frequency": 554,
+        "at": 0.07,
+        "duration": 0.13,
+        "wave": "sine",
+        "gain": 0.13,
+        "to": 554
+      },
+      {
+        "frequency": 659,
+        "at": 0.14,
+        "duration": 0.13,
+        "wave": "sine",
+        "gain": 0.13,
+        "to": 659
+      },
+      {
+        "frequency": 880,
+        "at": 0.21,
+        "duration": 0.2,
+        "wave": "sine",
+        "gain": 0.14,
+        "to": 880
+      }
+    ]
+  },
+  "fall": {
+    "label": "Спуск",
+    "notes": [
+      {
+        "frequency": 740,
+        "at": 0,
+        "duration": 0.13,
+        "wave": "sine",
+        "gain": 0.13,
+        "to": 740
+      },
+      {
+        "frequency": 587,
+        "at": 0.07,
+        "duration": 0.13,
+        "wave": "sine",
+        "gain": 0.13,
+        "to": 587
+      },
+      {
+        "frequency": 440,
+        "at": 0.14,
+        "duration": 0.13,
+        "wave": "sine",
+        "gain": 0.13,
+        "to": 440
+      },
+      {
+        "frequency": 294,
+        "at": 0.21,
+        "duration": 0.2,
+        "wave": "triangle",
+        "gain": 0.14,
+        "to": 294
+      }
+    ]
+  },
+  "penalty": {
+    "label": "Штраф",
+    "notes": [
+      {
+        "frequency": 330,
+        "at": 0,
+        "duration": 0.11,
+        "wave": "triangle",
+        "gain": 0.15,
+        "to": 330
+      },
+      {
+        "frequency": 330,
+        "at": 0.14,
+        "duration": 0.11,
+        "wave": "triangle",
+        "gain": 0.15,
+        "to": 330
+      },
+      {
+        "frequency": 247,
+        "at": 0.28,
+        "duration": 0.19,
+        "wave": "triangle",
+        "gain": 0.13,
+        "to": 247
+      }
+    ]
+  },
+  "success": {
+    "label": "Пара / комплект / очки",
+    "notes": [
+      {
+        "frequency": 660,
+        "at": 0,
+        "duration": 0.09,
+        "wave": "sine",
+        "gain": 0.15,
+        "to": 660
+      },
+      {
+        "frequency": 880,
+        "at": 0.08,
+        "duration": 0.15,
+        "wave": "sine",
+        "gain": 0.15,
+        "to": 880
+      }
+    ]
+  },
+  "success.special": {
+    "label": "Особая комбинация",
+    "notes": [
+      {
+        "frequency": 523,
+        "at": 0,
+        "duration": 0.13,
+        "wave": "sine",
+        "gain": 0.15,
+        "to": 523
+      },
+      {
+        "frequency": 659,
+        "at": 0.09,
+        "duration": 0.13,
+        "wave": "sine",
+        "gain": 0.15,
+        "to": 659
+      },
+      {
+        "frequency": 880,
+        "at": 0.18,
+        "duration": 0.2,
+        "wave": "sine",
+        "gain": 0.15,
+        "to": 880
+      }
+    ]
+  },
+  "success.yatzy": {
+    "label": "Ятзи",
+    "notes": [
+      {
+        "frequency": 523,
+        "at": 0,
+        "duration": 0.14,
+        "wave": "sine",
+        "gain": 0.15,
+        "to": 523
+      },
+      {
+        "frequency": 659,
+        "at": 0.1,
+        "duration": 0.14,
+        "wave": "sine",
+        "gain": 0.15,
+        "to": 659
+      },
+      {
+        "frequency": 784,
+        "at": 0.2,
+        "duration": 0.14,
+        "wave": "sine",
+        "gain": 0.15,
+        "to": 784
+      },
+      {
+        "frequency": 1047,
+        "at": 0.3,
+        "duration": 0.3,
+        "wave": "sine",
+        "gain": 0.15,
+        "to": 1047
+      }
+    ]
+  },
+  "mismatch": {
+    "label": "Нет совпадения",
+    "notes": [
+      {
+        "frequency": 400,
+        "at": 0,
+        "duration": 0.1,
+        "wave": "sine",
+        "gain": 0.08,
+        "to": 400
+      },
+      {
+        "frequency": 330,
+        "at": 0.1,
+        "duration": 0.13,
+        "wave": "sine",
+        "gain": 0.08,
+        "to": 330
+      }
+    ]
+  },
+  "error": {
+    "label": "Действие недоступно",
+    "notes": [
+      {
+        "frequency": 240,
+        "at": 0,
+        "duration": 0.11,
+        "wave": "triangle",
+        "gain": 0.1,
+        "to": 240
+      }
+    ]
+  },
+  "notify": {
+    "label": "Уведомление",
+    "notes": [
+      {
+        "frequency": 784,
+        "at": 0,
+        "duration": 0.2,
+        "wave": "sine",
+        "gain": 0.12,
+        "to": 784
+      },
+      {
+        "frequency": 1047,
+        "at": 0.07,
+        "duration": 0.24,
+        "wave": "sine",
+        "gain": 0.075,
+        "to": 1047
+      }
+    ]
+  },
+  "turn": {
+    "label": "Ваш ход",
+    "notes": [
+      {
+        "frequency": 740,
+        "at": 0,
+        "duration": 0.075,
+        "wave": "sine",
+        "gain": 0.075,
+        "to": 740
+      },
+      {
+        "frequency": 988,
+        "at": 0.085,
+        "duration": 0.1,
+        "wave": "sine",
+        "gain": 0.065,
+        "to": 988
+      }
+    ]
+  }
+}

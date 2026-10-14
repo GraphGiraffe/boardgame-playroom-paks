@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["ludo"] = {
   "id": "ludo",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "name": "Лудо",
   "category": "board",
   "estimatedDuration": "20–40 мин",
@@ -23,7 +23,7 @@
   "sharedUi": true,
   "sharedAssets": [
     "die.svg",
-    "token.svg"
+    "round-token.svg"
   ],
   "engineApi": 2,
   "stateVersion": 2,

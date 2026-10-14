@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 84" role="img" aria-label="Кость домино, образец три — пять">
+  <rect x="2" y="4" width="44" height="78" rx="7" fill="#b8baaa"/>
+  <rect x="2" y="1" width="44" height="78" rx="7" fill="#fffbed" stroke="#d8d3c1" stroke-width="2"/>
+  <path d="M7 40h34" stroke="#d4d0bd" stroke-width="2"/>
+  <g fill="#3f6654">
+    <circle cx="13" cy="11" r="3"/><circle cx="24" cy="21" r="3"/><circle cx="35" cy="31" r="3"/>
+    <circle cx="13" cy="49" r="3"/><circle cx="35" cy="49" r="3"/><circle cx="24" cy="60" r="3"/><circle cx="13" cy="71" r="3"/><circle cx="35" cy="71" r="3"/>
+  </g>
+</svg>

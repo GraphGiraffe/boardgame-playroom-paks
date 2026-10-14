@@ -12,7 +12,7 @@ import zipfile
 
 
 ROOT = Path(__file__).resolve().parent
-VERSION = "0.6.1"
+VERSION = "0.6.2"
 # Portable format 1: keep these checks aligned with core/packs.js.
 MAX_PACK_BYTES = 4 * 1024 * 1024
 MAX_PACK_FILES = 128
@@ -265,10 +265,15 @@ def main():
     source = output / "playroom-paks-source.zip"
     write_zip(source, [("playroom-paks/" + path.relative_to(ROOT).as_posix(), path.read_bytes()) for path in source_files(packs)])
     artifacts.extend([collection, source])
+    asset_sources = sorted(path for folder in ("assets", "templates", "sounds")
+                           for path in (ROOT / "shared" / folder).rglob("*") if path.is_file())
+    asset_archive = output / f"playroom-shared-assets-{VERSION}.zip"
+    write_zip(asset_archive, [(path.relative_to(ROOT / "shared").as_posix(), path.read_bytes()) for path in asset_sources])
+    artifacts.append(asset_archive)
     checksums = output / "SHA256SUMS"
     checksums.write_text("".join(f"{hashlib.sha256(path.read_bytes()).hexdigest()}  {path.name}\n" for path in sorted(artifacts)), encoding="ascii")
     print(f"Паки: {len(bundles)} файлов *.playroom-pack.json в {output}")
-    print(f"Коллекция: {collection.name}; исходники: {source.name}; контрольные суммы: {checksums.name}")
+    print(f"Коллекция: {collection.name}; ассеты: {asset_archive.name}; исходники: {source.name}; контрольные суммы: {checksums.name}")
     print("В Playroom откройте управление играми и выберите нужные JSON-файлы паков.")
 
 
