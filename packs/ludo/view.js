@@ -3,7 +3,9 @@
  const route=[[1,6],[2,6],[3,6],[4,6],[5,6],[6,5],[6,4],[6,3],[6,2],[6,1],[6,0],[7,0],[8,0],[8,1],[8,2],[8,3],[8,4],[8,5],[9,6],[10,6],[11,6],[12,6],[13,6],[14,6],[14,7],[14,8],[13,8],[12,8],[11,8],[10,8],[9,8],[8,9],[8,10],[8,11],[8,12],[8,13],[8,14],[7,14],[6,14],[6,13],[6,12],[6,11],[6,10],[6,9],[5,8],[4,8],[3,8],[2,8],[1,8],[0,8],[0,7],[0,6]];
  route.unshift(route.pop()); // Starts face the outer edge; the previous square leads into the home lane.
  const base=[[0,0],[9,0],[9,9],[0,9]],lane=(p,n)=>[[n+1,7],[7,n+1],[13-n,7],[7,13-n]][p];
- const location=(p,j,n)=>n<0?[base[p][0]+1.5+(j%2)*2,base[p][1]+1.5+Math.floor(j/2)*2]:n<52?route[(p*13+n)%52]:n<57?lane(p,n-52):[7+(p===0?-.45:p===2?.45:0),7+(p===1?-.45:p===3?.45:0)];
+ // Base slots use 18% outer padding, then 12% inner padding and a 15% gap.
+ // Their centers are 2.16 and 3.84 cells from each base edge.
+ const location=(p,j,n)=>n<0?[base[p][0]+1.66+(j%2)*1.68,base[p][1]+1.66+Math.floor(j/2)*1.68]:n<52?route[(p*13+n)%52]:n<57?lane(p,n-52):[7+(p===0?-.45:p===2?.45:0),7+(p===1?-.45:p===3?.45:0)];
  const anchor=(p,j,n)=>n<0?`base-${p}-${j}`:n<52?`path-${(p*13+n)%52}`:n<57?`home-${p}-${n}`:`finish-${p}`;
  function sequence(last){if(!last)return undefined;const {owner:p,pawn:j,from,to}=last;return {trigger:'move',entry:from<0?'lift':undefined,arrival:to===57?'settle':undefined,entity:`token-${p}-${j}`,player:p,counter:'home',origin:{anchor:anchor(p,j,from)},steps:Array.from({length:from<0?1:to-from},(_,i)=>({anchor:anchor(p,j,from<0?0:from+i+1)}))};}
  const render=(s,viewer,actions,ui={})=>{
@@ -27,8 +29,9 @@
    const special=key.startsWith('path-')&&[0,8].includes(Number(key.slice(5))%13);
    return `<${tag} class="ludo-cell ${key.startsWith('path-')&&Number(key.slice(5))%13===8?'ludo-safe':''} ${target?`ludo-target target-${kind}`:''}" data-motion-anchor="${key}" ${target?H.actionAttr(target.a):''} style="${style}" aria-label="${H.esc(description)}">${dots.has(key)&&!special?'<i class="ludo-route-dot" aria-hidden="true"></i>':content}</${tag}>`;
   };
-  const arrows=['→','↓','←','↑'];
-  const cells=route.map(([x,y],i)=>cellMarkup(`path-${i}`,`grid-column:${x+1};grid-row:${y+1};${i%13===0?`background:${colors[i/13]}`:''}`,`Клетка ${i+1}${i%13===0?' · старт':i%13===8?' · безопасная':''}`,i%13===0?`<b class="ludo-start-arrow" aria-hidden="true">${arrows[i/13]}</b>`:i%13===8?'<b class="ludo-safe-star" aria-hidden="true">★</b>':'')).join('')+colors.map((color,p)=>Array.from({length:5},(_,n)=>{const [x,y]=lane(p,n);return cellMarkup(`home-${p}-${n+52}`,`grid-column:${x+1};grid-row:${y+1};background:${color}`,`Дом: клетка ${n+1}`);}).join('')).join('');
+  const safeStar='<svg class="ludo-safe-star" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 4 61 35 95 36 69 56 78 92 50 72 22 92 31 56 5 36 39 35Z" fill="currentColor"/></svg>';
+  const startArrow=direction=>`<svg class="ludo-start-arrow" viewBox="0 0 100 100" style="transform:rotate(${direction*90}deg)" aria-hidden="true"><path d="M18 28 82 50 18 72Z" fill="currentColor"/></svg>`;
+  const cells=route.map(([x,y],i)=>cellMarkup(`path-${i}`,`grid-column:${x+1};grid-row:${y+1};${i%13===0?`background:${colors[i/13]}`:''}`,`Клетка ${i+1}${i%13===0?' · старт':i%13===8?' · безопасная':''}`,i%13===0?startArrow(i/13):i%13===8?safeStar:'')).join('')+colors.map((color,p)=>Array.from({length:5},(_,n)=>{const [x,y]=lane(p,n);return cellMarkup(`home-${p}-${n+52}`,`grid-column:${x+1};grid-row:${y+1};background:${color}`,`Дом: клетка ${n+1}`);}).join('')).join('');
   const finishes=colors.map((_,p)=>{const [x,y]=location(p,0,57);return cellMarkup(`finish-${p}`,`position:absolute;left:${(x+.5)/15*100}%;top:${(y+.5)/15*100}%;width:6.667%;transform:translate(-50%,-50%)`, 'Финиш');}).join('');
   const pawns=d.pawns.flatMap((row,p)=>row.map((n,j)=>{
    const [x,y]=location(p,j,n),key=`${p}:${j}`,playable=moves.some(a=>a.owner===p&&a.pawn===j),active=selected===key&&moves.length>0,group=occupants.get(anchor(p,j,n))||[key],index=group.indexOf(key),columns=Math.ceil(Math.sqrt(group.length)),rows=Math.ceil(group.length/columns),row=Math.floor(index/columns),rowLength=Math.min(columns,group.length-row*columns),offsetX=group.length>1?(index%columns-(rowLength-1)/2)/rowLength:0,offsetY=group.length>1?(row-(rows-1)/2)/rows:0,size=group.length<=1?5.4:group.length<=4?4.7:group.length<=9?2.85:2.1;
