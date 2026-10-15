@@ -19,6 +19,6 @@
   const metric=()=>message('meta.books');
   const scene=projection=>({contractVersion:1,id:'gofish-table',family:'card-table',stockCount:projection.data.drawPile.length,
     players:projection.data.hands.map((hand,player)=>({player,hand,books:projection.data.books[player],
-      metrics:[{id:'books',value:projection.data.books[player].length,label:metric(),resultUsage:true}]}))});
+      metrics:[{id:'books',kind:'points',value:projection.data.books[player].length,label:metric(),resultUsage:true}]}))});
   return Object.freeze({metadata,action,choice,event,metric,scene,rank});
 });

@@ -113,16 +113,6 @@
       ]
     }
   ],
-  "teamBadges": [
-    {
-      "label": "синяя",
-      "color": "#668fad"
-    },
-    {
-      "label": "красная",
-      "color": "#ce735d"
-    }
-  ],
   "sourceModules": {
     "rules": [
       "domain/board.js",
@@ -136,6 +126,28 @@
     "locales": {
       "ru": [
         "locales/ru/game.json"
+      ]
+    }
+  },
+  "teamLayouts": {
+    "teams": {
+      "seatTeams": [
+        "blue",
+        "red",
+        "blue",
+        "red"
+      ],
+      "teams": [
+        {
+          "id": "blue",
+          "label": "синяя",
+          "color": "#668fad"
+        },
+        {
+          "id": "red",
+          "label": "красная",
+          "color": "#ce735d"
+        }
       ]
     }
   }

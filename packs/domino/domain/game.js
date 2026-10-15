@@ -38,7 +38,7 @@
    next.status='finished';next.winners=winners.length===1?winners:[];events.push(fact('fish',next.winners[0]??null,{best}));}
   return {position:next,events};
  }
- function project(position,viewer){const d=JSON.parse(JSON.stringify(position.data));d.hands=d.hands.map((hand,player)=>position.openHands||player===viewer?hand:hand.map(()=>({hidden:true})));d.stock=d.stock.map(()=>({hidden:true}));return d;}
+ function project(position,viewer){const d=JSON.parse(JSON.stringify(position.data));d.points=score(position);d.hands=d.hands.map((hand,player)=>position.openHands||player===viewer?hand:hand.map(()=>({hidden:true})));d.stock=d.stock.map(()=>({hidden:true}));return d;}
  function bot(projection,actor,commands){return commands.slice().sort((a,b)=>{const left=projection.data.hands[actor].find(tile=>tile.id===a.card),right=projection.data.hands[actor].find(tile=>tile.id===b.card);return (right?right.a+right.b:0)-(left?left.a+left.b:0);})[0];}
  function score(position){const sums=position.data.hands.map(pips),winner=position.winners[0];return sums.map((_,player)=>position.status==='finished'&&player===winner?sums.reduce((a,b)=>a+b,0)-sums[player]:0);}
  function result(position){const values=position.data.hands.map(pips);return {winners:position.winners,

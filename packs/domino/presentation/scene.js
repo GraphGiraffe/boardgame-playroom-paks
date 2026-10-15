@@ -13,6 +13,6 @@
  }
  const metric=()=>message('meta.pips');
  const scene=projection=>({contractVersion:1,id:'domino-chain',family:'tile-chain',chain:projection.data.chain,
-  players:projection.data.hands.map((hand,player)=>({player,hand})),stockCount:projection.data.stock.length});
+  players:projection.data.hands.map((hand,player)=>({player,hand,metrics:[{id:'points',kind:'points',value:projection.data.points[player],label:metadata.scoreLabel,resultUsage:false}]})),stockCount:projection.data.stock.length});
  return Object.freeze({metadata,action,event,metric,scene});
 });

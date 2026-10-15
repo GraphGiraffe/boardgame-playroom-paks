@@ -28,7 +28,7 @@
       rows:categories.keys.map(key=>({id:key,label:message('category.'+key),
         cells:d.scores.map((row,player)=>({player,value:row[key]??null,preview:d.previews[key],
           command:player===projection.turn?projection.actions.find(a=>a.type==='score'&&a.key===key)||null:null}))})),
-      players:d.totals.map((value,player)=>({id:player,metrics:[{id:'points',value,format:'integer',label:metric('points'),resultUsage:true}]}))};
+      players:d.totals.map((value,player)=>({id:player,metrics:[{id:'points',kind:'points',value,format:'integer',label:metric('points'),resultUsage:true},{id:'wins',kind:'wins',value:projection.winners.includes(player)?1:0,label:metadata.scoreLabel,resultUsage:false}]}))};
   }
   return Object.freeze({metadata,action,event,metric,scene});
 });

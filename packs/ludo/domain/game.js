@@ -52,7 +52,7 @@
  })[0]||commands[0];}
  function result(position){const own=position.data.pawns.map(row=>row.filter(n=>n===57).length),values=position.preset==='teams'?own.map((_,player)=>own[player%2]+own[player%2+2]):own;
   return {winners:position.winners,places:values.map(value=>1+new Set(values.filter(other=>other>value)).size),
-   metrics:position.preset==='teams'?[{id:'team-home',values},{id:'home',values:own}]:[{id:'home',values}]};
+   metrics:position.preset==='teams'?[{id:'team-home',values,display:'ranking'},{id:'home',values:own}]:[{id:'home',values}]};
  }
  return Object.freeze({contractVersion:1,id:'ludo',minPlayers:2,maxPlayers:4,create,validate,actions,reduce,project,bot,result});
 });

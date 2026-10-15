@@ -12,9 +12,7 @@
     const scene = P.scene({...projected, actions:projected.actions.filter(command =>
       actions.some(action => action.type === command.type && action.cell === command.cell))});
     return {api:2, family:scene.family, className:'tictactoe-scene', fieldAspect:1,
-      playerContent:H.playerContent(state, viewer, null, {scoreLabel:translator.format(P.metadata.scoreLabel),
-        counters:player => scene.players[player].metrics.map(metric => ({kind:metric.placement,value:metric.value,label:translator.format(metric.label)})),
-        badges:player => [{label:scene.players[player].mark}]}),
+      playerContent:H.playerContent(state, viewer, null, {scoreLabel:translator.format(P.metadata.scoreLabel),badges:player => [{label:scene.players[player].mark}]}),
       elements:{field:`<div class="ttt-grid" role="grid" aria-label="${text(scene.label)}">${scene.cells.map(cell =>
         `<button class="ttt-cell ${cell.mark === 'X' ? 'cross' : cell.mark === 'O' ? 'nought' : ''}" role="gridcell" ${cell.command ? H.actionAttr(cell.command) : 'disabled'} aria-label="${text(cell.label)}"><span data-motion-effect="pulse" data-motion-trigger="place" data-motion-key="cell" data-motion-value="${cell.index}">${mark(cell.mark)}</span></button>`).join('')}</div>`}};
   }

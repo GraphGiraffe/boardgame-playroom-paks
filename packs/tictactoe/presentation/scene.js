@@ -28,7 +28,7 @@
     const commands = new Map(projection.actions.map(command => [command.cell, command]));
     return {contractVersion:1, family:'board', id:'tictactoe-board', columns:3, rows:3, label:message('board.label'),
       players:projection.data.marks.map((mark, player) => ({id:player, mark,
-        metrics:[{id:'wins', value:projection.winners.includes(player) ? 1 : 0,
+        metrics:[{id:'wins', kind:'wins', value:projection.winners.includes(player) ? 1 : 0,
           format:'integer', label:metric('wins'), placement:'wins', resultUsage:true}]})),
       cells:projection.data.board.map((owner, cell) => ({id:'cell-' + cell, index:cell,
         owner, mark:owner === null ? null : projection.data.marks[owner], command:commands.get(cell) || null,
