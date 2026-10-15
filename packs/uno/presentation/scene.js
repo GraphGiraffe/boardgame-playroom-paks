@@ -19,6 +19,6 @@
   throw Error('UNO_EVENT_UNKNOWN');
  }
  const metric=id=>message(id==='hand-count'?'meta.hand-count':'meta.points');
- const scene=projection=>({contractVersion:1,id:'uno-table',family:'card-table',discard:projection.data.discard.at(-1),color:projection.data.color,direction:projection.data.direction,players:projection.data.hands.map((hand,player)=>({player,hand}))});
+ const scene=projection=>({contractVersion:1,id:'uno-table',family:'card-table',discard:projection.data.discard.at(-1),color:projection.data.color,direction:projection.data.direction,turnOrder:Array.from({length:projection.playerCount},(_,index)=>(index*projection.data.direction+projection.playerCount)%projection.playerCount),players:projection.data.hands.map((hand,player)=>({player,hand}))});
  return Object.freeze({metadata,action,choice,event,metric,scene,face,color,message});
 });
