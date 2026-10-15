@@ -6,6 +6,8 @@
 .battleship-scene .fleet-indicator.is-complete{background:#d8edcf;border-color:#67945f;color:#2e623b}
 .battleship-scene .fleet-indicator.is-selected{outline:2px solid #d29a45;outline-offset:1px}
 .battleship-scene [data-drag-piece]{touch-action:none;cursor:grab}
-.battleship-scene .battle-cell.ship.is-selected{border-color:#efcb67}
+.battleship-scene .battle-grid{position:relative}
+.battleship-scene .battle-cell.ship>button:hover{background:transparent}
+.battleship-scene .battle-ship-selection{position:absolute;left:calc(var(--ship-x)*10%);top:calc(var(--ship-y)*10%);width:calc(var(--ship-w)*10%);height:calc(var(--ship-h)*10%);box-sizing:border-box;border:3px solid #efcb67;border-radius:4px;box-shadow:0 0 0 2px #274e52;pointer-events:none;z-index:2}
 .battleship-scene .battle-grid [data-drop-piece].playroom-drop-hover{outline-offset:-3px!important}
 .battleship-scene .layout-field,.battleship-scene .game-field-content{overflow-x:clip}
