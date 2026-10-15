@@ -1,4 +1,4 @@
-.game-tile[data-game=domino]{background:#e8e4d9}
+
 .domino-board{flex:1;min-height:128px;display:flex;flex-direction:column;justify-content:center;position:relative;min-width:0;border:1px dashed #bfccad;border-radius:24px;background:#e9eddd;margin:3px 0;padding:15px 7px 9px}
 .domino-play-row{width:100%;min-width:0}
 .domino-chain{--domino-row-height:62px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(var(--domino-rows),var(--domino-row-height));position:relative;width:100%;max-width:440px;margin:0 auto;min-width:0;overflow:visible}

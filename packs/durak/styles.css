@@ -1,4 +1,4 @@
-.game-tile[data-game=durak]{background:#e8ded7}
+
 .durak-scene .playing-card{width:66px;min-width:66px;height:97px;position:relative;display:block;background:#fffcf2;border:1px solid #e2decf;border-radius:10px;box-shadow:0 5px 0 #bdc7af;color:#375f4c;cursor:pointer;padding:0;overflow:hidden}
 .durak-scene .playing-card.red-suit{color:#d97459}
 .durak-scene .playing-card .card-corner{position:absolute;top:5px;left:7px;font-size:17px;line-height:1;font-weight:900;z-index:1}
