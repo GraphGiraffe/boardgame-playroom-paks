@@ -1,0 +1,20 @@
+{
+  "pexeso.meta.name": "Пексесо",
+  "pexeso.meta.description": "Парная игра на память со стандартными игральными картами.",
+  "pexeso.meta.wins": "победы",
+  "pexeso.meta.pairs": "Найдено пар",
+  "pexeso.presets.easy": "Легко · 8 пар",
+  "pexeso.presets.medium": "Средне · 12 пар",
+  "pexeso.presets.hard": "Сложно · 18 пар",
+  "pexeso.presets.full": "Вся колода",
+  "pexeso.rules.1": "Пара — одинаковый ранг и цвет масти: черви с бубнами, пики с трефами. Два джокера тоже образуют пару.",
+  "pexeso.rules.2": "За ход откройте две карты. Совпали — заберите пару и ходите ещё; не совпали — запомните карты до конца хода. Перед ходом следующего игрока они закрываются без отдельной кнопки.",
+  "pexeso.rules.3": "Побеждает собравший больше пар.",
+  "pexeso.actions.flip": "Открыть карту {index}",
+  "pexeso.events.flipped": "{player} открыл карту {index}",
+  "pexeso.events.matched": "{player} нашёл пару",
+  "pexeso.events.mismatch": "Карты не совпали",
+  "pexeso.events.finished": "Все пары найдены",
+  "pexeso.view.pairs": "Собранные пары",
+  "pexeso.view.hint": "Откройте две карты"
+}

@@ -78,3 +78,8 @@ Companion выделяет History, SessionCodec и typed Events/ModelValues в 
 shared/components/round-token.js — рабочий источник RoundToken, firstSymbol и числовых знаков. Оба builder встраивают его перед view-kit; Лудо/Змеи вызывают этот же компонент и не содержат запасных SVG. Приложение включает закреплённую копию с digest/provenance, проверяемыми source builder. Изменения вносить в canonical файл, затем обновлять host copy явной сборкой с companion source. Геометрия/шрифт принятых элементов сохранены; правила масштаба/стопки/веера остаются в shared/assets/README.md.
 
 Совместная byte/digest parity и действующие модели/сцены проверены 69/69. Остальные семьи ассетов и AssetResolver пока не объявляются полностью перенесёнными.
+
+
+### Морской бой и Пексесо: API 3
+
+Морской бой 0.2.0: geometry/domain/presentation/locales отдельно; setup private, fire public; одна модель показателей флота для поля и карточек. Пексесо 0.2.0: отдельные rules/scene/locales, явно переданные shuffle/Deck, bot observation только из ранее открытых карт, не передаваемая зрителям. Новые модели и прежние варианты проверяются companion-набором приложения; фактическое свидетельство — общий REFACTOR-0.18-TRACKER.md. Остальные паки пока продолжают миграцию; engineApi 1/2 ещё не удалены.

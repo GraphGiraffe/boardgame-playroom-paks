@@ -1,6 +1,6 @@
 {
   "id": "pexeso",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "name": "Пексесо",
   "category": "cards",
   "estimatedDuration": "5–20 мин",
@@ -41,7 +41,7 @@
       ]
     }
   ],
-  "engineApi": 1,
+  "engineApi": 3,
   "stateVersion": 2,
   "viewApi": 2,
   "tileTheme": "gold",
@@ -62,5 +62,19 @@
   ],
   "sharedDomain": [
     "standard-deck"
-  ]
+  ],
+  "sourceModules": {
+    "rules": [
+      "domain/game.js",
+      "presentation/scene.js"
+    ],
+    "view": [
+      "presentation/scene.js"
+    ],
+    "locales": {
+      "ru": [
+        "locales/ru/game.json"
+      ]
+    }
+  }
 }

@@ -33,5 +33,6 @@
       ],
       "teams": false
     }
-  ]
+  ],
+  "sharedUi": true
 }
