@@ -1,0 +1,16 @@
+{
+  "tictactoe.meta.name": "Крестики-нолики",
+  "tictactoe.meta.description": "Поставьте три знака в линию на поле 3×3.",
+  "tictactoe.meta.score-label": "победы",
+  "tictactoe.meta.classic": "Классика · 3×3",
+  "tictactoe.rules.1": "Первый игрок ставит крестики, второй — нолики.",
+  "tictactoe.rules.2": "Побеждает первый, кто соберёт три знака в строке, столбце или по диагонали.",
+  "tictactoe.rules.3": "Заполненное поле без линии означает ничью.",
+  "tictactoe.actions.place": "Клетка {cell}",
+  "tictactoe.events.placed": "{player}: {mark} в клетку {cell}",
+  "tictactoe.events.won": "{player} собрал три в ряд",
+  "tictactoe.events.draw": "Ничья: поле заполнено",
+  "tictactoe.board.label": "Поле крестиков-ноликов",
+  "tictactoe.board.empty-cell": "Клетка {cell}: пусто",
+  "tictactoe.board.marked-cell": "Клетка {cell}: {mark}"
+}

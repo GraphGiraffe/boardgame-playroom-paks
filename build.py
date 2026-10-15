@@ -80,7 +80,7 @@ def validate_manifest(manifest, label):
             or len(set(mode["players"])) != len(mode["players"]) for mode in modes)):
         raise ValueError(f"Некорректные составы игроков: {label}")
     state = manifest.get("stateVersion")
-    if (manifest.get("engineApi") not in (1, 2) or type(state) not in (int, float)
+    if (type(manifest.get("engineApi")) not in (int, float) or manifest.get("engineApi") not in (1, 2, 3) or type(state) not in (int, float)
             or not 1 <= state <= MAX_SAFE_INTEGER or int(state) != state):
         raise ValueError(f"Неподдерживаемый API/состояние пака: {label}")
     name = manifest.get("name")
@@ -183,6 +183,45 @@ def pack_files(pack, manifest):
     return sorted(files)
 
 
+def bundle_source_modules(files, source, read):
+    """Compile local layers and data into fixed, autonomous entrypoints."""
+    if not isinstance(source, dict) or set(source) - {"rules", "view", "locales"}:
+        raise ValueError("Некорректные sourceModules")
+    scripts = {}
+    for entry in ("rules", "view"):
+        paths = source.get(entry, [])
+        if (not isinstance(paths, list) or len(paths) > 32
+                or any(not isinstance(path, str) or not path_ok(path)
+                       or not re.fullmatch(r"(?:domain|presentation|ui)/[A-Za-z0-9_./-]+\.js", path) for path in paths)
+                or len(set(paths)) != len(paths)):
+            raise ValueError("Некорректные модули точки входа: " + entry)
+        scripts[entry] = paths
+    locales = source.get("locales", {})
+    if not isinstance(locales, dict) or len(locales) > 32:
+        raise ValueError("Некорректные каталоги локализации")
+    catalogs = {}
+    for locale, paths in locales.items():
+        if (not isinstance(locale, str) or not re.fullmatch(r"[a-z]{2,3}(?:-[A-Za-z0-9]{2,8})*", locale)
+                or not isinstance(paths, list) or not paths or len(paths) > 32
+                or any(not isinstance(path, str) or not path_ok(path)
+                       or not path.startswith("locales/" + locale + "/") or not path.endswith(".json") for path in paths)
+                or len(set(paths)) != len(paths)):
+            raise ValueError("Некорректные файлы локали")
+        catalog = {}
+        for path in paths:
+            files[path] = read(path)
+            messages = parse_json(files[path])
+            if not isinstance(messages, dict) or set(catalog).intersection(messages):
+                raise ValueError("Повтор ключей или неверный каталог: " + path)
+            catalog.update(messages)
+        catalogs[locale] = catalog
+    resources = "globalThis.PlayroomPackResources = " + json_text({"locales": catalogs}).rstrip() + ";\n"
+    for entry, paths in scripts.items():
+        for path in paths:
+            files[path] = read(path)
+        files[entry + ".js"] = "\n;\n".join([resources, *(files[path] for path in paths), files[entry + ".js"]])
+
+
 def build_pack(pack):
     manifest = read_manifest(pack)
     files = {}
@@ -206,6 +245,9 @@ def build_pack(pack):
             if not re.fullmatch(r"[a-z][a-z0-9-]*\.svg", name):
                 raise ValueError(f"Некорректное имя общего ресурса: {name}")
             files[f"assets/shared/{name}"] = local_file(shared, f"assets/{name}").read_text(encoding="utf-8")
+    if "sourceModules" in manifest:
+        source = manifest.pop("sourceModules")
+        bundle_source_modules(files, source, lambda path: local_file(pack, path).read_text(encoding="utf-8"))
     return validate_bundle({"format": "playroom-pack", "formatVersion": 1, "manifest": manifest, "files": files}, pack.name)
 
 
