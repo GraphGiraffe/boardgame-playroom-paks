@@ -1,6 +1,6 @@
 # ХОД · игровые паки 0.6.3
 
-Коллекция для [ХОД 0.17.4](https://github.com/GraphGiraffe/boardgame-playroom/releases/tag/v0.17.4) из 12 игр опубликована как [релиз 0.6.3](https://github.com/GraphGiraffe/boardgame-playroom-paks/releases/tag/v0.6.3) и в защищённом каталоге R2. Правила, варианты игры, бот, представление, стили и ресурсы принадлежат своему паку; приложение и движок поставляются отдельно.
+Коллекция для [ХОД 0.17.5](https://github.com/GraphGiraffe/boardgame-playroom/releases/tag/v0.17.5) из 12 игр опубликована как [релиз 0.6.3](https://github.com/GraphGiraffe/boardgame-playroom-paks/releases/tag/v0.6.3) и в защищённом каталоге R2. Правила, варианты игры, бот, представление, стили и ресурсы принадлежат своему паку; приложение и движок поставляются отдельно.
 
 Паки публикуются отдельно от оболочки приложения. Общие [игровые ассеты и правила масштабирования](shared/assets/README.md) входят в архив исходников коллекции и в отдельный `playroom-shared-assets-0.6.3.zip`.
 
