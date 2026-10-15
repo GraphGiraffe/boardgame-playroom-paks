@@ -1,17 +1,17 @@
-# ХОД · игровые паки 0.6.2
+# ХОД · игровые паки 0.6.3
 
-Коллекция для [ХОД 0.17.4](https://github.com/GraphGiraffe/boardgame-playroom/releases/tag/v0.17.4) из 12 игр опубликована как [релиз 0.6.2](https://github.com/GraphGiraffe/boardgame-playroom-paks/releases/tag/v0.6.2) и в защищённом каталоге R2. Правила, варианты игры, бот, представление, стили и ресурсы принадлежат своему паку; приложение и движок поставляются отдельно.
+Коллекция для [ХОД 0.17.4](https://github.com/GraphGiraffe/boardgame-playroom/releases/tag/v0.17.4) из 12 игр опубликована как [релиз 0.6.3](https://github.com/GraphGiraffe/boardgame-playroom-paks/releases/tag/v0.6.3) и в защищённом каталоге R2. Правила, варианты игры, бот, представление, стили и ресурсы принадлежат своему паку; приложение и движок поставляются отдельно.
 
-Паки публикуются отдельно от оболочки приложения. Общие [игровые ассеты и правила масштабирования](shared/assets/README.md) входят в архив исходников коллекции и в отдельный `playroom-shared-assets-0.6.2.zip`.
+Паки публикуются отдельно от оболочки приложения. Общие [игровые ассеты и правила масштабирования](shared/assets/README.md) входят в архив исходников коллекции и в отдельный `playroom-shared-assets-0.6.3.zip`.
 
 | Игра | Версия |
 | --- | --- |
 | checkers | 0.3.5 |
 | domino | 0.3.7 |
 | durak | 0.4.4 |
-| battleship | 0.1.5 |
+| battleship | 0.1.6 |
 | gofish | 0.1.4 |
-| ludo | 0.1.11 |
+| ludo | 0.1.12 |
 | oldmaid | 0.1.5 |
 | pexeso | 0.1.6 |
 | tictactoe | 0.1.3 |
@@ -36,8 +36,8 @@ Python 3.9+ и Node.js 22+:
 ```sh
 bash scripts/codex/setup.sh
 bash scripts/codex/check.sh
-python3 build.py --output-dir dist/release-0.6.2
-(cd dist/release-0.6.2 && sha256sum -c SHA256SUMS)
+python3 build.py --output-dir dist/release-0.6.3
+(cd dist/release-0.6.3 && sha256sum -c SHA256SUMS)
 ```
 
 Полная проверка с соседним checkout приложения:
