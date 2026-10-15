@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["battleship"] = {
   "id": "battleship",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "name": "Морской бой",
   "category": "board",
   "estimatedDuration": "15–30 мин",
