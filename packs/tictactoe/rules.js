@@ -7,7 +7,6 @@
   const locales = source ? {ru:require('./locales/ru/game.json')} : root.PlayroomPackResources.locales;
   const version = source ? require('./manifest.json').version : root.PlayroomPack.version;
   const specification = {definition, presentation, locales, version};
-  const adapted = source ? root.PlayroomModelAdapter.adapt(root.TabletopCore, specification)
-    : root.PlayroomPack.adaptModel(specification);
-  root.TabletopCore.register(adapted);
+  if(source)root.TabletopCore.registerModel(specification);
+  else root.TabletopCore.register(root.PlayroomPack.adaptModel(specification));
 })(globalThis);

@@ -11,7 +11,16 @@
       "combined",
       "table",
       "player"
-    ]
+    ],
+    "viewStateScope": "match",
+    "presentation": {
+      "minimumVisibleMs": {
+        "default": 750,
+        "phases": {
+          "setup": 0
+        }
+      }
+    }
   },
   "rules": "rules.js",
   "view": "view.js",

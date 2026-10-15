@@ -62,3 +62,19 @@ Bootstrap приложения предоставляет временный mod
 Companion выделяет History, SessionCodec и typed Events/ModelValues в независимые core-модули. Правила пака не импортируют историю, часы, browser storage или Session; domain возвращает переход/события, а приложение владеет ревизиями, сериализацией и durable commit. CommonJS fixture GameModel требует model-runtime (он разрешает зависимости сам); Web/source bootstrap загружает model-values/events перед ним. Автономный JSON пака не должен включать копии host runtime.
 
 Схема typed events/publicEvent эталона не меняется. Временный model-adapter по-прежнему принимает только публичные события; общий приватный журнал и canonical event IDs ещё не подключены. Форматы Session 1/2 остаются промежуточными; это не обещание их поддержки в финальном 0.18. Исполняемые исходники и версии паков в этом срезе не меняются. Выбранные совместные проверки Session/model/authority/правил/восстановления — 147/147, отдельная PWA-проверка — 1/1; подробности и команды в REFACTOR-0.18-TRACKER.md приложения.
+
+
+### Седьмой срез: Ятзи и полный typed event projector
+
+Текущий SDK core/model-registration.js заменяет app/model-adapter.js. Приватные typed события теперь сохраняются с ID/revision у хоста, проектируются до перевода/звука/replay и проверены; прежний защитный отказ адаптера удалён. Node registration вызывает engine.registerModel. Domain не импортирует приложение/renderer.
+
+Ятзи 0.2.0 / API 3 разделён на domain/categories, domain/game, presentation/scene и locales/ru/game.json. Схема категорий одна, score previews числовые, RNG явный, Web не разбирает label. Три броска, hold/release, бонус/ноль/ничья сохранены; все команды публичны для Стола. Capabilities объявляют quietActions и policy UI; Морской бой объявляет viewStateScope=match и minimumVisibleMs по фазе. Общий runtime больше не узнаёт их по ID.
+
+Бот Пексесо исправлен по A18: неизвестные лица не участвуют даже в преднамеренном промахе. Проверка перестановки нераскрытых карт подтверждает одинаковый выбор. Другие десять игр, shared компоненты/AssetResolver, весь русский каталог и финальный переход ещё требуют работы. Исправления не публикуются под прежними версиями.
+
+
+### Canonical компоненты: восьмой срез
+
+shared/components/round-token.js — рабочий источник RoundToken, firstSymbol и числовых знаков. Оба builder встраивают его перед view-kit; Лудо/Змеи вызывают этот же компонент и не содержат запасных SVG. Приложение включает закреплённую копию с digest/provenance, проверяемыми source builder. Изменения вносить в canonical файл, затем обновлять host copy явной сборкой с companion source. Геометрия/шрифт принятых элементов сохранены; правила масштаба/стопки/веера остаются в shared/assets/README.md.
+
+Совместная byte/digest parity и действующие модели/сцены проверены 69/69. Остальные семьи ассетов и AssetResolver пока не объявляются полностью перенесёнными.

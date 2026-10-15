@@ -239,7 +239,7 @@ def build_pack(pack):
         files["rules.js"] = "\n".join([*sources, files["rules.js"]])
     if manifest.get("sharedUi"):
         shared = ROOT / "shared"
-        files["view.js"] = (shared / "view-kit.js").read_text(encoding="utf-8") + "\n" + files["view.js"]
+        files["view.js"] = (shared / "components/round-token.js").read_text(encoding="utf-8") + "\n" + (shared / "view-kit.js").read_text(encoding="utf-8") + "\n" + files["view.js"]
         files["styles.css"] = (shared / "view-kit.css").read_text(encoding="utf-8") + "\n" + files["styles.css"]
         for name in manifest.get("sharedAssets", []):
             if not re.fullmatch(r"[a-z][a-z0-9-]*\.svg", name):

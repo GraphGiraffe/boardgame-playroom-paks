@@ -13,8 +13,30 @@
   legal(s){const d=s.data;return d.board.flatMap((_,index)=>!d.matched.includes(index)&&(d.phase==='reveal'||!d.flipped.includes(index))?[{type:'flip',index,label:`Открыть карту ${index+1}`}]:[]);},
   apply(s,actor,a){const d=s.data;if(d.phase==='reveal'){d.flipped=[];d.phase='first';}d.flipped.push(a.index);d.seen[a.index]=d.board[a.index].id;E.event(s,`${s.players[actor].name} открыл карту ${a.index+1}`,actor,'play',{presentation:{type:'flip',index:a.index}});if(d.flipped.length===1){d.phase='second';return;}const [i,j]=d.flipped;if(pair(d.board[i])===pair(d.board[j])){d.matched.push(i,j);d.scores[actor]++;d.flipped=[];d.phase='first';E.event(s,`${s.players[actor].name} нашёл пару`,actor,'capture',{sound:{id:'success'}});if(d.matched.length===d.board.length){const high=Math.max(...d.scores),winners=d.scores.flatMap((n,p)=>n===high?[p]:[]);E.finish(s,winners.length===s.players.length?null:winners.length===1?winners[0]:winners,'Все пары найдены');}}else{d.phase='reveal';s.events.at(-1).presentation.closeAfter=600;s.turn=(actor+1)%s.players.length;E.event(s,'Карты не совпали',actor,'action',{sound:{id:'mismatch'}});}},
   project(out){out.data.board=out.data.board.map((c,i)=>out.data.matched.includes(i)||out.data.flipped.includes(i)?c:{hidden:true});delete out.data.seen;},
-  bot(s,actor,actions){const d=s.data,known=actions.filter(a=>d.seen[a.index]),unseen=actions.filter(a=>!d.seen[a.index]),explore=pool=>{const options=pool?.length?pool:unseen.length?unseen:actions;return options[(s.move+actor)%options.length];};const mistake=((s.rng^Math.imul(s.move+1,0x9e3779b9))>>>0)%5===0;
-   if(d.phase==='second'){const wanted=pair(d.board[d.flipped[0]]),match=known.find(a=>pair(d.board[a.index])===wanted);return match&&(!mistake||actions.every(a=>pair(d.board[a.index])===wanted))?match:explore(actions.filter(a=>pair(d.board[a.index])!==wanted));}
-   for(const a of known){const match=known.find(b=>b.index!==a.index&&pair(d.board[a.index])===pair(d.board[b.index]));if(match&&!mistake)return a;}return explore();}
+  bot(s,actor,actions){
+    // Memory contains only cards revealed publicly in earlier actions. Never
+    // inspect an unknown board face, even while deliberately making a mistake.
+    const d=s.data,cards=new Map(deck(d.deckSize).map(card=>[card.id,card]));
+    const knownCard=index=>cards.get(d.seen[index]);
+    const known=actions.filter(action=>knownCard(action.index));
+    const unseen=actions.filter(action=>!knownCard(action.index));
+    const explore=pool=>{
+      const options=pool?.length?pool:unseen.length?unseen:actions;
+      return options[(s.move+actor)%options.length];
+    };
+    const mistake=((s.rng^Math.imul(s.move+1,0x9e3779b9))>>>0)%5===0;
+    if(d.phase==='second'){
+      const wanted=pair(knownCard(d.flipped[0]));
+      const match=known.find(action=>pair(knownCard(action.index))===wanted);
+      const alternatives=actions.filter(action=>!knownCard(action.index)||pair(knownCard(action.index))!==wanted);
+      return match&&(!mistake||!alternatives.length)?match:explore(alternatives);
+    }
+    for(const action of known){
+      const match=known.find(other=>other.index!==action.index&&pair(knownCard(action.index))===pair(knownCard(other.index)));
+      if(match&&!mistake)return action;
+    }
+    return explore();
+  }
+
  });
 })(globalThis.TabletopCore);

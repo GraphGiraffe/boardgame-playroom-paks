@@ -16,5 +16,5 @@
   return `<button class="shared-die ${extra}" ${attrs} aria-label="Кубик: ${H.esc(value||'ещё не брошен')}"><svg viewBox="0 0 60 60" aria-hidden="true">${source('die')?`<image href="${source('die')}" width="60" height="60"/>`:`<rect x="2" y="2" width="56" height="56" rx="12" fill="#fffbeb" stroke="#bac9ae" stroke-width="2"/>`}${dots.map(i=>`<circle cx="${14+i%3*16}" cy="${14+Math.floor(i/3)*16}" r="4" fill="currentColor"/>`).join('')}</svg></button>`;
  }
  const cover=content=>H.svg(`<ellipse cx="151" cy="158" rx="112" ry="14" fill="#365e4720"/>${content}`);
- root.PlayroomShared=Object.freeze({card,die,cover,asset:source});
+ root.PlayroomShared=Object.freeze({card,die,cover,roundTokenArt:root.PlayroomComponents.roundTokenArt,asset:source});
 })(globalThis);
