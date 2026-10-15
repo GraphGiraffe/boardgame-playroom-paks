@@ -105,3 +105,8 @@ UNO/Дурак, все общие ассеты и окончательный con
 ## Семантические игроки SceneModel
 
 Все 12 презентаций объявляют metrics с id/kind, команды и дополнительные итоговые показатели. Счётчики Web views больше не пересчитываются параллельно presentation. Ludo teamLayouts содержит явное соответствие seatTeams и полные team definitions; приложение не предполагает имя preset или чётность индекса. Domino project передаёт публичные points до закрытия рук, вместо попытки вычислить итог из hidden-карт в UI. Ludo team-home — ranking-only, home — видимый счётчик. Сохранены принятые assets/геометрия; Snake position использует общий круглый счётчик и motion ID. Companion source и точечные browser-проверки отмечены в tracker приложения.
+
+
+## Общие семейства и материалы
+
+shared/components/game-components.js объединяет исполняемые card artboard/main/compact, die flat/raised, checker/king, domino, boardCells, ship, counters и scoreTable. Повторная геометрия удалена из view-kit/checkers/domino/snakes и host UI. Shared archive включает components; host фиксирует ресурсы по SHA. AssetResolver/material slots принадлежат локальному appearance клиента. Ludo scene содержит colorRole, палитра выбирается Web UI. Принятое поле/фишки/финиш сохранены. Итоговая приёмка RC и остальные модули пока не завершены.

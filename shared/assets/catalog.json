@@ -1,0 +1,165 @@
+{
+  "card-face": {
+    "default": "classic",
+    "variants": [
+      "classic"
+    ],
+    "ratio": [
+      5,
+      7
+    ],
+    "materials": {
+      "face": "material.card.face",
+      "rim": "material.card.rim",
+      "ink": "material.card.ink"
+    },
+    "layouts": [
+      "corners",
+      "custom"
+    ]
+  },
+  "card-back": {
+    "default": "classic",
+    "variants": [
+      "classic"
+    ],
+    "ratio": [
+      5,
+      7
+    ],
+    "materials": {
+      "face": "surface.panel",
+      "ink": "text.primary",
+      "rim": "border.subtle"
+    },
+    "replaceColors": {
+      "#31594c": "material.card-back.face",
+      "#d3c997": "material.card-back.rim",
+      "#e3d9aa": "material.card-back.pattern",
+      "#d7b36c": "material.card-back.mark"
+    }
+  },
+  "die": {
+    "default": "classic",
+    "variants": [
+      "classic"
+    ],
+    "ratio": [
+      1,
+      1
+    ],
+    "materials": {
+      "face": "material.die.face",
+      "rim": "material.die.rim",
+      "ink": "material.die.ink"
+    }
+  },
+  "ship": {
+    "default": "classic",
+    "variants": [
+      "classic"
+    ],
+    "ratio": [
+      4,
+      1
+    ],
+    "materials": {
+      "face": "surface.panel",
+      "ink": "text.primary",
+      "rim": "border.subtle"
+    }
+  },
+  "checker": {
+    "default": "classic",
+    "variants": [
+      "classic"
+    ],
+    "ratio": [
+      1,
+      1
+    ],
+    "materials": {
+      "face": "surface.panel",
+      "ink": "text.primary",
+      "rim": "border.subtle"
+    }
+  },
+  "round-token": {
+    "default": "classic",
+    "variants": [
+      "classic"
+    ],
+    "ratio": [
+      1,
+      1
+    ],
+    "materials": {
+      "face": "token.face",
+      "side": "token.side",
+      "rim": "token.rim",
+      "ink": "token.mark"
+    }
+  },
+  "domino": {
+    "default": "classic",
+    "variants": [
+      "classic"
+    ],
+    "ratio": [
+      4,
+      7
+    ],
+    "materials": {
+      "face": "material.domino.face",
+      "rim": "material.domino.rim",
+      "ink": "material.domino.ink"
+    }
+  },
+  "board": {
+    "default": "classic",
+    "variants": [
+      "classic"
+    ],
+    "ratio": [
+      1,
+      1
+    ],
+    "materials": {
+      "light": "material.board.light",
+      "dark": "material.board.dark",
+      "rim": "material.board.rim"
+    }
+  },
+  "counter": {
+    "default": "classic",
+    "variants": [
+      "classic"
+    ],
+    "materials": {
+      "face": "counter.face",
+      "ink": "counter.mark"
+    }
+  },
+  "bubble": {
+    "default": "classic",
+    "variants": [
+      "classic"
+    ],
+    "materials": {
+      "face": "surface.panel",
+      "ink": "text.primary",
+      "rim": "border.subtle"
+    }
+  },
+  "score-table": {
+    "default": "classic",
+    "variants": [
+      "classic"
+    ],
+    "materials": {
+      "face": "surface.panel",
+      "ink": "text.primary",
+      "rim": "border.subtle"
+    }
+  }
+}

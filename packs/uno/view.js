@@ -16,7 +16,7 @@
     const main=`<div class="uno-art-face">${face}</div>`;
     // Compact artwork is opt-in. Larger corner symbols remain legible when cards overlap.
     const compact=`<div class="uno-art-face uno-art-compact"><span class="card-corner">${label}</span><span class="uno-oval"><span class="face-value">${label}</span></span></div>`;
-    return `<button class="uno-card art-card ${cls}" style="--card-color:${colors[c.color]||colors.wild}" ${attrs} data-entity="card-${H.esc(c.id)}" data-tooltip="${H.esc(help(c))}" aria-label="${H.esc(name(c.color)+' '+value(c))}">${H.art({main,compact,width:72,height:103},variant)}</button>`;
+    return `<button class="uno-card art-card ${cls}" style="--card-color:${colors[c.color]||colors.wild}" ${attrs} data-entity="card-${H.esc(c.id)}" data-tooltip="${H.esc(help(c))}" aria-label="${H.esc(name(c.color)+' '+value(c))}">${H.assetArt('card-face',{main,compact,width:72,height:103,variant},H.components.cardFace)}</button>`;
   }
   (globalThis.PlayroomCatalog ||= {}).uno ||= {};
   globalThis.PlayroomCatalog.uno.playerBadge=(state,index)=>state.data.uno?.declared?.[index]?{label:'UNO!',tone:'success'}:'';

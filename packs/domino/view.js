@@ -4,9 +4,7 @@
   const source=typeof require==='function'&&!globalThis.PlayroomPack;
   const translator=H.translator(source?{ru:require('./locales/ru/game.json')}:globalThis.PlayroomPackResources.locales);
   const text=(key,params={})=>translator.format({key:'domino.'+key,params});
-  const dots={0:[],1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8],7:[0,2,3,4,5,6,8],8:[0,1,2,3,5,6,7,8],9:[0,1,2,3,4,5,6,7,8]};
-  const half=n=>`<span class="domino-half" aria-hidden="true">${Array.from({length:9},(_,i)=>`<i class="${(dots[n]||dots[9]).includes(i)?'pip':''}"></i>`).join('')}</span>`;
-  const face=(a,b,rotation=0)=>H.art({main:`<div class="domino-art-face">${half(a)}<span class="domino-divider"></span>${half(b)}</div>`,width:48,height:84,rotation});
+  const face=globalThis.PlayroomShared.dominoFace;
   function tile(c,attr='disabled',cls=''){
     if(c.hidden)return H.back('domino');
     const upright=cls.includes('hand-card')||cls.includes('compact-piece')||cls.includes('double');

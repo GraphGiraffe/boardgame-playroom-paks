@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["snakes"] = {
   "id": "snakes",
-  "version": "0.3.9",
+  "version": "0.4.0",
   "category": "board",
   "estimatedDuration": "5–15 мин",
   "tagline": "Вверх по лестнице. Навстречу удаче.",
@@ -20,7 +20,7 @@
   "view": "view.js",
   "styles": "styles.css",
   "name": "Змеи и лестницы",
-  "engineApi": 1,
+  "engineApi": 3,
   "stateVersion": 1,
   "viewApi": 2,
   "tags": [
@@ -37,6 +37,7 @@
       ],
       "teams": false
     }
-  ]
+  ],
+  "sharedUi": true
 };
 })(globalThis);

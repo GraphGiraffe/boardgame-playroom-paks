@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["oldmaid"] = {
   "id": "oldmaid",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "name": "Акулина",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
@@ -60,8 +60,8 @@
       ]
     }
   ],
-  "engineApi": 2,
-  "stateVersion": 3,
+  "engineApi": 3,
+  "stateVersion": 4,
   "viewApi": 2,
   "tileTheme": "coral",
   "tags": [

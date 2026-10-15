@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["domino"] = {
   "id": "domino",
-  "version": "0.3.7",
+  "version": "0.4.0",
   "category": "board",
   "estimatedDuration": "10–15 мин",
   "tagline": "Семь костяшек. Много вариантов.",
@@ -20,7 +20,7 @@
   "view": "view.js",
   "styles": "styles.css",
   "name": "Домино",
-  "engineApi": 1,
+  "engineApi": 3,
   "stateVersion": 1,
   "viewApi": 2,
   "tags": [
@@ -36,6 +36,7 @@
       ],
       "teams": false
     }
-  ]
+  ],
+  "sharedUi": true
 };
 })(globalThis);

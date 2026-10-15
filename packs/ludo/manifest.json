@@ -141,12 +141,14 @@
         {
           "id": "blue",
           "label": "синяя",
-          "color": "#668fad"
+          "color": "#668fad",
+          "colorRole": "side.blue"
         },
         {
           "id": "red",
           "label": "красная",
-          "color": "#ce735d"
+          "color": "#ce735d",
+          "colorRole": "side.red"
         }
       ]
     }

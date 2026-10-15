@@ -1,5 +1,5 @@
 (function(){
- 'use strict';const V=globalThis.PlayroomViews,H=V.helpers,C=globalThis.PlayroomShared,colors=['#4c8060','#ce735d','#668fad','#cfac4c'];
+ 'use strict';const V=globalThis.PlayroomViews,H=V.helpers,C=globalThis.PlayroomShared,colors=['var(--color-side-green,#4c8060)','var(--color-side-red,#ce735d)','var(--color-side-blue,#668fad)','var(--color-side-yellow,#cfac4c)'];
  const source=typeof require==='function'&&!globalThis.PlayroomPack;
  const P=source?require('./presentation/scene.js'):globalThis.PlayroomPackPresentation;
  const translator=H.translator(source?{ru:require('./locales/ru/game.json')}:globalThis.PlayroomPackResources.locales);

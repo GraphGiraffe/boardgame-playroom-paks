@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["durak"] = {
   "id": "durak",
-  "version": "0.4.4",
+  "version": "0.5.0",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Козырь ещё пригодится.",
@@ -24,7 +24,7 @@
   "sharedAssets": [
     "card-back.svg"
   ],
-  "engineApi": 2,
+  "engineApi": 3,
   "stateVersion": 3,
   "viewApi": 2,
   "tags": [

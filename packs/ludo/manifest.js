@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["ludo"] = {
   "id": "ludo",
-  "version": "0.1.12",
+  "version": "0.2.0",
   "name": "Лудо",
   "category": "board",
   "estimatedDuration": "20–40 мин",
@@ -25,7 +25,7 @@
     "die.svg",
     "round-token.svg"
   ],
-  "engineApi": 2,
+  "engineApi": 3,
   "stateVersion": 2,
   "viewApi": 2,
   "tileTheme": "green",
@@ -117,15 +117,29 @@
       ]
     }
   ],
-  "teamBadges": [
-    {
-      "label": "синяя",
-      "color": "#668fad"
-    },
-    {
-      "label": "красная",
-      "color": "#ce735d"
+  "teamLayouts": {
+    "teams": {
+      "seatTeams": [
+        "blue",
+        "red",
+        "blue",
+        "red"
+      ],
+      "teams": [
+        {
+          "id": "blue",
+          "label": "синяя",
+          "color": "#668fad",
+          "colorRole": "side.blue"
+        },
+        {
+          "id": "red",
+          "label": "красная",
+          "color": "#ce735d",
+          "colorRole": "side.red"
+        }
+      ]
     }
-  ]
+  }
 };
 })(globalThis);

@@ -18,7 +18,7 @@
     const legacy=`<span class="card-corner">${rank(c.rank)}<small>${c.joker?'★':suits[c.suit]||c.suit}</small></span><span class="card-suit">${c.joker?'★':suits[c.suit]||c.suit}</span><span class="card-corner bottom">${rank(c.rank)}<small>${c.joker?'★':suits[c.suit]||c.suit}</small></span>`;
     const main=`<div class="durak-art-face">${legacy}</div>`;
     const compact=`<div class="durak-art-face durak-art-compact"><span class="card-corner">${rank(c.rank)}<small>${suits[c.suit]||c.suit}</small></span><span class="card-suit">${suits[c.suit]||c.suit}</span></div>`;
-    return `<button class="playing-card art-card ${red(c)?'red-suit':''} ${cls}" ${attr} data-entity="${cls.includes('trump-card')?'trump':'card'}-${H.esc(c.id)}" data-tooltip="${H.esc(help)}" aria-label="${H.esc(rank(c.rank)+' '+(suitNames[c.suit]||c.suit))}">${H.art({main,compact,width:66,height:97},variant)}</button>`;
+    return `<button class="playing-card art-card ${red(c)?'red-suit':''} ${cls}" ${attr} data-entity="${cls.includes('trump-card')?'trump':'card'}-${H.esc(c.id)}" data-tooltip="${H.esc(help)}" aria-label="${H.esc(rank(c.rank)+' '+(suitNames[c.suit]||c.suit))}">${H.assetArt('card-face',{main,compact,width:66,height:97,variant},H.components.cardFace)}</button>`;
   }
   const render=(s,viewer,actions,ui)=>{
     actions=actions.map(action=>({...action,label:action.label||translator.format(P.action(action,s.modelProjection||{data:s.data,actor:viewer,playerCount:s.players.length}))}));

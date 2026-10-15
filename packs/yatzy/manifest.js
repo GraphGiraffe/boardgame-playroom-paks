@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["yatzy"] = {
   "id": "yatzy",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "name": "Ятзи",
   "category": "dice",
   "estimatedDuration": "15–25 мин",
@@ -15,6 +15,9 @@
       "combined",
       "table",
       "player"
+    ],
+    "quietActions": [
+      "hold"
     ]
   },
   "rules": "rules.js",
@@ -24,7 +27,7 @@
   "sharedAssets": [
     "die.svg"
   ],
-  "engineApi": 1,
+  "engineApi": 3,
   "stateVersion": 1,
   "viewApi": 2,
   "tileTheme": "violet",

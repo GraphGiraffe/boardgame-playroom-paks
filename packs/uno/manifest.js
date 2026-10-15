@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["uno"] = {
   "id": "uno",
-  "version": "0.4.9",
+  "version": "0.5.0",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Цвет меняется. Азарт остаётся.",
@@ -37,8 +37,8 @@
     }
   ],
   "name": "UNO",
-  "engineApi": 1,
-  "stateVersion": 1,
+  "engineApi": 3,
+  "stateVersion": 2,
   "sounds": "sounds.js",
   "viewApi": 2,
   "tags": [

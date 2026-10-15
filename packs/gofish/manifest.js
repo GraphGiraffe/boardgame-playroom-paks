@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["gofish"] = {
   "id": "gofish",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "name": "Спроси рыбу",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
@@ -45,7 +45,7 @@
       ]
     }
   ],
-  "engineApi": 1,
+  "engineApi": 3,
   "stateVersion": 1,
   "viewApi": 2,
   "tileTheme": "blue",

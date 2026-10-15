@@ -239,7 +239,7 @@ def build_pack(pack):
         files["rules.js"] = "\n".join([*sources, files["rules.js"]])
     if manifest.get("sharedUi"):
         shared = ROOT / "shared"
-        files["view.js"] = (shared / "components/round-token.js").read_text(encoding="utf-8") + "\n" + (shared / "view-kit.js").read_text(encoding="utf-8") + "\n" + files["view.js"]
+        files["view.js"] = (shared / "components/round-token.js").read_text(encoding="utf-8") + "\n" + (shared / "components/game-components.js").read_text(encoding="utf-8") + "\n" + (shared / "view-kit.js").read_text(encoding="utf-8") + "\n" + files["view.js"]
         files["styles.css"] = (shared / "view-kit.css").read_text(encoding="utf-8") + "\n" + files["styles.css"]
         for name in manifest.get("sharedAssets", []):
             if not re.fullmatch(r"[a-z][a-z0-9-]*\.svg", name):
@@ -317,7 +317,7 @@ def main():
     source = output / "playroom-paks-source.zip"
     write_zip(source, [("playroom-paks/" + path.relative_to(ROOT).as_posix(), path.read_bytes()) for path in source_files(packs)])
     artifacts.extend([collection, source])
-    asset_sources = sorted(path for folder in ("assets", "templates", "sounds")
+    asset_sources = sorted(path for folder in ("assets", "components", "templates", "sounds")
                            for path in (ROOT / "shared" / folder).rglob("*") if path.is_file())
     asset_archive = output / f"playroom-shared-assets-{VERSION}.zip"
     write_zip(asset_archive, [(path.relative_to(ROOT / "shared").as_posix(), path.read_bytes()) for path in asset_sources])

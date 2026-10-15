@@ -47,5 +47,6 @@
         "locales/ru/game.json"
       ]
     }
-  }
+  },
+  "sharedUi": true
 }

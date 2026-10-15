@@ -18,13 +18,14 @@
     const summary=index===5?`<tr class="yatzy-summary"><th scope="row">${text('table.upper')}</th>${cells(d.upper,'upper')}</tr><tr class="yatzy-summary"><th scope="row">${text('table.bonus')}</th>${cells(d.bonuses,'bonus')}</tr>`:'';
     return `<tr><th scope="row">${H.esc(translator.format(row.label))}</th>${cells(values)}</tr>${summary}`;
   }).join('');
+  const tableHead=`<tr><th scope="col">${text('table.category')}</th>${s.players.map((person,index)=>`<th scope="col" class="${index===selected?'selected-player':''}" data-score-player="${index}">${H.avatar(person,index)}</th>`).join('')}</tr>`,tableFoot=`<tr><th scope="row">${text('table.total')}</th>${cells(d.totals,'total')}</tr>`;
   const dice=d.dice.map((value,index)=>{
     const hold=actions.find(a=>a.type==='hold'&&a.index===index);
     return C.die(d.rolls?value:null,`${!d.held[index]?'data-motion-lead="roll"':''} ${hold?H.actionAttr(hold):'disabled'} aria-pressed="${d.held[index]}" title="${H.esc(text(d.held[index]?'dice.release':'dice.hold'))}"`,d.held[index]?'held':'');
   }).join('');
   return {api:2,family:'board',fieldSizing:'scroll',actionReserve:true,className:'yatzy-scene',
     playerContent:H.playerContent(s,viewer,null,{}),elements:{
-      field:`<div class="yatzy-board" data-scene-scroll><table class="yatzy-score" style="--players:${s.players.length}"><thead><tr><th scope="col">${text('table.category')}</th>${s.players.map((person,index)=>`<th scope="col" class="${index===selected?'selected-player':''}" data-score-player="${index}">${H.avatar(person,index)}</th>`).join('')}</tr></thead><tbody>${rows}</tbody><tfoot><tr><th scope="row">${text('table.total')}</th>${cells(d.totals,'total')}</tr></tfoot></table></div>`,
+      field:`<div class="yatzy-board" data-scene-scroll>${C.scoreTable({className:'yatzy-score',attributes:`style="--players:${s.players.length}"`,head:tableHead,body:rows,foot:tableFoot})}</div>`,
       actions:`<div class="yatzy-controls"><div class="yatzy-dice">${dice}</div><span class="yatzy-dice-help">${d.rolls>0&&d.rolls<3?text('dice.help'):''}</span><button class="scene-button yatzy-roll" ${roll?H.actionAttr(roll):'disabled'}>${text(d.rolls?'dice.reroll':'dice.roll')} · ${d.rolls}/3</button></div>`
     }};
  }

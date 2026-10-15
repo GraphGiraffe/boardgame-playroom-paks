@@ -30,7 +30,7 @@
 
  function scene(projection){return {contractVersion:1,id:'ludo-board',family:'route-board',
   pawns:projection.data.pawns.flatMap((row,owner)=>row.map((progress,pawn)=>({id:'token-'+owner+'-'+pawn,owner,pawn,progress,point:location(owner,pawn,progress)}))),
-  players:projection.data.pawns.map((row,player)=>({player,teamId:projection.preset==='teams'?(player%2?'red':'blue'):null,team:projection.preset==='teams'?{id:player%2?'red':'blue',label:message(player%2?'view.red':'view.blue'),color:player%2?'#ce735d':'#668fad'}:null,
+  players:projection.data.pawns.map((row,player)=>({player,teamId:projection.preset==='teams'?(player%2?'red':'blue'):null,team:projection.preset==='teams'?{id:player%2?'red':'blue',label:message(player%2?'view.red':'view.blue'),colorRole:player%2?'side.red':'side.blue'}:null,
    metrics:[{id:'home',kind:'pieces',value:row.filter(n=>n===57).length,label:metric('home'),resultUsage:true},{id:'wins',kind:'wins',value:projection.winners.includes(player)?1:0,label:metadata.scoreLabel,resultUsage:false}]}))};}
  return Object.freeze({metadata,action,event,metric,scene,route,base,lane,location,anchor,sequence,destination:B.destination});
 });

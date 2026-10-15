@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["checkers"] = {
   "id": "checkers",
-  "version": "0.3.5",
+  "version": "0.4.0",
   "category": "board",
   "estimatedDuration": "15–30 мин",
   "tagline": "На один ход ближе к победе.",
@@ -20,7 +20,7 @@
   "view": "view.js",
   "styles": "styles.css",
   "name": "Шашки",
-  "engineApi": 1,
+  "engineApi": 3,
   "stateVersion": 1,
   "viewApi": 2,
   "tags": [
@@ -35,6 +35,7 @@
       ],
       "teams": false
     }
-  ]
+  ],
+  "sharedUi": true
 };
 })(globalThis);
