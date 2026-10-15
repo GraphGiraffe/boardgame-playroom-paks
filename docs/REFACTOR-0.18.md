@@ -90,3 +90,8 @@ shared/components/round-token.js — рабочий источник RoundToken,
 Дополнительно перенесены ludo/oldmaid/gofish 0.2.0 и snakes/domino/checkers 0.4.0. EngineApi 3; отдельные domain, presentation, locales и Web view. Начальные факты/очки — GameModel.start/score; Акулина stateVersion 4 хранит points. Шашки передают semantic capture, не требуют разбора текстовой подписи. Лудо использует одну domain-функцию destination для взятия в правилах и предпросмотра; принятое поле и финиш 1+3 сохранены.
 
 UNO/Дурак, все общие ассеты и окончательный container cutover пока не завершены. Не считать этот срез готовым выпуском 0.18.
+
+
+## Дурак: независимая модель
+
+Версия разработки 0.5.0 / engineApi 3 / stateVersion 3: domain/cards.js (геометрия ролей/старшинство), domain/game.js (полная колода, варианты, составной заход/отмена/добор/итог), presentation/scene.js, locales/ru/game.json, Web view. Публичные ответы доступны на Столе; выбор карты остаётся приватным. Domain выдаёт только semantic facts без имён и локализованных строк. Проверено в companion: rc2-games 28/28, compact-hand 35/35, isolated-models и Table privacy входят в 20/20 core/model-contract. UNO и общие механизмы ещё впереди.
