@@ -1,18 +1,20 @@
-# Local runtime
+# Local tools and explicit selection
 
-Requirements: Python 3.11+, Git; Node 22+ and project dependencies for checks. MCP is pinned to mcp==1.30.0 and launched by uv. CLI inspection/planning/checksum operations use the Python standard library. Paths are supplied explicitly and validated as PlayRoom checkouts; symlink escapes in pack/checksum inputs are rejected.
+Python 3.11+, Git; Node 22+ and the selected project dependencies for tests. MCP uses the existing pinned mcp==1.30.0 stdio process. Inspect/plan/checksum operations are read-only; setup/build/prepare-dev/run write their normal outputs. No MCP tool runs tests, commits, Actions or deployment.
 
-MCP tools (read-only): inspect_project, plan_validation, inspect_pack, verify_release. Plans return argv arrays and cwd, never shell text. No MCP tool executes tests, pushes commits, deletes refs or deploys. Long-running commands remain visible through the native terminal tool; publication uses existing authorized project scripts.
-
-CLI examples (run from plugin root; replace path placeholders):
+Four tools: inspect_project (exact roots/SHA/status), plan_validation (validated argv/cwd, optional explicit checks), inspect_pack (manifest/sourceModules/layers/assets), verify_release (SHA256/public ZIP integrity). A returned plan is not a passed test or release. Use long-running native exec for actual checks.
 
 ```bash
-python3 tools/playroom.py inspect --repo /path/to/checkout --companion /path/to/companion
-python3 tools/playroom.py plan --repo /path/to/checkout --companion /path/to/companion --area layout
-python3 tools/playroom.py run --repo /path/to/checkout --companion /path/to/companion --area layout --capture-dir /path/to/evidence
-python3 tools/playroom.py verify-release --directory /path/to/public/release
+python3 tools/playroom.py inspect --repo /path/to/repo --companion /path/to/companion
+python3 tools/playroom.py plan --repo /path/to/repo --companion /path/to/companion --area model
+python3 tools/playroom.py plan --repo /path/to/repo --companion /path/to/companion --area release --checks core/model,case/session
+python3 tools/playroom.py plan --repo /path/to/repo --area release --checks none
+python3 tools/playroom.py run --repo /path/to/repo --companion /path/to/companion --area table --checks network/table
+python3 tools/playroom.py verify-release --directory /path/to/public/artifacts
 ```
 
-Inspect the plan before execution. `run` invokes allowlisted canonical commands without a shell and preserves their nonzero exit status. setup/build/prepare-dev write normal generated outputs; they are not read-only. The helper does not start or kill a persistent server. Run setup only when missing prerequisites justify it. Public artifact verification rejects private wrapper ZIPs.
+Release without --checks is rejected. all/full/* and mixed none are rejected. Selected test names are checked against the current app runner with --list; it does not execute tests. Focused execution prepares the exact source packs; missing companion roots fail explicitly. none executes only git diff --check and reports tests_skipped=true. It does not imply packaging, gameplay, CI or deployment success; build and hash gates remain separate.
 
-MCP SDK: https://github.com/modelcontextprotocol/python-sdk ; stdio transport: https://modelcontextprotocol.io/specification/2025-06-18/basic/transports .
+Areas: docs, core, layout, hands, motion, network, pairing, storage, rules, model, appearance, localization, table, standalone, setup, build, release. Non-release test areas have scoped suggestions; --checks overrides them. standalone packs means syntax/build/SHA only; standalone app builds without implicit tests. build creates developer artifacts (app all-games/PWA with an explicit packs companion), not a provider publication. For real releases use current independent workflows and their verified public artifact contracts.
+
+run uses argv without a shell and propagates failures. --capture-dir sets PLAYROOM_CAPTURE_DIR for scenarios that implement it; inspect actual captures. Setup is only for missing prerequisites. Limits and local source roots are explicit; symlink escapes/private worker files are rejected during artifact verification. Read references/WORKFLOW.md for publication ownership and evidence.

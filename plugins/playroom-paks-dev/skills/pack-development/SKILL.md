@@ -1,20 +1,12 @@
 ---
 name: pack-development
-description: Develop a PlayRoom game pack or its shared assets while preserving the app/pack repository boundary.
+description: Develop PlayRoom packs with layered domain/presentation/locales, shared assets and explicit app compatibility during refactoring 0.18.
 ---
 
-# Game pack development
+# Pack source and ownership
 
-Use only for the PlayRoom packs checkout and an explicitly selected companion app. Read docs/AUTHORING.md and the app contracts required by the feature. Each game owns packs/ID/{manifest.json,rules.js,view.js,styles.css,assets}; manifest.json is canonical, manifest.js is generated. Sample two existing implementations of the exact contract before adding a new one.
+Inspect the selected packs/app roots and live AUTHORING/API/format contracts. manifest.json is canonical; manifest.js generated. Rules, bots, presentation/locales, styles and assets belong to their pack/shared directories; do not copy the app runtime. Use [refactoring contracts](../../references/REFACTOR-0.18.md) for engineApi 3, sourceModules and shared entities.
 
-Route rules and hidden state to pack-rules, UI/assets to pack-ui-assets, and packaging/versioning to pack-validation-release. Keep local bots and pass-the-phone operational; verify the network projection separately. The collection uses Yatzy instead of Perudo. Card-deck variants 36/52/54 belong only where the game rules support them; document exclusions and joker behavior. Do not implement invalid variants to fill a menu.
+Route deterministic rules/privacy to pack-rules, renderer/assets to pack-ui-assets and scoped packaging/publication to pack-validation-release. Sample the actual constructs before extending them; TicTacToe is the reference for the new model, not evidence all games migrated. Preserve local bots, hotseat, every preset/action/reaction/result and exact-version saves via the tracker.
 
-Common cards, dice, pieces, sounds and icons belong in shared assets and are embedded into each standalone pack. Do not depend on an external CDN or a neighboring checkout at runtime. Request generic app API improvements in the app repository when necessary instead of copying its engine.
-
-## Local tools
-
-Read [tools](../../references/TOOLS.md) before using the bundled MCP or CLI. Pass explicit app and pack checkout roots; never guess a sibling path in a worktree. Inspect both repositories and read their current AGENTS.md, CONTRIBUTING.md and relevant design contracts. The repo documentation is authoritative over this plugin. Use repository-workflow for GitHub operations and cleanup. Preserve active services, unrelated edits, published versions and pinned companion SHAs.
-
-## RC4 corrections
-
-Apply [RC4 constraints](../../references/RC4.md) whenever editing catalog, lobby, rules, effects or layout. The selected repositories and latest user decisions remain authoritative.
+Shared cards/dice/pawns/counters/sounds ship inside standalone packs, no CDN/neighbor checkout at runtime. Request reusable app ports for common behavior. Approved 0.18 API breaks and final removal of legacy runtime require a coordinated update, not edits to released bytes. Follow [workflow](../../references/WORKFLOW.md), [mechanics](../../references/RC4.md) and [tools](../../references/TOOLS.md) as relevant.

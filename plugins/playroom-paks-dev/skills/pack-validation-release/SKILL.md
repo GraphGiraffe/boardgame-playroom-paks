@@ -1,22 +1,14 @@
 ---
 name: pack-validation-release
-description: Validate, build and release the independent PlayRoom pack collection with exact companion provenance and minimal CI.
+description: Run selected PlayRoom pack checks and independently publish a collection or one immutable pack through R2 without app redeployment.
 ---
 
-# Pack validation and releases
+# Scoped pack checks and independent publication
 
-Start with the canonical standalone command bash scripts/codex/check.sh when syntax, manifests, assets or packaging changed. It validates JS, builds packs and checks distribution hashes. Gameplay/UI evidence requires the selected companion application, prepared from these exact source packs. Use focused profiles while implementing; full joint gate is required for the final release.
+Read current release and independent-publication documentation and workflow inputs in both selected repos. Use [workflow](../../references/WORKFLOW.md): release checks require explicit selectors or none, no implicit full cycle/all shortcut. Test only affected rules/view/privacy/restore paths; cross-pack checks need an actual common-contract risk. Standalone pack syntax/build/hash verification is separate from gameplay/browser verification.
 
-Use plan_validation with explicit repo and companion roots; run through tools/playroom.py only when the selected check is needed. For the complete pair, use bash scripts/codex/check.sh --full --app-dir APP_REPO from the packs root, or the equivalent application command --packs-dir PACKS_REPO/packs. Do not run both full gates for the same pair; they cover the same tests.
+Use exact companion sources/SHAs. The helper plans selected canonical commands, not a replacement suite. Build immutable individual JSON/collection/shared-asset/source artifacts and verify SHA256/ZIPs; release assets come from one final build. Keep old published bundles available for exact-version saves/replay or the approved coordinated 0.18 cutover.
 
-Collection and individual pack versions are independent. Never modify a published version in place; retain old bundles for saves/replays. Use python3 build.py --output-dir dist/RELEASE to build individual *.playroom-pack.json, collection ZIP, source ZIP and SHA256SUMS. The release asset allowlist must all come from one build. The helper verify_release checks integrity but not gameplay.
+Packs publish through the existing packs-publish.yml to private R2 with immutable files and atomic catalog pointer. Its only input can limit publication to one game. Verify the public app route serves the expected catalog/version/file hashes and catalog rollback remains possible. This does not redeploy Pages or change the app version. App shell deployments belong to the app workflow, not a duplicated publisher here.
 
-Before tag/release, confirm app workflow pins and source SHA, compare downloaded assets and hashes, and keep the pinned commit reachable. Task PRs target dev; stable releases follow current CONTRIBUTING.md. Plugin development stays in a separate tooling branch. The app plugin owns Cloudflare deployment; do not duplicate its publisher or embed its secrets here.
-
-## Local tools
-
-Read [tools](../../references/TOOLS.md) before using the bundled MCP or CLI. Pass explicit app and pack checkout roots; never guess a sibling path in a worktree. Inspect both repositories and read their current AGENTS.md, CONTRIBUTING.md and relevant design contracts. The repo documentation is authoritative over this plugin. Use repository-workflow for GitHub operations and cleanup. Preserve active services, unrelated edits, published versions and pinned companion SHAs.
-
-## RC4 corrections
-
-Apply [RC4 constraints](../../references/RC4.md) whenever editing catalog, lobby, rules, effects or layout. The selected repositories and latest user decisions remain authoritative.
+Task PRs/stable flow and existing authorization follow the selected repo, with reachable pinned provenance. Keep plugin edits in tooling branches. Report selected tests/omissions, release state and published catalog state separately. Use [tools](../../references/TOOLS.md) for local plan/inspection/hash support and [refactoring](../../references/REFACTOR-0.18.md) for migration limits.

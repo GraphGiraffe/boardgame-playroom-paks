@@ -1,22 +1,14 @@
 ---
 name: pack-rules
-description: Implement or review deterministic game rules, legal actions, hidden hands, bots, deck variants and replay in PlayRoom packs.
+description: Implement pure deterministic PlayRoom rules, legal/public choices, hidden projections, bots, scoring and replay contracts.
 ---
 
-# Rules and hidden information
+# Rules, events and visibility
 
-Read the selected manifest, rules, current authoring guide and exact engine contract. Separate public state, each player's private hand, legal targets and display hints. Use the provided deterministic RNG; never Math.random in authoritative rules. Actions must validate actor, turn, target and selected card, including malicious/replayed input.
+Read current pack authoring plus [0.18 contracts](../../references/REFACTOR-0.18.md). Domain owns legal commands, transitions, typed events and result/tie-break facts; presentation/translated labels do not determine outcomes. Explicit randomness/observations only; bots never inspect hidden authority data. Preserve supported player/deck/preset combinations and RNG ordering.
 
-Exercise setup, legal and illegal moves, scoring, turn boundaries, bots, empty hands, end conditions, save/replay and supported participant/deck ranges. Preserve hidden card identity: let a player choose a displayed back/index via the supported contract without exposing the private card ID. Player-target and card-target interactions must agree with the app controller.
+Commands carry rule parameters only. ActionChoice separately declares public/private. Table gets spectator data and separately authorized public choices; availability and arguments must be public before execution. Private card selection/fleet setup stays personal. Project event parameters before presentation/translation/audio/replay, including public fallbacks. Inspect current adapter support before migrating private events.
 
-For Battleship both current presets require side and diagonal spacing. Keep automatic/manual rules consistent; honor announcement privacy in projection, counters, cues and bot observations. For Yatzy keep totals/bonus consistent between table, player card and scoring logic. For Durak verify deck exhaustion, trump, transfer/throw-in limits and every supported 2–6 player/deck combination that the changed code affects.
+Check setup, illegal/malicious/replayed commands, turn boundaries/reactions, bot behavior, exhausted stock, draws, scoring and exact-version restore for the changed rule. Use the focused cases in the selected app; independent pack syntax/build is not gameplay evidence. Rank policies belong to rules, never Russian label matching in UI.
 
-Use existing games/actions and targeted rule tests. Expand only for a new uncovered risk. Changing a saved-state contract requires version policy and compatibility documentation, not rewriting an already published pack.
-
-## Local tools
-
-Read [tools](../../references/TOOLS.md) before using the bundled MCP or CLI. Pass explicit app and pack checkout roots; never guess a sibling path in a worktree. Inspect both repositories and read their current AGENTS.md, CONTRIBUTING.md and relevant design contracts. The repo documentation is authoritative over this plugin. Use repository-workflow for GitHub operations and cleanup. Preserve active services, unrelated edits, published versions and pinned companion SHAs.
-
-## RC4 corrections
-
-Apply [RC4 constraints](../../references/RC4.md) whenever editing catalog, lobby, rules, effects or layout. The selected repositories and latest user decisions remain authoritative.
+Keep actual game rules explicit: Battleship spacing/privacy and public outcomes, Yatzy category acceptance/bonus, Ludo independent dice/safe cells/team help, supported Durak limits/decks. Follow [workflow](../../references/WORKFLOW.md) and [RC4 mechanics](../../references/RC4.md); use [tools](../../references/TOOLS.md) when needed.

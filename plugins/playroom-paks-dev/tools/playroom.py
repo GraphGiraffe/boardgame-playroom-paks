@@ -12,7 +12,7 @@ import zipfile
 
 CONFIG = json.loads(Path(__file__).with_name('config.json').read_text())
 KIND = CONFIG['kind']
-AREAS = ('docs', 'core', 'layout', 'hands', 'motion', 'network', 'pairing', 'storage', 'rules', 'standalone', 'release', 'setup', 'build')
+AREAS = ('docs', 'core', 'layout', 'hands', 'motion', 'network', 'pairing', 'storage', 'rules', 'standalone', 'release', 'setup', 'build', 'model', 'appearance', 'localization', 'table')
 
 
 def checkout(value, kind):
@@ -40,14 +40,25 @@ def inspect_project(repo, companion=''):
     return result
 
 
-def plan_validation(repo, area, companion=''):
+def plan_validation(repo, area, companion='', checks=None):
     if area not in AREAS: raise ValueError('Unknown area; choose '+', '.join(AREAS))
     root = checkout(repo, KIND)
     other = checkout(companion, 'packs' if KIND == 'app' else 'app') if companion else None
     app, packs = (root, other) if KIND == 'app' else (other, root)
     cwd = root
+    selected = None
+    if checks is not None:
+        if not isinstance(checks, str) or not checks.strip(): raise ValueError('checks must name selectors or literal none')
+        values = [value.strip() for value in checks.split(',')]
+        if len(set(values)) != len(values) or any(not value or value.lower() in ('all','full','*') for value in values):
+            raise ValueError('List explicit blocks/subblocks/cases; all/full/* are not allowed')
+        if 'none' in values and values != ['none']: raise ValueError('none cannot be mixed with test selectors')
+        selected = ','.join(values)
+        if area in ('docs','standalone','setup','build'): raise ValueError('checks applies to test areas and release verification')
+    if area == 'release' and selected is None:
+        raise ValueError('Release checks are required: choose explicit selectors or none; no implicit full suite')
     if area == 'docs': command = ['git', 'diff', '--check']
-    elif area == 'standalone': command = ['bash', 'scripts/codex/check.sh']
+    elif area == 'standalone': command = ['bash', 'scripts/codex/check.sh'] if KIND == 'packs' else ['python3', 'build.py']
     elif area == 'setup':
         command = ['bash', 'scripts/codex/setup.sh']
         if other: command += ['--packs-dir', str(packs / 'packs')] if KIND == 'app' else ['--app-dir', str(app)]
@@ -56,23 +67,27 @@ def plan_validation(repo, area, companion=''):
         if KIND == 'app':
             if not packs: raise ValueError('All-games build needs the packs companion checkout')
             command += ['--all-games', '--pwa', '--packs-dir', str(packs / 'packs')]
-    elif area == 'release':
-        if not app or not packs: raise ValueError('Release verification needs both app and packs checkouts')
-        cwd = app
-        command = ['bash', 'scripts/codex/check.sh', '--full', '--packs-dir', str(packs / 'packs')]
     else:
-        if not app: raise ValueError('Gameplay/UI verification requires the app companion checkout')
-        cwd = app
-        profiles = {'core':'core', 'layout':'layout,ui', 'hands':'input/hands', 'motion':'input/motion',
-                    'network':'network', 'pairing':'pairing', 'storage':'storage', 'rules':'games/actions'}
-        command = ['node', 'scripts/codex/test.cjs', profiles[area]]
+        profiles = {'core':'core/state', 'layout':'games/layout', 'hands':'input/hands', 'motion':'input/motion',
+                    'network':'network', 'pairing':'pairing', 'storage':'storage', 'rules':'games/actions',
+                    'model':'core/model', 'appearance':'core/appearance,ui/appearance',
+                    'localization':'core/localization', 'table':'network/table'}
+        selected = selected if selected is not None else profiles[area]
+        if selected == 'none':
+            command = ['git', 'diff', '--check']
+        else:
+            if not app or not packs: raise ValueError('Selected tests need explicit app + packs roots to avoid stale source packs')
+            cwd = app
+            # The repository validates its own selectors without executing tests.
+            subprocess.check_output(['node', 'scripts/codex/test.cjs', selected, '--list'], cwd=app, text=True, timeout=15, stderr=subprocess.STDOUT)
+            command = ['node', 'scripts/codex/test.cjs', selected]
     preparation = []
-    if area not in ('docs', 'standalone', 'setup', 'build', 'release'):
-        if not app or not packs: raise ValueError('Focused checks need explicit app + packs roots to prevent testing stale installed packs')
+    if selected is not None and selected != 'none':
         preparation = [{'cwd':str(app), 'argv':['python3', 'build.py', '--prepare-dev', '--all-games', '--packs-dir', str(packs / 'packs')]}]
-    return {'area':area, 'preparation':preparation, 'cwd':str(cwd), 'argv':command,
+    return {'area':area, 'selected_checks':selected, 'tests_skipped':selected == 'none',
+            'preparation':preparation, 'cwd':str(cwd), 'argv':command,
             'remote_actions':False, 'executed':False,
-            'note':'Run setup only if dependencies/browser are missing. Run the full release gate once. Plans are not test results.'}
+            'note':'Only the chosen checks run; none is deliberate omission. Packaging/SHA and publication verification are separate required steps. A plan is not a result.'}
 
 
 def inspect_pack(repo, pack_id):
@@ -87,6 +102,7 @@ def inspect_pack(repo, pack_id):
     selected=manifest.get('tags',[])
     tag_issues=[] if 1<=len(selected)<=3 and len(set(selected))==len(selected) and all(t in allowed for t in selected) and any(allowed.get(t,{}).get('kind')=='type' for t in selected) else ['Tags missing or outside the current 1-3 type/mechanic contract']
     return {'id':pack_id, 'manifest':manifest,'tag_issues':tag_issues,'conditional_settings':[f['key'] for f in manifest.get('settings',[]) if f.get('visibleWhen')], 'files':sorted(str(p.relative_to(pack)) for p in pack.rglob('*') if p.is_file()),
+            'source_modules':manifest.get('sourceModules'), 'layers':{name:(pack/name).is_dir() for name in ('domain','presentation','locales','ui')},
             'shared_assets':sorted(p.name for p in (root / 'shared/assets').glob('*') if p.is_file())}
 
 
@@ -119,13 +135,14 @@ def main():
     parser.add_argument('operation',choices=['inspect','plan','run','pack','verify-release'])
     parser.add_argument('--repo');parser.add_argument('--companion',default='')
     parser.add_argument('--area',choices=AREAS,default='docs')
+    parser.add_argument('--checks',help='Explicit comma-separated selectors or none; required for release')
     parser.add_argument('--pack-id');parser.add_argument('--directory');parser.add_argument('--capture-dir')
     a=parser.parse_args()
     if a.operation=='verify-release': result=verify_release(a.directory)
     elif a.operation=='inspect': result=inspect_project(a.repo,a.companion)
     elif a.operation=='pack': result=inspect_pack(a.repo,a.pack_id)
     else:
-        result=plan_validation(a.repo,a.area,a.companion)
+        result=plan_validation(a.repo,a.area,a.companion,a.checks)
         if a.operation=='run':
             print(json.dumps(result,ensure_ascii=False),flush=True)
             env=os.environ.copy()

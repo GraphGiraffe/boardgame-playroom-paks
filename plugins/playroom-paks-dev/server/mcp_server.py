@@ -16,9 +16,9 @@ def inspect_project(repo: str, companion: str='') -> dict:
     return playroom.inspect_project(repo,companion)
 
 @mcp.tool(annotations=read)
-def plan_validation(repo: str, area: str, companion: str='') -> dict:
-    """Select existing local commands for docs/core/layout/hands/motion/network/pairing/storage/rules/standalone/release/setup/build; does not execute them."""
-    return playroom.plan_validation(repo,area,companion)
+def plan_validation(repo: str, area: str, companion: str='', checks: str | None=None) -> dict:
+    """Plan selected local checks; release requires explicit checks or none. Includes model/appearance/localization/table areas; never executes tests."""
+    return playroom.plan_validation(repo,area,companion,checks)
 
 @mcp.tool(annotations=read)
 def inspect_pack(repo: str, pack_id: str) -> dict:

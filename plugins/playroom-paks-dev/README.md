@@ -20,3 +20,7 @@ The caller supplies exact checkout roots. Skills follow current project docs and
 ## 0.1.1
 
 RC4 catalog/lobby/privacy/layout constraints; pack inspection reports unknown/missing tags and conditional rule fields. Local only; no app deployment.
+
+## 0.2.0
+
+Staged 0.18 layer/feature tracking, public Table roles, themes/locales/shared assets, explicit release selectors or none, and independent app/collection/single-pack publication. This plugin update does not release or deploy PlayRoom. See references/REFACTOR-0.18.md and references/WORKFLOW.md.

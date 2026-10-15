@@ -1,22 +1,14 @@
 ---
 name: pack-ui-assets
-description: Implement responsive game views and reusable card, die, board, icon and sound assets for PlayRoom packs.
+description: Implement reusable scalable PlayRoom game components, scene renderers, local palette/skin hooks and accessible interactions.
 ---
 
-# Pack UI and reusable assets
+# Pack presentation and shared assets
 
-Read docs/AUTHORING.md and the app's shared component/geometry contracts. Preserve playing cards 5:7, dice and grid cells 1:1, and circular pawns. Size within the provided field; reserve action slots and avoid touching the app hand area. Scope all CSS to this pack. Reuse shared card-back, dice, board/piece and sound resources through the build contract.
+Read current component/geometry contracts and [0.18 shared entities](../../references/REFACTOR-0.18.md#shared-visual-and-semantic-entities). Presentation produces serializable scene/metrics/MessageRef from authorized data; Web owns DOM/CSS/input. Reuse semantic assets instead of per-pack copies or rule calculations in view.
 
-Use direct taps on player's cards, opponent cards and legal board pieces where possible. Display only actionable targets, maintain meaningful accessible labels and keyboard paths, and keep indicators compact without duplicating the existing hand count. Dice rolls, moves, draws and flips use shared motion contracts and respect reduced motion. Audit audio paths, file signatures, inclusion in standalone JSON and actual event triggers; file existence is not audible playback proof.
+RoundToken is one SVG/CSS object for counters/first-player/team/medal/Ludo/Snakes variants; stack/fan/finish-triangle are layouts. Keep numeral paths centered at normal/small sizes, proportional face/rim/side, circular selection, 5:7 cards and square cells/dice. Preserve accepted Ludo board and shared pawn/finish behavior. Checkers/domino/ship/table/bubble/sound families also belong in shared resources, embedded offline.
 
-Follow [viewport matrix](../../references/VIEWPORTS.md). Battleship uses one mobile board at a time with clear misses; Tic-tac-toe and Battleship keep stable square cells; Ludo has a readable classic board and legal pawn selection; Pexeso uses card proportions; Yatzy keeps a compact score table and visible totals. Colored covers and icons should match the earlier packs' design language.
+Theme/skin hooks change local palette/appearance without changing semantic value, ID, hit area or privacy. No pack-owned theme store/room preference. Mechanical bubbles and chat have distinct semantic styles; scheduled chat/bot/statistics features remain pending until implemented. Result metrics reuse player-card descriptors.
 
-Use local games/layout or layout profiles with the exact companion pair. Capture same state before/after and inspect the rendering. Test large hand/board states and button appearance; do not accept forced global shrinking or nested scrolling as the general solution.
-
-## Local tools
-
-Read [tools](../../references/TOOLS.md) before using the bundled MCP or CLI. Pass explicit app and pack checkout roots; never guess a sibling path in a worktree. Inspect both repositories and read their current AGENTS.md, CONTRIBUTING.md and relevant design contracts. The repo documentation is authoritative over this plugin. Use repository-workflow for GitHub operations and cleanup. Preserve active services, unrelated edits, published versions and pinned companion SHAs.
-
-## RC4 corrections
-
-Apply [RC4 constraints](../../references/RC4.md) whenever editing catalog, lobby, rules, effects or layout. The selected repositories and latest user decisions remain authoritative.
+Scope CSS to pack components; do not style the hub. Keep field/control geometry and gestures stable when actions appear, opponents act or themes change. Verify affected states/viewports via [viewport guidance](../../references/VIEWPORTS.md), inspect screenshots and real input, and test cue/asset inclusion rather than merely checking files exist. Follow [workflow](../../references/WORKFLOW.md), [RC4](../../references/RC4.md) and [tools](../../references/TOOLS.md) as relevant.
