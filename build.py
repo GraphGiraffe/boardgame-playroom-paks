@@ -12,7 +12,7 @@ import zipfile
 
 
 ROOT = Path(__file__).resolve().parent
-VERSION = "0.6.4"
+VERSION = "0.6.5"
 # Portable format 1: keep these checks aligned with core/packs.js.
 MAX_PACK_BYTES = 4 * 1024 * 1024
 MAX_PACK_FILES = 128
