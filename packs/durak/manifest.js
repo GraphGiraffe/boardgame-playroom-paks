@@ -133,6 +133,9 @@
       "deck": "54",
       "jokerMode": "universal"
     }
-  }
+  },
+  "sharedDomain": [
+    "standard-deck"
+  ]
 };
 })(globalThis);

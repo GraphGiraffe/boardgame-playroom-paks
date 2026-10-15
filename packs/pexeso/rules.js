@@ -1,8 +1,8 @@
 (function(E){
  'use strict';
- const suits=['♠','♥','♦','♣'];
  const pair=c=>c.joker?'joker':`${c.rank}-${['♥','♦'].includes(c.suit)?'red':'black'}`;
- function deck(size){const cards=[];for(let rank=size===36?6:2;rank<=14;rank++)for(const suit of suits)cards.push({id:`${suit}${rank}`,rank,suit});if(size===54)for(const color of ['red','black'])cards.push({id:`joker-${color}`,rank:15,suit:'★',joker:true,color});return cards;}
+ const Deck = globalThis.PlayroomPackDomain?.standardDeck || (typeof require === 'function' ? require('../../shared/domain/standard-deck.js') : null);
+ const deck = size => Deck.create(size);
  E.register({id:'pexeso',version:'0.1.6',stateVersion:2,name:'Пексесо',min:2,max:4,scoreLabel:'победы',
   result(s){return {label:'Найдено пар',values:s.data.scores.slice()};},
   description:'Парная игра на память со стандартными игральными картами.',

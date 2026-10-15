@@ -1,8 +1,9 @@
 (function(E){
  'use strict';
- const suits=['♠','♥','♦','♣'],color=s=>['♥','♦'].includes(s)?'red':'black';
+ const color=s=>['♥','♦'].includes(s)?'red':'black';
  const face=c=>c.joker?(c.color==='red'?'Красный джокер':'Чёрный джокер'):`${({11:'В',12:'Д',13:'К',14:'Т'})[c.rank]||c.rank}${c.suit}`;
- function deck(size){const out=[];for(let rank=size===36?6:2;rank<=14;rank++)for(const suit of suits)out.push({id:`${suit}${rank}`,suit,rank});if(size===54)for(const c of ['red','black'])out.push({id:`joker-${c}`,suit:'★',rank:15,joker:true,color:c});return out;}
+ const Deck = globalThis.PlayroomPackDomain?.standardDeck || (typeof require === 'function' ? require('../../shared/domain/standard-deck.js') : null);
+ const deck = size => Deck.create(size);
  function spec(o={}){const variant=['simple','throwin','transfer'].includes(o.variant)?o.variant:'throwin';return {variant,size:[36,52,54].includes(Number(o.deck))?Number(o.deck):36,mode:o.jokerMode==='universal'?'universal':'color',handSize:variant==='simple'?5:6,endCondition:o.endCondition==='firstout'?'firstout':'lastfool'};}
  function beats(card,attack,d){const trump=d.trump.suit;if(d.jokerMode==='universal'){if(card.joker)return !attack.joker||card.color==='red'&&attack.color==='black';if(attack.joker)return false;}else if(d.deckSize===54){const tc=color(trump);if(card.joker){if(attack.joker)return card.color===tc&&attack.color!==tc;return card.color===tc||color(attack.suit)===card.color&&attack.suit!==trump;}if(attack.joker)return attack.color!==tc&&card.suit===trump;}
   return card.suit===attack.suit?card.rank>attack.rank:card.suit===trump&&attack.suit!==trump;}

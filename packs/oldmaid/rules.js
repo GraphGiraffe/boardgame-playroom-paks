@@ -1,6 +1,7 @@
 (function(E){
- 'use strict';const suits=['♠','♥','♦','♣'],key=c=>c.joker?'joker':`${c.rank}-${['♥','♦'].includes(c.suit)?'red':'black'}`;
- function deck(size){const out=[];for(let rank=size===36?6:2;rank<=14;rank++)for(const suit of suits)if(!(rank===12&&suit==='♣'))out.push({id:`${suit}${rank}`,suit,rank});if(size===54)for(const color of ['red','black'])out.push({id:`joker-${color}`,suit:'★',rank:15,joker:true,color});return out;}
+ 'use strict';const key=c=>c.joker?'joker':`${c.rank}-${['♥','♦'].includes(c.suit)?'red':'black'}`;
+ const Deck = globalThis.PlayroomPackDomain?.standardDeck || (typeof require === 'function' ? require('../../shared/domain/standard-deck.js') : null);
+ const deck = size => Deck.create(size, {exclude: ['♣12']});
  function discard(s,p,announce=false){const d=s.data,groups={};for(const c of d.hands[p])(groups[key(c)]??=[]).push(c);for(const group of Object.values(groups))while(group.length>=2){const ids=new Set(group.splice(0,2).map(c=>c.id));d.hands[p]=d.hands[p].filter(c=>!ids.has(c.id));d.discard.push(...deck(d.deckSize).filter(c=>ids.has(c.id)));if(announce)E.event(s,`${s.players[p].name} сбросил пару`,p,'capture',{sound:{id:'success'},transfer:{player:p,count:2,from:'hand',fromPlayer:p,to:'table'}});}}
  function next(d,from){for(let i=1;i<=d.hands.length;i++){const p=(from+i)%d.hands.length;if(d.hands[p].length)return p;}return from;}
  function awardExit(s,i){const d=s.data;if(!d.hands[i].length&&!d.outOrder.includes(i)){d.outOrder.push(i);s.players[i].score+=s.players.length-d.outOrder.length;}}

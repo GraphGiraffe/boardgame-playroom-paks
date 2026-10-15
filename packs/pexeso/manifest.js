@@ -63,6 +63,9 @@
       ],
       "teams": false
     }
+  ],
+  "sharedDomain": [
+    "standard-deck"
   ]
 };
 })(globalThis);

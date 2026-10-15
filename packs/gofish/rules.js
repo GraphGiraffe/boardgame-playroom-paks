@@ -1,6 +1,7 @@
 (function(E){
- 'use strict';const suits=['♠','♥','♦','♣'],rankName=n=>({11:'валеты',12:'дамы',13:'короли',14:'тузы',15:'джокеры'})[n]||`${n}-ки`;
- function deck(size){const out=[];for(let rank=size===36?6:2;rank<=14;rank++)for(const suit of suits)out.push({id:`${suit}${rank}`,suit,rank});if(size===54)for(const color of ['red','black'])out.push({id:`joker-${color}`,suit:'★',rank:15,joker:true,color});return out;}
+ 'use strict';const rankName=n=>({11:'валеты',12:'дамы',13:'короли',14:'тузы',15:'джокеры'})[n]||`${n}-ки`;
+ const Deck = globalThis.PlayroomPackDomain?.standardDeck || (typeof require === 'function' ? require('../../shared/domain/standard-deck.js') : null);
+ const deck = size => Deck.create(size);
  function book(s,p){const d=s.data,hand=d.hands[p];for(const rank of [...new Set(hand.map(c=>c.rank))]){const cards=hand.filter(c=>c.rank===rank),need=rank===15?2:4;if(cards.length===need){d.hands[p]=d.hands[p].filter(c=>c.rank!==rank);d.books[p].push(rank);E.event(s,`${s.players[p].name} собрал ${rankName(rank)}`,p,'capture',{sound:{id:'success'},transfer:{player:p,count:need,from:'hand',fromPlayer:p,to:'table'}});}}}
  function finishIfDone(s){const d=s.data;if(d.books.flat().length===d.deckSize/4+(d.deckSize===54?.5:0)||(!d.drawPile.length&&d.hands.every(h=>!h.length))){const scores=d.books.map(b=>b.length),best=Math.max(...scores),w=scores.flatMap((n,i)=>n===best?[i]:[]);E.finish(s,w.length===s.players.length?null:w.length===1?w[0]:w,'Все пары и квартеты собраны');return true;}return false;}
  function advance(s,from){const d=s.data;if(finishIfDone(s))return;for(let step=1;step<=s.players.length;step++){const p=(from+step)%s.players.length;if(!d.hands[p].length&&d.drawPile.length){d.hands[p].push(d.drawPile.pop());E.event(s,`${s.players[p].name} взял карту`,p,'draw',{transfer:{player:p,count:1,from:'stock'}});book(s,p);}if(d.hands[p].length){s.turn=p;return;}}finishIfDone(s);}
