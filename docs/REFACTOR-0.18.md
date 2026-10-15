@@ -83,3 +83,10 @@ shared/components/round-token.js — рабочий источник RoundToken,
 ### Морской бой и Пексесо: API 3
 
 Морской бой 0.2.0: geometry/domain/presentation/locales отдельно; setup private, fire public; одна модель показателей флота для поля и карточек. Пексесо 0.2.0: отдельные rules/scene/locales, явно переданные shuffle/Deck, bot observation только из ранее открытых карт, не передаваемая зрителям. Новые модели и прежние варианты проверяются companion-набором приложения; фактическое свидетельство — общий REFACTOR-0.18-TRACKER.md. Остальные паки пока продолжают миграцию; engineApi 1/2 ещё не удалены.
+
+
+### Перенос десяти игр
+
+Дополнительно перенесены ludo/oldmaid/gofish 0.2.0 и snakes/domino/checkers 0.4.0. EngineApi 3; отдельные domain, presentation, locales и Web view. Начальные факты/очки — GameModel.start/score; Акулина stateVersion 4 хранит points. Шашки передают semantic capture, не требуют разбора текстовой подписи. Лудо использует одну domain-функцию destination для взятия в правилах и предпросмотра; принятое поле и финиш 1+3 сохранены.
+
+UNO/Дурак, все общие ассеты и окончательный container cutover пока не завершены. Не считать этот срез готовым выпуском 0.18.

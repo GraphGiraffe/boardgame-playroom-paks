@@ -1,6 +1,6 @@
 {
   "id": "ludo",
-  "version": "0.1.12",
+  "version": "0.2.0",
   "name": "Лудо",
   "category": "board",
   "estimatedDuration": "20–40 мин",
@@ -21,7 +21,7 @@
     "die.svg",
     "round-token.svg"
   ],
-  "engineApi": 2,
+  "engineApi": 3,
   "stateVersion": 2,
   "viewApi": 2,
   "tileTheme": "green",
@@ -122,5 +122,21 @@
       "label": "красная",
       "color": "#ce735d"
     }
-  ]
+  ],
+  "sourceModules": {
+    "rules": [
+      "domain/board.js",
+      "domain/game.js",
+      "presentation/scene.js"
+    ],
+    "view": [
+      "domain/board.js",
+      "presentation/scene.js"
+    ],
+    "locales": {
+      "ru": [
+        "locales/ru/game.json"
+      ]
+    }
+  }
 }

@@ -1,0 +1,20 @@
+(function(root,factory){const source=typeof require==='function'&&!root.PlayroomPack;const api=factory(source?require('../domain/board.js'):root.PlayroomCheckersBoard);
+ if(typeof module==='object'&&module.exports)module.exports=api;root.PlayroomPackPresentation=api;})(globalThis,function(B){
+ 'use strict';const message=(key,params={})=>({key:'checkers.'+key,params});
+ const metadata={name:message('meta.name'),description:message('meta.description'),scoreLabel:message('meta.wins'),presets:['classic','quick'].map(id=>({id,label:message('presets.'+id)})),rules:[1,2,3,4,5,6].map(index=>message('rules.'+index))};
+ const choice=(command,projection)=>({capture:B.moves(projection,projection.actor).find(move=>move.from===command.from&&move.to===command.to)?.victim!=null});
+ const action=(command,projection)=>message(choice(command,projection).capture?'actions.capture':'actions.move',{from:B.cellName(command.from),to:B.cellName(command.to)});
+ function event(value){const p=value.params;
+  if(value.type==='checkers.moved')return {message:message(p.promoted?'events.promoted':'events.moved',{from:B.cellName(p.from),to:B.cellName(p.to),symbol:p.captured?'×':'→'}),
+   kind:p.captured?'capture':'move',sound:p.captured?{id:'attack.capture',target:p.target}:{id:p.promoted?'notify':'move'},presentation:{type:'move',from:p.from,to:p.to}};
+  if(value.type==='checkers.won')return {message:message('events.won'),finish:true};
+  if(value.type==='checkers.repeated')return {message:message('events.repeated'),finish:true};
+  if(value.type==='checkers.quiet')return {message:message('events.quiet'),finish:true};
+  throw Error('CHECKERS_EVENT_UNKNOWN');
+ }
+ const metric=()=>message('meta.wins');
+ const scene=projection=>({contractVersion:1,id:'checkers-board',family:'grid-board',columns:8,rows:8,
+  pieces:projection.data.board.flatMap((piece,cell)=>piece?[{...piece,cell,captured:projection.data.captured.includes(cell)}]:[]),
+  players:[0,1].map(player=>({player,metrics:[{id:'pieces',value:projection.data.board.filter(piece=>piece?.owner===player).length,label:message('view.pieces'),resultUsage:true}]}))});
+ return Object.freeze({metadata,choice,action,event,metric,scene});
+});
