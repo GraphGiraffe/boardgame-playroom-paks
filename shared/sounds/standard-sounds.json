@@ -633,5 +633,68 @@
         "to": 988
       }
     ]
+  },
+  "pass": {
+    "label": "Пас",
+    "notes": [
+      {
+        "frequency": 360,
+        "at": 0.0,
+        "duration": 0.075,
+        "wave": "triangle",
+        "gain": 0.12,
+        "to": 331.2
+      },
+      {
+        "frequency": 300,
+        "at": 0.09,
+        "duration": 0.12,
+        "wave": "triangle",
+        "gain": 0.12,
+        "to": 276.0
+      }
+    ]
+  },
+  "discard": {
+    "label": "Бито",
+    "notes": [
+      {
+        "frequency": 760,
+        "at": 0.0,
+        "duration": 0.075,
+        "wave": "triangle",
+        "gain": 0.12,
+        "to": 699.2
+      },
+      {
+        "frequency": 570,
+        "at": 0.09,
+        "duration": 0.12,
+        "wave": "triangle",
+        "gain": 0.12,
+        "to": 524.4
+      }
+    ]
+  },
+  "take": {
+    "label": "Взять со стола",
+    "notes": [
+      {
+        "frequency": 490,
+        "at": 0.0,
+        "duration": 0.075,
+        "wave": "triangle",
+        "gain": 0.12,
+        "to": 450.8
+      },
+      {
+        "frequency": 360,
+        "at": 0.09,
+        "duration": 0.12,
+        "wave": "triangle",
+        "gain": 0.12,
+        "to": 331.2
+      }
+    ]
   }
 }

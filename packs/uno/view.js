@@ -31,7 +31,7 @@
     const ordinary=draw?[draw,...other]:other;
     const controls=chosen.length>1?`<div class="uno-color-picker" aria-label="${H.esc(text('uno.view.choose-color'))}">${chosen.map(a=>`<button class="color-choice" ${H.target(a.card,a)} style="--choice:${colors[a.color]||colors.wild}" aria-label="${H.esc(a.label)}"><i></i>${H.esc(name(a.color))}</button>`).join('')}</div>`:ordinary.map(a=>H.actionButton(a)).join('');
     const hint=!controls?`<span class="scene-hint">${viewer===s.turn?text('uno.view.touch-card'):text('uno.view.wait')}</span>`:'';
-    const direction=`<div class="uno-direction" data-direction="${d.direction}" role="img" aria-label="${H.esc(d.direction===-1?text('uno.view.counterclockwise'):text('uno.view.clockwise'))}"><svg viewBox="0 0 64 16" aria-hidden="true"><path d="M3 8H61M54 2L61 8L54 14"/></svg></div>`;
+    const direction=s.players.length-(d.ending?.groups?.flat().length||0)>2?`<div class="uno-direction" data-direction="${d.direction}" role="img" aria-label="${H.esc(d.direction===-1?text('uno.view.counterclockwise'):text('uno.view.clockwise'))}"><svg viewBox="0 0 64 16" aria-hidden="true"><path d="M3 8H61M54 2L61 8L54 14"/></svg></div>`:'';
     const dock=H.actionGroups({start:call,primary:controls+hint,end:`<button class="uno-card-help" data-command="card-help" aria-label="${H.esc(text('uno.view.card-help'))}">${H.icon('help')}</button>`,exclusive:chosen.length>1});
     return {api:2,family:'cards',className:'uno-scene surface-'+surface,playerContent:H.playerContent(s,viewer,(c,attrs,ctx)=>card(c,attrs,'',ctx?.variant),{badges:i=>d.uno?.declared?.[i]?['UNO!']:[]}),elements:{
       participants:'',

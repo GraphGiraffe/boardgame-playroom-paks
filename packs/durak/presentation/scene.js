@@ -11,13 +11,13 @@
   return message('actions.'+command.type);
  }
  function event(value){const p=value.params,actor=value.actor;
-  if(value.type==='durak.taken')return {message:message('events.taken',{count:p.count}),kind:'take',transfer:{player:actor,count:p.count,from:'table'}};
-  if(value.type==='durak.discarded')return {message:message('events.discarded'),kind:'discard',sound:{id:'success'}};
-  if(value.type==='durak.drawn')return {message:message('events.drawn',{count:p.count}),kind:'draw',transfer:{player:actor,count:p.count,from:'stock'}};
+  if(value.type==='durak.taken')return {message:message('events.taken',{count:p.count}),kind:'take',feedback:{kind:'skip',player:actor},transfer:{player:actor,count:p.count,from:'table'}};
+  if(value.type==='durak.discarded')return {message:message('events.discarded'),kind:'discard',feedback:{kind:'discard',player:actor}};
+  if(value.type==='durak.drawn')return {message:message('events.drawn',{count:p.count}),kind:'draw',feedback:{kind:'draw',player:actor},transfer:{player:actor,count:p.count,from:'stock'}};
   if(value.type==='durak.exchanged')return {message:message('events.exchanged'),kind:'play'};
   if(value.type==='durak.confirmed')return {message:message('events.confirmed'),kind:'attack'};
-  if(value.type==='durak.passed')return {message:message('events.passed'),kind:'pass',speech:{speaker:actor,text:message('speech.pass')}};
-  if(value.type==='durak.taking')return {message:message('events.taking'),kind:'take',speech:{speaker:actor,text:message('speech.take')}};
+  if(value.type==='durak.passed')return {message:message('events.passed'),kind:'pass',feedback:{kind:'pass',player:actor},speech:{speaker:actor,text:message('speech.pass')}};
+  if(value.type==='durak.taking')return {message:message('events.taking'),kind:'take',feedback:{kind:'take',player:actor},speech:{speaker:actor,text:message('speech.take')}};
   if(value.type==='durak.attacked'||value.type==='durak.transferred')return {message:message(value.type==='durak.transferred'?'events.transferred':'events.attacked',{card:face(p.card)}),kind:'attack',sound:{id:value.type==='durak.transferred'?'reverse':'attack'}};
   if(value.type==='durak.defended')return {message:message('events.defended',{card:face(p.card),attack:face(p.attack)}),kind:'defend'};
   if(value.type==='durak.all-out')return {message:message('events.all-out'),finish:true};

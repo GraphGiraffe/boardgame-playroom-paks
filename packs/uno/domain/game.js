@@ -95,7 +95,7 @@
   if(a.type==='draw'){const got=draw(s,actor,1);syncPending(s);d.drawn=got[0]?.id||null;d.noDraw=!got.length;events.push(fact('drawn',actor,{count:got.length}));return;}
   if(a.type==='pass'){d.stalled=d.noDraw?d.stalled+1:0;d.drawn=null;d.noDraw=false;s.turn=nextPlayer(s,actor);events.push(fact('passed',actor));if(d.stalled>=s.playerCount-d.ending.groups.flat().length){s.status='finished';s.winners=[];events.push(fact('exhausted',null));}syncPending(s);return;}
   const at=d.hands[actor].findIndex(c=>c.id===a.card),card=d.hands[actor].splice(at,1)[0];d.discard.push(card);d.color=a.color||card.color;d.drawn=null;d.noDraw=false;d.stalled=0;
-  const skip=card.value==='skip'||card.value==='reverse'&&s.playerCount===2;
+  const skip=card.value==='skip'||card.value==='reverse'&&s.playerCount-d.ending.groups.flat().length===2;
   events.push(fact('played',actor,{card,color:d.color,skipped:skip?nextPlayer(s,actor):null}));
   let steps=1;if(card.value==='reverse'){d.direction*=-1;if(s.playerCount-d.ending.groups.flat().length===2)steps=2;}if(card.value==='skip')steps=2;
   if(card.value==='+2'||card.value==='+4'){const target=nextPlayer(s,actor),count=draw(s,target,card.value==='+2'?2:4).length;events.push(fact('draw-skipped',target,{count,heavy:card.value==='+4'}));steps=2;}

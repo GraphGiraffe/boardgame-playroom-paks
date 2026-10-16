@@ -36,7 +36,7 @@
    if(B.stranded(next,actor)&&!d.rollIndices.some(index=>d.dice[index]===6)){d.failed[actor]=Math.min(3,d.failed[actor]+1);d.guarantee=d.guaranteedExit&&d.failed[actor]>=3;}
    else{d.failed[actor]=0;d.guarantee=false;}
    events.push(fact('rolled',actor,{dice:d.rollIndices.map(index=>d.dice[index])}));
-   if(!B.moves(next,actor).length)completeBatch(next,actor);
+   if(!B.moves(next,actor).length){events.push(fact('skipped',actor));completeBatch(next,actor);}
   }else{
    const die=d.dice[action.dieIndex],{from,to,captured}=B.destination(next,action),guaranteed=from<0&&die!==6&&d.guarantee;
    d.used[action.dieIndex]=true;d.pawns[action.owner][action.pawn]=to;d.last={owner:action.owner,pawn:action.pawn,from,to,die,captured};
