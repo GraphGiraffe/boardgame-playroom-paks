@@ -48,5 +48,7 @@
   "battleship.setup.remove": "Убрать выбранный корабль",
   "battleship.setup.auto": "Расставить флот",
   "battleship.setup.opponent": "Расстановка соперника",
-  "battleship.setup.ready": "Готово"
+  "battleship.setup.ready": "Готово",
+  "battleship.modes.russian": "Десять кораблей: 4 / 3 / 3 / 2 / 2 / 2 / 1 / 1 / 1 / 1.",
+  "battleship.modes.classic": "Пять кораблей: 5 / 4 / 3 / 3 / 2."
 }

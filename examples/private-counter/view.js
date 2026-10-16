@@ -1,9 +1,3 @@
-(function(){
- 'use strict';const V=globalThis.PlayroomViews,H=V.helpers;
-  if(H.viewApi!==2)throw Error('Нужно приложение с API интерфейса 2');
- function render(s,viewer,actions,ui={}){
-   const surface=ui.surface||'combined',goal=s.data.goals[viewer];
-   return {api:2,family:'board',className:'private-counter',playerContent:H.playerContent(s,viewer,null,{badges:i=>i===viewer?[`Цель: ${goal&&!goal.hidden?goal.value:'—'}`]:[]}),elements:{field:`<strong class="private-counter-value">${H.esc(s.data.count)}</strong>`,status:`<p>${s.status==='finished'?'Партия завершена':'Ходит '+H.esc(s.players[s.turn].name)}</p>`,auxiliary:'',actions:surface==='table'?'':H.actionBar(actions,'Ждём ход')}};
- }
- V.register('private-counter',render,null,{surfaces:{table:(s,v,a,ui)=>render(s,v,[],{...ui,surface:'table'}),player:(s,v,a,ui)=>render(s,v,a,{...ui,surface:'player'})}});
-})();
+(function(){'use strict';const V=globalThis.PlayroomViews,H=V.helpers,source=typeof require==='function'&&!globalThis.PlayroomPack,t=H.translator(source?{ru:require('./locales/ru/game.json')}:globalThis.PlayroomPackResources.locales),text=(key,params={})=>t.format({key:'counter.'+key,params});
+function render(state,viewer,actions){const goal=state.data.goals[viewer];return {api:2,family:'board',className:'private-counter',playerContent:H.playerContent(state,viewer,null,{badges:index=>index===viewer?[text('target',{value:goal&&!goal.hidden?goal.value:'—'})]:[]}),elements:{field:'<strong class="private-counter-value">'+state.data.count+'</strong>',status:'<p>'+H.esc(state.status==='finished'?text('finished'):text('turn',{player:state.players[state.turn].name}))+'</p>',actions:H.actionBar(actions,text('wait'))}};}
+V.register('private-counter',render,null,{surfaces:{table:render,player:render}});})();

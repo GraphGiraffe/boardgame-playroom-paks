@@ -20,7 +20,7 @@
  // Base slots use 18% outer padding, then 12% inner padding and a 15% gap.
  // Their centers are 2.16 and 3.84 cells from each base edge.
  const finishLocation=(p,j)=>{
-  const spread=j===0?0:(j-2)*.64,depth=j===0?1.06:.45;
+  const {x:spread,y:depth}=(globalThis.PlayroomTokenLayout||(typeof require==='function'?require('../../../shared/domain/token-layout.js'):null)).triangle(j);
   const centers=[[6+depth,7.5+spread],[7.5+spread,6+depth],[9-depth,7.5+spread],[7.5+spread,9-depth]];
   return centers[p].map(value=>value-.5);
  };
@@ -28,9 +28,9 @@
  const anchor=(p,j,n)=>n<0?`base-${p}-${j}`:n<52?`path-${(p*13+n)%52}`:n<57?`home-${p}-${n}`:`finish-${p}`;
  function sequence(last){if(!last)return undefined;const {owner:p,pawn:j,from,to}=last;return {trigger:'move',entry:from<0?'lift':undefined,arrival:to===57?'settle':undefined,entity:`token-${p}-${j}`,player:p,counter:'home',origin:{anchor:anchor(p,j,from)},steps:Array.from({length:from<0?1:to-from},(_,i)=>({anchor:anchor(p,j,from<0?0:from+i+1)}))};}
 
- function scene(projection){return {contractVersion:1,id:'ludo-board',family:'route-board',
+ function scene(projection){return {contractVersion:1,id:'ludo-board',family:'route-board',round:{number:projection.data.ending.round,limit:projection.data.ending.maxRounds||null,starts:projection.data.ending.starts},
   pawns:projection.data.pawns.flatMap((row,owner)=>row.map((progress,pawn)=>({id:'token-'+owner+'-'+pawn,owner,pawn,progress,point:location(owner,pawn,progress)}))),
   players:projection.data.pawns.map((row,player)=>({player,teamId:projection.preset==='teams'?(player%2?'red':'blue'):null,team:projection.preset==='teams'?{id:player%2?'red':'blue',label:message(player%2?'view.red':'view.blue'),colorRole:player%2?'side.red':'side.blue'}:null,
    metrics:[{id:'home',kind:'pieces',value:row.filter(n=>n===57).length,label:metric('home'),resultUsage:true},{id:'wins',kind:'wins',value:projection.winners.includes(player)?1:0,label:metadata.scoreLabel,resultUsage:false}]}))};}
- return Object.freeze({metadata,action,event,metric,scene,route,base,lane,location,anchor,sequence,destination:B.destination});
+ return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}),action,event,metric,scene,route,base,lane,location,anchor,sequence,destination:B.destination});
 });

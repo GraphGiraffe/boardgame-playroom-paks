@@ -12,5 +12,6 @@
   "tictactoe.events.draw": "Ничья: поле заполнено",
   "tictactoe.board.label": "Поле крестиков-ноликов",
   "tictactoe.board.empty-cell": "Клетка {cell}: пусто",
-  "tictactoe.board.marked-cell": "Клетка {cell}: {mark}"
+  "tictactoe.board.marked-cell": "Клетка {cell}: {mark}",
+  "tictactoe.modes.classic": "Поле 3 × 3; первым рядом из трёх выигрывает X или O. Если рядов нет и поле заполнено — ничья."
 }

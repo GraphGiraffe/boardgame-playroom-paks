@@ -16,5 +16,5 @@
  const scene=projection=>({contractVersion:1,id:'checkers-board',family:'grid-board',columns:8,rows:8,
   pieces:projection.data.board.flatMap((piece,cell)=>piece?[{...piece,cell,captured:projection.data.captured.includes(cell)}]:[]),
   players:[0,1].map(player=>({player,metrics:[{id:'pieces',kind:'pieces',value:projection.data.board.filter(piece=>piece?.owner===player).length,label:message(player===(projection.data.lightPlayer??0)?'view.light':'view.dark'),resultUsage:true},{id:'wins',kind:'wins',value:projection.winners.includes(player)?1:0,label:metadata.scoreLabel,resultUsage:false}]}))});
- return Object.freeze({metadata,choice,action,event,metric,scene});
+ return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}),choice,action,event,metric,scene});
 });

@@ -1,7 +1,7 @@
 (function(root,factory){if(typeof module==='object'&&module.exports)module.exports=factory;root.PlayroomPackDefinitionFactory=factory;})(globalThis,function(ports){
- 'use strict';
+ 'use strict';const Ending=ports.ending;
  const colors=['red','yellow','green','blue'],reactionTypes=['declare-uno','accuse-uno'];
- const nextPlayer=(s,from,steps=1)=>(from+s.data.direction*steps+s.playerCount*4)%s.playerCount;
+ const nextPlayer=(s,from,steps=1)=>{let player=from;for(let step=0;step<steps;step++){for(let n=0;n<s.playerCount;n++){player=(player+s.data.direction+s.playerCount)%s.playerCount;if(!Ending.done(s.data.ending,player))break;}}return player;};
  const fact=(name,actor,params={})=>({type:'uno.'+name,actor,params,visibility:{kind:'public'}});
  function cards(){let id=0,deck=[];for(const color of colors){deck.push({id:`u${id++}`,color,value:'0'});for(const value of ['1','2','3','4','5','6','7','8','9','skip','reverse','+2'])for(let n=0;n<2;n++)deck.push({id:`u${id++}`,color,value});}for(const value of ['wild','+4'])for(let n=0;n<4;n++)deck.push({id:`u${id++}`,color:'wild',value});return deck;}
  function create({playerCount,firstPlayer,preset,rng,openHands,options={}}){
@@ -10,7 +10,7 @@
   const deck=ports.shuffle(cards(),s),hands=Array.from({length:playerCount},()=>[]);
   for(let n=0;n<(preset==='quick'?5:7);n++)for(const hand of hands)hand.push(deck.pop());
   const first=deck.findIndex(c=>/^\d$/.test(c.value)),discard=[deck.splice(first,1)[0]];
-  s.data={hands,drawPile:deck,discard,color:discard[0].color,direction:1,drawn:null,noDraw:false,stalled:0,points:hands.map(()=>0),
+  s.data={ending:Ending.create(playerCount,firstPlayer,options.endMode,['winner','last']),hands,drawPile:deck,discard,color:discard[0].color,direction:1,drawn:null,noDraw:false,stalled:0,points:hands.map(()=>0),
    uno:{mode:options.unoMode||'auto',declared:hands.map(()=>false),pending:null,episode:0,calls:[],penalties:[],situations:hands.map(()=>({episode:0,open:false,settled:false,called:false}))}};
   return s;
  }
@@ -18,6 +18,7 @@
   const inventory=(zones,predicate,size)=>{const all=zones.flat();check(all.length===size&&new Set(all.map(c=>c.id)).size===size&&all.every(predicate));};
   try{
       const d = s.data;
+      check(Ending.valid(d.ending,s.playerCount));
       check(Array.isArray(d.hands) && d.hands.length === s.playerCount);
       const values = ['1','2','3','4','5','6','7','8','9','skip','reverse','+2'];
       inventory([...d.hands, d.drawPile, d.discard], c => {
@@ -77,7 +78,7 @@
       actions.push(d.drawn != null || d.noDraw ? { type: 'pass' } : { type: 'draw' });
       return actions;
     })();return commands.map(command=>({command,visibility:'private'}));}
- function reactions(s,actor){if(s.data.uno.mode!=='manual'||s.status!=='playing')return [];const u=s.data.uno;return [{type:'declare-uno',episode:u.situations[actor].episode},...Array.from({length:s.playerCount},(_,target)=>target).filter(target=>target!==actor).map(target=>({type:'accuse-uno',target,episode:u.situations[target].episode}))].map(command=>({command,visibility:'public'}));}
+ function reactions(s,actor){if(s.data.uno.mode!=='manual'||s.status!=='playing'||Ending.done(s.data.ending,actor))return [];const u=s.data.uno;return [{type:'declare-uno',episode:u.situations[actor].episode},...Array.from({length:s.playerCount},(_,target)=>target).filter(target=>target!==actor).map(target=>({type:'accuse-uno',target,episode:u.situations[target].episode}))].map(command=>({command,visibility:'public'}));}
  function reactionWindows(s){if(s.status!=='playing'||s.data.uno.mode!=='manual')return [];return s.data.uno.situations.flatMap((w,owner)=>w.open&&!w.settled?[{id:`uno:${owner}:${w.episode}`,owner,revision:w.episode,humanMs:1000,botMs:3000,fallbackMs:10000}]:[]);}
  function reactionControl(s,actor,action){const u=s.data.uno;if(u.mode!=='manual')return null;
   if(!reactionTypes.includes(action.type))return ['play','draw','pass'].includes(action.type)?{kind:'advance'}:null;
@@ -92,17 +93,18 @@
   d.uno.episode=s.revision;
   if(d.hands[actor].length!==1){d.uno.situations[actor]={episode:s.revision,open:false,settled:false,called:false};d.uno.calls=d.uno.calls.filter(i=>i!==actor);d.uno.penalties=d.uno.penalties.filter(i=>i!==actor);}
   if(a.type==='draw'){const got=draw(s,actor,1);syncPending(s);d.drawn=got[0]?.id||null;d.noDraw=!got.length;events.push(fact('drawn',actor,{count:got.length}));return;}
-  if(a.type==='pass'){d.stalled=d.noDraw?d.stalled+1:0;d.drawn=null;d.noDraw=false;s.turn=nextPlayer(s,actor);events.push(fact('passed',actor));if(d.stalled>=s.playerCount){s.status='finished';s.winners=[];events.push(fact('exhausted',null));}syncPending(s);return;}
+  if(a.type==='pass'){d.stalled=d.noDraw?d.stalled+1:0;d.drawn=null;d.noDraw=false;s.turn=nextPlayer(s,actor);events.push(fact('passed',actor));if(d.stalled>=s.playerCount-d.ending.groups.flat().length){s.status='finished';s.winners=[];events.push(fact('exhausted',null));}syncPending(s);return;}
   const at=d.hands[actor].findIndex(c=>c.id===a.card),card=d.hands[actor].splice(at,1)[0];d.discard.push(card);d.color=a.color||card.color;d.drawn=null;d.noDraw=false;d.stalled=0;
   const skip=card.value==='skip'||card.value==='reverse'&&s.playerCount===2;
   events.push(fact('played',actor,{card,color:d.color,skipped:skip?nextPlayer(s,actor):null}));
-  let steps=1;if(card.value==='reverse'){d.direction*=-1;if(s.playerCount===2)steps=2;}if(card.value==='skip')steps=2;
+  let steps=1;if(card.value==='reverse'){d.direction*=-1;if(s.playerCount-d.ending.groups.flat().length===2)steps=2;}if(card.value==='skip')steps=2;
   if(card.value==='+2'||card.value==='+4'){const target=nextPlayer(s,actor),count=draw(s,target,card.value==='+2'?2:4).length;events.push(fact('draw-skipped',target,{count,heavy:card.value==='+4'}));steps=2;}
   s.turn=nextPlayer(s,actor,steps);d.uno.declared[actor]=false;
   if(d.hands[actor].length===1){if(d.uno.mode==='manual'){d.uno.situations[actor]={episode:s.revision,open:true,settled:false,called:false};d.uno.pending=actor;}else{d.uno.declared[actor]=true;events.push(fact('declared',actor,{automatic:true,count:1}));}}
-  if(!d.hands[actor].length){const points=d.hands.flat().reduce((sum,c)=>sum+(c.color==='wild'?50:/^\d$/.test(c.value)?Number(c.value):20),0);s.status='finished';s.winners=[actor];d.points[actor]=points;events.push(fact('won',actor,{points}));}syncPending(s);
+  if(!d.hands[actor].length){const points=d.hands.flat().reduce((sum,c)=>sum+(c.color==='wild'?50:/^\d$/.test(c.value)?Number(c.value):20),0);Ending.record(d.ending,[actor]);d.points[actor]=points;events.push(fact('won',actor,{points}));
+   if(d.ending.mode==='winner'||s.playerCount-d.ending.groups.flat().length<=1){s.status='finished';s.winners=Ending.winners(d.ending);}else if(Ending.done(d.ending,s.turn))s.turn=nextPlayer(s,actor);}syncPending(s);
  }
- function reduce(position,actor,action){const next=JSON.parse(JSON.stringify(position)),events=[];next.revision=(position.revision??0)+1;perform(next,actor,action,events);return {position:next,events};}
+ function reduce(position,actor,action){const next=JSON.parse(JSON.stringify(position)),events=[];next.revision=(position.revision??0)+1;perform(next,actor,action,events);return {position:next,events,turnEnded:action.type==='play'||action.type==='pass'};}
  function project(position,viewer){const d=JSON.parse(JSON.stringify(position.data));d.hands=d.hands.map((hand,player)=>position.openHands||player===viewer?hand:hand.map(()=>({hidden:true})));d.drawPile=d.drawPile.map(()=>({hidden:true}));delete d.uno.pending;delete d.uno.situations;if(viewer!==position.turn)d.drawn=d.drawn===null?null:true;return d;}
  function bot(s,actor,actions){
       const d = s.data, plays = actions.filter(a => a.type === 'play');
@@ -116,6 +118,6 @@
  function observe(s){return {situations:s.data.uno.situations};}
  function botReaction(s,actor,actions,memory){const u=s.data.uno;if(s.data.hands[actor].length===1&&!u.declared[actor]&&!u.calls.includes(actor))return actions.find(a=>a.type==='declare-uno');const target=memory.situations.findIndex((w,i)=>i!==actor&&w.open&&!w.settled&&!u.declared[i]);return target<0?null:actions.find(a=>a.type==='accuse-uno'&&a.target===target);}
  const score=s=>s.data.points;
- const result=s=>({winners:s.winners,places:s.data.points.map(value=>1+new Set(s.data.points.filter(other=>other>value)).size),metrics:[{id:'points',values:s.data.points},{id:'hand-count',values:s.data.hands.map(hand=>hand.length)}]});
+ const result=s=>({winners:s.winners,places:Ending.places(s.data.ending,s.data.points),metrics:[{id:'points',values:s.data.points},{id:'hand-count',values:s.data.hands.map(hand=>hand.length)}]});
  return Object.freeze({contractVersion:1,id:'uno',minPlayers:2,maxPlayers:4,create,validate,actions,reactions,reactionWindows,reactionControl,reduce,project,bot,botReaction,observe,score,result});
 });

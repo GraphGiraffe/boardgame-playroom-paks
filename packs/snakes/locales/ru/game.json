@@ -24,5 +24,7 @@
   "snakes.view.snake-down": "змея опускает",
   "snakes.view.finish-help": "Финиш {finish}. Нужно попасть точно; лишние шаги отскакивают назад.",
   "snakes.view.pawn": "{player}, клетка {cell}",
-  "snakes.view.die": "Кубик"
+  "snakes.view.die": "Кубик",
+  "snakes.modes.classic": "Поле на 100 клеток. Лестницы поднимают, змеи опускают. Для финиша нужен точный бросок.",
+  "snakes.modes.quick": "Поле на 64 клетки и короткий маршрут; правила броска и финиша те же."
 }

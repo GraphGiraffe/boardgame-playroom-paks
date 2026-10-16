@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["domino"] = {
   "id": "domino",
-  "version": "0.4.0",
+  "version": "0.4.0-rc.1",
   "category": "board",
   "estimatedDuration": "10–15 мин",
   "tagline": "Семь костяшек. Много вариантов.",
@@ -37,6 +37,27 @@
       "teams": false
     }
   ],
-  "sharedUi": true
+  "sharedUi": true,
+  "settings": [
+    {
+      "key": "endMode",
+      "label": "Завершение партии",
+      "default": "winner",
+      "help": "До победителя — первая пустая рука завершает партию. До последнего — вышедшие пропускаются; оставшиеся играют до одного участника или блокировки. При блокировке сравнивают очки на оставшихся костях.",
+      "options": [
+        {
+          "value": "winner",
+          "label": "До победителя"
+        },
+        {
+          "value": "last",
+          "label": "До последнего"
+        }
+      ]
+    }
+  ],
+  "sharedDomain": [
+    "end-policy"
+  ]
 };
 })(globalThis);

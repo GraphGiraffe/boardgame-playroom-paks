@@ -110,3 +110,9 @@ UNO/Дурак, все общие ассеты и окончательный con
 ## Общие семейства и материалы
 
 shared/components/game-components.js объединяет исполняемые card artboard/main/compact, die flat/raised, checker/king, domino, boardCells, ship, counters и scoreTable. Повторная геометрия удалена из view-kit/checkers/domino/snakes и host UI. Shared archive включает components; host фиксирует ресурсы по SHA. AssetResolver/material slots принадлежат локальному appearance клиента. Ludo scene содержит colorRole, палитра выбирается Web UI. Принятое поле/фишки/финиш сохранены. Итоговая приёмка RC и остальные модули пока не завершены.
+
+## Заключительный кандидат 0.7.0-rc.1
+
+Все 12 моделей и пример private-counter используют API 3. App 0.18.0-rc.1 больше не исполняет API 1/2. `shared/pack_compiler.py` — источник компилятора; app хранит SHA закреплённую копию. Shared domain включает deterministic deck, token-layout и end-policy. `turnEnded` отделяет ход от revision действия; `rounds/roundEnded` применяются только к определённому паком циклу. Свои `scene.round` и settings позволяют задать пределы/условия завершения. В UNO раундов нет. Описания preset и help настройки хранятся вместе с JSON метаданными/локалями.
+
+Выпуск RC использует `channel=0.18-rc.1, checks=none` только после выбранной совместной проверки приложения. Каталог RC находится под channels/, production pointer не меняется. Не повторять полный прогон в этом репозитории, если та же пара уже проверена app runner.

@@ -16,5 +16,9 @@
   "pexeso.events.mismatch": "Карты не совпали",
   "pexeso.events.finished": "Все пары найдены",
   "pexeso.view.pairs": "Собранные пары",
-  "pexeso.view.hint": "Откройте две карты"
+  "pexeso.view.hint": "Откройте две карты",
+  "pexeso.modes.easy": "Небольшое поле для короткой партии.",
+  "pexeso.modes.medium": "Среднее поле с большим числом пар.",
+  "pexeso.modes.hard": "Большое поле; требуется запоминать больше карт.",
+  "pexeso.modes.full": "Полный набор выбранной колоды. Все карты участвуют парами."
 }

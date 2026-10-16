@@ -18,9 +18,9 @@
       steps:Array.from({length:move.roll},(_,i)=>{const n=move.from+i+1;return point(n>finish?2*finish-n:n);}),
       ...(move.to!==move.landing?{jump:point(move.to)}:{})};
   }
-  const scene=projection=>({contractVersion:1,id:'snakes-board',family:'route-board',columns:Math.sqrt(projection.data.finish),
+  const scene=projection=>({contractVersion:1,id:'snakes-board',family:'route-board',round:{number:projection.data.ending.round,limit:projection.data.ending.maxRounds||null,starts:projection.data.ending.starts},columns:Math.sqrt(projection.data.finish),
     players:projection.data.positions.map((value,player)=>({player,metrics:[{id:'position',kind:'pieces',value,label:metric(),resultUsage:true},{id:'wins',kind:'wins',value:projection.winners.includes(player)?1:0,label:metadata.scoreLabel,resultUsage:false}]})),
     positions:projection.data.positions.map((cell,player)=>({id:'token-'+player,player,cell,point:position(cell,Math.sqrt(projection.data.finish))})),
     sequence:sequence(projection.data.lastMove,projection.data.finish)});
-  return Object.freeze({metadata,action,event,metric,scene,position,sequence});
+  return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}),action,event,metric,scene,position,sequence});
 });

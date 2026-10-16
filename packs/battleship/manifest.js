@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["battleship"] = {
   "id": "battleship",
-  "version": "0.2.0",
+  "version": "0.2.0-rc.1",
   "name": "Морской бой",
   "category": "board",
   "estimatedDuration": "15–30 мин",
@@ -63,7 +63,8 @@
           "value": "off",
           "label": "Нет"
         }
-      ]
+      ],
+      "help": "В игре «Морской бой» эта настройка задаёт объявлять о потоплении. Доступные варианты: Да · отмечать окружение, Нет."
     }
   ],
   "sounds": "sounds.js"

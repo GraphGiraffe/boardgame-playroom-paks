@@ -28,5 +28,5 @@
  const metric=id=>message(id==='hand-count'?'meta.hand-count':'meta.victory');
  const scene=projection=>({contractVersion:1,id:'durak-table',family:'card-table',table:projection.data.table,
   stockCount:projection.data.drawPile.length,players:projection.data.hands.map((hand,player)=>({player,hand,metrics:[{id:'wins',kind:'wins',value:projection.winners.includes(player)?1:0,label:metadata.scoreLabel,resultUsage:true}],role:player===projection.data.defender?'defender':player===projection.data.attacker?'attacker':'thrower'}))});
- return Object.freeze({metadata,action,event,metric,scene,face});
+ return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}),action,event,metric,scene,face});
 });

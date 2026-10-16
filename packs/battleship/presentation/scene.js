@@ -40,9 +40,9 @@
       vertical:!!(active&&d.orientation[viewer]),selected:player===viewer&&selected==='new:'+size}));
   }
   function scene(projection,context={}){
-    return {contractVersion:1,id:'battleship-fields',family:'grid-board',columns:10,rows:10,
+    return {contractVersion:1,id:'battleship-fields',personalSurfaceAllowed:projection.data.phase!=='setup',family:'grid-board',columns:10,rows:10,
       players:[0,1].map(player=>({player,indicators:fleet(projection,player,context),metrics:[{id:'wins',kind:'wins',value:projection.winners.includes(player)?1:0,label:metadata.scoreLabel,resultUsage:true}]})),
       fleets:[0,1].map(player=>({player,ships:projection.data.ships[player],indicators:fleet(projection,player,context)}))};
   }
-  return Object.freeze({metadata,action,event,metric,scene,fleet,coordinate});
+  return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}),action,event,metric,scene,fleet,coordinate});
 });

@@ -35,5 +35,5 @@
         label:owner === null ? message('board.empty-cell', {cell:cell + 1})
           : message('board.marked-cell', {cell:cell + 1, mark:projection.data.marks[owner]})}))};
   }
-  return Object.freeze({metadata, action, event, metric, scene});
+  return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}), action, event, metric, scene});
 });

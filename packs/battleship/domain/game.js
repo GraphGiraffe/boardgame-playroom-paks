@@ -86,7 +86,7 @@
         next.status='finished';next.winners=[actor];events.push(event('won',actor));
       }else if(next.preset==='classic'||!hit)next.turn=opponent;
     }
-    return {position:next,events};
+    return {position:next,events,turnEnded:position.data.phase==='battle'&&(next.turn!==actor||next.status==='finished')};
   }
   function project(position,viewer){
     const d=clone(position.data),setup=d.phase==='setup',sizes=G.fleets[position.preset];

@@ -56,7 +56,7 @@
         events[0].params.closeAfter=600;events.push(fact('mismatch',actor));
       }
     }
-    return {position:next,events};
+    return {position:next,events,turnEnded:action.type==='flip'&&position.data.phase==='second'};
   }
   function project(position){
     const d=clone(position.data);

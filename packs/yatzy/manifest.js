@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["yatzy"] = {
   "id": "yatzy",
-  "version": "0.2.0",
+  "version": "0.2.0-rc.1",
   "name": "Ятзи",
   "category": "dice",
   "estimatedDuration": "15–25 мин",
@@ -44,6 +44,32 @@
         4
       ],
       "teams": false
+    }
+  ],
+  "settings": [
+    {
+      "key": "maxRounds",
+      "label": "Количество раундов",
+      "default": "15",
+      "help": "В каждом раунде все игроки заполняют по одной комбинации. Полная партия — 15 раундов; короткая заканчивается после выбранного числа полных раундов. Сравнивается сумма очков.",
+      "options": [
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "10",
+          "label": "10"
+        },
+        {
+          "value": "15",
+          "label": "15"
+        }
+      ]
     }
   ]
 };

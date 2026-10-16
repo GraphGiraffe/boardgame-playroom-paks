@@ -44,7 +44,7 @@
     const won = wins(board, actor), draw = !won && board.every(owner => owner !== null);
     if (won) events.push(event('won', actor));
     if (draw) events.push(event('draw', null));
-    return {position:{playerCount:2, turn:won || draw ? actor : 1 - actor,
+    return {turnEnded:true,position:{playerCount:2, turn:won || draw ? actor : 1 - actor,
       status:won || draw ? 'finished' : 'playing', winners:won ? [actor] : [],
       data:{board, marks:[...position.data.marks]}}, events};
   }

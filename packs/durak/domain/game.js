@@ -51,7 +51,7 @@ const d=s.data,actions=[],ranks=new Set(d.table.map(p=>p.attack.rank));
    else{d.attackCursor=nextAttacker(d,actor);s.turn=d.taking?d.attackCursor:d.defender;}
   }else{d.table[a.target].defense=card;events.push(fact('defended',actor,{card,attack:d.table[a.target].attack}));s.turn=d.table.every(pair=>pair.defense)?d.attackCursor:d.defender;}
  }
- function reduce(position,actor,action){const next=JSON.parse(JSON.stringify(position)),events=[];perform(next,actor,action,events);return {position:next,events};}
+ function reduce(position,actor,action){const next=JSON.parse(JSON.stringify(position)),events=[];perform(next,actor,action,events);return {position:next,events,turnEnded:events.some(event=>['durak.taken','durak.discarded'].includes(event.type))};}
  function project(position,viewer){const d=JSON.parse(JSON.stringify(position.data));d.hands=d.hands.map((hand,player)=>position.openHands||player===viewer?hand:hand.map(()=>({hidden:true})));d.drawPile=d.drawPile.map(()=>({hidden:true}));return d;}
  function bot(s,actor,actions){
 const d=s.data;if(d.composing&&actions.some(a=>a.type==='confirm'))return actions.find(a=>a.type==='confirm');const exchange=actions.find(a=>a.type==='exchange');if(exchange)return exchange;const cards=actions.filter(a=>a.card);if(!cards.length)return actions[0];return cards.sort((a,b)=>{const ca=d.hands[actor].find(c=>c.id===a.card),cb=d.hands[actor].find(c=>c.id===b.card),cost=c=>(c.joker?40+(c.color==='red'?1:0):c.rank+(c.suit===d.trump.suit?20:0));return cost(ca)-cost(cb);})[0];

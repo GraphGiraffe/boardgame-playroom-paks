@@ -30,7 +30,7 @@
     const position={playerCount,turn:firstPlayer,status:'playing',winners:[],rng,preset,openHands:!!openHands,data:{}};
     const cards=ports.shuffle(Deck.create(size),position),hands=Array.from({length:playerCount},()=>[]),count=playerCount===2?7:5;
     for(let index=0;index<count;index++)for(const hand of hands)if(cards.length)hand.push(cards.pop());
-    position.data={deckSize:size,hands,drawPile:cards,books:Array.from({length:playerCount},()=>[]),attempts:Array(playerCount).fill(0)};
+    position.data={firstPlayer,deckSize:size,hands,drawPile:cards,books:Array.from({length:playerCount},()=>[]),attempts:Array(playerCount).fill(0)};
     const events=[];for(let player=0;player<playerCount;player++)book(position,player,events);
     if(!hands[firstPlayer].length)advance(position,firstPlayer,events);
     return {position,events};
@@ -55,7 +55,7 @@
     const next=JSON.parse(JSON.stringify(position)),d=next.data,events=[];
     if(action.type==='draw'){
       d.hands[actor].push(d.drawPile.pop());events.push(fact('drawn',actor));book(next,actor,events);advance(next,actor,events);
-      return {position:next,events};
+      return {position:next,events,roundEnded:next.turn!==actor&&((next.turn-d.firstPlayer+position.playerCount)%position.playerCount)<=((actor-d.firstPlayer+position.playerCount)%position.playerCount),turnEnded:next.turn!==actor||next.status==='finished'};
     }
     d.attempts[actor]++;
     const given=d.hands[action.target].filter(card=>card.rank===action.rank);
@@ -68,11 +68,11 @@
       events.push(fact('absent',action.target,{target:actor,rank:action.rank}));
       if(d.drawPile.length){
         const card=d.drawPile.pop();d.hands[actor].push(card);events.push(fact('drawn',actor));book(next,actor,events);
-        if(card.rank===action.rank&&d.hands[actor].length){events.push(fact('repeat',actor));finish(next,events);return {position:next,events};}
+        if(card.rank===action.rank&&d.hands[actor].length){events.push(fact('repeat',actor));finish(next,events);return {position:next,events,roundEnded:next.turn!==actor&&((next.turn-d.firstPlayer+position.playerCount)%position.playerCount)<=((actor-d.firstPlayer+position.playerCount)%position.playerCount),turnEnded:next.turn!==actor||next.status==='finished'};}
       }
       advance(next,actor,events);
     }
-    return {position:next,events};
+    return {position:next,events,roundEnded:next.turn!==actor&&((next.turn-d.firstPlayer+position.playerCount)%position.playerCount)<=((actor-d.firstPlayer+position.playerCount)%position.playerCount),turnEnded:next.turn!==actor||next.status==='finished'};
   }
   function project(position,viewer){const d=JSON.parse(JSON.stringify(position.data));
     d.hands=d.hands.map((hand,player)=>position.openHands||player===viewer?hand:hand.map(()=>({hidden:true})));
@@ -81,5 +81,5 @@
   const bot=(projection,actor,commands)=>commands[projection.data.attempts[actor]%commands.length];
   function result(position){const values=position.data.books.map(row=>row.length);return {winners:position.winners,
     places:values.map(value=>1+new Set(values.filter(other=>other>value)).size),metrics:[{id:'books',values}]};}
-  return Object.freeze({contractVersion:1,id:'gofish',minPlayers:2,maxPlayers:6,create,validate,actions,reduce,project,bot,result});
+  return Object.freeze({contractVersion:1,rounds:true,id:'gofish',minPlayers:2,maxPlayers:6,create,validate,actions,reduce,project,bot,result});
 });

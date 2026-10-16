@@ -15,5 +15,5 @@
   const scene=projection=>({contractVersion:1,id:'oldmaid-cards',family:'card-table',
     players:projection.data.hands.map((hand,player)=>({player,hand,metrics:[{id:'points',kind:'points',value:projection.data.points[player],label:metric(),resultUsage:true}]})),
     discard:projection.data.discard});
-  return Object.freeze({metadata,action,choice,event,metric,scene});
+  return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}),action,choice,event,metric,scene});
 });

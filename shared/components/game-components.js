@@ -9,7 +9,7 @@ function art({main,compact,width=72,height=103,rotation=0}, variant='main') {
     const transform=({0:'',90:`translate(${height} 0) rotate(90)`,180:`translate(${width} ${height}) rotate(180)`,270:`translate(0 ${width}) rotate(-90)`})[rotation];
     return `<svg class="piece-art" viewBox="0 0 ${swap?height:width} ${swap?width:height}" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false" data-art-variant="${small?'compact':'main'}"><g${transform?` transform="${transform}"`:''}><foreignObject width="${width}" height="${height}"><div xmlns="http://www.w3.org/1999/xhtml" class="piece-artboard" style="width:${width}px;height:${height}px">${small?compact:main}</div></foreignObject></g></svg>`;
   }
-function countBadge(count,label='Количество',{corner=false,hand=false}={}) {
+function countBadge(count,label=globalThis.PlayroomMessages.text("ui.game-components.737f7561bd7f"),{corner=false,hand=false}={}) {
     if(!Number.isSafeInteger(count)||count<0)throw Error('Invalid piece count');
     return `<span class="piece-count${corner?' is-corner':''}${hand?' is-hand':''}${hand&&count>=100?' is-long-count':''}" data-piece-count="${count}" aria-label="${esc(label)}: ${count}">${count}</span>`;
   }
@@ -47,14 +47,14 @@ const half=n=>`<span class="domino-half" aria-hidden="true">${Array.from({length
  function createHelpers(H,source){
 function card(value,attrs='disabled',extra=''){
   const tag=attrs==='disabled'?'span':'button',hidden=!value||value.hidden;
-  const rank=hidden?'':value.joker?'Дж':({14:'Т',13:'К',12:'Д',11:'В'})[value.rank]||value.rank,suit=hidden?'':value.suit||'';
+  const rank=hidden?'':value.joker?globalThis.PlayroomMessages.text("ui.game-components.2f0a8ec85914"):({14:globalThis.PlayroomMessages.text("ui.game-components.7614b90a1064"),13:globalThis.PlayroomMessages.text("ui.game-components.130b874a5c04"),12:globalThis.PlayroomMessages.text("ui.game-components.55cea60d6cce"),11:globalThis.PlayroomMessages.text("ui.game-components.8b7b577aa31e")})[value.rank]||value.rank,suit=hidden?'':value.suit||'';
   const red=!hidden&&(value.color==='red'||suit==='♥'||suit==='♦');
-  const label=hidden?'Закрытая карта':value.joker?`${red?'Красный':'Чёрный'} джокер`:`${rank} ${suit}`;
+  const label=hidden?globalThis.PlayroomMessages.text("ui.game-components.c13a6680430c"):value.joker?globalThis.PlayroomMessages.text("ui.game-components.232b69813cbf",{p0:String(red?globalThis.PlayroomMessages.text("ui.game-components.21b4d916f326"):globalThis.PlayroomMessages.text("ui.game-components.1ca9b6b05dfc"))}):`${rank} ${suit}`;
   
   return `<${tag} class="shared-card ${hidden?'shared-card-back':''} ${red?'shared-red':''} ${extra}" ${tag==='button'?attrs:''} ${!hidden&&value.id?`data-entity="card-${H.esc(value.id)}"`:''} aria-label="${H.esc(label)}">${H.assetArt(hidden?'card-back':'card-face',{rank,suit,hidden,backUrl:hidden?source('card-back'):''},params=>cardFace(params))}</${tag}>`;
  }
 const cover=content=>H.svg(`<ellipse cx="151" cy="158" rx="112" ry="14" fill="#365e4720"/>${content}`);
-  const die=(value,attrs='disabled',extra='')=>'<button class="shared-die '+extra+'" '+attrs+' aria-label="Кубик: '+H.esc(value||'ещё не брошен')+'">'+H.assetArt('die',{value},()=>dieArt(value))+'</button>';
+  const die=(value,attrs='disabled',extra='')=>'<button class="shared-die '+extra+'" '+attrs+' aria-label="'+globalThis.PlayroomMessages.text("ui.game-components.c21f8ac4292c")+H.esc(value||globalThis.PlayroomMessages.text("ui.game-components.22c66b66eaa1"))+'">'+H.assetArt('die',{value},()=>dieArt(value))+'</button>';
   return Object.freeze({card,die,cover,checkerArt:(king,movable)=>H.assetArt('checker',{king,movable},()=>checkerArt(king,movable)),dominoFace:(a,b,rotation=0)=>H.assetArt('domino',{a,b,rotation},()=>dominoFace(a,b,rotation)),shipSilhouette:size=>H.assetArt('ship',{size},()=>shipSilhouette(size)),scoreTable:params=>H.assetArt('score-table',params,()=>scoreTable(params)),boardCells,dieArt:(value,params={})=>H.assetArt('die',{value,...params},()=>dieArt(value,params)),bubbleClass});
  }
  return Object.freeze({art,countBadge,shipSilhouette,checkerArt,dominoFace,dieArt,boardCells,bubbleClass,scoreTable,createHelpers,AssetResolver,defaultRenderers,cardFace,scoreBadge});

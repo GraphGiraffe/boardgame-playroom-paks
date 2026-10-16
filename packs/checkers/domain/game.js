@@ -30,14 +30,14 @@
   const target=move.victim!==null?d.board[move.victim].owner:null;
   if(move.victim!==null)d.captured.push(move.victim);
   events.push(fact('moved',actor,{from:action.from,to:action.to,captured:move.victim!==null,target,promoted:piece.king&&!wasKing}));
-  if(move.victim!==null&&captures(d,action.to).length){d.forced=action.to;return {position:next,events};}
+  if(move.victim!==null&&captures(d,action.to).length){d.forced=action.to;return {position:next,events,turnEnded:false};}
   d.quiet=!d.captured.length&&wasKing?d.quiet+1:0;
   for(const victim of d.captured)d.board[victim]=null;
   d.captured=[];d.forced=null;next.turn=1-actor;
   if(!moves(next,next.turn).length){next.status='finished';next.winners=[actor];events.push(fact('won',actor));}
   else{const key=positionKey(next);d.repetitions[key]=(d.repetitions[key]||0)+1;
    if(d.repetitions[key]>=3||d.quiet>=30){next.status='finished';events.push(fact(d.repetitions[key]>=3?'repeated':'quiet',null));}}
-  return {position:next,events};
+  return {position:next,events,turnEnded:true};
  }
  const project=position=>JSON.parse(JSON.stringify(position.data));
  function bot(s,actor,actions){

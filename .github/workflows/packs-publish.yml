@@ -2,6 +2,13 @@ name: Publish independent game packs
 on:
   workflow_dispatch:
     inputs:
+      checks:
+        description: 'Publication verifies immutable release files; explicitly select none'
+        type: string
+        required: true
+      channel:
+        description: Isolated catalog channel; empty selects production
+        type: string
       release:
         description: Published pack collection release tag, for example v0.6.0
         type: string
@@ -22,7 +29,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: protected-pack-catalog
+  group: protected-pack-catalog-${{ inputs.channel || 'production' }}
   cancel-in-progress: false
 jobs:
   publish:
@@ -38,6 +45,8 @@ jobs:
       BOOTSTRAP: ${{ inputs.bootstrap }}
       ROLLBACK: ${{ inputs.rollback }}
       PROBE: ${{ inputs.probe }}
+      CHANNEL: ${{ inputs.channel }}
+      CHECKS: ${{ inputs.checks }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -49,6 +58,7 @@ jobs:
       - name: Verify input and release assets
         shell: bash
         run: |
+          test "$CHECKS" = none || { echo "Select checks=none for immutable artifact publication" >&2; exit 2; }
           set -euo pipefail
           test -n "$PLAYROOM_PACKS_BUCKET"
           if test "$PROBE" = true; then
@@ -58,14 +68,15 @@ jobs:
           fi
           if test -n "$ROLLBACK"; then
             test -z "$RELEASE" && test -z "$ONLY"
-            python3 scripts/publish-packs.py --bucket "$PLAYROOM_PACKS_BUCKET" --rollback "$ROLLBACK"
+            python3 scripts/publish-packs.py --bucket "$PLAYROOM_PACKS_BUCKET" --rollback "$ROLLBACK" --channel "$CHANNEL"
             exit 0
           fi
-          [[ "$RELEASE" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          [[ "$RELEASE" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]
+          if [[ "$RELEASE" == *-* ]]; then test -n "$CHANNEL"; fi
           mkdir -p dist/packs-release
           gh release view "$RELEASE" --repo "$GITHUB_REPOSITORY" --json tagName,isDraft --jq 'select(.tagName=="'"$RELEASE"'" and .isDraft==false) | .tagName' | grep -Fx "$RELEASE"
           gh release download "$RELEASE" --repo "$GITHUB_REPOSITORY" --pattern '*.playroom-pack.json' --pattern SHA256SUMS --dir dist/packs-release
-          args=(--bucket "$PLAYROOM_PACKS_BUCKET" --assets dist/packs-release --collection "${RELEASE#v}")
+          args=(--channel "$CHANNEL" --bucket "$PLAYROOM_PACKS_BUCKET" --assets dist/packs-release --collection "${RELEASE#v}")
           if test -n "$ONLY"; then args+=(--only "$ONLY"); fi
           if test "$BOOTSTRAP" = true; then args+=(--bootstrap); fi
           python3 scripts/publish-packs.py "${args[@]}" --dry-run

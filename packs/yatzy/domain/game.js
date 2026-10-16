@@ -6,11 +6,11 @@
   'use strict';
   const {rollDie}=ports;
   const event=(type,actor,params={})=>({type:'yatzy.'+type,actor,params,visibility:{kind:'public'}});
-  function create({playerCount,firstPlayer,preset,rng}){
+  function create({playerCount,firstPlayer,preset,rng,options={}}){
     if(preset!=='classic'||!Number.isSafeInteger(rng)||rng<0||rng>4294967295)throw Error('YATZY_OPTIONS_INVALID');
     return {playerCount,turn:firstPlayer,status:'playing',winners:[],rng,
       data:{dice:[1,1,1,1,1],held:[false,false,false,false,false],rolls:0,
-        scores:Array.from({length:playerCount},()=>({})),round:0}};
+        roundLimit:Number(options.maxRounds||15),roundStarts:[0],scores:Array.from({length:playerCount},()=>({})),round:0}};
   }
   function validate(position){
     const {data:d,playerCount,rng}=position;
@@ -21,9 +21,9 @@
        !Array.isArray(d.scores)||d.scores.length!==playerCount||
        !d.scores.every(row=>row&&typeof row==='object'&&!Array.isArray(row)&&
          Object.keys(row).every(key=>categories.keys.includes(key)&&Number.isInteger(row[key])&&row[key]>=0&&row[key]<=50))||
-       !Number.isInteger(d.round)||d.round<0||d.round>15*playerCount)return false;
+       !Number.isInteger(d.roundLimit)||d.roundLimit<1||d.roundLimit>15||!Array.isArray(d.roundStarts)||!Number.isInteger(d.round)||d.round<0||d.round>d.roundLimit*playerCount)return false;
     if(d.scores.reduce((sum,row)=>sum+Object.keys(row).length,0)!==d.round)return false;
-    return position.status==='finished'?d.round===15*playerCount:d.round<15*playerCount;
+    return position.status==='finished'?d.round===d.roundLimit*playerCount:d.round<d.roundLimit*playerCount;
   }
   function actions(position,actor){
     if(position.status!=='playing'||actor!==position.turn)return [];
@@ -52,14 +52,14 @@
       events.push(event('scored',actor,{category:command.key,points}));
       if(!hadBonus&&categories.upper(d.scores[actor])>=63)events.push(event('bonus',actor,{points:50}));
       d.round++;d.rolls=0;d.held.fill(false);
-      if(d.round===15*position.playerCount){
+      if(d.round===d.roundLimit*position.playerCount){
         const totals=d.scores.map(categories.total),top=Math.max(...totals);
         const winners=totals.flatMap((value,index)=>value===top?[index]:[]);
         next.status='finished';next.winners=winners.length===position.playerCount?[]:winners;
         events.push(event('finished',null,{top}));
-      }else next.turn=(actor+1)%position.playerCount;
+      }else{next.turn=(actor+1)%position.playerCount;if(d.round%position.playerCount===0)d.roundStarts.push((position.revision??0)+1);}
     }
-    return {position:next,events};
+    return {position:next,events,turnEnded:command.type==='score'};
   }
   function project(position){
     const d=position.data,upper=d.scores.map(categories.upper);

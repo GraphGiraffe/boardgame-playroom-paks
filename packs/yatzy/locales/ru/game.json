@@ -39,5 +39,6 @@
   "yatzy.category.largeStraight": "Большой стрит",
   "yatzy.category.fullHouse": "Фул-хаус",
   "yatzy.category.chance": "Шанс",
-  "yatzy.category.yatzy": "Ятзи"
+  "yatzy.category.yatzy": "Ятзи",
+  "yatzy.modes.classic": "Пять кубиков, до трёх бросков за ход. За ход заполняется одна комбинация; стандартно 15 полных раундов."
 }

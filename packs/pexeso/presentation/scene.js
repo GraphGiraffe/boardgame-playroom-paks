@@ -18,5 +18,5 @@
   function scene(projection){const d=projection.data;return {contractVersion:1,id:'pexeso-board',family:'memory-cards',
     cards:d.board.map((card,index)=>({id:'card-'+index,index,card,matched:d.matched.includes(index),closing:d.phase==='reveal'&&d.flipped.includes(index)})),
     players:d.scores.map((value,player)=>({player,metrics:[{id:'pairs',kind:'points',value,label:metric(),resultUsage:true}]}))};}
-  return Object.freeze({metadata,action,event,metric,scene});
+  return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}),action,event,metric,scene});
 });
