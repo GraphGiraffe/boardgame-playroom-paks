@@ -5,3 +5,17 @@
 .game-speech.is-success{animation:speech-success 320ms ease-in-out 2}.game-speech.is-error{animation:speech-error 320ms ease-in-out 2}
 @keyframes speech-success{50%{background:var(--color-material-bubble-success,#b9e5aa);box-shadow:0 0 0 4px #73b66a55}}@keyframes speech-error{50%{background:var(--color-material-bubble-error,#f4c9c0);box-shadow:0 0 0 4px #df7e7055}}
 body.reduced-motion .game-speech,.reduced-motion .game-speech{animation:none!important}
+
+/* Rule-driven skip feedback: no layout changes; reduced motion retains the red cue. */
+.player-panel.is-turn-skipped{animation:player-turn-skipped 700ms ease-in-out both!important}
+@keyframes player-turn-skipped{0%,100%{transform:translateX(0)}18%,52%{transform:translateX(-4px);background:var(--color-material-bubble-error,#f4c9c0);box-shadow:inset 0 0 0 2px #b64d43}35%,69%{transform:translateX(4px);background:var(--color-material-bubble-error,#f4c9c0);box-shadow:inset 0 0 0 2px #b64d43}85%{transform:translateX(0);background:var(--color-material-bubble-error,#f4c9c0)}}
+body.reduced-motion .player-panel.is-turn-skipped,.reduced-motion .player-panel.is-turn-skipped{animation:none!important;background:var(--color-material-bubble-error,#f4c9c0)!important;box-shadow:inset 0 0 0 2px #b64d43!important}
+@media(prefers-reduced-motion:reduce){.player-panel.is-turn-skipped{animation:none!important;background:var(--color-material-bubble-error,#f4c9c0)!important;box-shadow:inset 0 0 0 2px #b64d43!important}}
+
+.action-reveal{position:fixed;inset:0;z-index:55;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;pointer-events:none;padding:16px;background:radial-gradient(ellipse at center,var(--color-surface,#f4f2e8) 0%,transparent 66%)}
+.action-reveal-title{max-width:90vw;padding:8px 14px;border-radius:14px;background:var(--color-surface,#fffaf0);color:var(--color-text-primary,#244c35);font-size:clamp(16px,4vw,24px);text-align:center}
+.action-reveal-art{width:min(36vw,150px,calc(70dvh - 67px));transform-origin:center;filter:drop-shadow(0 8px 12px #142e3038)}
+.action-reveal-art.scene{display:block!important;min-height:0!important;max-height:none!important;height:auto!important;padding:0!important;margin:0!important;overflow:visible!important;aspect-ratio:auto!important;background:none!important;border:0!important}
+.action-reveal-art.scene>*{display:block!important;width:100%!important;height:auto!important;min-width:0!important;max-width:none!important;aspect-ratio:72/103;transform:none!important;margin:0!important}
+.action-reveal-art.is-dice{display:flex;align-items:center;justify-content:center;gap:8px;width:auto;max-width:90vw}
+.action-reveal-die{display:block;width:min(14vw,64px);aspect-ratio:1}.action-reveal-die>svg{display:block;width:100%;height:auto}.action-reveal-die.is-unused{opacity:.35;transform:scale(.82)}

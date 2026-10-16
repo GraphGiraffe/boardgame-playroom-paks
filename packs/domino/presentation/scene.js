@@ -5,8 +5,8 @@
   const tile=projection.data.hands[projection.viewer].find(tile=>tile.id===command.card);return message(projection.data.chain.length?'actions.play-side':'actions.play',{a:tile.a,b:tile.b,side:message('side.'+command.side)});}
  function event(value){const p=value.params;
   if(value.type==='domino.drawn')return {message:message('events.drawn'),kind:'draw',sound:{id:'draw',target:value.actor},transfer:{player:value.actor,count:1,from:'stock'}};
-  if(value.type==='domino.passed')return {message:message('events.passed'),kind:'pass',sound:{id:'notify'},speech:{speaker:value.actor,text:message('speech.pass')}};
-  if(value.type==='domino.played')return {message:message('events.played',{a:p.a,b:p.b,side:message('side.'+p.side)}),kind:'play',sound:{id:'move'}};
+  if(value.type==='domino.passed')return {message:message('events.passed'),kind:'pass',feedback:{kind:'skip',player:value.actor},speech:{speaker:value.actor,text:message('speech.pass')}};
+  if(value.type==='domino.played')return {message:message('events.played',{a:p.a,b:p.b,side:message('side.'+p.side)}),kind:'play',reveal:{kind:'card',card:{id:p.id,a:p.a,b:p.b},entity:'tile-'+p.id},sound:{id:'move'}};
   if(value.type==='domino.cleared')return {message:message('events.cleared'),finish:true};
   if(value.type==='domino.fish')return {message:message(value.actor===null?'events.fish-draw':'events.fish-win',{best:p.best}),finish:true};
   throw Error('DOMINO_EVENT_UNKNOWN');

@@ -49,7 +49,7 @@
       const hadBonus=categories.upper(d.scores[actor])>=63;
       const points=categories.value(d.dice,command.key);
       d.scores[actor][command.key]=points;
-      events.push(event('scored',actor,{category:command.key,points}));
+      events.push(event('scored',actor,{category:command.key,points,dice:[...d.dice]}));
       if(!hadBonus&&categories.upper(d.scores[actor])>=63)events.push(event('bonus',actor,{points:50}));
       d.round++;d.rolls=0;d.held.fill(false);
       if(d.round===d.roundLimit*position.playerCount){

@@ -15,7 +15,7 @@
   function event(value){
     const p=value.params;
     if(value.type==='yatzy.rolled')return {message:message('events.rolled',{rolls:p.rolls}),kind:'roll'};
-    if(value.type==='yatzy.scored')return {message:message('events.scored',{category:message('category.'+p.category),points:p.points}),kind:'action',
+    if(value.type==='yatzy.scored')return {message:message('events.scored',{category:message('category.'+p.category),points:p.points}),kind:'action',reveal:{kind:'dice',title:message('category.'+p.category),dice:p.dice.map((value,index)=>({value,active:categories.participation(p.dice,p.category)[index]}))},
       sound:{id:!p.points?'notify':p.category==='yatzy'?'success.yatzy':categories.keys.indexOf(p.category)<6||p.category==='chance'?'success':'success.special'}};
     if(value.type==='yatzy.bonus')return {message:message('events.bonus',{points:p.points}),kind:'action',sound:{id:'success.special'}};
     if(value.type==='yatzy.finished')return {message:message('events.finished',{top:p.top}),finish:true};

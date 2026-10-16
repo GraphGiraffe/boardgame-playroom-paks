@@ -9,7 +9,7 @@
     if(value.type==='snakes.won')return {message:message('events.won'),finish:true};
     const {roll,landing,to}=value.params,jump=landing!==to;
     return {message:message(jump?'events.jump':'events.roll',{roll,landing,to,kind:message(to>landing?'link.ladder':'link.snake')}),
-      kind:'roll',sound:{id:jump?(to>landing?'climb':'fall'):'dice'},presentation:{type:'roll'}};
+      kind:'roll',reveal:{kind:'dice',dice:[{value:roll}]},sound:{id:jump?(to>landing?'climb':'fall'):'dice'},presentation:{type:'roll'}};
   }
   function position(n,size=10){const row=Math.floor((Math.max(1,n)-1)/size),col=row%2?size-1-(Math.max(1,n)-1)%size:(Math.max(1,n)-1)%size,step=100/size;return {x:(col+.5)*step,y:100-(row+.5)*step};}
   function sequence(move,finish){
