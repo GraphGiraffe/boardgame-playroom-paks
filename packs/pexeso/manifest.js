@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["pexeso"] = {
   "id": "pexeso",
-  "version": "0.2.0-rc.2",
+  "version": "0.2.0-rc.3",
   "name": "Пексесо",
   "category": "cards",
   "estimatedDuration": "5–20 мин",
