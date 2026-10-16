@@ -13,14 +13,14 @@
 .trump-caption{font-size:10px;color:#6e8360;display:flex;gap:8px;align-items:center}
 .trump-caption b{font-size:22px;color:#3c6651}
 .trump-caption b.red-suit{color:#d8795e}
-.durak-table{flex:1;min-height:139px;display:flex;justify-content:center;align-items:center;align-content:center;flex-wrap:wrap;gap:20px 19px;padding:14px 10px 24px;border:1px dashed #becdaf;border-radius:22px;margin-top:4px;background:#e3e9d6}
+.durak-table{flex:1;min-height:139px;display:flex;justify-content:center;align-items:center;align-content:center;flex-wrap:wrap;gap:20px 19px;padding:14px 10px 24px;border:1px dashed var(--color-border-subtle,#becdaf);border-radius:22px;margin-top:4px;background:color-mix(in srgb,var(--color-surface-raised,#e3e9d6) 78%,transparent)}
 .durak-pair{position:relative;width:93px;height:110px;flex-shrink:0}
 .durak-scene .durak-pair .playing-card{width:59px;min-width:59px;height:85px;pointer-events:none}
 .attack-card{position:absolute;left:0;top:0;transform:rotate(-7deg)}
 .defense-card{position:absolute;left:29px;top:22px;transform:rotate(9deg);z-index:1}
 .defense-slot{position:absolute;left:32px;top:24px;width:57px;height:82px;border:1px dashed #aebf9c;border-radius:9px;pointer-events:none}
-.defend-target{position:absolute;left:30px;top:22px;width:61px;height:88px;border:2px dashed #5b845e;background:#f3f5dcdd;border-radius:9px;z-index:2;font-size:11px;line-height:1.6;font-weight:750;color:#4b754d;cursor:pointer}
-.defend-target:hover{background:#fffbe9}
+.defend-target{position:absolute;left:30px;top:22px;width:61px;height:88px;border:2px dashed #5b845e;background:color-mix(in srgb,var(--color-surface-panel,#f3f5dc) 85%,transparent);border-radius:9px;z-index:2;font-size:11px;line-height:1.6;font-weight:750;color:#4b754d;cursor:pointer}
+.defend-target:hover{background:var(--color-surface-panel,#fffbe9)}
 .durak-role{text-align:center;font-size:10px;color:#738664}
 .durak-empty{text-align:center;color:#8a9c78}
 .durak-empty>span{font-size:48px;color:#b7c8a5;line-height:1}
