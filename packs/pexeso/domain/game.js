@@ -4,13 +4,17 @@
   root.PlayroomPackDefinitionFactory=factory;
 })(globalThis,function(ports,Deck){
   'use strict';
-  const pair=card=>card.joker?'joker':`${card.rank}-${['♥','♦'].includes(card.suit)?'red':'black'}`;
+  const characters=['crescent','triangle','square','circle','star','rectangle','diamond','hexagon'];
+  const colors=['red','orange','yellow','green','blue','purple'];
+  const cartoonCards=()=>characters.flatMap(shape=>colors.flatMap(color=>['a','b'].map(copy=>({id:shape+'-'+color+'-'+copy,character:shape+'-'+color,shape,color}))));
+  const cardsFor=size=>size===96?cartoonCards():Deck.create(size);
+  const pair=card=>card?.character|| (card.joker?'joker':`${card.rank}-${['♥','♦'].includes(card.suit)?'red':'black'}`);
   const clone=value=>JSON.parse(JSON.stringify(value));
   const fact=(name,actor,params={})=>({type:'pexeso.'+name,actor,params,visibility:{kind:'public'}});
   function create({playerCount,firstPlayer,preset,rng,options={}}){
-    const size=[36,52,54].includes(Number(options.deck))?Number(options.deck):52;
+    const size=options.deck==null||options.deck==='cartoon'?96:[36,52,54].includes(Number(options.deck))?Number(options.deck):52;
     const position={playerCount,turn:firstPlayer,status:'playing',winners:[],rng,preset,data:{}};
-    const groups={};for(const card of Deck.create(size))(groups[pair(card)]??=[]).push(card);
+    const groups={};for(const card of cardsFor(size))(groups[pair(card)]??=[]).push(card);
     const keys=ports.shuffle(Object.keys(groups),position);
     const count={easy:8,medium:12,hard:18,full:keys.length}[preset];
     if(!count)throw Error('PEXESO_PRESET_INVALID');
@@ -19,10 +23,11 @@
     return position;
   }
   function validate({data:d,playerCount,rng}){
-    if(!Number.isSafeInteger(rng)||rng<0||rng>4294967295||![36,52,54].includes(d.deckSize)||
+    if(!Number.isSafeInteger(rng)||rng<0||rng>4294967295||![36,52,54,96].includes(d.deckSize)||
       !Array.isArray(d.board)||d.board.length%2||d.board.length<16||d.board.length>d.deckSize)return false;
-    const cards=new Set(Deck.create(d.deckSize).map(card=>card.id));
-    if(new Set(d.board.map(card=>card.id)).size!==d.board.length||!d.board.every(card=>cards.has(card.id)))return false;
+    const cards=new Map(cardsFor(d.deckSize).map(card=>[card.id,card]));
+    if(new Set(d.board.map(card=>card.id)).size!==d.board.length||!d.board.every(card=>cards.has(card.id)&&JSON.stringify(cards.get(card.id))===JSON.stringify(card)))return false;
+    const groups=new Map();for(const card of d.board)groups.set(pair(card),(groups.get(pair(card))||0)+1);if([...groups.values()].some(count=>count!==2))return false;
     const indices=list=>Array.isArray(list)&&new Set(list).size===list.length&&list.every(index=>Number.isInteger(index)&&index>=0&&index<d.board.length);
     return indices(d.matched)&&indices(d.flipped)&&d.flipped.every(index=>!d.matched.includes(index))&&
       ['first','second','reveal'].includes(d.phase)&&d.flipped.length==={first:0,second:1,reveal:2}[d.phase]&&
@@ -65,7 +70,7 @@
   }
   function observe(position){return {seen:{...position.data.seen}};}
   function bot(projection,actor,commands,memory){
-    const d=projection.data,cards=new Map(Deck.create(d.deckSize).map(card=>[card.id,card]));
+    const d=projection.data,cards=new Map(cardsFor(d.deckSize).map(card=>[card.id,card]));
     const knownCard=index=>cards.get(memory.seen[index]);
     const known=commands.filter(action=>knownCard(action.index)),unseen=commands.filter(action=>!knownCard(action.index));
     const explore=pool=>{const options=pool?.length?pool:unseen.length?unseen:commands;return options[((projection.revision||0)+actor)%options.length];};

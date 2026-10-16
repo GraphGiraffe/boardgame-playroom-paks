@@ -1,5 +1,5 @@
 (function(){
-  'use strict';const V=globalThis.PlayroomViews,H=V.helpers,C=globalThis.PlayroomShared;
+  'use strict';const coverComponents=globalThis.PlayroomShared;const V=globalThis.PlayroomViews,H=V.helpers,C=globalThis.PlayroomShared;
   if(H.viewApi!==2)throw Error('Нужно приложение с API интерфейса 2');
   const source=typeof require==='function'&&!globalThis.PlayroomPack;
   const P=source?require('./presentation/scene.js'):globalThis.PlayroomPackPresentation;
@@ -30,5 +30,5 @@
       return card(c,source.attr,source.className,d.trump?.suit);
     }),hand.length,text('view.hand-hint'),'',{layout:'fan'})}};
   };
-  V.register('durak',render,()=>H.svg(`<ellipse cx="151" cy="151" rx="91" ry="12" fill="#cbbdab"/><g transform="translate(72 27) rotate(-17 40 57)"><rect y="5" width="79" height="112" rx="12" fill="#c5b9a5"/><rect width="79" height="112" rx="12" fill="#fffbed"/><text x="13" y="29" font-size="24" fill="#df785e">К</text><text x="40" y="81" text-anchor="middle" font-size="60" fill="#df785e">♥</text></g><g transform="translate(137 19) rotate(15 40 58)"><rect y="5" width="80" height="116" rx="12" fill="#c5b9a5"/><rect width="80" height="116" rx="12" fill="#fffbed"/><text x="13" y="30" font-size="24" fill="#426553">Т</text><text x="40" y="83" text-anchor="middle" font-size="67" fill="#426553">♠</text></g><g transform="translate(212 121)"><circle r="18" fill="#e4bc59"/><text y="7" text-anchor="middle" font-size="23" fill="#fff7dd">♠</text></g>`),{reveal:value=>card(value.card,'disabled'),surfaces:{table:(s,v,a,ui)=>render(s,v,a,{...ui,surface:'table'}),player:(s,v,a,ui)=>render(s,v,a,{...ui,surface:'player'})}});
+  V.register('durak',render,()=>coverComponents.cover(`<g transform="translate(72 27) rotate(-17 40 57)"><rect y="5" width="79" height="112" rx="12" fill="#c5b9a5"/><rect width="79" height="112" rx="12" fill="#fffbed"/><text x="13" y="29" font-size="24" fill="#df785e">6</text><text x="40" y="81" text-anchor="middle" font-size="60" fill="#df785e">♥</text></g><g transform="translate(137 19) rotate(15 40 58)"><rect y="5" width="80" height="116" rx="12" fill="#c5b9a5"/><rect width="80" height="116" rx="12" fill="#fffbed"/><text x="13" y="30" font-size="24" fill="#426553">6</text><text x="40" y="83" text-anchor="middle" font-size="67" fill="#426553">♠</text></g><g transform="translate(212 121)"><circle r="18" fill="#e4bc59"/><text y="7" text-anchor="middle" font-size="23" fill="#fff7dd">♠</text></g>`),{reveal:value=>card(value.card,'disabled'),surfaces:{table:(s,v,a,ui)=>render(s,v,a,{...ui,surface:'table'}),player:(s,v,a,ui)=>render(s,v,a,{...ui,surface:'player'})}});
 })();

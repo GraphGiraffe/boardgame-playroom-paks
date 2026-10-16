@@ -1,0 +1,268 @@
+{
+  "format": "playroom-asset-pack",
+  "formatVersion": 1,
+  "id": "cartoon-deck",
+  "version": "0.1.0",
+  "name": "Мультяшная колода",
+  "dependencies": [
+    {
+      "id": "characters",
+      "version": "0.1.0"
+    }
+  ],
+  "ratio": [
+    5,
+    7
+  ],
+  "face": "#fffef8",
+  "rim": "#fffef8",
+  "faces": [
+    {
+      "id": "crescent-red",
+      "character": "crescent-red",
+      "label": "Месяц · красный"
+    },
+    {
+      "id": "crescent-orange",
+      "character": "crescent-orange",
+      "label": "Месяц · оранжевый"
+    },
+    {
+      "id": "crescent-yellow",
+      "character": "crescent-yellow",
+      "label": "Месяц · жёлтый"
+    },
+    {
+      "id": "crescent-green",
+      "character": "crescent-green",
+      "label": "Месяц · зелёный"
+    },
+    {
+      "id": "crescent-blue",
+      "character": "crescent-blue",
+      "label": "Месяц · синий"
+    },
+    {
+      "id": "crescent-purple",
+      "character": "crescent-purple",
+      "label": "Месяц · фиолетовый"
+    },
+    {
+      "id": "triangle-red",
+      "character": "triangle-red",
+      "label": "Треугольник · красный"
+    },
+    {
+      "id": "triangle-orange",
+      "character": "triangle-orange",
+      "label": "Треугольник · оранжевый"
+    },
+    {
+      "id": "triangle-yellow",
+      "character": "triangle-yellow",
+      "label": "Треугольник · жёлтый"
+    },
+    {
+      "id": "triangle-green",
+      "character": "triangle-green",
+      "label": "Треугольник · зелёный"
+    },
+    {
+      "id": "triangle-blue",
+      "character": "triangle-blue",
+      "label": "Треугольник · синий"
+    },
+    {
+      "id": "triangle-purple",
+      "character": "triangle-purple",
+      "label": "Треугольник · фиолетовый"
+    },
+    {
+      "id": "square-red",
+      "character": "square-red",
+      "label": "Квадрат · красный"
+    },
+    {
+      "id": "square-orange",
+      "character": "square-orange",
+      "label": "Квадрат · оранжевый"
+    },
+    {
+      "id": "square-yellow",
+      "character": "square-yellow",
+      "label": "Квадрат · жёлтый"
+    },
+    {
+      "id": "square-green",
+      "character": "square-green",
+      "label": "Квадрат · зелёный"
+    },
+    {
+      "id": "square-blue",
+      "character": "square-blue",
+      "label": "Квадрат · синий"
+    },
+    {
+      "id": "square-purple",
+      "character": "square-purple",
+      "label": "Квадрат · фиолетовый"
+    },
+    {
+      "id": "circle-red",
+      "character": "circle-red",
+      "label": "Круг · красный"
+    },
+    {
+      "id": "circle-orange",
+      "character": "circle-orange",
+      "label": "Круг · оранжевый"
+    },
+    {
+      "id": "circle-yellow",
+      "character": "circle-yellow",
+      "label": "Круг · жёлтый"
+    },
+    {
+      "id": "circle-green",
+      "character": "circle-green",
+      "label": "Круг · зелёный"
+    },
+    {
+      "id": "circle-blue",
+      "character": "circle-blue",
+      "label": "Круг · синий"
+    },
+    {
+      "id": "circle-purple",
+      "character": "circle-purple",
+      "label": "Круг · фиолетовый"
+    },
+    {
+      "id": "star-red",
+      "character": "star-red",
+      "label": "Звезда · красный"
+    },
+    {
+      "id": "star-orange",
+      "character": "star-orange",
+      "label": "Звезда · оранжевый"
+    },
+    {
+      "id": "star-yellow",
+      "character": "star-yellow",
+      "label": "Звезда · жёлтый"
+    },
+    {
+      "id": "star-green",
+      "character": "star-green",
+      "label": "Звезда · зелёный"
+    },
+    {
+      "id": "star-blue",
+      "character": "star-blue",
+      "label": "Звезда · синий"
+    },
+    {
+      "id": "star-purple",
+      "character": "star-purple",
+      "label": "Звезда · фиолетовый"
+    },
+    {
+      "id": "rectangle-red",
+      "character": "rectangle-red",
+      "label": "Прямоугольник · красный"
+    },
+    {
+      "id": "rectangle-orange",
+      "character": "rectangle-orange",
+      "label": "Прямоугольник · оранжевый"
+    },
+    {
+      "id": "rectangle-yellow",
+      "character": "rectangle-yellow",
+      "label": "Прямоугольник · жёлтый"
+    },
+    {
+      "id": "rectangle-green",
+      "character": "rectangle-green",
+      "label": "Прямоугольник · зелёный"
+    },
+    {
+      "id": "rectangle-blue",
+      "character": "rectangle-blue",
+      "label": "Прямоугольник · синий"
+    },
+    {
+      "id": "rectangle-purple",
+      "character": "rectangle-purple",
+      "label": "Прямоугольник · фиолетовый"
+    },
+    {
+      "id": "diamond-red",
+      "character": "diamond-red",
+      "label": "Ромб · красный"
+    },
+    {
+      "id": "diamond-orange",
+      "character": "diamond-orange",
+      "label": "Ромб · оранжевый"
+    },
+    {
+      "id": "diamond-yellow",
+      "character": "diamond-yellow",
+      "label": "Ромб · жёлтый"
+    },
+    {
+      "id": "diamond-green",
+      "character": "diamond-green",
+      "label": "Ромб · зелёный"
+    },
+    {
+      "id": "diamond-blue",
+      "character": "diamond-blue",
+      "label": "Ромб · синий"
+    },
+    {
+      "id": "diamond-purple",
+      "character": "diamond-purple",
+      "label": "Ромб · фиолетовый"
+    },
+    {
+      "id": "hexagon-red",
+      "character": "hexagon-red",
+      "label": "Шестиугольник · красный"
+    },
+    {
+      "id": "hexagon-orange",
+      "character": "hexagon-orange",
+      "label": "Шестиугольник · оранжевый"
+    },
+    {
+      "id": "hexagon-yellow",
+      "character": "hexagon-yellow",
+      "label": "Шестиугольник · жёлтый"
+    },
+    {
+      "id": "hexagon-green",
+      "character": "hexagon-green",
+      "label": "Шестиугольник · зелёный"
+    },
+    {
+      "id": "hexagon-blue",
+      "character": "hexagon-blue",
+      "label": "Шестиугольник · синий"
+    },
+    {
+      "id": "hexagon-purple",
+      "character": "hexagon-purple",
+      "label": "Шестиугольник · фиолетовый"
+    }
+  ],
+  "copiesPerPair": 2,
+  "files": [
+    "renderer.js"
+  ],
+  "scripts": [
+    "renderer.js"
+  ]
+}
