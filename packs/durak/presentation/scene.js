@@ -18,8 +18,8 @@
   if(value.type==='durak.confirmed')return {message:message('events.confirmed'),kind:'attack'};
   if(value.type==='durak.passed')return {message:message('events.passed'),kind:'pass',feedback:{kind:'pass',player:actor},speech:{speaker:actor,text:message('speech.pass')}};
   if(value.type==='durak.taking')return {message:message('events.taking'),kind:'take',feedback:{kind:'take',player:actor},speech:{speaker:actor,text:message('speech.take')}};
-  if(value.type==='durak.attacked'||value.type==='durak.transferred')return {message:message(value.type==='durak.transferred'?'events.transferred':'events.attacked',{card:face(p.card)}),kind:'attack',sound:{id:value.type==='durak.transferred'?'reverse':'attack'}};
-  if(value.type==='durak.defended')return {message:message('events.defended',{card:face(p.card),attack:face(p.attack)}),kind:'defend'};
+  if(value.type==='durak.attacked'||value.type==='durak.transferred')return {message:message(value.type==='durak.transferred'?'events.transferred':'events.attacked',{card:face(p.card)}),kind:'attack',reveal:{kind:'card',card:p.card,entity:'card-'+p.card.id},sound:{id:value.type==='durak.transferred'?'reverse':'attack'}};
+  if(value.type==='durak.defended')return {message:message('events.defended',{card:face(p.card),attack:face(p.attack)}),kind:'defend',reveal:{kind:'card',card:p.card,entity:'card-'+p.card.id}};
   if(value.type==='durak.all-out')return {message:message('events.all-out'),finish:true};
   if(value.type==='durak.first-out')return {message:message('events.first-out',{players:{kind:'player-list-reference',indices:p.players}}),finish:true};
   if(value.type==='durak.last-fool')return {message:message('events.last-fool'),finish:true};

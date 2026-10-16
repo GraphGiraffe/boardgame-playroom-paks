@@ -7,7 +7,7 @@
  function action(command,projection){if(command.type==='roll')return message('actions.roll');
   const to=B.destination(projection,command).to;return message('actions.move',{dieIndex:command.dieIndex+1,die:projection.data.dice[command.dieIndex],pawn:command.pawn+1,to:to===57?message('location.home'):to});}
  function event(value){const p=value.params;
-  if(value.type==='ludo.rolled')return {message:message('events.rolled',{dice:p.dice.join(', ')}),kind:'roll',presentation:{type:'roll'}};
+  if(value.type==='ludo.rolled')return {message:message('events.rolled',{dice:p.dice.join(', ')}),kind:'roll',reveal:{kind:'dice',dice:p.dice.map(value=>({value}))},presentation:{type:'roll'}};
   if(value.type==='ludo.skipped')return {message:message('events.skipped'),kind:'pass',feedback:{kind:'skip',player:value.actor}};
   if(value.type==='ludo.captured')return {message:message('events.captured',{owner:player(p.owner),target:player(p.target)}),kind:'capture'};
   if(value.type==='ludo.moved')return {message:message('events.moved',{owner:player(p.owner),pawn:p.pawn+1,to:p.to===57?message('location.home'):p.to}),kind:'move',sound:{id:p.to===57?'success.special':p.from<0?'success':'move'},presentation:{type:'move',owner:p.owner,pawn:p.pawn}};

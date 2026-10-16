@@ -17,7 +17,17 @@
   if(key==='chance')return sum;
   return groups.some(g=>g.n===5)?50:0;
  }
+ function participation(dice,key){
+  if(!value(dice,key))return dice.map(()=>false);
+  const index=categories.indexOf(key);let wanted;
+  if(index<6)wanted={[index+1]:5};
+  else if(['pair','twoPairs','three','four'].includes(key)){
+   const size=key==='three'?3:key==='four'?4:2,groups=[...new Set(dice)].filter(n=>dice.filter(d=>d===n).length>=size).sort((a,b)=>b-a).slice(0,key==='twoPairs'?2:1);
+   wanted=Object.fromEntries(groups.map(n=>[n,size]));
+  }else return dice.map(()=>true);
+  return dice.map(n=>wanted[n]>0?(wanted[n]--,true):false);
+ }
  function total(row){const upper=categories.slice(0,6).reduce((n,k)=>n+(row[k]||0),0);return categories.reduce((n,k)=>n+(row[k]||0),0)+(upper>=63?50:0);}
   const upper=row=>categories.slice(0,6).reduce((sum,key)=>sum+(row[key]||0),0);
-  return Object.freeze({keys:categories,value,total,upper});
+  return Object.freeze({keys:categories,value,total,upper,participation});
 });
