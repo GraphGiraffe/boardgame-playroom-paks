@@ -39,8 +39,8 @@
 @media(max-width:760px){.uno-drop-target{inset:-9px -10px 18px;border-radius:15px}
 .uno-drop-target>span{font-size:9px;top:-25px}
 }
-.uno-card-help{width:44px;height:44px;min-width:44px;display:grid;place-items:center;border:1px solid #c4d2b4;border-radius:13px;background:#edf2df;color:#55784c;font-weight:800;font-size:17px;touch-action:manipulation}
-.uno-card-help:hover{background:#e0e9ce}
+.uno-card-help{width:44px;height:44px;min-width:44px;display:grid;place-items:center;border:1px solid var(--color-border-subtle,#c4d2b4);border-radius:13px;background:var(--color-surface-raised,#edf2df);color:var(--color-text-primary,#55784c);font-weight:800;font-size:17px;touch-action:manipulation}
+.uno-card-help:hover{background:var(--color-surface-hover,#e0e9ce)}
 .uno-call{min-width:68px;min-height:44px;letter-spacing:.5px}
 .uno-manual-hint{max-width:480px;align-self:center}
 .uno-declared{flex-shrink:0;display:inline-block;padding:3px 5px;border-radius:5px;background:#e5edd6;color:#486945;font-size:9px;font-weight:800;line-height:1.1;white-space:nowrap}

@@ -124,5 +124,5 @@
     return {winners:position.winners,places:values.map(value=>value?1:2),metrics:[{id:'wins',values},
       {id:'hits',values:position.data.shots.map(shots=>shots.filter(shot=>shot.hit).length)}]};
   }
-  return Object.freeze({contractVersion:1,id:'battleship',minPlayers:2,maxPlayers:2,create,validate,actions,reduce,project,bot,result});
+  return Object.freeze({contractVersion:1,id:'battleship',minPlayers:2,maxPlayers:2,preparing:position=>position.data.phase==='setup',create,validate,actions,reduce,project,bot,result});
 });

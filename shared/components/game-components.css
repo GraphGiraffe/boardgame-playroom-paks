@@ -12,7 +12,7 @@ body.reduced-motion .game-speech,.reduced-motion .game-speech{animation:none!imp
 body.reduced-motion .player-panel.is-turn-skipped,.reduced-motion .player-panel.is-turn-skipped{animation:none!important;background:var(--color-material-bubble-error,#f4c9c0)!important;box-shadow:inset 0 0 0 2px #b64d43!important}
 @media(prefers-reduced-motion:reduce){.player-panel.is-turn-skipped{animation:none!important;background:var(--color-material-bubble-error,#f4c9c0)!important;box-shadow:inset 0 0 0 2px #b64d43!important}}
 
-.action-reveal{position:fixed;inset:0;z-index:55;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;pointer-events:none;padding:16px;background:radial-gradient(ellipse at center,color-mix(in srgb,var(--color-surface-panel,#f4f2e8) 82%,transparent) 0%,transparent 66%)}
+.action-reveal{position:fixed;inset:0;z-index:55;display:block;overflow:clip;pointer-events:none;background:radial-gradient(ellipse at center,color-mix(in srgb,var(--color-surface-panel,#f4f2e8) 82%,transparent) 0%,transparent 66%)}
 .action-reveal-title{max-width:90vw;padding:8px 14px;border-radius:14px;background:var(--color-surface-raised,#fffaf0);color:var(--color-text-primary,#244c35);font-size:clamp(16px,4vw,24px);text-align:center}
 .action-reveal-art{width:min(36vw,150px,calc(70dvh - 67px));transform-origin:center;filter:drop-shadow(0 8px 12px #142e3038)}
 .action-reveal-art.scene{display:block!important;min-height:0!important;max-height:none!important;height:auto!important;padding:0!important;margin:0!important;overflow:visible!important;aspect-ratio:auto!important;background:none!important;border:0!important}
@@ -30,3 +30,5 @@ body.reduced-motion .player-panel.is-turn-skipped,.reduced-motion .player-panel.
 :is(.game-scene,.app-game-layout) :is(.is-playable,.is-selected){outline:var(--interaction-ring-width,3px) solid var(--ui-action-outline,var(--color-interaction-available,#638658))!important;outline-offset:2px}
 :is(.game-scene,.app-game-layout) .is-selected{outline-color:var(--color-interaction-selected,#d3aa45)!important;outline-offset:3px}
 [data-interaction-shape="circle"]{--interaction-ring-width:clamp(2px,.32em,4px)}
+
+.action-reveal-content{position:absolute;left:var(--reveal-x,50%);top:var(--reveal-y,50%);transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:12px;max-width:calc(100vw - 24px)}
