@@ -1,16 +1,18 @@
 # Общие игровые элементы
 
+Рабочий источник круглого компонента — `shared/components/round-token.js`; SVG образца не является второй реализацией. Оба builder встраивают компонент, host SDK закрепляет его SHA256.
+
 Эти исходники входят в `playroom-paks-source.zip`. SVG из `shared/assets/` можно добавить в самостоятельный пак через `sharedUi: true` и `sharedAssets` в `manifest.json`. Файлы служат редактируемыми образцами; интерактивные элементы получают значения и доступные подписи из состояния игры, а не из рисунка.
 
 | Элемент | Исходник | Рабочее представление |
 | --- | --- | --- |
 | Фишка Лудо и «Змей и лестниц», счётчик фишек, жетон команды, первого игрока, медаль | `round-token.svg` | `TabletopUI.roundTokenArt` / `TabletopUI.playerMedallion` через `PlayroomViews.helpers`; один диск, меняются надпись и палитра |
-| Шашка и дамка | `checker.svg` | SVG в `packs/checkers/view.js`; дамка добавляет знак короны внутри того же `viewBox` |
-| Кость домино | `domino-tile.svg` | `packs/domino/view.js`, значения половин и ориентация задаются состоянием |
+| Шашка и дамка | `checker.svg` | `PlayroomShared.checkerArt`; дамка добавляет знак короны внутри того же `viewBox` |
+| Кость домино | `domino-tile.svg` | `PlayroomShared.dominoFace`, значения половин и ориентация задаются состоянием |
 | Поле 8 × 8 | `chessboard.svg` | квадратный образец для шахмат и шашек; логика клеток остаётся в игре |
 | Кубик | `die.svg` | `PlayroomShared.die()`, точки выводятся из значения 1–6 |
-| Таблица результатов | `score-table.svg` | редактируемый образец; рабочий HTML/CSS-шаблон в `shared/templates/` |
-| Игровая реплика и чат | `bubble-game.svg`, `bubble-chat.svg` | действующие баблы в `app/design-system.css` и `app/game-feedback.js`; текст, адресат и исход берутся из события |
+| Таблица результатов | `score-table.svg` | `PlayroomShared.scoreTable`, рабочий компонент Ятзи; пример в `shared/templates/` |
+| Игровая реплика и чат | `bubble-game.svg`, `bubble-chat.svg` | `PlayroomGameComponents.bubbleClass` и `shared/components/game-components.css`; lifecycle в `app/game-feedback.js`; текст, адресат и исход берутся из события |
 | Карты, очки, победы, корабли | `counter-card.svg`, `counter-score.svg`, `counter-fleet.svg` | `countBadge`, `scoreBadge`, `indicators` приложения; счётчик фишек использует круглый диск |
 | Рубашка карты, корабль | `card-back.svg`, `ship.svg` | общие образцы для игровых паков |
 
@@ -30,3 +32,10 @@
 ## Цвет и поведение
 
 Командный жетон отличается заливкой, первый игрок — знаком `1` в круге, медаль — цифрой места; все используют тот же диск и боковую грань. Победа/ошибка игровой реплики меняет подсветку зелёным/красным, адресат кратко выделяется синим. Обычное сообщение имеет светлый бабл, игровая реплика — светло-зелёный с тонкой рамкой. Статус и назначение должны также передаваться доступной подписью, а не одним цветом.
+
+
+## Компоненты 0.18
+
+`shared/components/game-components.js` — исполняемый источник семейств, встраивается обоими builders перед view-kit. `shared/assets/catalog.json` описывает варианты/пропорции/материалы. `PlayroomViews.helpers.assetArt(family, params, fallback)` использует локальный resolver хоста; паки не создают своё хранилище тем. Main/compact — полный artboard. Особое лицо карты передаёт trusted Web recipe main/compact/width/height/variant в семейство card-face. Значения/приватность проверяются до renderer.
+
+Звуки берутся из `shared/sounds/standard-sounds.json`. Shared-assets ZIP включает assets, components, templates, sounds. Host закрепляет JS/CSS/catalog/sounds по SHA256/provenance. Dark/custom меняют локальные CSS material slots/variants; размеры, seed, allowed actions и история не меняются. Специальный рецепт лица карты остаётся в Web своего пака, независимо от правил.

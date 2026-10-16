@@ -1,0 +1,4 @@
+(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;root.PlayroomPackPresentation=api;})(globalThis,function(){
+ 'use strict';const message=(key,params={})=>({key:'counter.'+key,params});
+ return {metadata:{name:message('name'),description:message('description'),scoreLabel:message('points'),presets:[{id:'classic',label:message('preset')}],rules:[message('rule')]},action:()=>message('add'),metric:()=>message('points'),event:value=>({message:message(value.type==='counter.goal'?'goal':'changed',value.params),kind:'action'}),scene:projection=>({contractVersion:1,id:'counter',family:'board',players:projection.data.points.map((value,player)=>({player,metrics:[{id:'points',kind:'points',value,label:message('points'),resultUsage:true}]}))})};
+});

@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["pexeso"] = {
   "id": "pexeso",
-  "version": "0.1.6",
+  "version": "0.2.0-rc.1",
   "name": "Пексесо",
   "category": "cards",
   "estimatedDuration": "5–20 мин",
@@ -42,10 +42,11 @@
           "value": "54",
           "label": "54 карты · с джокерами"
         }
-      ]
+      ],
+      "help": "Размер исходной колоды определяет состав карт и продолжительность партии."
     }
   ],
-  "engineApi": 1,
+  "engineApi": 3,
   "stateVersion": 2,
   "viewApi": 2,
   "tileTheme": "gold",
@@ -63,6 +64,9 @@
       ],
       "teams": false
     }
+  ],
+  "sharedDomain": [
+    "standard-deck"
   ]
 };
 })(globalThis);

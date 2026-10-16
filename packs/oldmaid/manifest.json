@@ -1,6 +1,6 @@
 {
   "id": "oldmaid",
-  "version": "0.1.5",
+  "version": "0.2.0-rc.1",
   "name": "Акулина",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
@@ -38,7 +38,8 @@
           "value": "54",
           "label": "54 карты · 53 в игре"
         }
-      ]
+      ],
+      "help": "Размер исходной колоды определяет состав карт и продолжительность партии."
     },
     {
       "key": "drawFrom",
@@ -53,11 +54,28 @@
           "value": "next",
           "label": "У следующего по кругу"
         }
+      ],
+      "help": "Выберите любого соперника с картами либо только следующего по кругу. Пустые руки пропускаются."
+    },
+    {
+      "key": "endMode",
+      "label": "Завершение партии",
+      "default": "last",
+      "help": "До победителя — после первого выхода с пустой рукой. До последнего — продолжают до игрока с Акулиной; очки начисляются по порядку выхода.",
+      "options": [
+        {
+          "value": "winner",
+          "label": "До победителя"
+        },
+        {
+          "value": "last",
+          "label": "До последнего"
+        }
       ]
     }
   ],
-  "engineApi": 2,
-  "stateVersion": 3,
+  "engineApi": 3,
+  "stateVersion": 4,
   "viewApi": 2,
   "tileTheme": "coral",
   "tags": [
@@ -77,5 +95,22 @@
       ],
       "teams": false
     }
-  ]
+  ],
+  "sharedDomain": [
+    "standard-deck"
+  ],
+  "sourceModules": {
+    "rules": [
+      "domain/game.js",
+      "presentation/scene.js"
+    ],
+    "view": [
+      "presentation/scene.js"
+    ],
+    "locales": {
+      "ru": [
+        "locales/ru/game.json"
+      ]
+    }
+  }
 }

@@ -1,6 +1,6 @@
 {
   "id": "domino",
-  "version": "0.3.7",
+  "version": "0.4.0-rc.1",
   "category": "board",
   "estimatedDuration": "10–15 мин",
   "tagline": "Семь костяшек. Много вариантов.",
@@ -16,7 +16,7 @@
   "view": "view.js",
   "styles": "styles.css",
   "name": "Домино",
-  "engineApi": 1,
+  "engineApi": 3,
   "stateVersion": 1,
   "viewApi": 2,
   "tags": [
@@ -32,5 +32,41 @@
       ],
       "teams": false
     }
+  ],
+  "sourceModules": {
+    "rules": [
+      "domain/game.js",
+      "presentation/scene.js"
+    ],
+    "view": [
+      "presentation/scene.js"
+    ],
+    "locales": {
+      "ru": [
+        "locales/ru/game.json"
+      ]
+    }
+  },
+  "sharedUi": true,
+  "settings": [
+    {
+      "key": "endMode",
+      "label": "Завершение партии",
+      "default": "winner",
+      "help": "До победителя — первая пустая рука завершает партию. До последнего — вышедшие пропускаются; оставшиеся играют до одного участника или блокировки. При блокировке сравнивают очки на оставшихся костях.",
+      "options": [
+        {
+          "value": "winner",
+          "label": "До победителя"
+        },
+        {
+          "value": "last",
+          "label": "До последнего"
+        }
+      ]
+    }
+  ],
+  "sharedDomain": [
+    "end-policy"
   ]
 }

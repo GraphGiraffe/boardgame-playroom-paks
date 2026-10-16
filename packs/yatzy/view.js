@@ -1,13 +1,33 @@
 (function(){
  'use strict';const V=globalThis.PlayroomViews,H=V.helpers,C=globalThis.PlayroomShared;
- const keys=['ones','twos','threes','fours','fives','sixes','pair','twoPairs','three','four','smallStraight','largeStraight','fullHouse','chance','yatzy'];
- const names=['Единицы','Двойки','Тройки','Четвёрки','Пятёрки','Шестёрки','Пара','Две пары','Три одинаковых','Четыре одинаковых','Малый стрит','Большой стрит','Фул-хаус','Шанс','Ятзи'];
- const render=(s,viewer,actions,ui={})=>{const d=s.data,roll=actions.find(a=>a.type==='roll'),requested=Number(ui.viewState?.scorePlayer),selected=Number.isInteger(requested)&&requested>=0&&requested<s.players.length?requested:s.turn;
-  const cells=(values,kind)=>values.map((value,p)=>`<td class="${p===selected?'selected-player':''}" data-score-player="${p}"${kind?` data-score-total="${kind}"`:''}>${value}</td>`).join('');
-  return {api:2,family:'board',fieldSizing:'scroll',actionReserve:true,className:'yatzy-scene',playerContent:H.playerContent(s,viewer,null,{counters:(p,person)=>[{kind:'points',value:d.totals[p],label:'Очки Ятзи'},{kind:'wins',value:person.score}]}),elements:{
-   field:`<div class="yatzy-board"><table class="yatzy-score" style="--players:${s.players.length}"><thead><tr><th scope="col">Категория</th>${s.players.map((p,i)=>`<th scope="col" class="${i===selected?'selected-player':''}" data-score-player="${i}">${H.avatar(p,i)}</th>`).join('')}</tr></thead><tbody>${keys.map((key,i)=>`<tr><th scope="row">${names[i]}</th>${cells(d.scores.map((row,p)=>{const a=p===s.turn?actions.find(x=>x.type==='score'&&x.key===key):null;return row[key]!==undefined?row[key]:a?`<button ${H.actionAttr(a)} aria-label="${H.esc(a.label)}">${H.esc(a.label.split(' · ').at(-1))}</button>`:'—';}))}</tr>${i===5?`<tr class="yatzy-summary"><th scope="row">Верх · от 63</th>${cells(d.upper,'upper')}</tr><tr class="yatzy-summary"><th scope="row">Бонус</th>${cells(d.bonuses,'bonus')}</tr>`:''}`).join('')}</tbody><tfoot><tr><th scope="row">Всего</th>${cells(d.totals,'total')}</tr></tfoot></table></div>`,
-   actions:`<div class="yatzy-controls"><div class="yatzy-dice">${d.dice.map((n,i)=>{const hold=actions.find(a=>a.type==='hold'&&a.index===i);return C.die(d.rolls?n:null,`${!d.held[i]?'data-motion-lead="roll"':''} ${hold?H.actionAttr(hold):'disabled'} aria-pressed="${d.held[i]}" title="${d.held[i]?'Освободить кубик перед броском':'Придержать кубик'}"`,d.held[i]?'held':'');}).join('')}</div><span class="yatzy-dice-help">${d.rolls>0&&d.rolls<3?'Кубик: удержать / освободить':''}</span><button class="scene-button yatzy-roll" ${roll?H.actionAttr(roll):'disabled'}>${d.rolls?'Перебросить':'Бросить'} · ${d.rolls}/3</button></div>`
-  }};
- };
- V.register('yatzy',render,()=>C.cover(`<g transform="translate(50 48) rotate(-13 50 50)"><rect x="2" y="6" width="92" height="92" rx="18" fill="#b7b29d"/><rect width="92" height="92" rx="18" fill="#fff9e8"/>${[[24,24],[68,24],[46,46],[24,68],[68,68]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="7" fill="#517660"/>`).join('')}</g><g transform="translate(161 25) rotate(14 46 46)"><rect x="2" y="6" width="92" height="92" rx="18" fill="#b7b29d"/><rect width="92" height="92" rx="18" fill="#fff9e8"/>${[[24,24],[68,24],[24,46],[68,46],[24,68],[68,68]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="7" fill="#c2735e"/>`).join('')}</g>`),{surfaces:{table:(s,v,a,ui)=>{const scene=render(s,v,[],ui);scene.elements.status=`<div class="yatzy-dice">${s.data.dice.map((n,i)=>C.die(s.data.rolls?n:null,`${!s.data.held[i]?'data-motion-lead="roll"':''} disabled`,s.data.held[i]?'held':'')).join('')}</div>`;return scene;},player:render}});
+ const source=typeof require==='function'&&!globalThis.PlayroomPack;
+ const P=source?require('./presentation/scene.js'):globalThis.PlayroomPackPresentation;
+ const locale=source?{ru:require('./locales/ru/game.json')}:globalThis.PlayroomPackResources.locales;
+ const translator=H.translator(locale);
+ const text=key=>translator.format({key:'yatzy.'+key});
+ function render(s,viewer,actions,ui={}){
+  const d=s.data,roll=actions.find(a=>a.type==='roll'),requested=Number(ui.viewState?.scorePlayer);
+  const selected=Number.isInteger(requested)&&requested>=0&&requested<s.players.length?requested:s.turn;
+  const projection={...s.modelProjection,actions:s.modelProjection.actions.filter(command=>actions.some(action=>
+    Object.keys(command).every(key=>command[key]===action[key])))};
+  const table=P.scene(projection),actionLabel=command=>translator.format(P.action(command,projection));
+  const cells=(values,kind)=>values.map((value,player)=>`<td class="${player===selected?'selected-player':''}" data-score-player="${player}"${kind?` data-score-total="${kind}"`:''}>${value}</td>`).join('');
+  const rows=table.rows.map((row,index)=>{
+    const values=row.cells.map(cell=>cell.value!==null?cell.value:cell.command?
+      `<button ${H.actionAttr(cell.command)} aria-label="${H.esc(actionLabel(cell.command))}">${H.esc(cell.preview)}</button>`:'—');
+    const summary=index===5?`<tr class="yatzy-summary"><th scope="row">${text('table.upper')}</th>${cells(d.upper,'upper')}</tr><tr class="yatzy-summary"><th scope="row">${text('table.bonus')}</th>${cells(d.bonuses,'bonus')}</tr>`:'';
+    return `<tr><th scope="row">${H.esc(translator.format(row.label))}</th>${cells(values)}</tr>${summary}`;
+  }).join('');
+  const tableHead=`<tr><th scope="col">${text('table.category')}</th>${s.players.map((person,index)=>`<th scope="col" class="${index===selected?'selected-player':''}" data-score-player="${index}">${H.avatar(person,index)}</th>`).join('')}</tr>`,tableFoot=`<tr><th scope="row">${text('table.total')}</th>${cells(d.totals,'total')}</tr>`;
+  const dice=d.dice.map((value,index)=>{
+    const hold=actions.find(a=>a.type==='hold'&&a.index===index);
+    return C.die(d.rolls?value:null,`${!d.held[index]?'data-motion-lead="roll"':''} ${hold?H.actionAttr(hold):'disabled'} aria-pressed="${d.held[index]}" title="${H.esc(text(d.held[index]?'dice.release':'dice.hold'))}"`,d.held[index]?'held':'');
+  }).join('');
+  return {api:2,family:'board',fieldSizing:'scroll',actionReserve:true,className:'yatzy-scene',
+    playerContent:H.playerContent(s,viewer,null,{}),elements:{
+      field:`<div class="yatzy-board" data-scene-scroll>${C.scoreTable({className:'yatzy-score',attributes:`style="--players:${s.players.length}"`,head:tableHead,body:rows,foot:tableFoot})}</div>`,
+      actions:`<div class="yatzy-controls"><div class="yatzy-dice">${dice}</div><span class="yatzy-dice-help">${d.rolls>0&&d.rolls<3?text('dice.help'):''}</span><button class="scene-button yatzy-roll" ${roll?H.actionAttr(roll):'disabled'}>${text(d.rolls?'dice.reroll':'dice.roll')} · ${d.rolls}/3</button></div>`
+    }};
+ }
+ V.register('yatzy',render,()=>C.cover(`<g transform="translate(50 48) rotate(-13 50 50)"><rect x="2" y="6" width="92" height="92" rx="18" fill="#b7b29d"/><rect width="92" height="92" rx="18" fill="#fff9e8"/>${[[24,24],[68,24],[46,46],[24,68],[68,68]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="7" fill="#517660"/>`).join('')}</g><g transform="translate(161 25) rotate(14 46 46)"><rect x="2" y="6" width="92" height="92" rx="18" fill="#b7b29d"/><rect width="92" height="92" rx="18" fill="#fff9e8"/>${[[24,24],[68,24],[24,46],[68,46],[24,68],[68,68]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="7" fill="#c2735e"/>`).join('')}</g>`),{surfaces:{table:(s,v,a,ui)=>{const scene=render(s,v,a,ui);const controls=scene.elements.actions;scene.elements.actions='';scene.elements.status=a.length?controls:`<div class="yatzy-dice">${s.data.dice.map((n,i)=>C.die(s.data.rolls?n:null,`${!s.data.held[i]?'data-motion-lead="roll"':''} disabled`,s.data.held[i]?'held':'')).join('')}</div>`;return scene;},player:render}});
 })();
