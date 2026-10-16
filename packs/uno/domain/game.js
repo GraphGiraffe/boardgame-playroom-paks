@@ -44,7 +44,7 @@
         check(u.calls === undefined || (Array.isArray(u.calls) && new Set(u.calls).size === u.calls.length && u.calls.every(p => Number.isInteger(p) && p >= 0 && p < s.playerCount)));
         check(u.penalties === undefined || (Array.isArray(u.penalties) && new Set(u.penalties).size===u.penalties.length && u.penalties.every(p=>Number.isInteger(p)&&p>=0&&p<s.playerCount)));
       }
-    
+
    check(Array.isArray(d.points)&&d.points.length===s.playerCount&&d.points.every(value=>Number.isSafeInteger(value)&&value>=0));
    return Number.isSafeInteger(s.rng)&&s.rng>=0&&s.rng<=4294967295;
   }catch(_){return false;}

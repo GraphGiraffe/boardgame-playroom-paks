@@ -19,7 +19,7 @@
       check(new Set(d.captured).size === d.captured.length && d.captured.every(i => Number.isInteger(i) && i >= 0 && i < 64 && d.board[i]?.owner === 1 - s.turn));
       check((d.forced !== null) === (d.captured.length > 0) && (d.forced === null || captures(d, d.forced).length > 0));
       check(Number.isInteger(d.quiet) && d.quiet >= 0 && d.quiet <= 30 && d.repetitions && typeof d.repetitions === 'object' && !Array.isArray(d.repetitions) && Object.values(d.repetitions).every(n => Number.isInteger(n) && n >= 1 && n <= 3));
-    
+
  return true;}catch(_){return false;}}
  function actions(position,actor){if(position.status!=='playing'||position.turn!==actor)return [];
   return moves(position,actor).map(move=>({command:{type:'move',from:move.from,to:move.to},visibility:'public'}));}
@@ -57,7 +57,7 @@
       const best = Math.max(...candidates.map(c => c.value));
       const chosen = candidates.filter(c => c.value === best);
       return chosen[(s.revision||0) % chosen.length].a;
-    
+
  }
  function result(position){const values=Array.from({length:2},(_,player)=>position.winners.includes(player)?1:0);
   return {winners:position.winners,places:values.map(value=>1+new Set(values.filter(other=>other>value)).size),metrics:[{id:'wins',values}]};}

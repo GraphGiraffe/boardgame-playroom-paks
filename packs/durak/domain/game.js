@@ -19,7 +19,7 @@ const d=s.data,actions=[],ranks=new Set(d.table.map(p=>p.attack.rank));
     const target=next(d,actor);if(d.variant==='transfer'&&target!==null&&ranks.size===1&&d.table.every(p=>!p.defense)&&d.table.length+1<=Math.min(6,d.hands[target].length))for(const c of d.hands[actor])if(ranks.has(c.rank))actions.push({type:'transfer',card:c.id});
     if(d.table.some(p=>!p.defense))actions.push({type:'take'});
    }return actions;
-  
+
   })();return commands.map(command=>({command,visibility:['done','take','confirm','undo'].includes(command.type)?'public':'private'}));
  }
  function endBout(s,events){const d=s.data,oldA=d.boutOrigin,oldD=d.defender,wasTaking=d.taking;
