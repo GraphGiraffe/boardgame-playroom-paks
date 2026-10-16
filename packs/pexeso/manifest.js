@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["pexeso"] = {
   "id": "pexeso",
-  "version": "0.2.0-rc.3",
+  "version": "0.2.0-rc.4",
   "name": "Пексесо",
   "category": "cards",
   "estimatedDuration": "5–20 мин",
@@ -28,8 +28,12 @@
     {
       "key": "deck",
       "label": "Колода",
-      "default": "52",
+      "default": "cartoon",
       "options": [
+        {
+          "value": "cartoon",
+          "label": "Персонажи · 48 пар"
+        },
         {
           "value": "36",
           "label": "36 карт · 6–Т"
@@ -43,11 +47,11 @@
           "label": "54 карты · с джокерами"
         }
       ],
-      "help": "Размер исходной колоды определяет состав карт и продолжительность партии."
+      "help": "В мультяшной колоде пара — два одинаковых персонажа одного цвета. В игральной — одинаковый ранг и цвет масти. Размер поля зависит от выбранного режима."
     }
   ],
   "engineApi": 3,
-  "stateVersion": 2,
+  "stateVersion": 3,
   "viewApi": 2,
   "tileTheme": "gold",
   "tags": [
@@ -67,6 +71,9 @@
   ],
   "sharedDomain": [
     "standard-deck"
+  ],
+  "sharedAssetPacks": [
+    "cartoon-deck"
   ]
 };
 })(globalThis);

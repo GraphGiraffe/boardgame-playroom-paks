@@ -225,7 +225,42 @@ def build_pack(pack, shared=None):
             if not re.fullmatch(r"[a-z][a-z0-9-]*\.svg", name):
                 raise ValueError(f"Некорректное имя общего ресурса: {name}")
             files[f"assets/shared/{name}"] = local_file(shared, f"assets/{name}").read_text(encoding="utf-8")
+    asset_scripts = []
+    included = {}
+    visiting = set()
+    def include_asset_pack(name, version=None):
+        if name in visiting:
+            raise ValueError("Cyclic asset pack dependency")
+        if name in included:
+            if version is not None and included[name] != version:
+                raise ValueError("Asset pack dependency version mismatch")
+            return
+        if not re.fullmatch(r"[a-z][a-z0-9-]*", name):
+            raise ValueError("Invalid asset pack ID")
+        root = shared / "asset-packs" / name
+        spec = parse_json(local_file(root, "manifest.json").read_text(encoding="utf-8"))
+        if spec.get("format") != "playroom-asset-pack" or spec.get("id") != name:
+            raise ValueError("Invalid asset pack manifest")
+        if spec.get("formatVersion") != 1 or not SEMVER.fullmatch(spec.get("version", "")):
+            raise ValueError("Invalid asset pack version")
+        if version is not None and spec["version"] != version:
+            raise ValueError("Asset pack dependency version mismatch")
+        visiting.add(name)
+        for dependency in spec.get("dependencies", []):
+            include_asset_pack(dependency["id"], dependency["version"])
+        visiting.remove(name)
+        included[name] = spec["version"]
+        for filename in spec.get("files", []):
+            path = local_file(root, filename)
+            data = path.read_bytes()
+            files["assets/shared-packs/" + name + "/" + filename] = data.decode("utf-8") if path.suffix in TEXT_EXTENSIONS else "data:" + (mimetypes.guess_type(path.name)[0] or "application/octet-stream") + ";base64," + base64.b64encode(data).decode("ascii")
+        for script in spec.get("scripts", []):
+            asset_scripts.append(local_file(root, script).read_text(encoding="utf-8"))
+    for asset_pack in manifest.get("sharedAssetPacks", []):
+        include_asset_pack(asset_pack)
     if "sourceModules" in manifest:
         source = manifest.pop("sourceModules")
         bundle_source_modules(files, source, lambda path: local_file(pack, path).read_text(encoding="utf-8"))
+    if asset_scripts:
+        files["view.js"] = "\n".join([*asset_scripts, files["view.js"]])
     return validate_bundle({"format": "playroom-pack", "formatVersion": 1, "manifest": manifest, "files": files}, pack.name)

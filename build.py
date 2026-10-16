@@ -35,7 +35,7 @@ MAX_PACK_FILES = _compiler['MAX_PACK_FILES']
 TEXT_EXTENSIONS = _compiler['TEXT_EXTENSIONS']
 ENTRY_POINTS = _compiler['ENTRY_POINTS']
 SEMVER = _compiler['SEMVER']
-VERSION = "0.7.0-rc.3"
+VERSION = "0.7.0-rc.4"
 
 
 
@@ -131,11 +131,16 @@ def main():
     source = output / "playroom-paks-source.zip"
     write_zip(source, [("playroom-paks/" + path.relative_to(ROOT).as_posix(), path.read_bytes()) for path in source_files(packs)])
     artifacts.extend([collection, source])
-    asset_sources = sorted(path for folder in ("assets", "components", "templates", "sounds", "locales", "domain")
+    asset_sources = sorted(path for folder in ("assets", "components", "templates", "sounds", "locales", "domain", "asset-packs")
                            for path in (ROOT / "shared" / folder).rglob("*") if path.is_file())
     asset_archive = output / f"playroom-shared-assets-{VERSION}.zip"
     write_zip(asset_archive, [(path.relative_to(ROOT / "shared").as_posix(), path.read_bytes()) for path in asset_sources])
     artifacts.append(asset_archive)
+    for manifest_path in sorted((ROOT / "shared/asset-packs").glob("*/manifest.json")):
+        spec = json.loads(manifest_path.read_text(encoding="utf-8"))
+        archive = output / f"playroom-assets-{spec['id']}-{spec['version']}.zip"
+        write_zip(archive, [(path.relative_to(manifest_path.parent).as_posix(), path.read_bytes()) for path in sorted(manifest_path.parent.rglob("*")) if path.is_file()])
+        artifacts.append(archive)
     checksums = output / "SHA256SUMS"
     checksums.write_text("".join(f"{hashlib.sha256(path.read_bytes()).hexdigest()}  {path.name}\n" for path in sorted(artifacts)), encoding="ascii")
     print(f"Паки: {len(bundles)} файлов *.playroom-pack.json в {output}")
