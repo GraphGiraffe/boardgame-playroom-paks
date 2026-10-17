@@ -17,7 +17,7 @@
       (p.preset==='plus'?Array.isArray(d.dice)&&d.dice.length>=1&&d.dice.length<=2&&d.dice.every(face):face(d.dice))&&
       Array.isArray(d.positions)&&d.positions.length===p.playerCount&&d.positions.every(valid)&&
       Array.isArray(d.effects)&&d.effects.length===p.playerCount&&d.effects.every(e=>['adjust','less','skip','shield'].every(k=>typeof e[k]==='boolean'))&&
-      JSON.stringify(d.special)===JSON.stringify(p.preset==='plus'?cells[d.finish]:{})&&d.links&&Object.entries(d.links).every(([a,b])=>valid(+a)&&+a>0&&+a<d.finish&&valid(b)&&b>0&&b!==+a)&&
+      JSON.stringify(d.special)===JSON.stringify(p.preset==='plus'?cells[d.finish]:{})&&Object.keys(d.special).every(cell=>!Object.hasOwn(d.links,cell))&&d.links&&Object.entries(d.links).every(([a,b])=>valid(+a)&&+a>0&&+a<d.finish&&valid(b)&&b>0&&b!==+a)&&
       (!d.lastMove||[d.lastMove.from,d.lastMove.landing,d.lastMove.to].every(valid));
   }
   function destination(d,actor,dieIndex,delta=0){const distance=d.dice[dieIndex]+delta,from=d.positions[actor],landing=from+distance>d.finish?2*d.finish-from-distance:from+distance;return {distance,from,landing,to:d.links[landing]&&!(d.links[landing]<landing&&d.effects[actor].shield)?d.links[landing]:landing};}
