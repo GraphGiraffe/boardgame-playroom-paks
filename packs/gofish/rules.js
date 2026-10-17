@@ -5,6 +5,6 @@
   const presentation=source?require('./presentation/scene.js'):root.PlayroomPackPresentation;
   const manifest=source?require('./manifest.json'):root.PlayroomPack;
   const locales=source?{ru:require('./locales/ru/game.json')}:root.PlayroomPackResources.locales;
-  const specification={definition:factory({shuffle:root.TabletopCore.shuffle},Deck),presentation,locales,version:manifest.version};
+  const specification={definition:factory({shuffle:root.TabletopCore.shuffle},Deck),presentation,locales,version:manifest.version,stateVersion:manifest.stateVersion};
   if(source)root.TabletopCore.registerModel(specification);else root.TabletopCore.register(root.PlayroomPack.adaptModel(specification));
 })(globalThis);

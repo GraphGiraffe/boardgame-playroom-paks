@@ -8,7 +8,7 @@
     if(value.type==='oldmaid.drawn')return {message:message('events.drawn',{target:{kind:'player-reference',index:value.params.target}}),kind:'draw',sound:{id:'draw'},
       transfer:{player:value.actor,count:1,from:'hand',fromPlayer:value.params.target}};
     if(value.type==='oldmaid.paired')return {message:message('events.paired'),kind:'capture',sound:{id:'success'},
-      transfer:{player:value.actor,count:2,from:'hand',fromPlayer:value.actor,to:'table'}};
+      reveal:{kind:'cards',cards:value.params.cards,entity:'card-'+value.params.cards.at(-1).id}};
     if(value.type==='oldmaid.finished')return {message:message('events.finished'),finish:true};
     throw Error('OLDMAID_EVENT_UNKNOWN');
   }

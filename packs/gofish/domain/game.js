@@ -5,7 +5,7 @@
     const d=position.data,hand=d.hands[player];
     for(const rank of new Set(hand.map(card=>card.rank))){
       const cards=hand.filter(card=>card.rank===rank),need=rank===15?2:4;
-      if(cards.length===need){d.hands[player]=d.hands[player].filter(card=>card.rank!==rank);d.books[player].push(rank);events.push(fact('booked',player,{rank,count:need}));}
+      if(cards.length===need){d.hands[player]=d.hands[player].filter(card=>card.rank!==rank);d.books[player].push(rank);d.bookCards[player].push(cards[0]);events.push(fact('booked',player,{rank,count:need,cards}));}
     }
   }
   function finish(position,events){
@@ -30,7 +30,7 @@
     const position={playerCount,turn:firstPlayer,status:'playing',winners:[],rng,preset,openHands:!!openHands,data:{}};
     const cards=ports.shuffle(Deck.create(size),position),hands=Array.from({length:playerCount},()=>[]),count=playerCount===2?7:5;
     for(let index=0;index<count;index++)for(const hand of hands)if(cards.length)hand.push(cards.pop());
-    position.data={firstPlayer,deckSize:size,hands,drawPile:cards,books:Array.from({length:playerCount},()=>[]),attempts:Array(playerCount).fill(0)};
+    position.data={firstPlayer,deckSize:size,hands,drawPile:cards,books:Array.from({length:playerCount},()=>[]),bookCards:Array.from({length:playerCount},()=>[]),attempts:Array(playerCount).fill(0)};
     const events=[];for(let player=0;player<playerCount;player++)book(position,player,events);
     if(!hands[firstPlayer].length)advance(position,firstPlayer,events);
     return {position,events};
@@ -38,6 +38,7 @@
   function validate(position){
     const d=position.data,n=position.playerCount;
     if(![36,52,54].includes(d.deckSize)||!Array.isArray(d.hands)||d.hands.length!==n||!d.hands.every(Array.isArray)||!Array.isArray(d.books)||d.books.length!==n||!d.books.every(Array.isArray)||!Array.isArray(d.drawPile))return false;
+    if(!Array.isArray(d.bookCards)||d.bookCards.length!==n||d.bookCards.some((row,p)=>!Array.isArray(row)||row.length!==d.books[p].length||row.some((card,i)=>!card||card.rank!==d.books[p][i]||!Deck.create(d.deckSize).some(c=>c.id===card.id&&c.suit===card.suit&&c.rank===card.rank))))return false;
     const deck=Deck.create(d.deckSize),known=new Set(deck.map(card=>card.id)),all=[...d.hands.flat(),...d.drawPile,...d.books.flat().flatMap(rank=>deck.filter(card=>card.rank===rank))];
     return Number.isSafeInteger(position.rng)&&position.rng>=0&&position.rng<=4294967295&&
       all.length===d.deckSize&&new Set(all.map(card=>card.id)).size===all.length&&all.every(card=>known.has(card.id))&&

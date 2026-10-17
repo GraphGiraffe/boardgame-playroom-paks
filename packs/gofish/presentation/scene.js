@@ -7,7 +7,7 @@
   function choice(command,projection){return command.type==='ask'?{card:projection.data.hands[projection.viewer].find(card=>card.rank===command.rank).id,targetKind:'player',targetSource:true}:{};}
   function event(value){
     const {actor,params:p}=value;
-    if(value.type==='gofish.booked')return {message:message('events.booked',{rank:rank(p.rank)}),kind:'capture',sound:{id:'success'},transfer:{player:actor,count:p.count,from:'hand',fromPlayer:actor,to:'table'}};
+    if(value.type==='gofish.booked')return {message:message('events.booked',{rank:rank(p.rank)}),kind:'capture',sound:{id:'success'},reveal:{kind:'cards',cards:p.cards,entity:'card-'+p.cards[0].id}};
     if(value.type==='gofish.drawn')return {message:message('events.drawn'),kind:'draw',transfer:{player:actor,count:1,from:'stock'}};
     if(value.type==='gofish.asked')return {message:message('events.asked',{rank:rank(p.rank),target:{kind:'player-reference',index:p.target}}),kind:'action',speech:{speaker:actor,target:p.target,text:rank(p.rank)}};
     if(value.type==='gofish.given')return {message:message('events.given',{count:p.count}),kind:'play',sound:{id:'draw'},transfer:{player:p.target,count:p.count,from:'hand',fromPlayer:actor},speech:{speaker:actor,target:p.target,icon:'cards',count:p.count,result:'success'}};
