@@ -119,5 +119,5 @@
  function botReaction(s,actor,actions,memory){const u=s.data.uno;if(s.data.hands[actor].length===1&&!u.declared[actor]&&!u.calls.includes(actor))return actions.find(a=>a.type==='declare-uno');const target=memory.situations.findIndex((w,i)=>i!==actor&&w.open&&!w.settled&&!u.declared[i]);return target<0?null:actions.find(a=>a.type==='accuse-uno'&&a.target===target);}
  const score=s=>s.data.points;
  const result=s=>({winners:s.winners,places:Ending.places(s.data.ending,s.data.points),metrics:[{id:'points',values:s.data.points},{id:'hand-count',values:s.data.hands.map(hand=>hand.length)}]});
- return Object.freeze({contractVersion:1,id:'uno',minPlayers:2,maxPlayers:4,create,validate,actions,reactions,reactionWindows,reactionControl,reduce,project,bot,botReaction,observe,score,result});
+ return Object.freeze({contractVersion:1,id:'uno',minPlayers:2,maxPlayers:6,create,validate,actions,reactions,reactionWindows,reactionControl,reduce,project,bot,botReaction,observe,score,result});
 });

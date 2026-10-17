@@ -15,7 +15,8 @@
     const size=options.deck==null||options.deck==='cartoon'?96:[36,52,54].includes(Number(options.deck))?Number(options.deck):52;
     const position={playerCount,turn:firstPlayer,status:'playing',winners:[],rng,preset,data:{}};
     const groups={};for(const card of cardsFor(size))(groups[pair(card)]??=[]).push(card);
-    const keys=ports.shuffle(Object.keys(groups),position);
+    // Stable catalog order selects the same pairs for a board size; only positions shuffle.
+    const keys=Object.keys(groups);
     const count={easy:8,medium:12,hard:18,full:keys.length}[preset];
     if(!count)throw Error('PEXESO_PRESET_INVALID');
     position.data={deckSize:size,board:ports.shuffle(keys.slice(0,Math.min(count,keys.length)).flatMap(key=>groups[key]),position),
