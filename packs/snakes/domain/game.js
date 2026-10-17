@@ -33,5 +33,5 @@
   const project=position=>JSON.parse(JSON.stringify(position.data));
   function result(position){const values=position.data.positions;return {winners:position.winners,
     places:Ending.places(position.data.ending,values),metrics:[{id:'position',values}]};}
-  return Object.freeze({contractVersion:1,id:'snakes',minPlayers:2,maxPlayers:4,create,validate,actions,reduce,project,result});
+  return Object.freeze({contractVersion:1,id:'snakes',minPlayers:2,maxPlayers:6,create,validate,actions,reduce,project,result});
 });

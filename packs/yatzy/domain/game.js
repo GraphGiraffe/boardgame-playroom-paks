@@ -78,5 +78,5 @@
     return {winners:position.winners,places:values.map(value=>1+new Set(values.filter(other=>other>value)).size),
       metrics:[{id:'points',values}]};
   }
-  return Object.freeze({contractVersion:1,id:'yatzy',minPlayers:2,maxPlayers:4,create,validate,actions,reduce,project,bot,result});
+  return Object.freeze({contractVersion:1,id:'yatzy',minPlayers:2,maxPlayers:6,create,validate,actions,reduce,project,bot,result});
 });
