@@ -4,10 +4,11 @@
  function create({playerCount,firstPlayer,preset,rng,options={}}){
   if(!['classic','teams'].includes(preset)||preset==='teams'&&playerCount!==4)throw Error('LUDO_ROSTER_INVALID');
   const diceCount=[1,2,3].includes(Number(options.diceCount))?Number(options.diceCount):1;
+  const preview={rng:(rng^0x9e3779b9)>>>0};
   return {playerCount,turn:firstPlayer,status:'playing',winners:[],rng,preset,data:{
    ending:Ending.create(playerCount,firstPlayer,options.endMode,undefined,Number(options.maxRounds||0)),pawns:Array.from({length:playerCount},()=>[options.startPawn==='on'?0:-1,-1,-1,-1]),diceCount,
    sixReroll:options.sixReroll!=='off',guaranteedExit:options.guaranteedExit!=='off',failed:Array(playerCount).fill(0),guarantee:false,
-   dice:Array(diceCount).fill(1),used:Array(diceCount).fill(true),rollIndices:Array.from({length:diceCount},(_,index)=>index),phase:'roll',die:null,lastRoll:null,last:null}};
+   dice:Array.from({length:diceCount},()=>ports.rollDie(6,preview)),used:Array(diceCount).fill(true),rollIndices:Array.from({length:diceCount},(_,index)=>index),phase:'roll',die:null,lastRoll:null,last:null}};
  }
  function validate(position){const d=position.data;
   return Number.isSafeInteger(position.rng)&&position.rng>=0&&position.rng<=4294967295&&

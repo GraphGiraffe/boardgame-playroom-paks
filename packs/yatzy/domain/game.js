@@ -8,8 +8,9 @@
   const event=(type,actor,params={})=>({type:'yatzy.'+type,actor,params,visibility:{kind:'public'}});
   function create({playerCount,firstPlayer,preset,rng,options={}}){
     if(preset!=='classic'||!Number.isSafeInteger(rng)||rng<0||rng>4294967295)throw Error('YATZY_OPTIONS_INVALID');
+    const preview={rng:(rng^0x9e3779b9)>>>0};
     return {playerCount,turn:firstPlayer,status:'playing',winners:[],rng,
-      data:{dice:[1,1,1,1,1],held:[false,false,false,false,false],rolls:0,
+      data:{dice:Array.from({length:5},()=>rollDie(6,preview)),held:[false,false,false,false,false],rolls:0,
         roundLimit:Number(options.maxRounds||15),roundStarts:[0],scores:Array.from({length:playerCount},()=>({})),round:0}};
   }
   function validate(position){
