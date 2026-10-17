@@ -40,6 +40,8 @@
  .snakes-adjust button{min-height:26px;min-width:28px;padding:2px 4px}
 }
 
+/* Board cells < links < player tokens; overlays never intercept cell input. */
+.snakes-links{z-index:3}.snakes-tokens{z-index:4}
 .snakes-cell[data-special]{isolation:isolate;z-index:1}.snakes-cell[data-special] .snakes-special{z-index:2}
 .snakes-hint{display:block;line-height:1.3;min-height:2.6em}
 .snakes-cell .board-route-dot{position:absolute;left:39%;top:39%;z-index:2}
