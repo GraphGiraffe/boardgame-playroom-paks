@@ -86,7 +86,7 @@
         next.status='finished';next.winners=[actor];events.push(event('won',actor));
       }else if(next.preset==='classic'||!hit)next.turn=opponent;
     }
-    return {position:next,events,turnEnded:position.data.phase==='battle'&&(next.turn!==actor||next.status==='finished')};
+    return {position:next,events,turnEnded:position.data.phase==='battle',roundEnded:position.data.phase==='battle'&&next.turn!==actor&&next.turn===d.starter};
   }
   function project(position,viewer){
     const d=clone(position.data),setup=d.phase==='setup',sizes=G.fleets[position.preset];
@@ -124,5 +124,5 @@
     return {winners:position.winners,places:values.map(value=>value?1:2),metrics:[{id:'wins',values},
       {id:'hits',values:position.data.shots.map(shots=>shots.filter(shot=>shot.hit).length)}]};
   }
-  return Object.freeze({contractVersion:1,id:'battleship',minPlayers:2,maxPlayers:2,preparing:position=>position.data.phase==='setup',create,validate,actions,reduce,project,bot,result});
+  return Object.freeze({contractVersion:1,id:'battleship',minPlayers:2,maxPlayers:2,rounds:true,preparing:position=>position.data.phase==='setup',create,validate,actions,reduce,project,bot,result});
 });
