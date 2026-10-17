@@ -21,7 +21,7 @@
   "styles": "styles.css",
   "name": "Змеи и лестницы",
   "engineApi": 3,
-  "stateVersion": 1,
+  "stateVersion": 2,
   "viewApi": 2,
   "tags": [
     "board",
@@ -46,6 +46,22 @@
     "end-policy"
   ],
   "settings": [
+    {
+      "key": "boardSize",
+      "label": "Размер поля",
+      "default": "64",
+      "help": "Размер поля не меняет выбранный режим.",
+      "options": [
+        {
+          "value": "64",
+          "label": "64 клетки"
+        },
+        {
+          "value": "100",
+          "label": "100 клеток"
+        }
+      ]
+    },
     {
       "key": "endMode",
       "label": "Завершение партии",

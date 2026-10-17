@@ -21,7 +21,7 @@
   const tableHead=`<tr><th scope="col">${text('table.category')}</th>${s.players.map((person,index)=>`<th scope="col" class="${index===selected?'selected-player':''}" data-score-player="${index}">${H.avatar(person,index)}</th>`).join('')}</tr>`,tableFoot=`<tr><th scope="row">${text('table.total')}</th>${cells(d.totals,'total')}</tr>`;
   const dice=d.dice.map((value,index)=>{
     const hold=actions.find(a=>a.type==='hold'&&a.index===index);
-    return C.die(d.rolls?value:null,`${!d.held[index]?'data-motion-lead="roll"':''} ${hold?H.actionAttr(hold):'disabled'} aria-pressed="${d.held[index]}" title="${H.esc(text(d.held[index]?'dice.release':'dice.hold'))}"`,d.held[index]?'held':'');
+    return C.die(value,`${!d.held[index]?'data-motion-lead="roll"':''} ${hold?H.actionAttr(hold):'disabled'} aria-pressed="${d.held[index]}" title="${H.esc(text(d.held[index]?'dice.release':'dice.hold'))}"`,d.held[index]?'held':'');
   }).join('');
   return {api:2,family:'board',fieldSizing:'scroll',actionReserve:true,className:'yatzy-scene',
     playerContent:H.playerContent(s,viewer,null,{}),elements:{

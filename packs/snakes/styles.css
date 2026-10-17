@@ -24,3 +24,21 @@
 
 /* A shared result remains readable while rolling is unavailable. */
 .snakes-scene .die:disabled{opacity:1;cursor:default}
+/* Public route choices and deferred effects share the same icon vocabulary. */
+.snakes-scene .snakes-cell{padding:0;border-radius:0;box-shadow:none;color:var(--color-text-primary);min-height:0}
+.snakes-special{position:absolute;right:5%;bottom:5%;width:56%;height:56%;display:block;color:#324f41;background:#fff9e7d9;border-radius:25%;z-index:1}
+.snakes-special svg{width:100%;height:100%;display:block}
+.snakes-cell.is-route:after{content:'';position:absolute;width:12%;height:12%;border-radius:50%;background:#355b48;left:44%;top:44%;z-index:2}
+.snakes-cell.is-destination{outline:2px solid #225e46;outline-offset:-2px;z-index:3;cursor:pointer}
+.snakes-destination{position:absolute;inset:20%;border-radius:50%;background:#245b46;color:#fff;display:grid;place-items:center;font-size:12px;z-index:3}
+.snakes-token.is-selected{filter:drop-shadow(0 0 2px #fff);outline:2px solid #fff;outline-offset:1px;border-radius:50%}
+.snakes-controls{width:100%;text-align:center}.snakes-hint{font-size:12px;color:var(--color-text-secondary)}
+.snakes-bottom{gap:18px;align-items:flex-start}.snakes-die-choice{display:flex;flex-direction:column;align-items:center;gap:6px}
+.snakes-adjust{display:flex;gap:4px}.snakes-adjust button{min-width:36px;min-height:32px;padding:3px 6px;font-size:14px}
+.snakes-adjust button{border:1px solid var(--color-border-subtle,#d3d6c7);border-radius:10px;background:var(--color-surface-raised,#fff9e7);color:var(--color-text-primary,#254735);font:inherit;font-size:13px;cursor:pointer}
+.snakes-adjust button:disabled{opacity:.45;cursor:default}
+@media(orientation:landscape) and (max-height:540px){
+ .snakes-bottom{min-height:0;padding:4px;gap:12px}.snakes-scene .die{width:44px;height:44px}
+ .snakes-hint{font-size:11px;line-height:1.2;display:block}.snakes-die-choice{gap:4px}
+ .snakes-adjust button{min-height:26px;min-width:28px;padding:2px 4px}
+}
