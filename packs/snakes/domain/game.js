@@ -23,7 +23,7 @@
   function destination(d,actor,dieIndex,delta=0){const distance=d.dice[dieIndex]+delta,from=d.positions[actor],landing=from+distance>d.finish?2*d.finish-from-distance:from+distance;return {distance,from,landing,to:d.links[landing]&&!(d.links[landing]<landing&&d.effects[actor].shield)?d.links[landing]:landing};}
   function actions(p,actor){
     if(p.status!=='playing'||actor!==p.turn)return [];
-    const commands=p.data.phase==='roll'?[{type:'roll'}]:p.data.dice.flatMap((die,dieIndex)=>(p.data.adjusting?[0,-1,1]:[0]).filter(delta=>die+delta>=1&&die+delta<=6).map(delta=>({type:'move',dieIndex,delta})));
+    const commands=p.data.phase==='roll'?[{type:'roll'}]:p.data.dice.flatMap((die,dieIndex)=>(p.data.adjusting?[-1,1]:[0]).filter(delta=>die+delta>=1&&die+delta<=6).map(delta=>({type:'move',dieIndex,delta})));
     return commands.map(command=>({command,visibility:'public'}));
   }
   function reduce(position,actor,command){
