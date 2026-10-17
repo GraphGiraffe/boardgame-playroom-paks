@@ -96,3 +96,5 @@
 .domino-drop-target .domino-preview{width:40px;height:calc(40px * 4 / 7);min-width:0;aspect-ratio:7/4}
 .domino-drop-target .domino-preview.double{width:24px;height:42px;aspect-ratio:4/7}
 @container(min-width:350px){.domino-chain-long .domino-node>.domino-tile:not(.double){height:auto;aspect-ratio:7/4}.domino-chain-long .domino-node>.domino-tile.double{width:30px;height:auto;aspect-ratio:4/7}.domino-chain-long .domino-node>.domino-tile:not(.double)>.piece-art,.domino-chain-long .domino-node .domino-preview:not(.double)>.piece-art{transform:rotate(var(--node-wide-rotation,0deg))}}
+
+.domino-tile.art-card,.domino-drop-target .domino-preview{box-shadow:none}.action-reveal-art.domino-scene{width:min(25vw,90px,22dvh)}.action-reveal-art.domino-scene>.domino-tile{aspect-ratio:4/7!important}

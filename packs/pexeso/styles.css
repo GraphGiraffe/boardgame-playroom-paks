@@ -7,3 +7,5 @@
 .pexeso-scene .pexeso-slot{aspect-ratio:5/7;position:relative}.pexeso-scene .pexeso-face{backface-visibility:hidden}.pexeso-scene .pexeso-grid{max-width:100%}
 
 .pexeso-scene .pexeso-character-card{padding:0;border:0;background:transparent;box-shadow:none;overflow:visible}.pexeso-scene .pexeso-character-card>svg{display:block;width:100%;height:100%}
+
+.pexeso-scene .pexeso-grid{height:100%;width:100%;grid-template-columns:repeat(var(--grid-columns,6),minmax(0,1fr));grid-template-rows:repeat(var(--grid-rows,6),minmax(0,1fr));gap:4px;padding:4px;align-items:center;justify-items:center}.pexeso-scene .pexeso-slot{width:min(100%,var(--grid-card-width,48px));height:auto}.pexeso-scene .pexeso-slot .shared-card{min-width:0!important;min-height:0!important}

@@ -27,8 +27,8 @@ body.reduced-motion .player-panel.is-turn-skipped,.reduced-motion .player-panel.
 /* Interaction shape is part of the component, independent of a game's rules. */
 [data-interaction-shape="circle"]{border-radius:50%!important}
 [data-interaction-shape="cell"]{border-radius:0!important}
-:is(.game-scene,.app-game-layout) :is(.is-playable,.is-selected){outline:var(--interaction-ring-width,3px) solid var(--ui-action-outline,var(--color-interaction-available,#638658))!important;outline-offset:2px}
-:is(.game-scene,.app-game-layout) .is-selected{outline-color:var(--color-interaction-selected,#d3aa45)!important;outline-offset:3px}
-[data-interaction-shape="circle"]{--interaction-ring-width:clamp(2px,.32em,4px)}
+:is(.game-scene,.app-game-layout) :is(.is-playable,.is-selected){outline:var(--interaction-ring-width,2px) solid var(--ui-action-outline,var(--color-interaction-available,#638658))!important;outline-offset:1px}
+:is(.game-scene,.app-game-layout) .is-selected{outline-color:var(--color-interaction-selected,#d3aa45)!important;outline-offset:1px}
+[data-interaction-shape="circle"]{--interaction-ring-width:2px}
 
 .action-reveal-content{position:absolute;left:var(--reveal-x,50%);top:var(--reveal-y,50%);transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:12px;max-width:calc(100vw - 24px)}
