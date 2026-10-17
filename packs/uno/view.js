@@ -19,7 +19,7 @@
     return `<button class="uno-card art-card ${cls}" style="--card-color:${colors[c.color]||colors.wild}" ${attrs} data-entity="card-${H.esc(c.id)}" data-tooltip="${H.esc(help(c))}" aria-label="${H.esc(name(c.color)+' '+value(c))}">${H.assetArt('card-face',{main,compact,width:72,height:103,variant},H.components.cardFace)}</button>`;
   }
   (globalThis.PlayroomCatalog ||= {}).uno ||= {};
-  globalThis.PlayroomCatalog.uno.playerBadge=(state,index)=>state.data.uno?.declared?.[index]?{label:'UNO!',tone:'success'}:'';
+  globalThis.PlayroomCatalog.uno.playerBadge=(state,index)=>state.data.uno?.declared?.[index]?{label:'UNO',tone:'success',position:'avatar-bottom'}:'';
   function render(s,viewer,actions,ui={}){
     const surface=ui.surface||'combined';
     actions=actions.map(action=>action.label?action:{...action,label:text(P.action(action,{actor:s.tableActor??viewer,data:s.data}))});
@@ -33,7 +33,7 @@
     const hint=!controls?`<span class="scene-hint">${viewer===s.turn?text('uno.view.touch-card'):text('uno.view.wait')}</span>`:'';
     const direction=s.players.length-(d.ending?.groups?.flat().length||0)>2?`<div class="uno-direction" data-direction="${d.direction}" role="img" aria-label="${H.esc(d.direction===-1?text('uno.view.counterclockwise'):text('uno.view.clockwise'))}"><svg viewBox="0 0 64 16" aria-hidden="true"><path d="M3 8H61M54 2L61 8L54 14"/></svg></div>`:'';
     const dock=H.actionGroups({start:call,primary:controls+hint,end:`<button class="uno-card-help" data-command="card-help" aria-label="${H.esc(text('uno.view.card-help'))}">${H.icon('help')}</button>`,exclusive:chosen.length>1});
-    return {api:2,family:'cards',className:'uno-scene surface-'+surface,playerContent:H.playerContent(s,viewer,(c,attrs,ctx)=>card(c,attrs,'',ctx?.variant),{badges:i=>d.uno?.declared?.[i]?[{label:'UNO!',tone:'success'}]:[]}),elements:{
+    return {api:2,family:'cards',className:'uno-scene surface-'+surface,playerContent:H.playerContent(s,viewer,(c,attrs,ctx)=>card(c,attrs,'',ctx?.variant),{badges:i=>d.uno?.declared?.[i]?[{label:'UNO',tone:'success',position:'avatar-bottom'}]:[]}),elements:{
       participants:'',
       field:`<div class="uno-play-area"><div class="uno-flow">${direction}<div class="uno-color-indicator" aria-label="${H.esc(text('uno.view.active-color',{color:name(d.color)}))}"><i style="background:${colors[d.color]||colors.wild}"></i>${H.esc(name(d.color))}</div></div><div class="uno-center"><button class="stock-button" ${draw?H.actionAttr(draw):'disabled'} aria-label="${H.esc(text('uno.view.draw'))}" data-tooltip="${H.esc(text('uno.view.stock-help'))}">${H.back()}${H.countBadge(d.drawPile.length,text('uno.view.stock-count'),{corner:true})}<small>${H.esc(text('uno.view.stock-caption'))}</small></button><div class="uno-discard" data-motion-table data-tooltip="${H.esc(text('uno.view.discard-help'))}">${top?card(top):''}${drop}<small>${H.esc(text('uno.view.discard-caption',{count:d.discard.length}))}</small></div></div></div>`,
       actions:dock,
