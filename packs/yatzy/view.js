@@ -26,7 +26,7 @@
   return {api:2,family:'board',fieldSizing:'scroll',actionReserve:true,className:'yatzy-scene',
     playerContent:H.playerContent(s,viewer,null,{}),elements:{
       field:`<div class="yatzy-board" data-scene-scroll>${C.scoreTable({className:'yatzy-score',attributes:`style="--players:${s.players.length}"`,head:tableHead,body:rows,foot:tableFoot})}</div>`,
-      actions:`<div class="yatzy-controls"><div class="yatzy-dice">${dice}</div><span class="yatzy-dice-help">${d.rolls>0&&d.rolls<3?text('dice.help'):''}</span><button class="scene-button yatzy-roll" ${roll?H.actionAttr(roll):'disabled'}>${text(d.rolls?'dice.reroll':'dice.roll')} · ${d.rolls}/3</button></div>`
+      actions:`<div class="yatzy-controls"><div class="yatzy-dice">${dice}</div><button class="scene-button yatzy-roll" ${roll?H.actionAttr(roll):'disabled'}>${text(d.rolls?'dice.reroll':'dice.roll')} · ${d.rolls}/3</button></div>`
     }};
  }
  V.register('yatzy',render,()=>C.cover(`<g transform="translate(40 20) rotate(115 40 38)">

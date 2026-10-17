@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["ludo"] = {
   "id": "ludo",
-  "version": "0.2.0-rc.6",
+  "version": "0.2.0-rc.7",
   "name": "Лудо",
   "category": "board",
   "estimatedDuration": "20–40 мин",

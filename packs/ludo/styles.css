@@ -7,13 +7,7 @@
 .ludo-scene .ludo-safe{color:var(--color-material-route-star,#376746);background:var(--color-material-route-safe,#d8e6ca)}
 .ludo-scene .ludo-safe-star{display:block;width:100%;height:100%;color:var(--color-material-route-star,#376746);pointer-events:none}
 .ludo-scene .ludo-start-arrow{display:block;width:80%;height:80%;color:#fffbea;filter:drop-shadow(0 1px 1px #29422f88);pointer-events:none}
-.ludo-scene .ludo-target{cursor:pointer;z-index:1;outline:2px solid var(--target-edge);outline-offset:-3px;background:var(--target-fill)!important}
-.ludo-scene .target-move{--target-fill:#f4d96c;--target-edge:#96720b}
-.ludo-scene .target-capture{--target-fill:#ee9a87;--target-edge:#ad392c}
-.ludo-scene .target-home{--target-fill:#98d09a;--target-edge:#2c743f}
-.ludo-scene .ludo-route-dot{display:block;width:22%;aspect-ratio:1;border-radius:50%;background:#334d3c;box-shadow:0 0 0 1px var(--color-material-route-base,#fff9e7);pointer-events:none}
 .ludo-scene .ludo-cell[data-motion-anchor^="finish-"]:not(.ludo-target){visibility:hidden}
-.ludo-scene .ludo-target:focus-visible{outline:3px solid #172f25;outline-offset:0}
 .ludo-scene .ludo-pawn:focus-visible{outline:0;box-shadow:0 0 0 3px #172f25}
 .ludo-scene .shared-die.used{opacity:.4;filter:grayscale(1)}
 .ludo-scene .shared-die.is-playable{outline:3px solid #c4a344;outline-offset:2px}
