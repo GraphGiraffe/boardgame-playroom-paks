@@ -12,7 +12,7 @@
       d.hands[player]=d.hands[player].filter(card=>!ids.has(card.id));
       // Preserve canonical deck ordering of public pairs.
       d.discard.push(...deck(d.deckSize).filter(card=>ids.has(card.id)));
-      if(events)events.push(fact('paired',player));
+      if(events)events.push(fact('paired',player,{cards:d.discard.slice(-2)}));
     }
   }
   function nextPlayer(data,from){for(let step=1;step<=data.hands.length;step++){const player=(from+step)%data.hands.length;if(data.hands[player].length)return player;}return from;}
