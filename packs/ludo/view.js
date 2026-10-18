@@ -6,6 +6,7 @@
  const text=(key,params={})=>translator.format({key:'ludo.'+key,params});
  const {route,base,lane,location,anchor,sequence}=P;
  const render=(s,viewer,actions,ui={})=>{
+  const rollEvent=s.events?.findLast(event=>event.kind==='roll'),rollPlayer=ui.presentationTurn??s.turn;
   const d=s.data,roll=actions.find(a=>a.type==='roll'),moves=actions.filter(a=>a.type==='move'),selected=ui.viewState?.pawn;
   const occupants=new Map();
   d.pawns.forEach((row,p)=>row.forEach((n,j)=>{if(n<0)return;const key=anchor(p,j,n);if(!occupants.has(key))occupants.set(key,[]);occupants.get(key).push(`${p}:${j}`);}));
@@ -31,12 +32,15 @@
   const pawns=d.pawns.flatMap((row,p)=>row.map((n,j)=>{
    const [x,y]=location(p,j,n),key=`${p}:${j}`,playable=moves.some(a=>a.owner===p&&a.pawn===j),active=selected===key&&moves.length>0,group=n===57?[key]:occupants.get(anchor(p,j,n))||[key],index=group.indexOf(key),offset=H.tokenLayout.cell(index,group.length),offsetX=offset.x,offsetY=offset.y,size=n===57?3.8:group.length<=1?5.4:group.length<=4?4.7:group.length<=9?2.85:2.1;
    const exit=moves.find(a=>a.owner===p&&a.pawn===j&&n<0),destination=targets.get(anchor(p,j,n));
-   const control=destination?H.actionAttr(destination.a):exit?H.actionAttr(exit):playable?`data-view-key="pawn" data-view-value="${key}"`:'disabled';
+   const team=s.scene?.players?.find(player=>player.player===p)?.teamId,actorTeam=s.scene?.players?.find(player=>player.player===s.turn)?.teamId;
+   const friendly=p===s.turn||team!=null&&team===actorTeam;
+   // A friendly pawn remains a selection target even on a highlighted cell.
+   const control=exit?H.actionAttr(exit):playable?`data-view-key="pawn" data-view-value="${key}"`:destination&&!friendly?H.actionAttr(destination.a):'disabled';
    return `<button class="ludo-pawn ${n===57?'is-finished':''} ${group.length>1?'is-stacked':''} ${group.length>9?'is-tiny':''} ${playable?'is-playable':''} ${active?'is-selected':''}" data-interaction-shape="circle" data-entity="token-${p}-${j}" ${control} aria-pressed="${!!active}" style="--pawn:${colors[p]};--pawn-size:${size}%;left:${(x+.5+offsetX)/15*100}%;top:${(y+.5+offsetY)/15*100}%" aria-label="${H.esc(text('view.pawn',{player:s.players[p].name,pawn:j+1,location:n<0?text('view.base'):n===57?text('location.home'):n}))}">${globalThis.PlayroomShared.roundTokenArt({value:j+1})}</button>`;
   })).join('');
   return {api:2,family:'board',layout:{focus:'field',seats:['north-west','north-east','south-east','south-west'].slice(0,s.players.length),duplicateSelf:true},fieldAspect:1,actionReserve:true,className:'ludo-scene',motionSequence:sequence(d.last),playerContent:H.playerContent(s,viewer,null,{scoreLabel:text('meta.wins')}),elements:{field:`<div class="ludo-board">${base.map(([x,y],p)=>`<div class="ludo-base" style="grid-column:${x+1}/span 6;grid-row:${y+1}/span 6;--base:${colors[p]}"><div>${Array.from({length:4},(_,j)=>`<span data-motion-anchor="base-${p}-${j}"></span>`).join('')}</div></div>`).join('')}${cells}<div class="ludo-center"><svg viewBox="0 0 90 90" aria-hidden="true">${['M0 0 45 45 0 90Z','M0 0 90 0 45 45Z','M90 0 90 90 45 45Z','M0 90 45 45 90 90Z'].map((path,p)=>`<path d="${path}" fill="${colors[p]}"/>`).join('')}</svg></div>${finishes}${pawns}</div>`,actions:`<div class="shared-action-row">${d.dice.map((n,i)=>{
-   const canRoll=roll&&d.rollIndices.includes(i);
-   return C.die(n,`data-motion-lead="${d.lastRolled?.includes(i)?'roll':''}" ${canRoll?H.actionAttr(roll):'disabled'}`,canRoll?'is-playable':d.used[i]?'used':'');
+   const canRoll=roll&&d.rollIndices.includes(i),move=moves.find(a=>a.dieIndex===i&&`${a.owner}:${a.pawn}`===selected),command=canRoll?roll:move;
+   return C.die(n,`data-motion-lead="${rollEvent?.player===rollPlayer&&d.lastRolled?.includes(i)?'roll':''}" ${command?H.actionAttr(command):'disabled'}`,command?'is-playable':d.used[i]?'used':'');
   }).join('')}</div>`}};
  };
  V.register('ludo',render,()=>C.cover(`<g transform="translate(76 13) rotate(-7 76 76)"><rect x="2" y="5" width="150" height="150" rx="12" fill="#b6af8f"/><rect width="150" height="150" rx="12" fill="#fff8e7"/>${base.map(([x,y],p)=>`<rect x="${x*10+5}" y="${y*10+5}" width="50" height="50" rx="8" fill="${colors[p]}"/><circle cx="${x*10+30}" cy="${y*10+30}" r="14" fill="#fffae5"/>`).join('')}<path d="M60 0v150M90 0v150M0 60h150M0 90h150" stroke="#d3c6a5" stroke-width="2"/><circle cx="75" cy="75" r="12" fill="#ceaa52"/></g>`),{surfaces:{table:(s,v,a,ui)=>{const scene=render(s,v,a,ui);scene.elements.status=scene.elements.actions;scene.elements.actions='';return scene;},player:render}});
