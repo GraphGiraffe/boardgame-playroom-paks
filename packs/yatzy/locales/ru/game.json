@@ -12,6 +12,7 @@
   "yatzy.actions.reroll": "Перебросить свободные",
   "yatzy.actions.hold": "Придержать кубик {die}",
   "yatzy.actions.score": "{category} · {points}",
+  "yatzy.actions.confirm-score": "Записать «{category}»: {points} очков? Это завершит ход.",
   "yatzy.events.rolled": "{player} бросил кубики ({rolls}/3)",
   "yatzy.events.scored": "{player}: {category} · {points}",
   "yatzy.events.bonus": "{player}: бонус {points}",
