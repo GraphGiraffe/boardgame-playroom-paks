@@ -226,6 +226,7 @@ def build_pack(pack, shared=None):
                 raise ValueError(f"Некорректное имя общего ресурса: {name}")
             files[f"assets/shared/{name}"] = local_file(shared, f"assets/{name}").read_text(encoding="utf-8")
     asset_scripts = []
+    asset_styles = []
     included = {}
     visiting = set()
     def include_asset_pack(name, version=None):
@@ -256,6 +257,8 @@ def build_pack(pack, shared=None):
             files["assets/shared-packs/" + name + "/" + filename] = data.decode("utf-8") if path.suffix in TEXT_EXTENSIONS else "data:" + (mimetypes.guess_type(path.name)[0] or "application/octet-stream") + ";base64," + base64.b64encode(data).decode("ascii")
         for script in spec.get("scripts", []):
             asset_scripts.append(local_file(root, script).read_text(encoding="utf-8"))
+        for style in spec.get("styles", []):
+            asset_styles.append(local_file(root, style).read_text(encoding="utf-8"))
     for asset_pack in manifest.get("sharedAssetPacks", []):
         include_asset_pack(asset_pack)
     if "sourceModules" in manifest:
@@ -263,4 +266,6 @@ def build_pack(pack, shared=None):
         bundle_source_modules(files, source, lambda path: local_file(pack, path).read_text(encoding="utf-8"))
     if asset_scripts:
         files["view.js"] = "\n".join([*asset_scripts, files["view.js"]])
+    if asset_styles:
+        files["styles.css"] = "\n".join([*asset_styles, files["styles.css"]])
     return validate_bundle({"format": "playroom-pack", "formatVersion": 1, "manifest": manifest, "files": files}, pack.name)
