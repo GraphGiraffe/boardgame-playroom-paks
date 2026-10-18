@@ -116,6 +116,8 @@ def publish(args):
                 prior = None
         else:
             pointer, prior = current(args.bucket, folder, args.bootstrap, prefix)
+            if pointer is not None:
+                print("Previous catalog snapshot:", json.loads(pointer)["sha256"], flush=True)
         entries = {item["id"]: item for item in prior.get("packs", [])} if prior else {}
         for ident, (path, manifest, sha) in assets.items():
             version = manifest["version"]

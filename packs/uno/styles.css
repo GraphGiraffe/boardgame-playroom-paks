@@ -143,6 +143,6 @@
 .uno-color-picker{flex-wrap:wrap;max-width:100%;justify-content:center}
 .uno-color-picker{gap:2px}
 /* A pending colour choice occupies the existing action row at every size. */
-.uno-scene .uno-color-picker{display:grid;grid-template-columns:repeat(4,44px);gap:2px;max-width:100%;flex-wrap:nowrap}
+.uno-scene .uno-color-picker{display:grid;grid-template-columns:repeat(4,44px);gap:2px;max-width:100%;flex-wrap:nowrap;justify-content:end}
 .uno-scene .uno-color-picker .color-choice{width:44px;min-width:44px;height:44px;padding:8px;gap:0;font-size:0}
 .uno-scene .uno-color-picker .color-choice i{width:22px;height:22px;flex-shrink:0}

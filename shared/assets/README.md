@@ -40,7 +40,7 @@
 
 Звуки берутся из `shared/sounds/standard-sounds.json`. Shared-assets ZIP включает assets, components, templates, sounds. Host закрепляет JS/CSS/catalog/sounds по SHA256/provenance. Dark/custom меняют локальные CSS material slots/variants; размеры, seed, allowed actions и история не меняются. Специальный рецепт лица карты остаётся в Web своего пака, независимо от правил.
 
-## Представление RC2: геометрия, темы и эффекты
+## Представление: геометрия, темы и эффекты
 
 - Размер RoundToken задаётся относительно клетки или компонента; группа не увеличивает одиночную фишку. SVG face/rim/side/mark масштабируются вместе.
 - `data-interaction-shape="circle"` для фишек, `cell` для клеток. Рамки доступности/выбора рисует общий UI; отдельные угловые точки доступности не добавляются.

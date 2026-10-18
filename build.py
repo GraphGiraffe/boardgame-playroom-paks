@@ -35,7 +35,7 @@ MAX_PACK_FILES = _compiler['MAX_PACK_FILES']
 TEXT_EXTENSIONS = _compiler['TEXT_EXTENSIONS']
 ENTRY_POINTS = _compiler['ENTRY_POINTS']
 SEMVER = _compiler['SEMVER']
-VERSION = "0.7.0-rc.19"
+VERSION = "0.7.0"
 
 
 
@@ -88,10 +88,10 @@ def source_files(packs):
     for name in ("README.md", ".gitignore", ".gitattributes", ".nvmrc", "AGENTS.md", "CONTRIBUTING.md", "CHANGELOG.md"):
         if (ROOT / name).is_file():
             result.add(ROOT / name)
-    for pattern in ("docs/*.md", "scripts/codex/*.sh", ".github/workflows/*.yml", ".github/workflows/*.yaml", "tests/*.cjs"):
+    for pattern in ("docs/**/*.md", "docs/design/**/*.jpg", "docs/design/**/*.png", "scripts/*.py", "scripts/codex/*.sh", ".github/workflows/*.yml", ".github/workflows/*.yaml", "tests/*.cjs"):
         result.update(ROOT.glob(pattern))
     # Ship runnable authoring examples in the source archive without adding
-    # them to the five-game installable collection.
+    # them to the installable game collection.
     result.update(path for path in (ROOT / "examples").rglob("*") if path.is_file())
     result.update(path for path in (ROOT / "shared").rglob("*") if path.is_file() and "__pycache__" not in path.parts)
     for pack in packs:
