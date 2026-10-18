@@ -68,3 +68,7 @@ view возвращает elements API 2 для combined/player/table; CSS ог�
 `shared/asset-packs/<id>/manifest.json` имеет `format: playroom-asset-pack`, `formatVersion: 1`, точные `id/version`, `files` и необязательные `scripts/dependencies`. Зависимость — `{id,version}`; версии и циклы проверяет compiler. Manifest игры объявляет `sharedAssetPacks: ["cartoon-deck"]`; ресурсы доступны через `PlayroomPack.asset("assets/shared-packs/characters/runtime/circle-red.webp")`. Скрипты подключаются перед view. Compiler включает транзитивные ресурсы в immutable JSON; независимые ZIP собираются с SHA256SUMS. Это контракт сборки; интерфейс импорта произвольных asset ZIP отдельно пока не реализован.
 
 `characters@0.1.0` содержит 48 канонических PNG 512×512 с alpha и runtime WebP 256×256; `cartoon-deck@0.1.0` зависит от него, задаёт 48 лиц с белой основой 5:7 и renderer. Пара Пексесо — идентичные персонаж и цвет. Простые геометрические карточки исключены по решению владельца.
+
+### Стили переиспользуемого asset-пака
+
+Манифест playroom-asset-pack может объявлять `styles: ["styles.css"]` наряду с `scripts`. Builder встраивает эти стили в styles.css игры, в порядке зависимостей, до собственных стилей; файл также перечисляется в files и входит в отдельный ZIP набора. Самостоятельный образец — shared/asset-packs/mini-cards. Старые наборы без styles компилируются как прежде.

@@ -1,0 +1,5 @@
+/* Rank-only cards: the same 5:7 face, rim and side material as hand cards. */
+.mini-card{display:block;position:relative;width:24px;aspect-ratio:5/7;flex:none;border-radius:3px;color:var(--color-material-card-ink,#264e43);box-shadow:0 1px 0 var(--color-material-card-side,#aebcae),0 2px 1px rgb(0 0 0 / .16);transform:translateY(-1px)}
+.mini-card .shared-card-corner{display:block;top:5px;left:5px;text-align:left;font:800 42px/1 var(--font-ui,system-ui),sans-serif}
+.mini-card .shared-card-corner.bottom,.mini-card .shared-card-corner small,.mini-card .shared-face>strong{display:none}
+.mini-card[data-rank="10"] .shared-card-corner{left:2px}
