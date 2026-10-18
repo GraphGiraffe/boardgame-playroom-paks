@@ -102,3 +102,6 @@
 /* Plain two-tone tile backs retain the domino silhouette in either theme. */
 .domino-scene .domino-back{box-sizing:border-box;display:block;position:relative;aspect-ratio:4/7;padding:2px;border:1px solid var(--color-material-domino-ink,#365f4c);border-radius:14%;background:var(--color-material-domino-face,#fffcf2);box-shadow:0 2px 0 var(--color-material-domino-side,#c4c7b3);overflow:hidden}
 .domino-scene .domino-back-surface{display:block;width:100%;height:100%;border-radius:11%;background:color-mix(in srgb,var(--color-material-domino-ink,#365f4c) 80%,var(--color-material-domino-face,#fffcf2));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--color-material-domino-face,#fffcf2) 35%,transparent)}
+
+/* Keep tile and target sizes readable; long chains scroll inside the fixed field. */
+.domino-scene .domino-board{box-sizing:border-box;min-height:100%;height:auto;justify-content:flex-start}

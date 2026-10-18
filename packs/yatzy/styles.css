@@ -2,8 +2,6 @@
 .yatzy-scene .yatzy-dice-help{flex:1 0 100%;text-align:center;font:600 11px/1.25 system-ui;color:var(--color-text-secondary,#586f5d)}
 .yatzy-scene .yatzy-controls{display:grid;grid-template-rows:48px 44px;gap:4px;min-height:96px;align-content:center;justify-items:center}.yatzy-scene .yatzy-controls .yatzy-dice{width:100%;min-width:0;align-items:center}.yatzy-scene .yatzy-controls .yatzy-dice .shared-die{width:min(38px,calc((100% - 28px)/5))}.yatzy-scene .yatzy-controls .yatzy-roll{width:min(100%,240px);height:44px}.yatzy-scene .yatzy-controls .yatzy-dice-help{align-self:center;min-height:0;max-height:30px;overflow:hidden;font-size:10px;line-height:15px}
 
-/* Fit the complete score sheet to its reserved field, including history. */
-.yatzy-scene .yatzy-score{height:100%;font-size:clamp(8px,2.3cqh,12px);line-height:1}
-.yatzy-scene .yatzy-score th,.yatzy-scene .yatzy-score td{height:auto;padding:0 2px}
-.yatzy-scene .yatzy-score button{height:100%;max-height:30px;min-height:0;padding:0;font-size:inherit;line-height:1}
-.yatzy-scene .yatzy-score .avatar{width:clamp(12px,4cqh,26px);height:clamp(12px,4cqh,26px);font-size:10px}
+
+/* Stable readable rows; the reserved field scrolls instead of compressing the sheet. */
+.yatzy-scene .yatzy-score{height:auto}
