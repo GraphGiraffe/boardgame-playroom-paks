@@ -3,7 +3,7 @@
 })(globalThis,function(ports){
   'use strict';const {rollDie}=ports,Ending=ports.ending;
   const routes={quick:{3:15,8:26,20:34,31:49,43:58,22:7,39:18,52:36,61:45},classic:{3:22,8:30,20:41,28:55,50:67,71:92,17:4,39:19,54:31,62:43,87:64,96:75}};
-  const cells={64:{6:'extra',11:'skip',13:'adjust',17:'second',24:'shield',29:'less',32:'adjust',41:'second',47:'skip',50:'shield',55:'extra'},100:{6:'extra',12:'skip',14:'adjust',25:'second',33:'shield',46:'less',48:'adjust',69:'extra',73:'second',78:'skip',82:'shield'}};
+  const cells={64:{11:'skip',13:'adjust',17:'second',24:'shield',29:'less',32:'adjust',41:'second',47:'skip',50:'shield'},100:{12:'skip',14:'adjust',25:'second',33:'shield',46:'less',48:'adjust',73:'second',78:'skip',82:'shield'}};
   const face=n=>Number.isInteger(n)&&n>=1&&n<=6;
   function create({playerCount,firstPlayer,preset='plus',rng,options={}}){
     if(!['plus','classic','quick'].includes(preset))throw Error('SNAKES_PRESET_INVALID');
@@ -30,7 +30,7 @@
     const next=JSON.parse(JSON.stringify(position)),d=next.data,plus=next.preset==='plus',events=[],e=d.effects[actor];
     const fact=(type,params={},owner=actor)=>events.push({type:'snakes.'+type,actor:owner,params,visibility:{kind:'public'}});
     const protect=kind=>{if(!e.shield)return false;e.shield=false;fact('protected',{effect:kind});return true;};
-    let extra=false;
+    const extra=plus&&command.type==='move'&&d.dice.length===2&&d.dice[0]===d.dice[1];
     function travel(roll,automatic=false){
       const from=d.positions[actor];let landing=from+roll;if(landing>d.finish)landing=2*d.finish-landing;
       let to=d.links[landing]||landing;if(to<landing&&protect('snake'))to=landing;
@@ -40,7 +40,6 @@
       const special=d.special[to];
       if(['skip','less'].includes(special)){if(!protect(special)){e[special]=true;fact('effect',{effect:special});}}
       else if(special==='adjust'||special==='shield'){e[special]=true;fact('effect',{effect:special});}
-      else if(special==='extra'){extra=true;fact('extra');}
       if(special==='second'&&!automatic&&d.dice.length===2){fact('second');travel(d.dice[1-command.dieIndex],true);}
     }
     if(command.type==='roll'){
@@ -52,7 +51,7 @@
       d.dice=rollDie(6,next);travel(d.dice);
     }else{travel(d.dice[command.dieIndex]+command.delta);d.adjusting=false;}
     d.phase='roll';
-    if(extra&&!Ending.done(d.ending,actor))return {position:next,events,turnEnded:true};
+    if(extra&&!Ending.done(d.ending,actor)){fact('extra',{reason:'double'});return {position:next,events,turnEnded:true};}
     const revision=(next.revision??0)+1;let from=actor,turn;
     // Skipped seats consume their effect without an input action. Empty circles
     // are coalesced into the same revision, preserving strictly ordered history.
@@ -67,7 +66,7 @@
     return {position:next,events,turnEnded:true};
   }
   const project=p=>JSON.parse(JSON.stringify(p.data));
-  function bot(p,actor,legal){if(p.data.phase!=='move')return legal[0];return legal.reduce((best,a)=>{const score=c=>{const v=destination(p.data,actor,c.dieIndex,c.delta),kind=p.data.special[v.to];return v.to+({skip:-7,less:-3,second:4,extra:5,shield:3,adjust:2}[kind]||0);};return score(a)>score(best)?a:best;},legal[0]);}
+  function bot(p,actor,legal){if(p.data.phase!=='move')return legal[0];return legal.reduce((best,a)=>{const score=c=>{const v=destination(p.data,actor,c.dieIndex,c.delta),kind=p.data.special[v.to];return v.to+({skip:-7,less:-3,second:4,shield:3,adjust:2}[kind]||0);};return score(a)>score(best)?a:best;},legal[0]);}
   function result(p){const values=p.data.positions;return {winners:p.winners,places:Ending.places(p.data.ending,values),metrics:[{id:'position',values}]};}
   return Object.freeze({contractVersion:1,id:'snakes',minPlayers:2,maxPlayers:6,create,validate,actions,reduce,project,result,bot});
 });
