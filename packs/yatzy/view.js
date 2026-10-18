@@ -14,7 +14,7 @@
   const cells=(values,kind)=>values.map((value,player)=>`<td class="${player===selected?'selected-player':''}" data-score-player="${player}"${kind?` data-score-total="${kind}"`:''}>${value}</td>`).join('');
   const rows=table.rows.map((row,index)=>{
     const values=row.cells.map(cell=>cell.value!==null?cell.value:cell.command?
-      `<button ${H.actionAttr(cell.command)} aria-label="${H.esc(actionLabel(cell.command))}">${H.esc(cell.preview)}</button>`:'—');
+      `<button ${H.actionAttr(actions.find(action=>Object.keys(cell.command).every(key=>cell.command[key]===action[key])))} aria-label="${H.esc(actionLabel(cell.command))}">${H.esc(cell.preview)}</button>`:'—');
     const summary=index===5?`<tr class="yatzy-summary"><th scope="row">${text('table.upper')}</th>${cells(d.upper,'upper')}</tr><tr class="yatzy-summary"><th scope="row">${text('table.bonus')}</th>${cells(d.bonuses,'bonus')}</tr>`:'';
     return `<tr><th scope="row">${H.esc(translator.format(row.label))}</th>${cells(values)}</tr>${summary}`;
   }).join('');

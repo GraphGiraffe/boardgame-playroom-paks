@@ -21,6 +21,7 @@
     if(value.type==='yatzy.finished')return {message:message('events.finished',{top:p.top}),finish:true};
     throw Error('YATZY_EVENT_UNKNOWN');
   }
+  const choice=(command,projection)=>command.type==='score'?{confirmation:message('actions.confirm-score',{category:message('category.'+command.key),points:projection.data.previews[command.key]})}:{};
   const metric=id=>message(id==='points'?'meta.points':'meta.wins');
   function scene(projection){
     const d=projection.data;
@@ -30,5 +31,5 @@
           command:player===projection.turn?projection.actions.find(a=>a.type==='score'&&a.key===key)||null:null}))})),
       players:d.totals.map((value,player)=>({id:player,metrics:[{id:'points',kind:'points',value,format:'integer',label:metric('points'),resultUsage:true},{id:'wins',kind:'wins',value:projection.winners.includes(player)?1:0,label:metadata.scoreLabel,resultUsage:false}]}))};
   }
-  return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}),action,event,metric,scene});
+  return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}),action,choice,event,metric,scene});
 });
