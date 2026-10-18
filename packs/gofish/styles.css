@@ -1,8 +1,8 @@
-.gofish-scene .gofish-board{display:grid;grid-template-columns:clamp(86px,25cqw,150px) minmax(0,1fr);align-items:center;align-content:safe center;gap:12px;height:100%;min-height:0;overflow:auto;width:100%;padding:8px;box-sizing:border-box}
+.gofish-scene .gofish-board{display:grid;grid-template-columns:clamp(60px,18cqw,90px) minmax(0,1fr);align-items:center;align-content:safe center;gap:12px;height:100%;min-height:0;overflow:auto;width:100%;padding:8px;box-sizing:border-box}
 .gofish-scene .gofish-stock{position:relative;min-width:0}.gofish-scene .gofish-stock>.shared-card{width:100%;height:auto;aspect-ratio:5/7;min-width:0}
-.gofish-scene .gofish-books{display:grid;grid-template-columns:repeat(var(--book-columns),minmax(0,1fr));align-items:start;gap:12px;min-width:0}
-.gofish-scene .gofish-book-column{width:100%;table-layout:fixed;border-collapse:collapse}.gofish-scene .gofish-book-row :is(th,td){padding:3px 0;vertical-align:middle;border-bottom:1px solid var(--color-border-subtle,#d8dacd)}.gofish-scene .gofish-book-row th{width:36px;padding-right:6px}.gofish-scene .gofish-book-row:last-child :is(th,td){border-bottom:0}
-.gofish-scene .gofish-owner .avatar{display:block;width:30px;height:30px;min-width:0}
-.gofish-scene .gofish-book-cards{display:flex;gap:4px;min-width:0;height:48px;align-items:center;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}
-.gofish-scene .gofish-book{display:block;width:34px;aspect-ratio:5/7;flex:none;color:var(--color-material-card-ink,#264e43)}
+.gofish-scene .gofish-books{min-width:0}
+.gofish-scene .gofish-book-table{display:block;width:100%;border-collapse:collapse}.gofish-scene .gofish-book-table tbody{display:grid;grid-auto-flow:column;grid-template-columns:repeat(var(--score-columns,1),minmax(0,1fr));grid-template-rows:repeat(var(--score-rows,6),max-content);column-gap:12px}.gofish-scene .gofish-book-row{display:grid;grid-template-columns:36px minmax(0,1fr)}.gofish-scene .gofish-book-row :is(th,td){padding:3px 0;vertical-align:middle;border-bottom:1px solid var(--color-border-subtle,#d8dacd)}.gofish-scene .gofish-book-row th{display:grid;place-items:center;padding-right:6px}.gofish-scene .gofish-book-row:last-child :is(th,td){border-bottom:0}
+.gofish-scene .gofish-owner .avatar{display:grid;place-items:center;width:30px;height:30px;min-width:0}
+.gofish-scene .gofish-book-cards{display:flex;gap:4px;min-width:0;height:40px;align-items:center;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}
+.gofish-scene .gofish-book{display:block;width:28px;aspect-ratio:5/7;flex:none;color:var(--color-material-card-ink,#264e43)}
 .gofish-scene .gofish-book .shared-card-corner{display:none}.gofish-scene .gofish-book .shared-face{font-size:48px;font-family:var(--font-ui,system-ui),sans-serif}
