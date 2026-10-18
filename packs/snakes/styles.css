@@ -48,3 +48,8 @@
 
 .snakes-controls>.snakes-adjust{justify-content:center;min-height:44px}
 .snakes-adjust button[aria-pressed="true"]{background:var(--color-action-primary,#365f4a);color:var(--color-action-on-primary,#fff);outline:2px solid var(--color-action-primary,#365f4a);outline-offset:1px}
+
+/* Reserve both dice and the optional adjustment in one stable control row. */
+.snakes-controls{display:flex;align-items:center;justify-content:center;gap:6px}
+.snakes-controls>.snakes-bottom{width:auto;flex:0 1 auto}
+.snakes-controls>.snakes-adjust{flex:none}
