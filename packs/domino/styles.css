@@ -1,16 +1,16 @@
-.game-tile[data-game=domino]{background:#e8e4d9}
-.domino-board{flex:1;min-height:128px;display:flex;flex-direction:column;justify-content:center;position:relative;min-width:0;border:1px dashed #bfccad;border-radius:24px;background:#e9eddd;margin:3px 0;padding:15px 7px 9px}
+
+.domino-board{flex:1;min-height:128px;display:flex;flex-direction:column;justify-content:center;position:relative;min-width:0;border:1px dashed var(--color-border-subtle,#bfccad);border-radius:24px;background:color-mix(in srgb,var(--color-surface-raised,#e9eddd) 78%,transparent);margin:3px 0;padding:15px 7px 9px}
 .domino-play-row{width:100%;min-width:0}
 .domino-chain{--domino-row-height:62px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(var(--domino-rows),var(--domino-row-height));position:relative;width:100%;max-width:440px;margin:0 auto;min-width:0;overflow:visible}
 .domino-chain>.domino-connections{position:absolute;inset:0;width:100%;height:100%;overflow:hidden;pointer-events:none}
 .domino-connections path{fill:none;stroke:#aec099;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
 .domino-node{position:relative;z-index:1;min-width:0;display:flex;align-items:center;justify-content:center}
-.domino-tile{height:98px;width:56px;min-width:56px;background:#fffcf0;border:1px solid #e5deca;box-shadow:0 4px 0 #c4c7b3;border-radius:8px;padding:7px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;cursor:pointer;box-sizing:border-box}
+.domino-tile{height:98px;width:56px;min-width:56px;background:#fffcf0;border:1px solid #e5deca;box-shadow:0 4px 0 var(--color-material-domino-side,#c4c7b3);border-radius:8px;padding:7px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;cursor:pointer;box-sizing:border-box}
 .domino-half{width:33px;height:33px;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:3px;flex-shrink:0}
 .domino-half i{border-radius:50%;background:none;width:100%;height:100%;min-width:0;min-height:0}
-.domino-half .pip{background:#365f4c}
-.domino-divider{height:1px;background:#dedcca;width:100%;display:block;flex-shrink:0}
-.domino-node>.domino-tile{width:calc(100% - 10px);max-width:68px;min-width:0;height:36px;flex-direction:row;padding:4px;pointer-events:none;gap:3px;box-shadow:0 3px 0 #c4c7b3}
+.domino-half .pip{background:var(--color-material-domino-ink,#365f4c)}
+.domino-divider{height:1px;background:var(--color-material-domino-divider,#dedcca);width:100%;display:block;flex-shrink:0}
+.domino-node>.domino-tile{width:calc(100% - 10px);max-width:68px;min-width:0;height:36px;flex-direction:row;padding:4px;pointer-events:none;gap:3px;box-shadow:0 3px 0 var(--color-material-domino-side,#c4c7b3)}
 .domino-node>.domino-tile .domino-half{width:calc((100% - 7px)/2);height:auto;aspect-ratio:1;max-width:26px;gap:2px}
 .domino-node>.domino-tile .domino-divider{height:100%;width:1px}
 .domino-node>.domino-tile.double{width:32px;height:54px;flex-direction:column;gap:2px}
@@ -18,12 +18,12 @@
 .domino-node>.domino-tile.double .domino-divider{height:1px;width:100%}
 .domino-node.reverse>.domino-tile:not(.double),.domino-node.reverse .domino-preview:not(.double){flex-direction:row-reverse}
 .domino-end-slot{position:relative;min-width:0;display:flex;align-items:center;justify-content:center;width:100%}
-.domino-end-label{position:absolute;left:50%;top:-12px;transform:translateX(-50%);white-space:nowrap;font-size:9px;line-height:12px;color:#637b53;background:#e9eddd;padding:0 3px;border-radius:4px;pointer-events:none}
+.domino-end-label{position:absolute;left:50%;top:-12px;transform:translateX(-50%);white-space:nowrap;font-size:9px;line-height:12px;color:var(--color-text-secondary,#637b53);background:color-mix(in srgb,var(--color-surface-raised,#e9eddd) 78%,transparent);padding:0 3px;border-radius:4px;pointer-events:none}
 .domino-end-label b{font-size:11px;color:#345d3e}
-.domino-drop-target,.domino-drop-placeholder{width:48px;height:48px;min-width:44px;min-height:44px;border:1px dashed #8baa72;border-radius:10px;background:#f2f5e2;color:#456b45;display:flex;align-items:center;justify-content:center;padding:2px;box-sizing:border-box;flex-shrink:0}
+.domino-drop-target,.domino-drop-placeholder{width:48px;height:48px;min-width:44px;min-height:44px;border:1px dashed var(--color-border-strong,#8baa72);border-radius:10px;background:color-mix(in srgb,var(--color-surface-raised,#e9eddd) 78%,transparent);color:var(--color-text-primary,#456b45);display:flex;align-items:center;justify-content:center;padding:2px;box-sizing:border-box;flex-shrink:0}
 .domino-drop-target{cursor:pointer;box-shadow:inset 0 0 0 2px #fff9e870}
 .domino-drop-target:hover,.domino-drop-target:focus-visible,.domino-drop-target.is-drop-target{background:#d7e9bb;border-color:#436e43;box-shadow:inset 0 0 0 2px #9dbb81}
-.domino-drop-placeholder{border-color:#c5d1b4;background:#e9eddd;color:#a3b48e}
+.domino-drop-placeholder{border-color:var(--color-border-subtle,#c5d1b4);background:color-mix(in srgb,var(--color-surface-raised,#e9eddd) 78%,transparent);color:var(--color-text-secondary,#a3b48e)}
 .domino-drop-placeholder>span{font-size:22px;line-height:1;font-weight:300}
 .domino-drop-target .domino-preview{width:40px;min-width:0;height:25px;flex-direction:row;padding:3px;gap:2px;border-color:#bdcba9;background:#fffced;box-shadow:0 2px 0 #c0cdab99;opacity:.85;pointer-events:none;border-radius:5px}
 .domino-preview .domino-half{width:14px;height:14px;gap:1px}
@@ -84,15 +84,24 @@
 .domino-node>.domino-tile .domino-half{min-width:0;min-height:0;flex:1;height:auto;aspect-ratio:1}
 
 /* One 48x84 face is uniformly scaled and rotated for every tile. */
-.domino-tile.art-card,.domino-drop-target .domino-preview{padding:0;gap:0;border:0;background:transparent;display:block;overflow:visible;box-shadow:0 3px 0 #c4c7b3;border-radius:8px}
+.domino-tile.art-card,.domino-drop-target .domino-preview{padding:0;gap:0;border:0;background:transparent;display:block;overflow:visible;box-shadow:0 3px 0 var(--color-material-domino-side,#c4c7b3);border-radius:8px}
 .domino-tile .piece-art{display:block;width:100%;height:100%;overflow:visible}
-.domino-tile .domino-art-face{box-sizing:border-box;width:48px;height:84px;display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;padding:5px;border:1px solid #e2decf;border-radius:8px;background:#fffcf2}
+.domino-tile .domino-art-face{box-sizing:border-box;width:48px;height:84px;display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;padding:5px;border:1px solid var(--color-material-domino-rim,#e2decf);border-radius:8px;background:var(--color-material-domino-face,#fffcf2)}
 .domino-scene .domino-tile .domino-art-face .domino-half{display:grid;grid-template-columns:repeat(3,8px);grid-template-rows:repeat(3,8px);width:28px;height:28px;min-width:28px;min-height:28px;max-width:28px;flex:none;gap:2px;aspect-ratio:1}
 .domino-scene .domino-tile .domino-art-face .domino-half i{width:8px;height:8px;border-radius:50%;flex:none}
-.domino-scene .domino-tile .domino-art-face .domino-divider{height:1px;width:100%;flex:none;margin:0;background:#dedcca}
+.domino-scene .domino-tile .domino-art-face .domino-divider{height:1px;width:100%;flex:none;margin:0;background:var(--color-material-domino-divider,#dedcca)}
 .domino-scene .domino-node>.domino-tile:not(.double){width:min(58px,calc(100% - 4px));height:auto;min-width:0;aspect-ratio:7/4}
 .domino-scene .domino-node>.domino-tile.double{width:30px;height:auto;min-width:0;aspect-ratio:4/7}
 .domino-node.reverse>.domino-tile:not(.double)>.piece-art,.domino-node.reverse .domino-preview:not(.double)>.piece-art{transform:rotate(180deg)}
 .domino-drop-target .domino-preview{width:40px;height:calc(40px * 4 / 7);min-width:0;aspect-ratio:7/4}
 .domino-drop-target .domino-preview.double{width:24px;height:42px;aspect-ratio:4/7}
 @container(min-width:350px){.domino-chain-long .domino-node>.domino-tile:not(.double){height:auto;aspect-ratio:7/4}.domino-chain-long .domino-node>.domino-tile.double{width:30px;height:auto;aspect-ratio:4/7}.domino-chain-long .domino-node>.domino-tile:not(.double)>.piece-art,.domino-chain-long .domino-node .domino-preview:not(.double)>.piece-art{transform:rotate(var(--node-wide-rotation,0deg))}}
+
+.domino-tile.art-card,.domino-drop-target .domino-preview{box-shadow:none}.action-reveal-art.domino-scene{width:min(25vw,90px,22dvh)}.action-reveal-art.domino-scene>.domino-tile{aspect-ratio:4/7!important}
+
+/* Plain two-tone tile backs retain the domino silhouette in either theme. */
+.domino-scene .domino-back{box-sizing:border-box;display:block;position:relative;aspect-ratio:4/7;padding:2px;border:1px solid var(--color-material-domino-ink,#365f4c);border-radius:14%;background:var(--color-material-domino-face,#fffcf2);box-shadow:0 2px 0 var(--color-material-domino-side,#c4c7b3);overflow:hidden}
+.domino-scene .domino-back-surface{display:block;width:100%;height:100%;border-radius:11%;background:color-mix(in srgb,var(--color-material-domino-ink,#365f4c) 80%,var(--color-material-domino-face,#fffcf2));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--color-material-domino-face,#fffcf2) 35%,transparent)}
+
+/* Keep tile and target sizes readable; long chains scroll inside the fixed field. */
+.domino-scene .domino-board{box-sizing:border-box;min-height:100%;height:auto;justify-content:flex-start}

@@ -1,9 +1,9 @@
 {
   "id": "private-counter",
   "name": "Учебный счётчик",
-  "version": "0.3.1",
-  "engineApi": 1,
-  "stateVersion": 1,
+  "version": "0.4.0",
+  "engineApi": 3,
+  "stateVersion": 2,
   "rules": "rules.js",
   "view": "view.js",
   "styles": "styles.css",
@@ -28,5 +28,19 @@
       ],
       "teams": false
     }
-  ]
+  ],
+  "sourceModules": {
+    "rules": [
+      "domain/game.js",
+      "presentation/scene.js"
+    ],
+    "view": [
+      "presentation/scene.js"
+    ],
+    "locales": {
+      "ru": [
+        "locales/ru/game.json"
+      ]
+    }
+  }
 }

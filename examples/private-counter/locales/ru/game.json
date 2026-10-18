@@ -1,0 +1,14 @@
+{
+  "counter.name": "Учебный счётчик",
+  "counter.description": "Восемь шагов с закрытой целью.",
+  "counter.points": "очки",
+  "counter.preset": "Восемь шагов",
+  "counter.rule": "Добавляйте очки по очереди. Закрытая цель видна только владельцу.",
+  "counter.add": "Добавить 1",
+  "counter.goal": "Ваша закрытая цель: {value}",
+  "counter.changed": "Счётчик: {count}",
+  "counter.target": "Цель: {value}",
+  "counter.wait": "Ждём ход",
+  "counter.finished": "Партия завершена",
+  "counter.turn": "Ходит {player}"
+}

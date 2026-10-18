@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["gofish"] = {
   "id": "gofish",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "name": "Спроси рыбу",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
@@ -21,6 +21,9 @@
   "view": "view.js",
   "styles": "styles.css",
   "sharedUi": true,
+  "sharedAssetPacks": [
+    "mini-cards"
+  ],
   "sharedAssets": [
     "card-back.svg"
   ],
@@ -42,11 +45,12 @@
           "value": "54",
           "label": "54 карты · джокерная пара"
         }
-      ]
+      ],
+      "help": "Размер исходной колоды определяет состав карт и продолжительность партии."
     }
   ],
-  "engineApi": 1,
-  "stateVersion": 1,
+  "engineApi": 3,
+  "stateVersion": 2,
   "viewApi": 2,
   "tileTheme": "blue",
   "tags": [
@@ -65,6 +69,9 @@
       ],
       "teams": false
     }
+  ],
+  "sharedDomain": [
+    "standard-deck"
   ]
 };
 })(globalThis);

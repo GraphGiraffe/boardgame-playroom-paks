@@ -5,9 +5,9 @@
   root.PlayroomCatalog["private-counter"] = {
   "id": "private-counter",
   "name": "Учебный счётчик",
-  "version": "0.3.0",
-  "engineApi": 1,
-  "stateVersion": 1,
+  "version": "0.4.0",
+  "engineApi": 3,
+  "stateVersion": 2,
   "rules": "rules.js",
   "view": "view.js",
   "styles": "styles.css",
@@ -18,6 +18,20 @@
       "player"
     ]
   },
-  "viewApi": 2
+  "viewApi": 2,
+  "tags": [
+    "pieces"
+  ],
+  "playModes": [
+    {
+      "id": "individual",
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "teams": false
+    }
+  ]
 };
 })(globalThis);

@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["battleship"] = {
   "id": "battleship",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "name": "Морской бой",
   "category": "board",
   "estimatedDuration": "15–30 мин",
@@ -15,7 +15,16 @@
       "combined",
       "table",
       "player"
-    ]
+    ],
+    "viewStateScope": "match",
+    "presentation": {
+      "minimumVisibleMs": {
+        "default": 750,
+        "phases": {
+          "setup": 0
+        }
+      }
+    }
   },
   "rules": "rules.js",
   "view": "view.js",
@@ -24,8 +33,8 @@
   "sharedAssets": [
     "ship.svg"
   ],
-  "engineApi": 1,
-  "stateVersion": 3,
+  "engineApi": 3,
+  "stateVersion": 4,
   "viewApi": 2,
   "tileTheme": "blue",
   "tags": [
@@ -54,7 +63,8 @@
           "value": "off",
           "label": "Нет"
         }
-      ]
+      ],
+      "help": "В игре «Морской бой» эта настройка задаёт объявлять о потоплении. Доступные варианты: Да · отмечать окружение, Нет."
     }
   ],
   "sounds": "sounds.js"

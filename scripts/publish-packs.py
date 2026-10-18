@@ -14,6 +14,14 @@ SEMVER = re.compile(r"(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z.-]+
 HEX = re.compile(r"[a-f0-9]{64}")
 
 
+def channel_prefix(channel):
+    if not channel:
+        return ""
+    if not re.fullmatch(r"[a-z0-9][a-z0-9.-]{0,63}",channel):
+        raise ValueError("Invalid catalog channel")
+    return f"channels/{channel}/"
+
+
 def digest(data):
     return hashlib.sha256(data).hexdigest()
 
@@ -72,15 +80,15 @@ def checked_assets(folder, only=None):
     return selected
 
 
-def current(bucket, folder, bootstrap=False):
+def current(bucket, folder, bootstrap=False, prefix=""):
     try:
-        pointer = download(bucket, "catalog/current.json", folder)
+        pointer = download(bucket, prefix + "catalog/current.json", folder)
     except RuntimeError as error:
         if bootstrap and re.search(r"(?:not found|404|does not exist|no such key)", str(error), re.I):
             return None, None
         raise
     info = json.loads(pointer)
-    if info.get("version") != 1 or not HEX.fullmatch(info.get("sha256", "")) or info.get("key") != f"catalog/snapshots/{info['sha256']}.json":
+    if info.get("version") != 1 or not HEX.fullmatch(info.get("sha256", "")) or info.get("key") != f"{prefix}catalog/snapshots/{info['sha256']}.json":
         raise ValueError("Invalid current catalog pointer")
     body = download(bucket, info["key"], folder)
     if digest(body) != info["sha256"]:
@@ -94,6 +102,7 @@ def current(bucket, folder, bootstrap=False):
 def publish(args):
     if not SEMVER.fullmatch(args.collection):
         raise ValueError("Invalid collection version")
+    prefix = channel_prefix(getattr(args,"channel",""))
     assets = checked_assets(args.assets, args.only)
     with tempfile.TemporaryDirectory(prefix="playroom-packs-") as temporary:
         folder = Path(temporary)
@@ -102,11 +111,13 @@ def publish(args):
             if args.base_catalog:
                 prior = json.loads(args.base_catalog.read_text())
             elif args.only and not args.bootstrap:
-                prior = current(args.bucket, folder)[1]
+                prior = current(args.bucket, folder, prefix=prefix)[1]
             else:
                 prior = None
         else:
-            pointer, prior = current(args.bucket, folder, args.bootstrap)
+            pointer, prior = current(args.bucket, folder, args.bootstrap, prefix)
+            if pointer is not None:
+                print("Previous catalog snapshot:", json.loads(pointer)["sha256"], flush=True)
         entries = {item["id"]: item for item in prior.get("packs", [])} if prior else {}
         for ident, (path, manifest, sha) in assets.items():
             version = manifest["version"]
@@ -123,21 +134,22 @@ def publish(args):
             print(body.decode(), end="")
             print("Snapshot SHA256:", sha)
             return
-        if pointer is not None and download(args.bucket, "catalog/current.json", folder) != pointer:
+        if pointer is not None and download(args.bucket, prefix + "catalog/current.json", folder) != pointer:
             raise RuntimeError("Catalog pointer changed during publication")
-        key = f"catalog/snapshots/{sha}.json"
+        key = f"{prefix}catalog/snapshots/{sha}.json"
         upload_checked(args.bucket, key, body, folder)
         next_pointer = canonical({"version": 1, "key": key, "sha256": sha})
-        upload_checked(args.bucket, "catalog/current.json", next_pointer, folder)
+        upload_checked(args.bucket, prefix + "catalog/current.json", next_pointer, folder)
         print(f"Published collection {args.collection}; catalog snapshot {sha}; changed packs: {', '.join(sorted(assets))}")
 
 
 def rollback(args):
+    prefix = channel_prefix(getattr(args,"channel",""))
     if not HEX.fullmatch(args.rollback):
         raise ValueError("Invalid snapshot SHA256")
     with tempfile.TemporaryDirectory(prefix="playroom-packs-") as temporary:
         folder = Path(temporary)
-        key = f"catalog/snapshots/{args.rollback}.json"
+        key = f"{prefix}catalog/snapshots/{args.rollback}.json"
         body = download(args.bucket, key, folder)
         if digest(body) != args.rollback:
             raise ValueError("Snapshot checksum mismatch")
@@ -148,13 +160,14 @@ def rollback(args):
             remote = download(args.bucket, item["url"].removeprefix("/api/packs/"), folder)
             if digest(remote) != item["sha256"]:
                 raise ValueError("Rollback pack checksum mismatch: " + item["id"])
-        upload_checked(args.bucket, "catalog/current.json", canonical({"version": 1, "key": key, "sha256": args.rollback}), folder)
+        upload_checked(args.bucket, prefix + "catalog/current.json", canonical({"version": 1, "key": key, "sha256": args.rollback}), folder)
         print("Rolled back catalog to", args.rollback)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--bucket", required=True)
+    parser.add_argument("--channel", default="", help="Isolated catalog channel; empty selects production")
     parser.add_argument("--assets", type=Path)
     parser.add_argument("--collection")
     parser.add_argument("--only", choices=sorted(IDS))

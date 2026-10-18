@@ -1,0 +1,518 @@
+{
+  "format": "playroom-asset-pack",
+  "formatVersion": 1,
+  "id": "characters",
+  "version": "0.1.1",
+  "name": "Персонажи-стикеры",
+  "canvas": [
+    512,
+    512
+  ],
+  "runtimeCanvas": [
+    256,
+    256
+  ],
+  "alpha": true,
+  "shapes": [
+    "crescent",
+    "triangle",
+    "square",
+    "circle",
+    "star",
+    "rectangle",
+    "diamond",
+    "hexagon"
+  ],
+  "colors": [
+    "red",
+    "orange",
+    "yellow",
+    "green",
+    "blue",
+    "purple"
+  ],
+  "items": [
+    {
+      "id": "crescent-red",
+      "shape": "crescent",
+      "color": "red",
+      "label": "Месяц · красный",
+      "file": "runtime/crescent-red.webp",
+      "source": "images/crescent-red.png",
+      "sha256": "977008304e15886e30a2a135ad04d66151a00a354726af4022f290222989c74a"
+    },
+    {
+      "id": "crescent-orange",
+      "shape": "crescent",
+      "color": "orange",
+      "label": "Месяц · оранжевый",
+      "file": "runtime/crescent-orange.webp",
+      "source": "images/crescent-orange.png",
+      "sha256": "5df2a0a4e876a4a16b3b8c34bf5db477b5e67fd2835fb020d1b642dfc0ff6a26"
+    },
+    {
+      "id": "crescent-yellow",
+      "shape": "crescent",
+      "color": "yellow",
+      "label": "Месяц · жёлтый",
+      "file": "runtime/crescent-yellow.webp",
+      "source": "images/crescent-yellow.png",
+      "sha256": "524ea3f5e36e7997f8e8a5ca3487c8e0ff9c8c61ec6575bbbedd40b06cefb913"
+    },
+    {
+      "id": "crescent-green",
+      "shape": "crescent",
+      "color": "green",
+      "label": "Месяц · зелёный",
+      "file": "runtime/crescent-green.webp",
+      "source": "images/crescent-green.png",
+      "sha256": "e579327d78f0fac05bd23274a49d451af42afbb484f58ad05edd6a34c92b3349"
+    },
+    {
+      "id": "crescent-blue",
+      "shape": "crescent",
+      "color": "blue",
+      "label": "Месяц · синий",
+      "file": "runtime/crescent-blue.webp",
+      "source": "images/crescent-blue.png",
+      "sha256": "ccaac9f59ec00555b74dbfd31508ca01b8bb881a7d46deac71325364fd4fbca5"
+    },
+    {
+      "id": "crescent-purple",
+      "shape": "crescent",
+      "color": "purple",
+      "label": "Месяц · фиолетовый",
+      "file": "runtime/crescent-purple.webp",
+      "source": "images/crescent-purple.png",
+      "sha256": "c08da322ec5ed3ca69ed7653cc5346e4ddbbb5acce73661499e57b8bb7b4c9b8"
+    },
+    {
+      "id": "triangle-red",
+      "shape": "triangle",
+      "color": "red",
+      "label": "Треугольник · красный",
+      "file": "runtime/triangle-red.webp",
+      "source": "images/triangle-red.png",
+      "sha256": "6a2fb8d70fa6458ec025f945910da7e87c76d15acb060fcf6f87f4e916e2d306"
+    },
+    {
+      "id": "triangle-orange",
+      "shape": "triangle",
+      "color": "orange",
+      "label": "Треугольник · оранжевый",
+      "file": "runtime/triangle-orange.webp",
+      "source": "images/triangle-orange.png",
+      "sha256": "857d93fb4daf504cd9aca8bc5373eedcb19e1c138702bae4f4cfa38e63ee6981"
+    },
+    {
+      "id": "triangle-yellow",
+      "shape": "triangle",
+      "color": "yellow",
+      "label": "Треугольник · жёлтый",
+      "file": "runtime/triangle-yellow.webp",
+      "source": "images/triangle-yellow.png",
+      "sha256": "19be5d88041b67458b77babaf12154c869ba026641047bf019bcbe6b896e73f4"
+    },
+    {
+      "id": "triangle-green",
+      "shape": "triangle",
+      "color": "green",
+      "label": "Треугольник · зелёный",
+      "file": "runtime/triangle-green.webp",
+      "source": "images/triangle-green.png",
+      "sha256": "5f7756b79491d170af922702aa5bc173d00fed84992f397ff587c93b26d11d79"
+    },
+    {
+      "id": "triangle-blue",
+      "shape": "triangle",
+      "color": "blue",
+      "label": "Треугольник · синий",
+      "file": "runtime/triangle-blue.webp",
+      "source": "images/triangle-blue.png",
+      "sha256": "49d83d348372c213b5beeeab8a9f57873e79095738403de11414d4cc0a87d9e9"
+    },
+    {
+      "id": "triangle-purple",
+      "shape": "triangle",
+      "color": "purple",
+      "label": "Треугольник · фиолетовый",
+      "file": "runtime/triangle-purple.webp",
+      "source": "images/triangle-purple.png",
+      "sha256": "6d18904883986bfce44c05e7c955487a13d25a87b9fb96b3a11c2c74e76f848b"
+    },
+    {
+      "id": "square-red",
+      "shape": "square",
+      "color": "red",
+      "label": "Квадрат · красный",
+      "file": "runtime/square-red.webp",
+      "source": "images/square-red.png",
+      "sha256": "9f810799642d5257efd9ef68b809f6debc47a7cf4b2795be5d7f388bdb2d8f15"
+    },
+    {
+      "id": "square-orange",
+      "shape": "square",
+      "color": "orange",
+      "label": "Квадрат · оранжевый",
+      "file": "runtime/square-orange.webp",
+      "source": "images/square-orange.png",
+      "sha256": "d22b454a7f0295059c3f6eab8eaa5d44dfde25683416a70a7f52d55a47fb7b92"
+    },
+    {
+      "id": "square-yellow",
+      "shape": "square",
+      "color": "yellow",
+      "label": "Квадрат · жёлтый",
+      "file": "runtime/square-yellow.webp",
+      "source": "images/square-yellow.png",
+      "sha256": "31f3e270383c387ffeaa549179d79ff91ed5a41fa50dbc8f752a66e09b78b42c"
+    },
+    {
+      "id": "square-green",
+      "shape": "square",
+      "color": "green",
+      "label": "Квадрат · зелёный",
+      "file": "runtime/square-green.webp",
+      "source": "images/square-green.png",
+      "sha256": "4a25122eb23cb7e315255b4d2528b64269511ba379d499fb73e984352baa05d8"
+    },
+    {
+      "id": "square-blue",
+      "shape": "square",
+      "color": "blue",
+      "label": "Квадрат · синий",
+      "file": "runtime/square-blue.webp",
+      "source": "images/square-blue.png",
+      "sha256": "3006e417c997eb378a4940ca48f78e4d03e40ac7328d38503f756b55c525922c"
+    },
+    {
+      "id": "square-purple",
+      "shape": "square",
+      "color": "purple",
+      "label": "Квадрат · фиолетовый",
+      "file": "runtime/square-purple.webp",
+      "source": "images/square-purple.png",
+      "sha256": "44ed7795de617de8d854662daa3e85c64509da97e6da31601d9083ed24ac4926"
+    },
+    {
+      "id": "circle-red",
+      "shape": "circle",
+      "color": "red",
+      "label": "Круг · красный",
+      "file": "runtime/circle-red.webp",
+      "source": "images/circle-red.png",
+      "sha256": "c8434094f21717982984db9e6af202fd9227fc1a5f22848b9813fedaafc5a550"
+    },
+    {
+      "id": "circle-orange",
+      "shape": "circle",
+      "color": "orange",
+      "label": "Круг · оранжевый",
+      "file": "runtime/circle-orange.webp",
+      "source": "images/circle-orange.png",
+      "sha256": "071f46e7be7aaf8d682c376e00956ebc21532dccf694898c9c59cc74e75f6a8a"
+    },
+    {
+      "id": "circle-yellow",
+      "shape": "circle",
+      "color": "yellow",
+      "label": "Круг · жёлтый",
+      "file": "runtime/circle-yellow.webp",
+      "source": "images/circle-yellow.png",
+      "sha256": "ccf1a66368c76b7fcb8dfd9708bd65ac8cea379f8c5309aa8ded1666e2caa340"
+    },
+    {
+      "id": "circle-green",
+      "shape": "circle",
+      "color": "green",
+      "label": "Круг · зелёный",
+      "file": "runtime/circle-green.webp",
+      "source": "images/circle-green.png",
+      "sha256": "f7481f72297be8a9850920416a3c1d1485d154258589eae99cfe7d4cf3793033"
+    },
+    {
+      "id": "circle-blue",
+      "shape": "circle",
+      "color": "blue",
+      "label": "Круг · синий",
+      "file": "runtime/circle-blue.webp",
+      "source": "images/circle-blue.png",
+      "sha256": "29abc45fd9763b8be46b74f46c40e019fdf9eba99abef2fb7b08869db7ea2680"
+    },
+    {
+      "id": "circle-purple",
+      "shape": "circle",
+      "color": "purple",
+      "label": "Круг · фиолетовый",
+      "file": "runtime/circle-purple.webp",
+      "source": "images/circle-purple.png",
+      "sha256": "bdd212d03ca3f25d75a8bcc9eb4446b0f0dfa3a6aaa5bd12ec29f90600307c65"
+    },
+    {
+      "id": "star-red",
+      "shape": "star",
+      "color": "red",
+      "label": "Звезда · красный",
+      "file": "runtime/star-red.webp",
+      "source": "images/star-red.png",
+      "sha256": "46bec1ddab5508e4a1f7a19ef3b0f1ae37f15c900b24110e39cb1f95e546bd87"
+    },
+    {
+      "id": "star-orange",
+      "shape": "star",
+      "color": "orange",
+      "label": "Звезда · оранжевый",
+      "file": "runtime/star-orange.webp",
+      "source": "images/star-orange.png",
+      "sha256": "2194c75e56d57581b7689290a5e4cc54b8e435de50972aca6475a0e12c9d8c85"
+    },
+    {
+      "id": "star-yellow",
+      "shape": "star",
+      "color": "yellow",
+      "label": "Звезда · жёлтый",
+      "file": "runtime/star-yellow.webp",
+      "source": "images/star-yellow.png",
+      "sha256": "a7b4c999699e7ae05b20f5adcee7e2ad115ece2f8d1f33e9f5b32f6aa6ad1c54"
+    },
+    {
+      "id": "star-green",
+      "shape": "star",
+      "color": "green",
+      "label": "Звезда · зелёный",
+      "file": "runtime/star-green.webp",
+      "source": "images/star-green.png",
+      "sha256": "28b248a5b297de1a3cc3c77a84cd88089666eb95cd4eab48f1e110a9e35c193f"
+    },
+    {
+      "id": "star-blue",
+      "shape": "star",
+      "color": "blue",
+      "label": "Звезда · синий",
+      "file": "runtime/star-blue.webp",
+      "source": "images/star-blue.png",
+      "sha256": "b9c2a140b094e6e1e42329a68835a219a700435c72892aac0859d3d6b2e29ef6"
+    },
+    {
+      "id": "star-purple",
+      "shape": "star",
+      "color": "purple",
+      "label": "Звезда · фиолетовый",
+      "file": "runtime/star-purple.webp",
+      "source": "images/star-purple.png",
+      "sha256": "4e38d3f0004d89c18e9106bdc76dcf50b7065eb8cc1aba9d211320a572057834"
+    },
+    {
+      "id": "rectangle-red",
+      "shape": "rectangle",
+      "color": "red",
+      "label": "Прямоугольник · красный",
+      "file": "runtime/rectangle-red.webp",
+      "source": "images/rectangle-red.png",
+      "sha256": "88c7651ce009b72c88e98024400ddb97bcfb8ebd60f672207761c0e98703c657"
+    },
+    {
+      "id": "rectangle-orange",
+      "shape": "rectangle",
+      "color": "orange",
+      "label": "Прямоугольник · оранжевый",
+      "file": "runtime/rectangle-orange.webp",
+      "source": "images/rectangle-orange.png",
+      "sha256": "f6cc9e75b9bd48c66877c07b49b07b88850dae548960d7e2c07bc8b83ff150b0"
+    },
+    {
+      "id": "rectangle-yellow",
+      "shape": "rectangle",
+      "color": "yellow",
+      "label": "Прямоугольник · жёлтый",
+      "file": "runtime/rectangle-yellow.webp",
+      "source": "images/rectangle-yellow.png",
+      "sha256": "fe27c83e47cfcf5cc0ff2ada08ef4a70d55a20cca94397c2bb09b8adcdfd9bdf"
+    },
+    {
+      "id": "rectangle-green",
+      "shape": "rectangle",
+      "color": "green",
+      "label": "Прямоугольник · зелёный",
+      "file": "runtime/rectangle-green.webp",
+      "source": "images/rectangle-green.png",
+      "sha256": "1890331193484dc4f32a5818a9415213bf4c31c49d076b48698fc0e5bae255e6"
+    },
+    {
+      "id": "rectangle-blue",
+      "shape": "rectangle",
+      "color": "blue",
+      "label": "Прямоугольник · синий",
+      "file": "runtime/rectangle-blue.webp",
+      "source": "images/rectangle-blue.png",
+      "sha256": "5e4afd2fd52e6953e13ca363dbcc22ebc062d17f974ddfec4df1881b257a0a06"
+    },
+    {
+      "id": "rectangle-purple",
+      "shape": "rectangle",
+      "color": "purple",
+      "label": "Прямоугольник · фиолетовый",
+      "file": "runtime/rectangle-purple.webp",
+      "source": "images/rectangle-purple.png",
+      "sha256": "d23713d1fb7d616d84dee339be6a025939d5ab971bc7cb2f2888efdcacd4f97f"
+    },
+    {
+      "id": "diamond-red",
+      "shape": "diamond",
+      "color": "red",
+      "label": "Ромб · красный",
+      "file": "runtime/diamond-red.webp",
+      "source": "images/diamond-red.png",
+      "sha256": "97c8d8d7c5ccec45bf5493e15d33a31a926e69fb64489916eade0f079bcc9956"
+    },
+    {
+      "id": "diamond-orange",
+      "shape": "diamond",
+      "color": "orange",
+      "label": "Ромб · оранжевый",
+      "file": "runtime/diamond-orange.webp",
+      "source": "images/diamond-orange.png",
+      "sha256": "5120ac9776798b80b824d7b6dfadf747c0210792ec4067c3b9763b3ec19cffd0"
+    },
+    {
+      "id": "diamond-yellow",
+      "shape": "diamond",
+      "color": "yellow",
+      "label": "Ромб · жёлтый",
+      "file": "runtime/diamond-yellow.webp",
+      "source": "images/diamond-yellow.png",
+      "sha256": "e8c67ee5657f49bb35c99bedc952e240f1d8ceb6128ed8b8be921f0c30caf2d4"
+    },
+    {
+      "id": "diamond-green",
+      "shape": "diamond",
+      "color": "green",
+      "label": "Ромб · зелёный",
+      "file": "runtime/diamond-green.webp",
+      "source": "images/diamond-green.png",
+      "sha256": "94ea805eaaa9ef927d90a61e1f55b8c453bc7e026d7ce1ee730f280e8f5aacd6"
+    },
+    {
+      "id": "diamond-blue",
+      "shape": "diamond",
+      "color": "blue",
+      "label": "Ромб · синий",
+      "file": "runtime/diamond-blue.webp",
+      "source": "images/diamond-blue.png",
+      "sha256": "ccfc1216e430caf84e372302cb770f73052f2adbaab449512a4d0a6f56fc1eab"
+    },
+    {
+      "id": "diamond-purple",
+      "shape": "diamond",
+      "color": "purple",
+      "label": "Ромб · фиолетовый",
+      "file": "runtime/diamond-purple.webp",
+      "source": "images/diamond-purple.png",
+      "sha256": "b75a3168a862a7334b8d4f52755c3fa4a915c037f58e2c4169f6894134389703"
+    },
+    {
+      "id": "hexagon-red",
+      "shape": "hexagon",
+      "color": "red",
+      "label": "Шестиугольник · красный",
+      "file": "runtime/hexagon-red.webp",
+      "source": "images/hexagon-red.png",
+      "sha256": "1dcaf652d817c11d76aa30bcae1351494021ba7ce5b702ab45708f3b12c4c85a"
+    },
+    {
+      "id": "hexagon-orange",
+      "shape": "hexagon",
+      "color": "orange",
+      "label": "Шестиугольник · оранжевый",
+      "file": "runtime/hexagon-orange.webp",
+      "source": "images/hexagon-orange.png",
+      "sha256": "924add4b2c64e2d9451e45942a5917ae36f0560e19aceb5ba33546da17a8dbbc"
+    },
+    {
+      "id": "hexagon-yellow",
+      "shape": "hexagon",
+      "color": "yellow",
+      "label": "Шестиугольник · жёлтый",
+      "file": "runtime/hexagon-yellow.webp",
+      "source": "images/hexagon-yellow.png",
+      "sha256": "e99aeb9f81c0456f440cf0178b6149bf5c343263a3df97b3397d8f848eb7b578"
+    },
+    {
+      "id": "hexagon-green",
+      "shape": "hexagon",
+      "color": "green",
+      "label": "Шестиугольник · зелёный",
+      "file": "runtime/hexagon-green.webp",
+      "source": "images/hexagon-green.png",
+      "sha256": "ea77b0a458f13da995f8e1f86419584799ae8040893797e7c0557ea623885d3c"
+    },
+    {
+      "id": "hexagon-blue",
+      "shape": "hexagon",
+      "color": "blue",
+      "label": "Шестиугольник · синий",
+      "file": "runtime/hexagon-blue.webp",
+      "source": "images/hexagon-blue.png",
+      "sha256": "d34ea22e5c8d1d529ae3b327ed27955b3c97fdc60c0c82a1a071b93d77824efd"
+    },
+    {
+      "id": "hexagon-purple",
+      "shape": "hexagon",
+      "color": "purple",
+      "label": "Шестиугольник · фиолетовый",
+      "file": "runtime/hexagon-purple.webp",
+      "source": "images/hexagon-purple.png",
+      "sha256": "b73894da4bbc7cf6e0b98639c35c3e5e8a2e901dc69761be0811f44d1a6f394b"
+    }
+  ],
+  "files": [
+    "runtime/crescent-red.webp",
+    "runtime/crescent-orange.webp",
+    "runtime/crescent-yellow.webp",
+    "runtime/crescent-green.webp",
+    "runtime/crescent-blue.webp",
+    "runtime/crescent-purple.webp",
+    "runtime/triangle-red.webp",
+    "runtime/triangle-orange.webp",
+    "runtime/triangle-yellow.webp",
+    "runtime/triangle-green.webp",
+    "runtime/triangle-blue.webp",
+    "runtime/triangle-purple.webp",
+    "runtime/square-red.webp",
+    "runtime/square-orange.webp",
+    "runtime/square-yellow.webp",
+    "runtime/square-green.webp",
+    "runtime/square-blue.webp",
+    "runtime/square-purple.webp",
+    "runtime/circle-red.webp",
+    "runtime/circle-orange.webp",
+    "runtime/circle-yellow.webp",
+    "runtime/circle-green.webp",
+    "runtime/circle-blue.webp",
+    "runtime/circle-purple.webp",
+    "runtime/star-red.webp",
+    "runtime/star-orange.webp",
+    "runtime/star-yellow.webp",
+    "runtime/star-green.webp",
+    "runtime/star-blue.webp",
+    "runtime/star-purple.webp",
+    "runtime/rectangle-red.webp",
+    "runtime/rectangle-orange.webp",
+    "runtime/rectangle-yellow.webp",
+    "runtime/rectangle-green.webp",
+    "runtime/rectangle-blue.webp",
+    "runtime/rectangle-purple.webp",
+    "runtime/diamond-red.webp",
+    "runtime/diamond-orange.webp",
+    "runtime/diamond-yellow.webp",
+    "runtime/diamond-green.webp",
+    "runtime/diamond-blue.webp",
+    "runtime/diamond-purple.webp",
+    "runtime/hexagon-red.webp",
+    "runtime/hexagon-orange.webp",
+    "runtime/hexagon-yellow.webp",
+    "runtime/hexagon-green.webp",
+    "runtime/hexagon-blue.webp",
+    "runtime/hexagon-purple.webp"
+  ]
+}

@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["uno"] = {
   "id": "uno",
-  "version": "0.4.9",
+  "version": "0.5.0",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Цвет меняется. Азарт остаётся.",
@@ -18,6 +18,7 @@
   },
   "rules": "rules.js",
   "view": "view.js",
+  "sharedUi": true,
   "styles": "styles.css",
   "settings": [
     {
@@ -33,12 +34,29 @@
           "value": "auto",
           "label": "Автоматически"
         }
+      ],
+      "help": "Автоматический режим объявляет UNO за игрока. В ручном нужно объявить самому; соперники могут обвинить в пропуске. Ошибочное обвинение штрафуется."
+    },
+    {
+      "key": "endMode",
+      "label": "Завершение партии",
+      "default": "winner",
+      "help": "До победителя — первая пустая рука завершает партию. До последнего — вышедших пропускают, остальные продолжают до одного игрока с картами. Действие последней карты сохраняется. Последнего круга нет: реверс и пропуски меняют очередь.",
+      "options": [
+        {
+          "value": "winner",
+          "label": "До победителя"
+        },
+        {
+          "value": "last",
+          "label": "До последнего"
+        }
       ]
     }
   ],
   "name": "UNO",
-  "engineApi": 1,
-  "stateVersion": 1,
+  "engineApi": 3,
+  "stateVersion": 2,
   "sounds": "sounds.js",
   "viewApi": 2,
   "tags": [
@@ -51,10 +69,15 @@
       "players": [
         2,
         3,
-        4
+        4,
+        5,
+        6
       ],
       "teams": false
     }
+  ],
+  "sharedDomain": [
+    "end-policy"
   ]
 };
 })(globalThis);

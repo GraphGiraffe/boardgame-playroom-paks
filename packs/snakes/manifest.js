@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["snakes"] = {
   "id": "snakes",
-  "version": "0.3.9",
+  "version": "0.4.0",
   "category": "board",
   "estimatedDuration": "5–15 мин",
   "tagline": "Вверх по лестнице. Навстречу удаче.",
@@ -20,8 +20,8 @@
   "view": "view.js",
   "styles": "styles.css",
   "name": "Змеи и лестницы",
-  "engineApi": 1,
-  "stateVersion": 1,
+  "engineApi": 3,
+  "stateVersion": 2,
   "viewApi": 2,
   "tags": [
     "board",
@@ -33,9 +33,86 @@
       "players": [
         2,
         3,
-        4
+        4,
+        5,
+        6
       ],
       "teams": false
+    }
+  ],
+  "sharedUi": true,
+  "sharedDomain": [
+    "token-layout",
+    "end-policy"
+  ],
+  "settings": [
+    {
+      "key": "boardSize",
+      "label": "Размер поля",
+      "default": "64",
+      "help": "Размер поля не меняет выбранный режим.",
+      "options": [
+        {
+          "value": "64",
+          "label": "64 клетки"
+        },
+        {
+          "value": "100",
+          "label": "100 клеток"
+        }
+      ]
+    },
+    {
+      "key": "endMode",
+      "label": "Завершение партии",
+      "default": "winner",
+      "help": "До победителя — сразу после финиша. Последний раунд — оставшиеся игроки завершают текущий круг от первого игрока; закончившие в этом круге делят победу. До последнего — все доводят фишки до финиша, места определяются порядком финиша. В командах Лудо финиширует вся команда.",
+      "options": [
+        {
+          "value": "winner",
+          "label": "До победителя"
+        },
+        {
+          "value": "round",
+          "label": "Последний раунд"
+        },
+        {
+          "value": "last",
+          "label": "До последнего"
+        }
+      ]
+    },
+    {
+      "key": "maxRounds",
+      "label": "Предел раундов",
+      "default": "0",
+      "help": "Раунд — полный круг от первого игрока. При достижении предела все заканчивают текущий круг. Если ещё никто не финишировал, сравниваются позиции фишек; равенство означает общее место.",
+      "options": [
+        {
+          "value": "0",
+          "label": "Без ограничения"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "10",
+          "label": "10"
+        },
+        {
+          "value": "20",
+          "label": "20"
+        },
+        {
+          "value": "50",
+          "label": "50"
+        }
+      ]
     }
   ]
 };
