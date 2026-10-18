@@ -8,6 +8,11 @@
   const colors=['red','orange','yellow','green','blue','purple'];
   const cartoonCards=()=>characters.flatMap(shape=>colors.flatMap(color=>['a','b'].map(copy=>({id:shape+'-'+color+'-'+copy,character:shape+'-'+color,shape,color}))));
   const cardsFor=size=>size===96?cartoonCards():Deck.create(size);
+  function cartoonPairs(position){
+    const shapes=ports.shuffle([...characters],position),palette=ports.shuffle([...colors],position);
+    // Visit every shape before repeating one; each round gives it a new color.
+    return palette.flatMap((_,round)=>shapes.map((shape,index)=>shape+'-'+palette[(index+round)%palette.length]));
+  }
   const pair=card=>card?.character|| (card.joker?'joker':`${card.rank}-${['♥','♦'].includes(card.suit)?'red':'black'}`);
   const clone=value=>JSON.parse(JSON.stringify(value));
   const fact=(name,actor,params={})=>({type:'pexeso.'+name,actor,params,visibility:{kind:'public'}});
@@ -15,8 +20,8 @@
     const size=options.deck==null||options.deck==='cartoon'?96:[36,52,54].includes(Number(options.deck))?Number(options.deck):52;
     const position={playerCount,turn:firstPlayer,status:'playing',winners:[],rng,preset,data:{}};
     const groups={};for(const card of cardsFor(size))(groups[pair(card)]??=[]).push(card);
-    // Stable catalog order selects the same pairs for a board size; only positions shuffle.
-    const keys=Object.keys(groups);
+    // Standard decks keep their accepted subset; cartoon pairs vary with the seed.
+    const keys=size===96?cartoonPairs(position):Object.keys(groups);
     const count={easy:8,medium:12,hard:18,full:keys.length}[preset];
     if(!count)throw Error('PEXESO_PRESET_INVALID');
     position.data={deckSize:size,board:ports.shuffle(keys.slice(0,Math.min(count,keys.length)).flatMap(key=>groups[key]),position),
