@@ -1,0 +1,14 @@
+.solitaire-scene .layout-field,.solitaire-scene .game-field-content{min-height:0;height:100%;overflow:hidden}
+.solitaire-board{container-type:inline-size;width:100%;height:100%;display:flex;flex-direction:column;min-height:0;color:var(--color-material-card-ink,#264e43)}
+.solitaire-toolbar{display:flex;gap:4px;flex-wrap:wrap;flex:none}.solitaire-toolbar button{min-height:44px;padding:4px 8px;font-size:12px}.solitaire-stats,.solitaire-hint-text{font-size:12px;min-height:22px;padding:2px 4px;flex:none}
+.solitaire-content{--cw:clamp(16px,calc((100cqw - 65px)/10),70px);--ch:calc(var(--cw)*1.4);display:flex;flex-direction:column;min-height:0;flex:1;gap:8px;padding:8px}
+.solitaire-scroll{overflow:auto;min-height:0;flex:1;overscroll-behavior:contain}.solitaire-columns{display:grid;grid-template-columns:repeat(var(--columns),var(--cw));gap:3px;width:max-content;min-height:100%;margin-inline:auto;padding:3px}
+.solitaire-column,.solitaire-home{position:relative;width:var(--cw);min-height:var(--ch)}.solitaire-card-position{position:absolute;left:0;width:var(--cw);height:var(--ch)}
+.solitaire-board .solitaire-card{width:var(--cw)!important;height:var(--ch)!important;min-width:0!important;min-height:0!important;padding:0!important;margin:0;aspect-ratio:5/7;border-radius:4px;display:block;transform:none!important;background:var(--color-material-card-face,#fffdf4);color:var(--color-material-card-ink,#264e43);box-shadow:0 1px 0 var(--color-material-card-side,#aebcae)}
+.solitaire-board .solitaire-card.shared-red{color:var(--color-material-card-red,#ba4c3c)}.solitaire-card>svg{width:100%;height:100%;display:block}.solitaire-card[disabled]{opacity:1}
+.solitaire-empty{width:var(--cw);height:var(--ch);min-width:0;min-height:0;padding:0;border:1px dashed var(--color-border-strong,#8da283);border-radius:4px;background:transparent;color:inherit;font:inherit}
+.solitaire-board .solitaire-hint{outline:2px solid var(--color-interaction-selected,#d3aa45)!important;outline-offset:1px}.solitaire-picked{filter:brightness(.91)}
+.solitaire-stocks{display:grid;grid-template-columns:var(--cw) calc(var(--cw)*2 + 3px) repeat(4,var(--cw));gap:3px;width:max-content;margin-inline:auto;align-items:start;min-height:calc(var(--ch) + 22px)}.solitaire-stock{min-height:44px;font-size:11px;padding:3px}.solitaire-stocks .solitaire-stock{width:var(--cw);overflow-wrap:anywhere;min-width:0}.solitaire-waste{position:relative;height:var(--ch)}.solitaire-waste>div{position:absolute;width:var(--cw);height:var(--ch)}.solitaire-dock{display:flex;justify-content:space-between;align-items:center;font-size:12px;flex:none}
+
+/* Holding or keyboard-focusing a covered face exposes its suit without moving the column. */
+.solitaire-card-position:has(.is-hand-preview),.solitaire-card-position:focus-within{z-index:5}

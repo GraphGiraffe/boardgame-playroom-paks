@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["uno"] = {
   "id": "uno",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Цвет меняется. Азарт остаётся.",
@@ -111,6 +111,9 @@
       }
     ],
     "help": "Число карт у каждого игрока при начальной раздаче. Правила специальных карт сохраняются."
-  }
+  },
+  "skinFamilies": [
+    "card-back"
+  ]
 };
 })(globalThis);

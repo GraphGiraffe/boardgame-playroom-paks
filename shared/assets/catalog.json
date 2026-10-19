@@ -2,7 +2,8 @@
   "card-face": {
     "default": "classic",
     "variants": [
-      "classic"
+      "classic",
+      "mini-split"
     ],
     "ratio": [
       5,
@@ -16,7 +17,11 @@
     "layouts": [
       "corners",
       "custom"
-    ]
+    ],
+    "labels": {
+      "classic": "Классический",
+      "mini-split": "Мини: номинал / масть"
+    }
   },
   "card-back": {
     "default": "classic",

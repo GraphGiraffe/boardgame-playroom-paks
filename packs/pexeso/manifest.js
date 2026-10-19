@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["pexeso"] = {
   "id": "pexeso",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "name": "Пексесо",
   "category": "cards",
   "estimatedDuration": "5–20 мин",
@@ -95,6 +95,10 @@
       }
     ],
     "help": "Число пар на поле: чем их больше, тем больше карт нужно запоминать. Состав пар зависит от выбранной колоды."
-  }
+  },
+  "skinFamilies": [
+    "card-face",
+    "card-back"
+  ]
 };
 })(globalThis);

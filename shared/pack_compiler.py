@@ -66,6 +66,14 @@ def validate_manifest(manifest, label):
             or not mode["players"] or any(type(n) is not int or not 1 <= n <= 32 for n in mode["players"])
             or len(set(mode["players"])) != len(mode["players"]) for mode in modes)):
         raise ValueError(f"Некорректные составы игроков: {label}")
+    families = manifest.get("skinFamilies", [])
+    defaults = manifest.get("defaultSkins", {})
+    if (not isinstance(families, list) or len(families) > 32 or
+            any(not isinstance(family, str) or not ID.fullmatch(family) for family in families) or
+            len(set(families)) != len(families) or not isinstance(defaults, dict) or
+            any(family not in families or not isinstance(variant, str) or not ID.fullmatch(variant)
+                for family, variant in defaults.items())):
+        raise ValueError(f"Некорректные скины пака: {label}")
     state = manifest.get("stateVersion")
     if (type(manifest.get("engineApi")) not in (int, float) or manifest.get("engineApi") != 3 or type(state) not in (int, float)
             or not 1 <= state <= MAX_SAFE_INTEGER or int(state) != state):

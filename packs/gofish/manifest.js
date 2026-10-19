@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["gofish"] = {
   "id": "gofish",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "name": "Спроси рыбу",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
@@ -77,6 +77,10 @@
         "deck"
       ]
     }
+  ],
+  "skinFamilies": [
+    "card-face",
+    "card-back"
   ]
 };
 })(globalThis);

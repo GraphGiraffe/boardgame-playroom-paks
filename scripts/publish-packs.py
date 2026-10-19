@@ -9,7 +9,7 @@ import subprocess
 import tempfile
 
 WRANGLER = "wrangler@4.149.0"
-IDS = {"uno", "domino", "durak", "checkers", "snakes", "tictactoe", "battleship", "pexeso", "ludo", "yatzy", "gofish", "oldmaid"}
+IDS = {"spider", "klondike", "uno", "domino", "durak", "checkers", "snakes", "tictactoe", "battleship", "pexeso", "ludo", "yatzy", "gofish", "oldmaid"}
 SEMVER = re.compile(r"(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?")
 HEX = re.compile(r"[a-f0-9]{64}")
 
