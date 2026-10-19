@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["uno"] = {
   "id": "uno",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Цвет меняется. Азарт остаётся.",
@@ -28,14 +28,15 @@
       "options": [
         {
           "value": "manual",
-          "label": "Вручную · можно ошибаться"
+          "label": "Вручную"
         },
         {
           "value": "auto",
-          "label": "Автоматически"
+          "label": "Авто"
         }
       ],
-      "help": "Автоматический режим объявляет UNO за игрока. В ручном нужно объявить самому; соперники могут обвинить в пропуске. Ошибочное обвинение штрафуется."
+      "help": "Автоматический режим объявляет UNO за игрока. В ручном нужно объявить самому; соперники могут обвинить в пропуске. Ошибочное обвинение штрафуется.",
+      "control": "slider"
     },
     {
       "key": "endMode",
@@ -51,7 +52,8 @@
           "value": "last",
           "label": "До последнего"
         }
-      ]
+      ],
+      "control": "slider"
     }
   ],
   "name": "UNO",
@@ -78,6 +80,37 @@
   ],
   "sharedDomain": [
     "end-policy"
-  ]
+  ],
+  "ruleGroups": [
+    {
+      "label": "Раздача и объявления",
+      "fields": [
+        "preset",
+        "unoMode"
+      ]
+    },
+    {
+      "label": "Завершение",
+      "fields": [
+        "endMode"
+      ],
+      "end": true
+    }
+  ],
+  "presetSetting": {
+    "label": "Карт на руке",
+    "control": "slider",
+    "options": [
+      {
+        "value": "quick",
+        "label": "5"
+      },
+      {
+        "value": "classic",
+        "label": "7"
+      }
+    ],
+    "help": "Число карт у каждого игрока при начальной раздаче. Правила специальных карт сохраняются."
+  }
 };
 })(globalThis);

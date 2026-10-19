@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["oldmaid"] = {
   "id": "oldmaid",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "name": "Акулина",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
@@ -27,39 +27,37 @@
   "settings": [
     {
       "key": "deck",
-      "label": "Исходная колода",
+      "label": "Колода",
       "default": "36",
       "options": [
         {
           "value": "36",
-          "label": "36 карт · 35 в игре"
+          "label": "35 карт"
         },
         {
           "value": "52",
-          "label": "52 карты · 51 в игре"
-        },
-        {
-          "value": "54",
-          "label": "54 карты · 53 в игре"
+          "label": "51 карта"
         }
       ],
-      "help": "Размер исходной колоды определяет состав карт и продолжительность партии."
+      "help": "В игре 35 или 51 карта: из исходной колоды 36 или 52 карты убрана дама треф.",
+      "control": "select"
     },
     {
       "key": "drawFrom",
-      "label": "У кого вытягивать карту",
+      "label": "Брать карту",
       "default": "any",
       "options": [
         {
           "value": "any",
-          "label": "У любого соперника"
+          "label": "У любого"
         },
         {
           "value": "next",
-          "label": "У следующего по кругу"
+          "label": "У следующего"
         }
       ],
-      "help": "Выберите любого соперника с картами либо только следующего по кругу. Пустые руки пропускаются."
+      "help": "Выберите любого соперника с картами либо только следующего по кругу. Пустые руки пропускаются.",
+      "control": "slider"
     },
     {
       "key": "endMode",
@@ -75,7 +73,8 @@
           "value": "last",
           "label": "До последнего"
         }
-      ]
+      ],
+      "control": "slider"
     }
   ],
   "engineApi": 3,
@@ -102,6 +101,22 @@
   ],
   "sharedDomain": [
     "standard-deck"
+  ],
+  "ruleGroups": [
+    {
+      "label": "Карты и ход",
+      "fields": [
+        "deck",
+        "drawFrom"
+      ]
+    },
+    {
+      "label": "Завершение",
+      "fields": [
+        "endMode"
+      ],
+      "end": true
+    }
   ]
 };
 })(globalThis);

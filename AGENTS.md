@@ -1,6 +1,6 @@
 # Работа с коллекцией ХОД 0.7
 
-Коллекция 0.7.0 для приложения 0.18.0; engineApi 3, viewApi 2. [Руководство автора](docs/AUTHORING.md), [архитектура](docs/ARCHITECTURE.md), [будущие расширения](docs/NEXT-PATCHES.md).
+Коллекция 0.7.1 для приложения 0.18.1; engineApi 3, viewApi 2. [Руководство автора](docs/AUTHORING.md), [архитектура](docs/ARCHITECTURE.md), [будущие расширения](docs/NEXT-PATCHES.md).
 
 - Проверить root/status/ветку; сохранять чужую работу. Игра целиком в packs/<id>; manifest.json источник метаданных, manifest.js генерирует build.py.
 - Domain чистый, без DOM/имён/переводов/часов/storage. RNG явный. Presentation получает projection, renderer не пересчитывает правила.

@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["yatzy"] = {
   "id": "yatzy",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "name": "Ятзи",
   "category": "dice",
   "estimatedDuration": "15–25 мин",
@@ -71,7 +71,17 @@
           "value": "15",
           "label": "15"
         }
-      ]
+      ],
+      "control": "slider"
+    }
+  ],
+  "ruleGroups": [
+    {
+      "label": "Завершение",
+      "fields": [
+        "maxRounds"
+      ],
+      "end": true
     }
   ]
 };
