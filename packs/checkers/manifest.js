@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["checkers"] = {
   "id": "checkers",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "category": "board",
   "estimatedDuration": "15–30 мин",
   "tagline": "На один ход ближе к победе.",
@@ -36,6 +36,29 @@
       "teams": false
     }
   ],
-  "sharedUi": true
+  "sharedUi": true,
+  "ruleGroups": [
+    {
+      "label": "Начальная расстановка",
+      "fields": [
+        "preset"
+      ]
+    }
+  ],
+  "presetSetting": {
+    "label": "Шашек у игрока",
+    "control": "slider",
+    "options": [
+      {
+        "value": "quick",
+        "label": "8"
+      },
+      {
+        "value": "classic",
+        "label": "12"
+      }
+    ],
+    "help": "Начальное число шашек у каждого игрока на доске 8 × 8. Правила ходов, дамок и обязательного взятия одинаковы."
+  }
 };
 })(globalThis);

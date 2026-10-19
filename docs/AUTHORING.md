@@ -39,3 +39,11 @@ node scripts/codex/test.cjs case/pack-models,case/view-contract
 Неизменяемая packVersion при публикации; stateVersion меняется при форме данных, engineApi — при SDK. Поставки должны сохранять точные старые версии. Asset pack dependencies также точные. Коллекция 0.7.0 не заставляет менять правила каждой игры. Канонические shared-компоненты синхронизируются в host с digest, поэтому для их изменения нужна проверка обоих builder и общих потребителей.
 
 [Процедура релиза](https://github.com/GraphGiraffe/boardgame-playroom/blob/main/docs/RELEASING.md), [реестр механик](https://github.com/GraphGiraffe/boardgame-playroom/blob/main/docs/MECHANICS.md), [UI API](https://github.com/GraphGiraffe/boardgame-playroom/blob/main/docs/GAME-ELEMENTS-API.md).
+
+## Метаданные редактора правил (0.18.1)
+
+Необязательное `settings[].control` принимает `slider` или `select`; без указания сохраняется список. У слайдера позиции соответствуют порядку `options`, а сохранённые значения остаются `options[].value`, включая строковый `0` для отсутствия лимита. `label` и `help` задают подпись и справку. Колоды используют `select`.
+
+`presetSetting: {label, help, control, options: [{value, label}]}` переименовывает и упорядочивает выбор preset в редакторе, не меняя domain IDs или значения по умолчанию. `ruleGroups: [{label, fields: ["preset", "deck"]}]` задаёт смысловые блоки по две ячейки в строке; `fields` ссылается на preset или settings key. Флаг `end: true` переносит блок завершения в конец после общих параметров. Каждый параметр перечислять один раз. Отсутствующие в группах поля сохраняются в редакторе, единственный вариант скрывается. `visibleWhen` проверяется по точным значениям правил, а не индексам слайдеров. Это метаданные Web UI, без изменения engineApi/viewApi/stateVersion.
+
+В новых играх Рыбы/Акулины колода 54 не предлагается. Акулина показывает число карт в партии — 35/51, сохраняя внутренние deck IDs 36/52. Domain сохраняет чтение старых состояний с 54 картами; точные прежние опубликованные паки не переписываются.
