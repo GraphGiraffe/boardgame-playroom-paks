@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["domino"] = {
   "id": "domino",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "category": "board",
   "estimatedDuration": "10–15 мин",
   "tagline": "Семь костяшек. Много вариантов.",
@@ -53,11 +53,42 @@
           "value": "last",
           "label": "До последнего"
         }
-      ]
+      ],
+      "control": "slider"
     }
   ],
   "sharedDomain": [
     "end-policy"
-  ]
+  ],
+  "ruleGroups": [
+    {
+      "label": "Раздача",
+      "fields": [
+        "preset"
+      ]
+    },
+    {
+      "label": "Завершение",
+      "fields": [
+        "endMode"
+      ],
+      "end": true
+    }
+  ],
+  "presetSetting": {
+    "label": "Костей на руке",
+    "control": "slider",
+    "options": [
+      {
+        "value": "quick",
+        "label": "5"
+      },
+      {
+        "value": "classic",
+        "label": "7"
+      }
+    ],
+    "help": "Число костей у каждого игрока при начальной раздаче. Набор и правила цепочки сохраняются."
+  }
 };
 })(globalThis);

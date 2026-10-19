@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["battleship"] = {
   "id": "battleship",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "name": "Морской бой",
   "category": "board",
   "estimatedDuration": "15–30 мин",
@@ -52,21 +52,46 @@
   "settings": [
     {
       "key": "announceSinking",
-      "label": "Объявлять о потоплении",
+      "label": "Объявлять потопление",
       "default": "on",
       "options": [
         {
           "value": "on",
-          "label": "Да · отмечать окружение"
+          "label": "Да"
         },
         {
           "value": "off",
           "label": "Нет"
         }
       ],
-      "help": "В игре «Морской бой» эта настройка задаёт объявлять о потоплении. Доступные варианты: Да · отмечать окружение, Нет."
+      "help": "При включении сопернику сообщается о потоплении корабля и автоматически отмечаются клетки вокруг него. При выключении попадания видны, но потопление не объявляется.",
+      "control": "slider"
     }
   ],
-  "sounds": "sounds.js"
+  "sounds": "sounds.js",
+  "ruleGroups": [
+    {
+      "label": "Правила",
+      "fields": [
+        "preset",
+        "announceSinking"
+      ]
+    }
+  ],
+  "presetSetting": {
+    "label": "Режим",
+    "control": "slider",
+    "options": [
+      {
+        "value": "russian",
+        "label": "Русский"
+      },
+      {
+        "value": "classic",
+        "label": "Классический"
+      }
+    ],
+    "help": "Русский: 10 кораблей (4/3/3/2/2/2/1/1/1/1), после попадания стреляют снова. Классический: 5 кораблей (5/4/3/3/2), после каждого выстрела ход переходит сопернику."
+  }
 };
 })(globalThis);

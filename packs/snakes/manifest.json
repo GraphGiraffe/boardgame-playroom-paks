@@ -1,6 +1,6 @@
 {
   "id": "snakes",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "category": "board",
   "estimatedDuration": "5–15 мин",
   "tagline": "Вверх по лестнице. Навстречу удаче.",
@@ -64,13 +64,14 @@
       "options": [
         {
           "value": "64",
-          "label": "64 клетки"
+          "label": "64"
         },
         {
           "value": "100",
-          "label": "100 клеток"
+          "label": "100"
         }
-      ]
+      ],
+      "control": "slider"
     },
     {
       "key": "endMode",
@@ -90,18 +91,15 @@
           "value": "last",
           "label": "До последнего"
         }
-      ]
+      ],
+      "control": "slider"
     },
     {
       "key": "maxRounds",
-      "label": "Предел раундов",
+      "label": "Лимит раундов",
       "default": "0",
       "help": "Раунд — полный круг от первого игрока. При достижении предела все заканчивают текущий круг. Если ещё никто не финишировал, сравниваются позиции фишек; равенство означает общее место.",
       "options": [
-        {
-          "value": "0",
-          "label": "Без ограничения"
-        },
         {
           "value": "3",
           "label": "3"
@@ -121,8 +119,45 @@
         {
           "value": "50",
           "label": "50"
+        },
+        {
+          "value": "0",
+          "label": "∞"
         }
-      ]
+      ],
+      "control": "slider"
     }
-  ]
+  ],
+  "ruleGroups": [
+    {
+      "label": "Поле и правила",
+      "fields": [
+        "preset",
+        "boardSize"
+      ]
+    },
+    {
+      "label": "Завершение",
+      "fields": [
+        "endMode",
+        "maxRounds"
+      ],
+      "end": true
+    }
+  ],
+  "presetSetting": {
+    "label": "Режим",
+    "control": "slider",
+    "options": [
+      {
+        "value": "classic",
+        "label": "Простой"
+      },
+      {
+        "value": "plus",
+        "label": "ЗиЛ+"
+      }
+    ],
+    "help": "Простой: один кубик, змеи и лестницы. ЗиЛ+: два кубика на выбор, особые клетки и эффекты на следующий ход."
+  }
 }
