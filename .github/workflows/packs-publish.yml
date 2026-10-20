@@ -53,7 +53,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: GraphGiraffe/boardgame-playroom-utils
-          ref: 2ecceec294d1d5d7c883ec855d7616e79e5bac88
+          ref: b01590ab7ba42d93677a1aa7451721b4083c4bd2
           ssh-key: ${{ secrets.PLAYROOM_UTILS_READ_KEY }}
           path: .playroom-utils
           persist-credentials: false
