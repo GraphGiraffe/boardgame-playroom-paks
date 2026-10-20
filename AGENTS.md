@@ -1,6 +1,6 @@
 # Работа с коллекцией ХОД 0.7
 
-Коллекция 0.7.1 для приложения 0.18.1; engineApi 3, viewApi 2. [Руководство автора](docs/AUTHORING.md), [архитектура](docs/ARCHITECTURE.md), [будущие расширения](docs/NEXT-PATCHES.md).
+Коллекция 0.7.2 для приложения 0.18.1; engineApi 3, viewApi 2. [Руководство автора](docs/AUTHORING.md), [архитектура](docs/ARCHITECTURE.md), [будущие расширения](https://github.com/GraphGiraffe/boardgame-playroom-utils/blob/main/docs/project/packs/NEXT-PATCHES.md).
 
 - Проверить root/status/ветку; сохранять чужую работу. Игра целиком в packs/<id>; manifest.json источник метаданных, manifest.js генерирует build.py.
 - Domain чистый, без DOM/имён/переводов/часов/storage. RNG явный. Presentation получает projection, renderer не пересчитывает правила.
@@ -12,3 +12,11 @@
 Standalone: `bash scripts/codex/check.sh` — синтаксис/упаковка/SHA, не доказательство gameplay. Совместно подготовить приложение с --packs-dir, затем выбрать явные blocks/case его runner. Для сквозного stable cutover: `node scripts/codex/test.cjs core,input,games,ui,storage,network,pairing` из app. Изменённая игра: варианты, privacy, bots, legal targets, restore/replay, 320/390 portrait/короткий landscape. [CONTRIBUTING](CONTRIBUTING.md).
 
 Task branch → dev squash. Stable dev → main merge commit, fast-forward dev. Не force-push. Проверенные source SHA, release assets и live catalog — разные результаты; сообщать их отдельно.
+
+## Предотвращение повторных регрессий
+
+Перед изменением упаковки, скинов, жестов или сохранений прочитать [точные инварианты и проверки](docs/DEVELOPMENT-REGRESSIONS.md). Аудитировать готовые артефакты; повторы между самостоятельными паками допустимы. Исходные мастера сохранять вне runtime. Подготовить exact companion перед игровыми тестами; выбранные проверки и offline HTML доказывают только свой scope. Релиз/публикация требуют отдельного поручения.
+
+## Владение средствами разработки
+
+Общие навыки, операционные инструменты, roadmap, Cloud/test/release инструкции — в [utils](https://github.com/GraphGiraffe/boardgame-playroom-utils/blob/main/docs/PROJECT.md). Здесь остаются продуктовый код, SDK/правила/ассеты, авторские контракты и собственные проверки. Operational scripts — совместимые shims; установите соседний utils либо PLAYROOM_UTILS_ROOT. Не копировать реализацию обратно.

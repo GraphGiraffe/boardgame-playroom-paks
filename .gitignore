@@ -6,3 +6,6 @@ __pycache__/
 .env
 .env.*
 *.log
+
+# Pinned developer-tools checkout, never runtime sources
+.playroom-utils/

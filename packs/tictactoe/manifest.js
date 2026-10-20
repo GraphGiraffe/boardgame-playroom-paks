@@ -4,11 +4,11 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["tictactoe"] = {
   "id": "tictactoe",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "name": "Крестики-нолики",
   "category": "board",
   "estimatedDuration": "2–5 мин",
-  "tagline": "Три в ряд — и победа.",
+  "tagline": "Займи три клетки в линию раньше соперника.",
   "capabilities": {
     "hands": false,
     "surfaces": [
@@ -38,6 +38,9 @@
       ],
       "teams": false
     }
+  ],
+  "skinFamilies": [
+    "board"
   ]
 };
 })(globalThis);

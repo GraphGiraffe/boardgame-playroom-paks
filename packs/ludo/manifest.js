@@ -4,11 +4,11 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["ludo"] = {
   "id": "ludo",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "name": "Лудо",
   "category": "board",
   "estimatedDuration": "20–40 мин",
-  "tagline": "Четыре фишки домой.",
+  "tagline": "Выведи фишки, обойди круг и доберись домой.",
   "capabilities": {
     "hands": false,
     "surfaces": [
@@ -251,6 +251,9 @@
       }
     ],
     "help": "Обычный: каждый играет за себя, 2–4 игрока. Командный: две команды по два игрока; после финиша своих фишек игрок помогает партнёру."
-  }
+  },
+  "skinFamilies": [
+    "die"
+  ]
 };
 })(globalThis);

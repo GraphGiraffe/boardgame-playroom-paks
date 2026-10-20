@@ -1,0 +1,6 @@
+(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;root.PlayroomPackPresentation=api;})(globalThis,function(){
+'use strict';const message=(key,params={})=>({key:'klondike.'+key,params});
+const metadata={name:message('meta.name'),description:message('meta.description'),scoreLabel:message('meta.score'),presets:[{id:'classic',label:message('presets.classic')}],rules:[1,2,3].map(i=>message('rules.'+i))};
+const action=command=>message('actions.'+command.type),event=value=>({message:message('events.'+value.type.split('.').at(-1)),kind:value.type.endsWith('.finished')?'finish':'action',...(value.type.endsWith('.finished')?{}:{presentation:{type:value.type.split('.').at(-1),...(value.params?.card?{card:value.params.card}:{})}}),...(value.type.endsWith('.finished')?{finish:true}:{})}),metric=id=>message(id==='moves'?'meta.moves':id==='cleared'?'meta.cleared':'meta.score');
+return Object.freeze({metadata,action,event,metric,scene:projection=>({contractVersion:1,id:'klondike-board',family:'solitaire',players:[{player:0,metrics:projection.data.config.scoring!=='none'&&projection.data.score>=0?[{id:'score',kind:'points',value:projection.data.score,label:metric('score'),resultUsage:true}]:[]}]})});
+});

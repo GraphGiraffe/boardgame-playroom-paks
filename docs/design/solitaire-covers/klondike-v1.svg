@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 168" width="280" height="168">
+<!-- Tableau, face-down stacks and alternating red/black sequence. -->
+<g fill="#31594c" stroke="#d6c79a" stroke-width="2">
+ <rect x="4" y="8" width="82" height="114" rx="10"/><rect x="4" y="14" width="82" height="114" rx="10"/>
+ <rect x="99" y="2" width="82" height="114" rx="10"/><rect x="99" y="8" width="82" height="114" rx="10"/>
+ <rect x="194" y="14" width="82" height="114" rx="10"/><rect x="194" y="20" width="82" height="114" rx="10"/><rect x="194" y="26" width="82" height="114" rx="10"/>
+</g>
+<g transform="translate(4 20)">
+ <rect y="4" width="82" height="114" rx="10" fill="#a8b69a"/><rect width="82" height="114" rx="10" fill="#fff9e9" stroke="#e4dfc6" stroke-width="2"/>
+ <text x="10" y="28" font-family="system-ui,sans-serif" font-size="24" font-weight="800" fill="#bd6f59">Т</text>
+ <path d="M41 62c-18-22-40 4 0 31 40-27 18-53 0-31Z" fill="#bd6f59"/>
+</g>
+<g transform="translate(99 14)">
+ <rect y="4" width="82" height="114" rx="10" fill="#a8b69a"/><rect width="82" height="114" rx="10" fill="#fff9e9" stroke="#e4dfc6" stroke-width="2"/>
+ <text x="9" y="24" font-family="system-ui,sans-serif" font-size="21" font-weight="800" fill="#31594c">К ♠</text>
+ <g transform="translate(0 34)"><rect y="4" width="82" height="114" rx="10" fill="#a8b69a"/><rect width="82" height="114" rx="10" fill="#fff9e9" stroke="#e4dfc6" stroke-width="2"/>
+ <text x="9" y="24" font-family="system-ui,sans-serif" font-size="21" font-weight="800" fill="#bd6f59">Д ♥</text>
+ <path d="M41 62c-18-22-40 4 0 31 40-27 18-53 0-31Z" fill="#bd6f59"/>
+ </g>
+</g>
+<g transform="translate(194 32)">
+ <rect y="4" width="82" height="114" rx="10" fill="#a8b69a"/><rect width="82" height="114" rx="10" fill="#fff9e9" stroke="#e4dfc6" stroke-width="2"/>
+ <text x="10" y="28" font-family="system-ui,sans-serif" font-size="24" font-weight="800" fill="#31594c">7</text>
+ <path d="M41 51c-4 13-25 19-25 34 0 13 19 18 24 4-1 10-3 15-9 19h21c-6-4-8-9-9-19 5 14 24 9 24-4 0-15-21-21-26-34Z" fill="#31594c"/>
+</g>
+</svg>

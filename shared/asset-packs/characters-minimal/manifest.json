@@ -1,0 +1,426 @@
+{
+  "format": "playroom-asset-pack",
+  "formatVersion": 1,
+  "id": "characters-minimal",
+  "version": "0.1.0",
+  "name": "Стандартные персонажи",
+  "canvas": [
+    256,
+    256
+  ],
+  "alpha": true,
+  "semanticSource": {
+    "id": "characters",
+    "version": "0.1.1"
+  },
+  "shapes": [
+    "crescent",
+    "triangle",
+    "square",
+    "circle",
+    "star",
+    "rectangle",
+    "diamond",
+    "hexagon"
+  ],
+  "colors": [
+    "red",
+    "orange",
+    "yellow",
+    "green",
+    "blue",
+    "purple"
+  ],
+  "items": [
+    {
+      "id": "crescent-red",
+      "shape": "crescent",
+      "color": "red",
+      "label": "Месяц · красный",
+      "file": "runtime/crescent-red.svg",
+      "sha256": "ba83b840b55d7f34d298ad4a971a98e5dd958d5762fa3709eb1c8ee9f14e785f"
+    },
+    {
+      "id": "crescent-orange",
+      "shape": "crescent",
+      "color": "orange",
+      "label": "Месяц · оранжевый",
+      "file": "runtime/crescent-orange.svg",
+      "sha256": "ee02e4ab1114c9d91aeb622bdc47fe66035ba01c657f7667600b4271336831b0"
+    },
+    {
+      "id": "crescent-yellow",
+      "shape": "crescent",
+      "color": "yellow",
+      "label": "Месяц · жёлтый",
+      "file": "runtime/crescent-yellow.svg",
+      "sha256": "192a3d1c847ff7b0a7c68c096a46d57c68cc880f076383b804a899db4fb59a1d"
+    },
+    {
+      "id": "crescent-green",
+      "shape": "crescent",
+      "color": "green",
+      "label": "Месяц · зелёный",
+      "file": "runtime/crescent-green.svg",
+      "sha256": "6b2cba9ca8d46c20f3abba57317ea50bf5242d55df391ec6df0a07ce0ed3881e"
+    },
+    {
+      "id": "crescent-blue",
+      "shape": "crescent",
+      "color": "blue",
+      "label": "Месяц · синий",
+      "file": "runtime/crescent-blue.svg",
+      "sha256": "833d43f2e6f0e4e2be918b62890fe6b7f75f663657c787efe64daceb00ec020f"
+    },
+    {
+      "id": "crescent-purple",
+      "shape": "crescent",
+      "color": "purple",
+      "label": "Месяц · фиолетовый",
+      "file": "runtime/crescent-purple.svg",
+      "sha256": "9a8a3d47bbab24962da7fcf1d398a426662ab75c81326f02ed2ffd46a040902a"
+    },
+    {
+      "id": "triangle-red",
+      "shape": "triangle",
+      "color": "red",
+      "label": "Треугольник · красный",
+      "file": "runtime/triangle-red.svg",
+      "sha256": "3fed8e38ff60c1c006ddfd722571ac9e099a78a7e343f4b6f1355a2061ef0100"
+    },
+    {
+      "id": "triangle-orange",
+      "shape": "triangle",
+      "color": "orange",
+      "label": "Треугольник · оранжевый",
+      "file": "runtime/triangle-orange.svg",
+      "sha256": "9c00e2771d3c3fa027a241a8d49cfc3627c8529681817e1bb99f9247bfe22b72"
+    },
+    {
+      "id": "triangle-yellow",
+      "shape": "triangle",
+      "color": "yellow",
+      "label": "Треугольник · жёлтый",
+      "file": "runtime/triangle-yellow.svg",
+      "sha256": "0fcab208c70dc856f2779e01f179bc04b3adbdc379ff898aa872da67007f3320"
+    },
+    {
+      "id": "triangle-green",
+      "shape": "triangle",
+      "color": "green",
+      "label": "Треугольник · зелёный",
+      "file": "runtime/triangle-green.svg",
+      "sha256": "0236f5633d974a509158b96567fab0c8ef7ab63d1ccb15f702a242514449fd22"
+    },
+    {
+      "id": "triangle-blue",
+      "shape": "triangle",
+      "color": "blue",
+      "label": "Треугольник · синий",
+      "file": "runtime/triangle-blue.svg",
+      "sha256": "e73e54146c89e8c618abbc7f7355d4117a6a02d1f83f52c54f68c2683daf3e98"
+    },
+    {
+      "id": "triangle-purple",
+      "shape": "triangle",
+      "color": "purple",
+      "label": "Треугольник · фиолетовый",
+      "file": "runtime/triangle-purple.svg",
+      "sha256": "3c80ad371f6d8533eb94a852d2ea53d52b27922459ec25e8577e6c7276edb61e"
+    },
+    {
+      "id": "square-red",
+      "shape": "square",
+      "color": "red",
+      "label": "Квадрат · красный",
+      "file": "runtime/square-red.svg",
+      "sha256": "4c622dfffa031ccd020ebbfaeaf4983bc466d50e5a48e3feb9e707e57bf50b05"
+    },
+    {
+      "id": "square-orange",
+      "shape": "square",
+      "color": "orange",
+      "label": "Квадрат · оранжевый",
+      "file": "runtime/square-orange.svg",
+      "sha256": "da513a198d3bf9d23ea2387b468d84e7b1ce0e284f9cd1b2bb109a9e09eb7ccd"
+    },
+    {
+      "id": "square-yellow",
+      "shape": "square",
+      "color": "yellow",
+      "label": "Квадрат · жёлтый",
+      "file": "runtime/square-yellow.svg",
+      "sha256": "8de395baaf1dfba9a7980b8ba61274f53a19b25be97f4857f2ac387c0b8582a6"
+    },
+    {
+      "id": "square-green",
+      "shape": "square",
+      "color": "green",
+      "label": "Квадрат · зелёный",
+      "file": "runtime/square-green.svg",
+      "sha256": "a3b9ecc6d210b4e19e808cc5e896a748de164bc006b9fa7a7566242baadbf2cc"
+    },
+    {
+      "id": "square-blue",
+      "shape": "square",
+      "color": "blue",
+      "label": "Квадрат · синий",
+      "file": "runtime/square-blue.svg",
+      "sha256": "b9104f3c29591b8b2d341843275bf3e8fb3f45c92ec9448ca1eb9926f64c2d35"
+    },
+    {
+      "id": "square-purple",
+      "shape": "square",
+      "color": "purple",
+      "label": "Квадрат · фиолетовый",
+      "file": "runtime/square-purple.svg",
+      "sha256": "088a675b2aa5bd09c4b6152d4a7fcd1d9984b8c277a07981e33c0f1be5ef9bdf"
+    },
+    {
+      "id": "circle-red",
+      "shape": "circle",
+      "color": "red",
+      "label": "Круг · красный",
+      "file": "runtime/circle-red.svg",
+      "sha256": "e3a70fff67463caff1775a6d0d8127ffec2f012acc3a74c6116c7ca71ce412cc"
+    },
+    {
+      "id": "circle-orange",
+      "shape": "circle",
+      "color": "orange",
+      "label": "Круг · оранжевый",
+      "file": "runtime/circle-orange.svg",
+      "sha256": "71786c25baf1d2a841f30fa3cb453c582e8549e3e46e923241326e15ff3d84c2"
+    },
+    {
+      "id": "circle-yellow",
+      "shape": "circle",
+      "color": "yellow",
+      "label": "Круг · жёлтый",
+      "file": "runtime/circle-yellow.svg",
+      "sha256": "2087ef9ae2f0f8710628b6c05c38e5f18af4024296c2fa3a54833ce98d7169af"
+    },
+    {
+      "id": "circle-green",
+      "shape": "circle",
+      "color": "green",
+      "label": "Круг · зелёный",
+      "file": "runtime/circle-green.svg",
+      "sha256": "e8a32bce7ebf343c10f95b18f10c53ea006100dea3dc6740ee3b31a0d572378a"
+    },
+    {
+      "id": "circle-blue",
+      "shape": "circle",
+      "color": "blue",
+      "label": "Круг · синий",
+      "file": "runtime/circle-blue.svg",
+      "sha256": "dcc5cc158bd6dfbabefe244ce18e293c93373a6d9b804586b6d291043d5ea026"
+    },
+    {
+      "id": "circle-purple",
+      "shape": "circle",
+      "color": "purple",
+      "label": "Круг · фиолетовый",
+      "file": "runtime/circle-purple.svg",
+      "sha256": "29e595f33221c4464fd185beb8f1448aef76f454639c212de0c1bb4f3bb3feb5"
+    },
+    {
+      "id": "star-red",
+      "shape": "star",
+      "color": "red",
+      "label": "Звезда · красный",
+      "file": "runtime/star-red.svg",
+      "sha256": "868dfbe7372622afb4b76b6d1bc72a2859f59fc424a6c81d68bb5ddfa0bc4590"
+    },
+    {
+      "id": "star-orange",
+      "shape": "star",
+      "color": "orange",
+      "label": "Звезда · оранжевый",
+      "file": "runtime/star-orange.svg",
+      "sha256": "fa38e4dae57c1778b656d0ba6335c34088e145147fc93e8984c5958d78a22014"
+    },
+    {
+      "id": "star-yellow",
+      "shape": "star",
+      "color": "yellow",
+      "label": "Звезда · жёлтый",
+      "file": "runtime/star-yellow.svg",
+      "sha256": "d9be79fd6cf331a5c07fc2bf3b206a1534d3b3eb95c85787a3a1ed8352f18038"
+    },
+    {
+      "id": "star-green",
+      "shape": "star",
+      "color": "green",
+      "label": "Звезда · зелёный",
+      "file": "runtime/star-green.svg",
+      "sha256": "cf0d19352c826d0504bf47384fb51618b4d2f553599577542e8de7be58a6be6c"
+    },
+    {
+      "id": "star-blue",
+      "shape": "star",
+      "color": "blue",
+      "label": "Звезда · синий",
+      "file": "runtime/star-blue.svg",
+      "sha256": "8080959cfaf6c7d84968a6e8fcc18f410e2c9a1d2656b37370f05a49a2b09f75"
+    },
+    {
+      "id": "star-purple",
+      "shape": "star",
+      "color": "purple",
+      "label": "Звезда · фиолетовый",
+      "file": "runtime/star-purple.svg",
+      "sha256": "db6c12a0efc2da4bb2c5969f3c679226964e21e741536e4a4506f24ebfe2d881"
+    },
+    {
+      "id": "rectangle-red",
+      "shape": "rectangle",
+      "color": "red",
+      "label": "Прямоугольник · красный",
+      "file": "runtime/rectangle-red.svg",
+      "sha256": "940a5e2161cafef34b373f26741c221d5cc957b2340385ab77baef142eece320"
+    },
+    {
+      "id": "rectangle-orange",
+      "shape": "rectangle",
+      "color": "orange",
+      "label": "Прямоугольник · оранжевый",
+      "file": "runtime/rectangle-orange.svg",
+      "sha256": "3dd6826af162d769660bb2174ff15a3a1e37816311729068d84fd36a8ed6309f"
+    },
+    {
+      "id": "rectangle-yellow",
+      "shape": "rectangle",
+      "color": "yellow",
+      "label": "Прямоугольник · жёлтый",
+      "file": "runtime/rectangle-yellow.svg",
+      "sha256": "f7d2a4dfc46a15d3bde8dab8f932a24b97bed8f8c920a4057d706063ffc99b26"
+    },
+    {
+      "id": "rectangle-green",
+      "shape": "rectangle",
+      "color": "green",
+      "label": "Прямоугольник · зелёный",
+      "file": "runtime/rectangle-green.svg",
+      "sha256": "1fe8752e87e5e9dae58530ca3fee428e64314131c57fe86b3b7795bcdbe365bc"
+    },
+    {
+      "id": "rectangle-blue",
+      "shape": "rectangle",
+      "color": "blue",
+      "label": "Прямоугольник · синий",
+      "file": "runtime/rectangle-blue.svg",
+      "sha256": "8d788c3dc7aee0d986976eef11e80aa1414705f144ca63762e673a87747e8d2c"
+    },
+    {
+      "id": "rectangle-purple",
+      "shape": "rectangle",
+      "color": "purple",
+      "label": "Прямоугольник · фиолетовый",
+      "file": "runtime/rectangle-purple.svg",
+      "sha256": "0487f4899f85789c93f8c763488cf7597fd90359bfc9f5a06b867191e1e65ee1"
+    },
+    {
+      "id": "diamond-red",
+      "shape": "diamond",
+      "color": "red",
+      "label": "Ромб · красный",
+      "file": "runtime/diamond-red.svg",
+      "sha256": "a4917db07f50c8590868febd09529a335e5bd7a352d66a26b4266b3445fc875f"
+    },
+    {
+      "id": "diamond-orange",
+      "shape": "diamond",
+      "color": "orange",
+      "label": "Ромб · оранжевый",
+      "file": "runtime/diamond-orange.svg",
+      "sha256": "0b40bf1773d4f41a1f1ba7e361db9e0e4da655f6ceaacf1389b8ccbf7c1349f6"
+    },
+    {
+      "id": "diamond-yellow",
+      "shape": "diamond",
+      "color": "yellow",
+      "label": "Ромб · жёлтый",
+      "file": "runtime/diamond-yellow.svg",
+      "sha256": "35647ed64301dd7d3ac825626aa077d18f666547967a909f03704bfd0365fb7e"
+    },
+    {
+      "id": "diamond-green",
+      "shape": "diamond",
+      "color": "green",
+      "label": "Ромб · зелёный",
+      "file": "runtime/diamond-green.svg",
+      "sha256": "350c533f5563398f3a7521b7a8ef3b2377000014deda283ccb24df7db63e5bfa"
+    },
+    {
+      "id": "diamond-blue",
+      "shape": "diamond",
+      "color": "blue",
+      "label": "Ромб · синий",
+      "file": "runtime/diamond-blue.svg",
+      "sha256": "746ca675c006f9256da0090682a9de748084d8010931f52f98e9537c8c08f887"
+    },
+    {
+      "id": "diamond-purple",
+      "shape": "diamond",
+      "color": "purple",
+      "label": "Ромб · фиолетовый",
+      "file": "runtime/diamond-purple.svg",
+      "sha256": "86f81986f3e0f57122c1f9a71ba670004a35f8cb63879aff3bb5172334c5a851"
+    },
+    {
+      "id": "hexagon-red",
+      "shape": "hexagon",
+      "color": "red",
+      "label": "Шестиугольник · красный",
+      "file": "runtime/hexagon-red.svg",
+      "sha256": "a0415b58f0b27df86d27061c3d0a6dfae633db128b27ae742f7bdba95cde53ad"
+    },
+    {
+      "id": "hexagon-orange",
+      "shape": "hexagon",
+      "color": "orange",
+      "label": "Шестиугольник · оранжевый",
+      "file": "runtime/hexagon-orange.svg",
+      "sha256": "ed40c5027c049f6470539495eba413be106890c6a8d415a1fe698c7ca17c40c5"
+    },
+    {
+      "id": "hexagon-yellow",
+      "shape": "hexagon",
+      "color": "yellow",
+      "label": "Шестиугольник · жёлтый",
+      "file": "runtime/hexagon-yellow.svg",
+      "sha256": "36f3657f5a6018cc77704fb80c5cc03156d0127cd7dff5e02df46ca4dcf0c609"
+    },
+    {
+      "id": "hexagon-green",
+      "shape": "hexagon",
+      "color": "green",
+      "label": "Шестиугольник · зелёный",
+      "file": "runtime/hexagon-green.svg",
+      "sha256": "b53d1056d075ad3ec46f3d7076c5ecb9f91c4b64713857e076c9a29da0528451"
+    },
+    {
+      "id": "hexagon-blue",
+      "shape": "hexagon",
+      "color": "blue",
+      "label": "Шестиугольник · синий",
+      "file": "runtime/hexagon-blue.svg",
+      "sha256": "d96106ece479fce63900a7a2e71877ca289d32ee4aad871bb72721310f5ede35"
+    },
+    {
+      "id": "hexagon-purple",
+      "shape": "hexagon",
+      "color": "purple",
+      "label": "Шестиугольник · фиолетовый",
+      "file": "runtime/hexagon-purple.svg",
+      "sha256": "3f97b04cd0540fa4cf3ca8f75d31a01dd9452836b49c3dfed4f29844e5858feb"
+    }
+  ],
+  "files": [
+    "renderer.js"
+  ],
+  "scripts": [
+    "renderer.js"
+  ]
+}

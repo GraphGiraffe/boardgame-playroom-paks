@@ -1,0 +1,1 @@
+(function(root){const factory=(ports,Deck,Solitaire)=>Solitaire.factory('klondike',ports,Deck);if(typeof module==='object'&&module.exports)module.exports=factory;root.PlayroomPackDefinitionFactory=factory;})(globalThis);

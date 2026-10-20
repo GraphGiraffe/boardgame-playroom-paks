@@ -1,6 +1,6 @@
 """Original deterministic sea effects, no external samples. Python standard library."""
 from pathlib import Path
-import base64, json, math, random, struct, wave
+import json, math, random, struct, wave
 ROOT=Path(__file__).resolve().parent.parent/'packs/battleship/assets'
 RATE=22050
 rng=random.Random(184)
@@ -24,5 +24,5 @@ def synth(kind,length):
     return path
 sounds={}
 for kind,length,label in [('start',.65,'Короткая сирена'),('miss',.32,'Всплеск'),('hit',.22,'Попадание'),('sunk',.58,'Потопление')]:
-    p=synth(kind,length);sounds['sea.'+kind]={'label':label,'src':'data:audio/wav;base64,'+base64.b64encode(p.read_bytes()).decode()}
-(ROOT.parent/'sounds.js').write_text('(function(root){root.PlayroomCatalog ||= {};root.PlayroomCatalog.battleship ||= {};root.PlayroomCatalog.battleship.sounds='+json.dumps(sounds,ensure_ascii=False)+';})(globalThis);\n')
+    p=synth(kind,length);sounds['sea.'+kind]={'label':label,'asset':'assets/'+p.name}
+(ROOT.parent/'sounds.js').write_text('(function(root){root.PlayroomCatalog ||= {};root.PlayroomCatalog.battleship ||= {};const cues='+json.dumps(sounds,ensure_ascii=False)+';root.PlayroomCatalog.battleship.sounds=Object.fromEntries(Object.entries(cues).map(([id,cue])=>[id,{label:cue.label,src:root.PlayroomPack.asset(cue.asset)}]));})(globalThis);\n')
