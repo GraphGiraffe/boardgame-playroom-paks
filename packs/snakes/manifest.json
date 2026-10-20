@@ -3,7 +3,7 @@
   "version": "0.4.2",
   "category": "board",
   "estimatedDuration": "5–15 мин",
-  "tagline": "Вверх по лестнице. Навстречу удаче.",
+  "tagline": "Лестницы поднимают. Змеи возвращают назад.",
   "capabilities": {
     "hands": false,
     "surfaces": [

@@ -32,3 +32,8 @@ body.reduced-motion .player-panel.is-turn-skipped,.reduced-motion .player-panel.
 [data-interaction-shape="circle"]{--interaction-ring-width:2px}
 
 .action-reveal-content{position:absolute;left:var(--reveal-x,50%);top:var(--reveal-y,50%);transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:12px;max-width:calc(100vw - 24px)}
+
+/* One exposed header contains both rank and suit for compact vertical stacks. */
+.inline-index-face .shared-card-corner{display:flex;flex-direction:row;align-items:center;gap:3px;top:3px;left:4px;font-size:15px;line-height:17px;white-space:nowrap}
+.inline-index-face .shared-card-corner small{font-size:15px;line-height:17px}
+.inline-index-face .shared-card-corner.bottom{top:auto;left:auto;bottom:3px;right:4px}

@@ -4,18 +4,28 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["spider"] = {
   "id": "spider",
-  "version": "0.1.0",
+  "version": "0.1.3",
   "name": "Паук",
   "category": "solitaire",
   "estimatedDuration": "10–30 мин",
-  "tagline": "Один расклад — без передачи хода.",
+  "tagline": "Собери восемь серий от короля до туза.",
   "capabilities": {
     "hands": false,
     "surfaces": [
       "combined",
       "table",
       "player"
-    ]
+    ],
+    "quietActions": [
+      "move",
+      "flip",
+      "recycle",
+      "undo",
+      "collect"
+    ],
+    "presentation": {
+      "entityMotion": true
+    }
   },
   "rules": "rules.js",
   "view": "view.js",
@@ -53,7 +63,7 @@
     "card-back"
   ],
   "defaultSkins": {
-    "card-face": "mini-split"
+    "card-face": "compact-index"
   },
   "settings": [
     {

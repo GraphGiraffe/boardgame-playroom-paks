@@ -8,7 +8,7 @@
   "name": "Акулина",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
-  "tagline": "Сбрось пары. Не оставь даму.",
+  "tagline": "Разбирай пары. Берегись последней дамы.",
   "capabilities": {
     "hands": true,
     "surfaces": [

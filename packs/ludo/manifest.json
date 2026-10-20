@@ -4,7 +4,7 @@
   "name": "Лудо",
   "category": "board",
   "estimatedDuration": "20–40 мин",
-  "tagline": "Четыре фишки домой.",
+  "tagline": "Выведи фишки, обойди круг и доберись домой.",
   "capabilities": {
     "hands": false,
     "surfaces": [

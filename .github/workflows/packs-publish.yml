@@ -49,6 +49,14 @@ jobs:
       CHECKS: ${{ inputs.checks }}
     steps:
       - uses: actions/checkout@v4
+      - name: Checkout pinned shared project tools
+        uses: actions/checkout@v4
+        with:
+          repository: GraphGiraffe/boardgame-playroom-utils
+          ref: 2ecceec294d1d5d7c883ec855d7616e79e5bac88
+          ssh-key: ${{ secrets.PLAYROOM_UTILS_READ_KEY }}
+          path: .playroom-utils
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc

@@ -8,7 +8,7 @@
   "name": "Морской бой",
   "category": "board",
   "estimatedDuration": "15–30 мин",
-  "tagline": "Построй флот. Найди противника.",
+  "tagline": "Ищи палубы. Потопи весь чужой флот.",
   "capabilities": {
     "hands": false,
     "surfaces": [

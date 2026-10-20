@@ -8,7 +8,7 @@
   "name": "Пексесо",
   "category": "cards",
   "estimatedDuration": "5–20 мин",
-  "tagline": "Открой пару и запомни остальное.",
+  "tagline": "Запомни карты и открой больше пар.",
   "capabilities": {
     "hands": false,
     "surfaces": [
@@ -66,7 +66,9 @@
     "standard-deck"
   ],
   "sharedAssetPacks": [
-    "cartoon-deck"
+    "cartoon-deck",
+    "characters-minimal",
+    "characters-simple"
   ],
   "ruleGroups": [
     {
@@ -98,7 +100,11 @@
   },
   "skinFamilies": [
     "card-face",
+    "character-face",
     "card-back"
-  ]
+  ],
+  "defaultSkins": {
+    "character-face": "minimal"
+  }
 };
 })(globalThis);

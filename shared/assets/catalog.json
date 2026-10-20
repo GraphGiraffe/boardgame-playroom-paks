@@ -3,7 +3,11 @@
     "default": "classic",
     "variants": [
       "classic",
-      "mini-split"
+      "mini-split",
+      "compact-index",
+      "classic-four-color",
+      "mini-split-four-color",
+      "compact-index-four-color"
     ],
     "ratio": [
       5,
@@ -20,7 +24,135 @@
     ],
     "labels": {
       "classic": "Классический",
-      "mini-split": "Мини: номинал / масть"
+      "mini-split": "Крупные: номинал и масть",
+      "classic-four-color": "Классический · 4 цвета",
+      "mini-split-four-color": "Крупные · 4 цвета",
+      "compact-index": "Компактный: номинал и масть",
+      "compact-index-four-color": "Компактный · 4 цвета"
+    },
+    "variantGroups": [
+      {
+        "id": "two-color",
+        "label": "2 цвета",
+        "variants": [
+          "classic",
+          "mini-split",
+          "compact-index"
+        ]
+      },
+      {
+        "id": "four-color",
+        "label": "4 цвета",
+        "variants": [
+          "classic-four-color",
+          "mini-split-four-color",
+          "compact-index-four-color"
+        ]
+      }
+    ],
+    "stacking": {
+      "classic": {
+        "protectedZones": [
+          {
+            "x": 0.04,
+            "y": 0.03,
+            "width": 0.26,
+            "height": 0.3
+          }
+        ],
+        "horizontal": 0.32,
+        "vertical": 0.35,
+        "arc": 0.4,
+        "faceDown": 0.07,
+        "wasteAxis": "horizontal"
+      },
+      "classic-four-color": {
+        "protectedZones": [
+          {
+            "x": 0.04,
+            "y": 0.03,
+            "width": 0.26,
+            "height": 0.3
+          }
+        ],
+        "horizontal": 0.32,
+        "vertical": 0.35,
+        "arc": 0.4,
+        "faceDown": 0.07,
+        "wasteAxis": "horizontal"
+      },
+      "mini-split": {
+        "protectedZones": [
+          {
+            "x": 0.13,
+            "y": 0.03,
+            "width": 0.48,
+            "height": 0.24
+          },
+          {
+            "x": 0.13,
+            "y": 0.33,
+            "width": 0.74,
+            "height": 0.57
+          }
+        ],
+        "horizontal": 0.87,
+        "vertical": 0.9,
+        "arc": 0.95,
+        "faceDown": 0.07,
+        "wasteAxis": "horizontal"
+      },
+      "mini-split-four-color": {
+        "protectedZones": [
+          {
+            "x": 0.13,
+            "y": 0.03,
+            "width": 0.48,
+            "height": 0.24
+          },
+          {
+            "x": 0.13,
+            "y": 0.33,
+            "width": 0.74,
+            "height": 0.57
+          }
+        ],
+        "horizontal": 0.87,
+        "vertical": 0.9,
+        "arc": 0.95,
+        "faceDown": 0.07,
+        "wasteAxis": "horizontal"
+      },
+      "compact-index": {
+        "protectedZones": [
+          {
+            "x": 0.04,
+            "y": 0.03,
+            "width": 0.5800000000000001,
+            "height": 0.19
+          }
+        ],
+        "horizontal": 0.64,
+        "vertical": 0.24,
+        "arc": 0.72,
+        "faceDown": 0.07,
+        "wasteAxis": "vertical"
+      },
+      "compact-index-four-color": {
+        "protectedZones": [
+          {
+            "x": 0.04,
+            "y": 0.03,
+            "width": 0.5800000000000001,
+            "height": 0.19
+          }
+        ],
+        "horizontal": 0.64,
+        "vertical": 0.24,
+        "arc": 0.72,
+        "faceDown": 0.07,
+        "wasteAxis": "vertical"
+      }
     }
   },
   "card-back": {
@@ -165,6 +297,26 @@
       "face": "surface.panel",
       "ink": "text.primary",
       "rim": "border.subtle"
+    }
+  },
+  "character-face": {
+    "default": "minimal",
+    "variants": [
+      "minimal",
+      "simple"
+    ],
+    "labels": {
+      "minimal": "Стандартный",
+      "simple": "Простой"
+    },
+    "ratio": [
+      5,
+      7
+    ],
+    "optional": true,
+    "materials": {
+      "face": "material.card.face",
+      "rim": "material.card.rim"
     }
   }
 }

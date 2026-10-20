@@ -1,7 +1,7 @@
 {
   "spider.meta.name": "Паук",
   "spider.meta.description": "Соберите восемь одномастных серий от короля до туза.",
-  "spider.meta.score": "Карты",
+  "spider.meta.score": "Очки",
   "spider.meta.moves": "Действия",
   "spider.presets.classic": "Классический",
   "spider.rules.1": "Переносите одномастные убывающие группы на карту старше на один ранг любой масти. В пустой столбец — любую доступную группу.",
@@ -26,10 +26,19 @@
   "spider.ui.waste": "Сброс",
   "spider.ui.foundation": "Дом",
   "spider.ui.empty": "Пустой столбец",
-  "spider.ui.noHint": "Доступного переноса или добора нет",
+  "spider.ui.noHint": "Полезной подсказки нет",
   "spider.ui.hintMove": "Столбец {from} → {to}",
   "spider.ui.completed": "Серий {count}/8",
   "spider.ui.stats": "Очки {score} · действий {moves}",
   "spider.ui.inspect": "Просмотр карты",
-  "spider.ui.clearShort": "Снять"
+  "spider.ui.clearShort": "Снять",
+  "spider.ui.orientation": "Листайте поле или поверните экран",
+  "spider.ui.score": "Очки",
+  "spider.ui.moves": "Действия",
+  "spider.ui.series": "Серии",
+  "spider.ui.rank11": "Валет",
+  "spider.ui.rank12": "Дама",
+  "spider.ui.rank13": "Король",
+  "spider.ui.rank14": "Туз",
+  "spider.meta.cleared": "Серии"
 }

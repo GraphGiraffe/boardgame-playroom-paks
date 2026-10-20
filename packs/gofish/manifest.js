@@ -8,7 +8,7 @@
   "name": "Спроси рыбу",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
-  "tagline": "Есть у тебя семёрки?",
+  "tagline": "Спрашивай ранги — собирай четвёрки.",
   "capabilities": {
     "hands": true,
     "surfaces": [

@@ -8,7 +8,7 @@
   "name": "Крестики-нолики",
   "category": "board",
   "estimatedDuration": "2–5 мин",
-  "tagline": "Три в ряд — и победа.",
+  "tagline": "Займи три клетки в линию раньше соперника.",
   "capabilities": {
     "hands": false,
     "surfaces": [

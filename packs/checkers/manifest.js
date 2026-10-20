@@ -7,7 +7,7 @@
   "version": "0.4.2",
   "category": "board",
   "estimatedDuration": "15–30 мин",
-  "tagline": "На один ход ближе к победе.",
+  "tagline": "Бери шашки и пробивайся в дамки.",
   "capabilities": {
     "hands": false,
     "surfaces": [

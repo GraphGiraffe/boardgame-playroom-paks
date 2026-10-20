@@ -1,6 +1,6 @@
 (function(){
   'use strict';const coverComponents=globalThis.PlayroomShared;
-  const V=globalThis.PlayroomViews,H=V.helpers;
+  const V=globalThis.PlayroomViews,H=V.helpers,C=globalThis.PlayroomShared;
   const source=typeof require==='function'&&!globalThis.PlayroomPack;
   const P=source?require('./presentation/scene.js'):globalThis.PlayroomPackPresentation;
   const translator=H.translator(source?{ru:require('./locales/ru/game.json')}:globalThis.PlayroomPackResources.locales);
@@ -34,7 +34,7 @@
     const dock=H.actionGroups({start:call,primary:controls,end:`<button class="uno-card-help" data-command="card-help" aria-label="${H.esc(text('uno.view.card-help'))}">${H.icon('help')}</button>`,exclusive:chosen.length>1});
     return {api:2,family:'cards',layout:{focus:'hands'},fieldSizing:'content',className:'uno-scene surface-'+surface,playerContent:H.playerContent(s,viewer,(c,attrs,ctx)=>card(c,attrs,'',ctx?.variant),{badges:i=>d.uno?.declared?.[i]?[{label:'UNO',tone:'success',position:'avatar-bottom'}]:[]}),elements:{
       participants:'',
-      field:`<div class="uno-play-area"><div class="uno-flow">${direction}<div class="uno-color-indicator" aria-label="${H.esc(text('uno.view.active-color',{color:name(d.color)}))}"><i style="background:${colors[d.color]||colors.wild}"></i>${H.esc(name(d.color))}</div></div><div class="uno-center"><button class="stock-button" ${draw?H.actionAttr(draw):'disabled'} aria-label="${H.esc(text('uno.view.draw'))}" data-tooltip="${H.esc(text('uno.view.stock-help'))}">${H.back()}${H.countBadge(d.drawPile.length,text('uno.view.stock-count'),{corner:true})}<small>${H.esc(text('uno.view.stock-caption'))}</small></button><div class="uno-discard" data-motion-table data-tooltip="${H.esc(text('uno.view.discard-help'))}">${top?card(top):''}${drop}<small>${H.esc(text('uno.view.discard-caption',{count:d.discard.length}))}</small></div></div></div>`,
+      field:`<div class="uno-play-area"><div class="uno-flow">${direction}<div class="uno-color-indicator" aria-label="${H.esc(text('uno.view.active-color',{color:name(d.color)}))}"><i style="background:${colors[d.color]||colors.wild}"></i>${H.esc(name(d.color))}</div></div><div class="uno-center"><button class="stock-button" ${draw?H.actionAttr(draw):'disabled'} aria-label="${H.esc(text('uno.view.draw'))}" data-tooltip="${H.esc(text('uno.view.stock-help'))}">${d.drawPile.length?H.back():C.cardSlot({label:text('uno.view.draw'),kind:'stock'})}${H.countBadge(d.drawPile.length,text('uno.view.stock-count'),{corner:true})}<small>${H.esc(text('uno.view.stock-caption'))}</small></button><div class="uno-discard" data-motion-table data-tooltip="${H.esc(text('uno.view.discard-help'))}">${top?card(top):C.cardSlot({label:text('uno.view.discard-help'),kind:'discard'})}${drop}<small>${H.esc(text('uno.view.discard-caption',{count:d.discard.length}))}</small></div></div></div>`,
       actions:dock,
       auxiliary:'',
       hand:surface!=='table'?H.hand(hand.map(c=>{const source=H.source(c.id,actions,ui.selected,{mode:ui.quickPlay?'immediate':'select',preview:true,inspect:true,drag:true,swipe:true});return card(c,source.attr,source.className);}),hand.length,ui.quickPlay?text('uno.view.quick-hand'):text('uno.view.select-hand'),'',{layout:'fan'}):''

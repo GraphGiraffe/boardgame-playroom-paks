@@ -8,7 +8,7 @@
   "name": "Ятзи",
   "category": "dice",
   "estimatedDuration": "15–25 мин",
-  "tagline": "Пять кубиков. Пятнадцать решений.",
+  "tagline": "Собирай комбинации и выбирай строку счёта.",
   "capabilities": {
     "hands": false,
     "surfaces": [

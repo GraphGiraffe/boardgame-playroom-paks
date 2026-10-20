@@ -4,18 +4,27 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["klondike"] = {
   "id": "klondike",
-  "version": "0.1.0",
+  "version": "0.1.3",
   "name": "Косынка",
   "category": "solitaire",
   "estimatedDuration": "10–30 мин",
-  "tagline": "Один расклад — без передачи хода.",
+  "tagline": "Разбери семь столбцов и собери четыре масти.",
   "capabilities": {
     "hands": false,
     "surfaces": [
       "combined",
       "table",
       "player"
-    ]
+    ],
+    "quietActions": [
+      "move",
+      "flip",
+      "recycle",
+      "undo"
+    ],
+    "presentation": {
+      "entityMotion": true
+    }
   },
   "rules": "rules.js",
   "view": "view.js",
@@ -53,7 +62,7 @@
     "card-back"
   ],
   "defaultSkins": {
-    "card-face": "mini-split"
+    "card-face": "compact-index"
   },
   "settings": [
     {
@@ -139,7 +148,7 @@
     {
       "key": "autoFlip",
       "label": "Открытие карт",
-      "default": "manual",
+      "default": "auto",
       "options": [
         {
           "value": "manual",
@@ -156,7 +165,7 @@
     {
       "key": "autoCollect",
       "label": "Автосбор",
-      "default": "off",
+      "default": "button",
       "options": [
         {
           "value": "off",
@@ -164,11 +173,11 @@
         },
         {
           "value": "button",
-          "label": "По кнопке"
+          "label": "Двойное нажатие"
         }
       ],
       "control": "slider",
-      "help": "Кнопка доступна только после открытия всех карт и исчерпания запаса; переносит доступные карты в дома."
+      "help": "Дважды нажмите на пустое поле: доступные открытые карты последовательно перемещаются в дома. Запас не раздаётся; закрытые карты открываются только при включённом автооткрытии."
     }
   ],
   "ruleGroups": [

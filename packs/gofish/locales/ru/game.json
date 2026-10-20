@@ -30,5 +30,11 @@
   "gofish.view.choose-target": "Теперь выберите игрока · {rank}",
   "gofish.view.choose-rank": "Выберите ранг в своей руке",
   "gofish.view.wait": "Ход соперника",
-  "gofish.modes.classic": "Спрашивают имеющийся у себя ранг, собирают квартеты. При удаче продолжают ход, при неудаче добирают из колоды."
+  "gofish.modes.classic": "Спрашивают имеющийся у себя ранг, собирают квартеты. При удаче продолжают ход, при неудаче добирают из колоды.",
+  "gofish.speech.rank.numeric": "{rank}",
+  "gofish.speech.rank.11": "В",
+  "gofish.speech.rank.12": "Д",
+  "gofish.speech.rank.13": "К",
+  "gofish.speech.rank.14": "Т",
+  "gofish.speech.rank.15": "Дж"
 }
