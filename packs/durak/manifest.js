@@ -4,10 +4,10 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["durak"] = {
   "id": "durak",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
-  "tagline": "Козырь ещё пригодится.",
+  "tagline": "Отбивайся, подкидывай и избавляйся от карт.",
   "capabilities": {
     "hands": true,
     "surfaces": [
@@ -166,6 +166,10 @@
       ],
       "end": true
     }
+  ],
+  "skinFamilies": [
+    "card-face",
+    "card-back"
   ]
 };
 })(globalThis);

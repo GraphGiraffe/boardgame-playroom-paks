@@ -66,6 +66,14 @@ def validate_manifest(manifest, label):
             or not mode["players"] or any(type(n) is not int or not 1 <= n <= 32 for n in mode["players"])
             or len(set(mode["players"])) != len(mode["players"]) for mode in modes)):
         raise ValueError(f"Некорректные составы игроков: {label}")
+    families = manifest.get("skinFamilies", [])
+    defaults = manifest.get("defaultSkins", {})
+    if (not isinstance(families, list) or len(families) > 32 or
+            any(not isinstance(family, str) or not ID.fullmatch(family) for family in families) or
+            len(set(families)) != len(families) or not isinstance(defaults, dict) or
+            any(family not in families or not isinstance(variant, str) or not ID.fullmatch(variant)
+                for family, variant in defaults.items())):
+        raise ValueError(f"Некорректные скины пака: {label}")
     state = manifest.get("stateVersion")
     if (type(manifest.get("engineApi")) not in (int, float) or manifest.get("engineApi") != 3 or type(state) not in (int, float)
             or not 1 <= state <= MAX_SAFE_INTEGER or int(state) != state):
@@ -156,7 +164,7 @@ def pack_files(pack, manifest):
     for folder in ("assets", "config"):
         if (pack / folder).is_dir():
             for path in (pack / folder).rglob("*"):
-                if path.is_file():
+                if path.is_file() and path.suffix.lower() not in {".md", ".txt"}:
                     files.add(local_file(pack, path.relative_to(pack).as_posix()))
     for path in pack.glob("*.json"):
         if path.name != "manifest.json":
@@ -200,6 +208,8 @@ def bundle_source_modules(files, source, read):
         for path in paths:
             files[path] = read(path)
         files[entry + ".js"] = "\n;\n".join([resources, *(files[path] for path in paths), files[entry + ".js"]])
+    for path in set(scripts["rules"] + scripts["view"] + [p for paths in locales.values() for p in paths]):
+        files.pop(path, None)
 
 def build_pack(pack, shared=None):
     shared = Path(shared) if shared else Path(__file__).resolve().parent
@@ -251,7 +261,10 @@ def build_pack(pack, shared=None):
             include_asset_pack(dependency["id"], dependency["version"])
         visiting.remove(name)
         included[name] = spec["version"]
+        compiled_resources = set(spec.get("scripts", [])) | set(spec.get("styles", []))
         for filename in spec.get("files", []):
+            if filename in compiled_resources:
+                continue  # The executable copy lives in view.js/styles.css.
             path = local_file(root, filename)
             data = path.read_bytes()
             files["assets/shared-packs/" + name + "/" + filename] = data.decode("utf-8") if path.suffix in TEXT_EXTENSIONS else "data:" + (mimetypes.guess_type(path.name)[0] or "application/octet-stream") + ";base64," + base64.b64encode(data).decode("ascii")

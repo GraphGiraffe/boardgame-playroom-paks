@@ -4,11 +4,11 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["battleship"] = {
   "id": "battleship",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "name": "Морской бой",
   "category": "board",
   "estimatedDuration": "15–30 мин",
-  "tagline": "Построй флот. Найди противника.",
+  "tagline": "Ищи палубы. Потопи весь чужой флот.",
   "capabilities": {
     "hands": false,
     "surfaces": [
@@ -92,6 +92,9 @@
       }
     ],
     "help": "Русский: 10 кораблей (4/3/3/2/2/2/1/1/1/1), после попадания стреляют снова. Классический: 5 кораблей (5/4/3/3/2), после каждого выстрела ход переходит сопернику."
-  }
+  },
+  "skinFamilies": [
+    "ship"
+  ]
 };
 })(globalThis);

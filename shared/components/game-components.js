@@ -21,7 +21,7 @@ const half=n=>`<span class="domino-half" aria-hidden="true">${Array.from({length
  const pipPlaces=Object.freeze({1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]});
  function dieArt(value,{frame='flat'}={}){if(value!==null&&value!==undefined&&(!Number.isInteger(value)||value<0||value>1000))throw Error('DIE_VALUE_INVALID');
   const raised=frame==='raised',dots=pipPlaces[value]||[];
-  const body=raised?'<rect x="3" y="7" width="54" height="50" rx="11" fill="var(--die-side,#c6c9b2)"/><rect x="3" y="3" width="54" height="50" rx="11" fill="var(--die-face,#fffcf0)" stroke="var(--die-rim,#ede9d4)" stroke-width="2"/>':'<g transform="scale(1.1111111111)"><rect x="2" y="2" width="50" height="50" rx="10" fill="var(--die-face,#fffdf4)" stroke="var(--die-rim,#c5cebc)" stroke-width="3"/></g>';
+  const body=raised?'<rect x="3" y="7" width="54" height="50" rx="11" fill="var(--die-side,#c6c9b2)"/><rect x="3" y="3" width="54" height="50" rx="11" fill="var(--die-face,#fffbed)" stroke="var(--die-rim,#ede9d4)" stroke-width="2"/>':'<g transform="scale(1.1111111111)"><rect x="2" y="2" width="50" height="50" rx="10" fill="var(--die-face,#fffbed)" stroke="var(--die-rim,#c5cebc)" stroke-width="3"/></g>';
   const mark=value>6?'<text x="30" y="30" text-anchor="middle" dominant-baseline="central" fill="var(--die-mark,currentColor)" font-family="system-ui,sans-serif" font-size="22" font-weight="800">'+value+'</text>':dots.map(i=>'<circle cx="'+((raised?18:14)+i%3*(raised?12:16))+'" cy="'+((raised?17:14)+Math.floor(i/3)*(raised?12:16))+'" r="'+(raised?3.7:4)+'" fill="var(--die-mark,'+(raised?'#456750':'currentColor')+')"/>').join('');
   return '<svg class="'+(raised?'shared-die-art is-raised':'shared-die-art')+'" viewBox="0 0 60 60" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">'+body+mark+'</svg>';
  }
@@ -30,19 +30,38 @@ const half=n=>`<span class="domino-half" aria-hidden="true">${Array.from({length
  const bubbleClass=({kind='game',result=null}={})=>'game-speech is-'+(kind==='chat'?'chat':'game')+(result==='success'?' is-success':result==='error'?' is-error':'');
  function scoreTable({head,body,foot='',className='',attributes=''}={}){if(typeof head!=='string'||typeof body!=='string'||typeof foot!=='string')throw Error('SCORE_TABLE_INVALID');return '<table class="'+esc(className)+'" '+attributes+'><thead>'+head+'</thead><tbody>'+body+'</tbody>'+(foot?'<tfoot>'+foot+'</tfoot>':'')+'</table>';}
  function scoreBadge(counter,{roundTokenArt}={}){return `<span class="player-score is-${counter.kind}" data-score-kind="${counter.kind}" data-score-id="${esc(counter.id||counter.kind)}" data-motion-counter="${esc(counter.id||counter.kind)}" aria-label="${esc(counter.label)}: ${counter.value}" title="${esc(counter.label)}: ${counter.value}">${counter.kind==='pieces'?roundTokenArt({value:counter.value}):counter.value}</span>`;}
- function cardFace({rank='',suit='',backUrl='',hidden=false,compact=false,main:recipe,variant='main',...geometry}={}){
+ function cardFace({rank='',suit='',backUrl='',hidden=false,compact=false,inlineIndex=false,suitOnly=false,crown=false,main:recipe,variant='main',...geometry}={}){
   if(typeof recipe==='string')return art({main:recipe,compact,...geometry},variant);
-  const main=hidden?`<div class="shared-face shared-back-face">${backUrl?`<img src="${esc(backUrl)}" alt="">`:'✦'}</div>`:`<div class="shared-face"><span class="shared-card-corner">${esc(rank)}<small>${esc(suit)}</small></span><strong>${esc(suit)}</strong><span class="shared-card-corner bottom">${esc(rank)}<small>${esc(suit)}</small></span></div>`;
+  if(suitOnly&&!hidden)return art({main:`<div class="shared-face suit-only"><strong>${esc(suit)}</strong></div>`,width:70,height:98});
+  const main=hidden?`<div class="shared-face shared-back-face">${backUrl?`<img src="${esc(backUrl)}" alt="">`:'✦'}</div>`:`<div class="shared-face${inlineIndex?' inline-index-face':''}"><span class="shared-card-corner">${esc(rank)}<small>${esc(suit)}</small></span><strong>${esc(suit)}</strong>${crown?'<svg class="shared-card-crown" viewBox="0 0 40 32" aria-hidden="true"><path d="m3 10 8 7L20 2l9 15 8-7-5 20H8Z" fill="var(--color-material-card-crown,#c9a44f)"/></svg>':''}<span class="shared-card-corner bottom">${esc(rank)}<small>${esc(suit)}</small></span></div>`;
   return art({main,width:70,height:98},compact?'compact':'main');
  }
- const defaultRenderers=Object.freeze({die:params=>dieArt(params.value,params),checker:params=>checkerArt(params.king,params.movable),domino:params=>dominoFace(params.a,params.b,params.rotation||0),ship:params=>shipSilhouette(params.size),
+ function characterFace({character='',characterSources={},source=''}={}, {variant='minimal'}={}){
+  const uri=characterSources[variant]||characterSources.minimal||source;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 140" preserveAspectRatio="xMidYMid meet" aria-hidden="true" data-character-style="${esc(variant)}" data-character-id="${esc(character)}"><rect x="1.5" y="3" width="97" height="135.5" rx="11.5" fill="var(--color-material-card-side,#aebcae)"/><rect x="1.5" y="1.5" width="97" height="137" rx="11.5" fill="var(--color-material-card-face,#fffbed)" stroke="var(--color-material-card-rim,#e5e6d4)" stroke-width="3"/><image href="${esc(uri)}" x="4" y="20" width="92" height="96" preserveAspectRatio="xMidYMid meet"/></svg>`;
+ }
+ const defaultRenderers=Object.freeze({'character-face':characterFace,die:params=>dieArt(params.value,params),checker:params=>checkerArt(params.king,params.movable),domino:params=>dominoFace(params.a,params.b,params.rotation||0),ship:params=>shipSilhouette(params.size),
   counter:params=>countBadge(params.value,params.label,params),bubble:params=>`<span class="${bubbleClass(params)}">${esc(params.text||'')}</span>`,'score-table':scoreTable,'card-face':cardFace,'card-back':params=>cardFace({...params,hidden:true}),
   board:params=>`<svg viewBox="0 0 ${params.columns||8} ${params.rows||8}" preserveAspectRatio="xMidYMid meet" aria-hidden="true">${boardCells(params.columns||8,params.rows||8).map(cell=>`<rect x="${cell.column}" y="${cell.row}" width="1" height="1" fill="var(--color-material-board-${cell.dark?'dark':'light'},${cell.dark?'#84a187':'#e6e5ca'})"/>`).join('')}</svg>`});
  class AssetResolver {
-  constructor({catalog={},skins={},palette={},renderers={}}={}){this.catalog=JSON.parse(JSON.stringify(catalog));this.skins={...skins};this.palette={...palette};this.renderers={...defaultRenderers,...renderers};}
-  resolve(family){const spec=Object.hasOwn(this.catalog,family)?this.catalog[family]:null;if(!spec)throw Error('ASSET_FAMILY_UNKNOWN');const requested=this.skins[family]||spec.default,variant=spec.variants.includes(requested)?requested:spec.default;return Object.freeze({family,variant,missing:variant!==requested,ratio:spec.ratio||null,materials:Object.freeze(Object.fromEntries(Object.entries(spec.materials||{}).map(([name,slot])=>[name,this.palette[slot]||null])))});}
+  constructor({catalog={},skins={},palette={},renderers={},skinFor=null}={}){this.skinFor=skinFor;this.catalog=JSON.parse(JSON.stringify(catalog));this.skins={...skins};this.palette={...palette};this.renderers={...defaultRenderers,...renderers};}
+  resolve(family,params={}){const spec=Object.hasOwn(this.catalog,family)?this.catalog[family]:null;if(!spec)throw Error('ASSET_FAMILY_UNKNOWN');const requested=this.skinFor?.(family,params.packId)||this.skins[family]||spec.default,variant=spec.variants.includes(requested)?requested:spec.default;return Object.freeze({family,variant,stacking:spec.stacking?.[variant]||null,missing:variant!==requested,ratio:spec.ratio||null,materials:Object.freeze(Object.fromEntries(Object.entries(spec.materials||{}).map(([name,slot])=>[name,this.palette[slot]||null])))});}
   uri(family,uri){if(typeof uri!=='string'||!uri.startsWith('data:image/svg+xml;'))return uri;const index=uri.indexOf(',');let svg=uri.slice(index+1);if(uri.slice(0,index).includes(';base64'))return uri;svg=decodeURIComponent(svg);for(const [source,slot]of Object.entries(this.catalog[family]?.replaceColors||{}))svg=svg.replaceAll(source,this.palette[slot]||source);return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);}
-  render(family,params={}){const resolved=this.resolve(family),renderer=this.renderers[family+':'+resolved.variant]||this.renderers[family];if(typeof renderer!=='function')throw Error('ASSET_RENDERER_MISSING');return renderer(params.backUrl?{...params,backUrl:this.uri(family,params.backUrl)}:params,resolved);}
+  render(family,params={}){
+   const resolved=this.resolve(family,params),renderer=this.renderers[family+':'+resolved.variant]||this.renderers[family];
+   if(typeof renderer!=='function')throw Error('ASSET_RENDERER_MISSING');
+   const standardFace=family==='card-face'&&typeof params.main!=='string'&&!params.hidden;
+   const mini=standardFace&&['mini-split','mini-split-four-color'].includes(resolved.variant)&&globalThis.PlayroomMiniSplitDeck;
+   const inline=standardFace&&['compact-index','compact-index-four-color'].includes(resolved.variant);
+   let markup=inline?cardFace({...params,inlineIndex:true}):mini?(globalThis.PlayroomMiniSplitDeck.face(params)||cardFace(params)):renderer(params.backUrl?{...params,backUrl:this.uri(family,params.backUrl)}:params,resolved);
+   if(standardFace&&['classic-four-color','mini-split-four-color','compact-index-four-color'].includes(resolved.variant)){
+    const ink={'♥':'var(--color-material-card-red,#b94f40)','♣':'var(--color-material-card-club,#2d68ab)','♦':'var(--color-material-card-diamond,#ac6711)','♠':'var(--color-material-card-ink,#264e43)'}[params.suit];
+    // Keep colour inside the SVG children so live skin changes remove it cleanly.
+    if(ink)markup=markup.replace(/^(<svg[^>]*>)/,`$1<g class="four-color-suit" style="color:${ink}">`).replace(/<\/svg>$/,'</g></svg>');
+   }
+   if(family==='card-face'&&resolved.stacking)markup=markup.replace(/^(<svg[^>]*)(>)/,`$1 data-card-stacking="${esc(JSON.stringify(resolved.stacking))}"$2`);
+   return markup;
+  }
  }
  function createHelpers(H,source){
 function card(value,attrs='disabled',extra=''){
@@ -51,11 +70,14 @@ function card(value,attrs='disabled',extra=''){
   const red=!hidden&&(value.color==='red'||suit==='♥'||suit==='♦');
   const label=hidden?globalThis.PlayroomMessages.text("ui.game-components.c13a6680430c"):value.joker?globalThis.PlayroomMessages.text("ui.game-components.232b69813cbf",{p0:String(red?globalThis.PlayroomMessages.text("ui.game-components.21b4d916f326"):globalThis.PlayroomMessages.text("ui.game-components.1ca9b6b05dfc"))}):`${rank} ${suit}`;
 
-  return `<${tag} class="shared-card ${hidden?'shared-card-back':''} ${red?'shared-red':''} ${extra}" ${tag==='button'?attrs:''} ${!hidden&&value.id?`data-entity="card-${H.esc(value.id)}"`:''} aria-label="${H.esc(label)}">${H.assetArt(hidden?'card-back':'card-face',{rank,suit,hidden,backUrl:hidden?source('card-back'):''},params=>cardFace(params))}</${tag}>`;
+  return `<${tag} class="shared-card ${hidden?'shared-card-back':''} ${red?'shared-red':''} ${extra}" ${tag==='button'?attrs:''} ${!hidden&&value.id?`data-entity="card-${H.esc(value.id)}"`:''} aria-label="${H.esc(label)}">${H.assetArt(hidden?'card-back':'card-face',{rank,suit,hidden,crown:!!value?.crown,backUrl:hidden?source('card-back'):''},params=>cardFace(params))}</${tag}>`;
+ }
+function cardSlot({suit='',attrs='disabled',className='',label='',kind='empty'}={}){
+  return `<button class="shared-card-slot ${esc(className)} ${suit==='♥'||suit==='♦'?'shared-red':''}" ${attrs} data-card-slot="${esc(kind)}" aria-label="${esc(label)}">${suit?H.assetArt('card-face',{suit,suitOnly:true},cardFace):''}</button>`;
  }
 const cover=content=>H.svg(`<ellipse data-cover-shadow cx="151" cy="158" rx="112" ry="14" fill="#365e4720"/><g data-cover-art>${content}</g>`);
   const die=(value,attrs='disabled',extra='')=>'<button class="shared-die '+extra+'" '+attrs+' aria-label="'+globalThis.PlayroomMessages.text("ui.game-components.c21f8ac4292c")+H.esc(value||globalThis.PlayroomMessages.text("ui.game-components.22c66b66eaa1"))+'">'+H.assetArt('die',{value},()=>dieArt(value))+'</button>';
-  return Object.freeze({card,die,cover,checkerArt:(king,movable)=>H.assetArt('checker',{king,movable},()=>checkerArt(king,movable)),dominoFace:(a,b,rotation=0)=>H.assetArt('domino',{a,b,rotation},()=>dominoFace(a,b,rotation)),shipSilhouette:size=>H.assetArt('ship',{size},()=>shipSilhouette(size)),scoreTable:params=>H.assetArt('score-table',params,()=>scoreTable(params)),boardCells,dieArt:(value,params={})=>H.assetArt('die',{value,...params},()=>dieArt(value,params)),bubbleClass});
+  return Object.freeze({card,cardSlot,die,cover,checkerArt:(king,movable)=>H.assetArt('checker',{king,movable},()=>checkerArt(king,movable)),dominoFace:(a,b,rotation=0)=>H.assetArt('domino',{a,b,rotation},()=>dominoFace(a,b,rotation)),shipSilhouette:size=>H.assetArt('ship',{size},()=>shipSilhouette(size)),scoreTable:params=>H.assetArt('score-table',params,()=>scoreTable(params)),boardCells,dieArt:(value,params={})=>H.assetArt('die',{value,...params},()=>dieArt(value,params)),bubbleClass});
  }
- return Object.freeze({art,countBadge,shipSilhouette,checkerArt,dominoFace,dieArt,boardCells,bubbleClass,scoreTable,createHelpers,AssetResolver,defaultRenderers,cardFace,scoreBadge});
+ return Object.freeze({art,countBadge,shipSilhouette,checkerArt,dominoFace,dieArt,boardCells,bubbleClass,scoreTable,createHelpers,AssetResolver,defaultRenderers,cardFace,characterFace,scoreBadge});
 });

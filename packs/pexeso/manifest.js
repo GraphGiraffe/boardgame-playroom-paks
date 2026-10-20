@@ -4,11 +4,11 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["pexeso"] = {
   "id": "pexeso",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "name": "Пексесо",
   "category": "cards",
   "estimatedDuration": "5–20 мин",
-  "tagline": "Открой пару и запомни остальное.",
+  "tagline": "Запомни карты и открой больше пар.",
   "capabilities": {
     "hands": false,
     "surfaces": [
@@ -66,7 +66,9 @@
     "standard-deck"
   ],
   "sharedAssetPacks": [
-    "cartoon-deck"
+    "cartoon-deck",
+    "characters-minimal",
+    "characters-simple"
   ],
   "ruleGroups": [
     {
@@ -95,6 +97,14 @@
       }
     ],
     "help": "Число пар на поле: чем их больше, тем больше карт нужно запоминать. Состав пар зависит от выбранной колоды."
+  },
+  "skinFamilies": [
+    "card-face",
+    "character-face",
+    "card-back"
+  ],
+  "defaultSkins": {
+    "character-face": "minimal"
   }
 };
 })(globalThis);

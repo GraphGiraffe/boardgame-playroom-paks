@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 270 164" width="270" height="164">
+<!-- Large diamond king and friendly eight-legged spider; flat pack palette. -->
+<g transform="translate(142 8) rotate(9 45 66)">
+ <g data-cover-card="durak-style" transform="scale(1.125 1.08621)" font-family="system-ui,sans-serif" font-weight="700"><rect y="5" width="80" height="116" rx="12" fill="#c5b9a5"/><rect width="80" height="116" rx="12" fill="#fffbed"/><text x="13" y="30" font-size="24" fill="#df785e">К</text><text x="40" y="83" text-anchor="middle" font-size="67" fill="#df785e">♦</text></g></g>
+<g fill="none" stroke="#31594c" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+ <path d="m72 77-26-22-20 5m44 29L35 78 14 90m56 12-36 6-16 20m58-14-25 25 1 16"/>
+ <path d="m116 77 26-22 20 5m-44 29 35-11 21 12m-56 12 36 6 16 20m-58-14 25 25-1 16"/>
+</g>
+<ellipse cx="94" cy="84" rx="35" ry="42" fill="#31594c"/>
+<ellipse cx="85" cy="63" rx="12" ry="14" fill="#5b7d62"/>
+<ellipse cx="94" cy="112" rx="30" ry="27" fill="#47725b"/>
+<ellipse cx="83" cy="104" rx="8" ry="10" fill="#fff9e9"/><ellipse cx="105" cy="104" rx="8" ry="10" fill="#fff9e9"/>
+<circle cx="85" cy="106" r="4" fill="#243f36"/><circle cx="103" cy="106" r="4" fill="#243f36"/>
+<path d="M86 122q8 7 16 0" fill="none" stroke="#fff9e9" stroke-width="3" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,17 @@
+{
+  "format": "playroom-asset-pack",
+  "formatVersion": 1,
+  "id": "solitaire-board",
+  "version": "0.1.4",
+  "name": "Поле пасьянса",
+  "files": [
+    "renderer.js",
+    "styles.css"
+  ],
+  "scripts": [
+    "renderer.js"
+  ],
+  "styles": [
+    "styles.css"
+  ]
+}

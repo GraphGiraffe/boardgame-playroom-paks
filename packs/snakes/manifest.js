@@ -4,10 +4,10 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["snakes"] = {
   "id": "snakes",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "category": "board",
   "estimatedDuration": "5–15 мин",
-  "tagline": "Вверх по лестнице. Навстречу удаче.",
+  "tagline": "Лестницы поднимают. Змеи возвращают назад.",
   "capabilities": {
     "hands": false,
     "surfaces": [
@@ -149,6 +149,9 @@
       }
     ],
     "help": "Простой: один кубик, змеи и лестницы. ЗиЛ+: два кубика на выбор, особые клетки и эффекты на следующий ход."
-  }
+  },
+  "skinFamilies": [
+    "die"
+  ]
 };
 })(globalThis);
