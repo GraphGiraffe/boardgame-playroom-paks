@@ -4,11 +4,11 @@
 @media(min-width:560px) and (max-height:500px) and (orientation:landscape){}
 
 
-.checker-count{display:flex;gap:7px;align-items:center}.checker-count b{color:#355842}.checker-mini{height:18px;width:18px;border-radius:50%;display:inline-block;background:#ebbd70;border:2px solid #f6d696;box-shadow:0 2px 0 #bd9255}.checker-mini.owner-1{background:#47705b;border-color:#74957a;box-shadow:0 2px 0 #2c513c}.checker-board-wrap{width:min(100%,440px);padding:11px;background:var(--color-material-board-frame,#fffae9);border-radius:17px;box-shadow:0 7px 0 #bdc9ac;border:1px solid var(--color-material-board-rim,#d4d8c3);flex-shrink:0}.checker-board{aspect-ratio:1;display:grid;grid-template-columns:repeat(8,1fr);border-radius:8px;overflow:hidden;width:100%}.checker-cell{padding:0;border:0;aspect-ratio:1;position:relative;display:grid;place-items:center;background:var(--color-material-board-light,#e5e5cc);min-width:0;cursor:pointer}.checker-cell.dark{background:var(--color-material-board-dark,#84a286)}.checker-cell.destination{outline-offset:-2px!important}.checker-cell:focus-visible{outline:2px solid #f6cf78!important;outline-offset:-2px!important;z-index:2}.checker-piece{width:75%;height:75%;position:relative;pointer-events:none;--checker-fill:var(--color-material-checker-light-face,#eac079);--checker-edge:var(--color-material-checker-light-rim,#f3d596);--checker-ring:var(--color-material-checker-light-ring,#d6ac67);--checker-shadow:var(--color-material-checker-light-side,#b99054);--checker-mark:var(--color-material-checker-light-mark,#86652b)}.checker-piece>.checker-art{display:block;width:100%;height:100%;overflow:visible}.checker-piece.owner-1{--checker-fill:var(--color-material-checker-dark-face,#3f6b52);--checker-edge:var(--color-material-checker-dark-rim,#73967a);--checker-ring:var(--color-material-checker-dark-ring,#2f5941);--checker-shadow:var(--color-material-checker-dark-side,#294f38);--checker-mark:var(--color-material-checker-dark-mark,#e3e9c4)}.destination-dot{width:25%;height:25%;border-radius:50%;background:#426e4d;box-shadow:0 0 0 5px #4c7c3f15}.coord-file,.coord-rank{position:absolute;font-size:8px;color:#496b4f;z-index:1;line-height:1}.coord-file{bottom:3px;right:4px}.coord-rank{left:3px;top:4px}.guide-dot{display:inline-block;height:7px;width:7px;background:#caa858;border-radius:50%;flex-shrink:0}@media(max-width:760px){.checker-board-wrap{padding:8px;border-radius:14px;max-width:400px}}@media(min-width:761px){.checker-board-wrap{width:min(52dvh,440px)}}@media(max-height:740px) and (orientation:portrait){.checker-board-wrap{width:min(100%,47dvh)}}
+.checker-count{display:flex;gap:var(--size-space-7_0,8px);align-items:center;}.checker-count b{color:#355842;}.checker-mini{height:var(--size-length-18_0,16px);width:var(--size-length-18_0,16px);border-radius:50%;display:inline-block;background:#ebbd70;border:var(--size-border-2_0,2px) solid #f6d696;box-shadow:0 2px 0 #bd9255;}.checker-mini.owner-1{background:#47705b;border-color:#74957a;box-shadow:0 2px 0 #2c513c;}.checker-board-wrap{width:min(100%,var(--size-length-440_0,440px));padding:var(--size-space-11_0,12px);background:var(--color-material-board-frame,#fffae9);border-radius:var(--size-radius-17_0,16px);box-shadow:0 7px 0 #bdc9ac;border:var(--size-border-1_0,1px) solid var(--color-material-board-rim,#d4d8c3);flex-shrink:0;}.checker-board{aspect-ratio:1;display:grid;grid-template-columns:repeat(8,1fr);border-radius:var(--size-radius-8_0,8px);overflow:hidden;width:100%;}.checker-cell{padding:0;border:0;aspect-ratio:1;position:relative;display:grid;place-items:center;background:var(--color-material-board-light,#e5e5cc);min-width:0;cursor:pointer;}.checker-cell.dark{background:var(--color-material-board-dark,#84a286);}.checker-cell.destination{outline-offset:-2px!important;}.checker-cell:focus-visible{outline:var(--size-border-2_0,2px) solid #f6cf78!important;outline-offset:-2px!important;z-index:2;}.checker-piece{width:75%;height:75%;position:relative;pointer-events:none;--checker-fill:var(--color-material-checker-light-face,#eac079);--checker-edge:var(--color-material-checker-light-rim,#f3d596);--checker-ring:var(--color-material-checker-light-ring,#d6ac67);--checker-shadow:var(--color-material-checker-light-side,#b99054);--checker-mark:var(--color-material-checker-light-mark,#86652b);}.checker-piece>.checker-art{display:block;width:100%;height:100%;overflow:visible;}.checker-piece.owner-1{--checker-fill:var(--color-material-checker-dark-face,#3f6b52);--checker-edge:var(--color-material-checker-dark-rim,#73967a);--checker-ring:var(--color-material-checker-dark-ring,#2f5941);--checker-shadow:var(--color-material-checker-dark-side,#294f38);--checker-mark:var(--color-material-checker-dark-mark,#e3e9c4);}.destination-dot{width:25%;height:25%;border-radius:50%;background:#426e4d;box-shadow:0 0 0 5px #4c7c3f15;}.coord-file,.coord-rank{position:absolute;font-size:var(--size-type-8_0,10px);color:#496b4f;z-index:1;line-height:1;}.coord-file{bottom:3px;right:4px;}.coord-rank{left:3px;top:4px;}.guide-dot{display:inline-block;height:var(--size-length-7_0,8px);width:var(--size-length-7_0,8px);background:#caa858;border-radius:50%;flex-shrink:0;}@media(max-width:760px){.checker-board-wrap{padding:var(--size-space-8_0,8px);border-radius:var(--size-radius-14_0,12px);max-width:var(--size-length-400_0,400px);}}@media(min-width:761px){.checker-board-wrap{width:min(52dvh,var(--size-length-440_0,440px));}}@media(max-height:740px) and (orientation:portrait){.checker-board-wrap{width:min(100%,47dvh);}}
 
-.checker-piece.captured{opacity:.4;filter:grayscale(.6)}.checker-count{min-width:0;max-width:48%}.checker-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.checker-count>i,.checker-count>b{flex-shrink:0}.checker-board .checker-cell:disabled{opacity:1;cursor:default}
+.checker-piece.captured{opacity:.4;filter:grayscale(.6);}.checker-count{min-width:0;max-width:48%;}.checker-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.checker-count>i,.checker-count>b{flex-shrink:0;}.checker-board .checker-cell:disabled{opacity:1;cursor:default;}
 
-.checker-piece[data-drag-piece]{pointer-events:auto;touch-action:none;cursor:grab}.checker-piece[data-drag-piece]>*{pointer-events:none}
+.checker-piece[data-drag-piece]{pointer-events:auto;touch-action:none;cursor:grab;}.checker-piece[data-drag-piece]>*{pointer-events:none;}
 
 
 @media(min-width:560px) and (orientation:landscape){
@@ -16,21 +16,21 @@
 
 
 @media(orientation:landscape) and (max-height:540px){
- .checker-board-wrap{padding:6px;border-radius:12px;box-shadow:0 4px 0 #bdc9ac}
- .checker-count{max-width:100%;gap:4px}
- .checkers-scene .table-chip{font-size:9px;padding:5px 6px}
+ .checker-board-wrap{padding:var(--size-space-6_0,4px);border-radius:var(--size-radius-12_0,12px);box-shadow:0 4px 0 #bdc9ac;}
+ .checker-count{max-width:100%;gap:var(--size-space-4_0,4px);}
+ .checkers-scene .table-chip{font-size:var(--size-type-9_0,10px);padding:var(--size-space-5_0,4px) var(--size-space-6_0,4px);}
 
 
 
 }
 
 /* The app draws the interaction outline; use the opposing piece colour. */
-.checker-piece{--ui-action-outline:#294f38}
-.checker-piece.owner-1{--ui-action-outline:#ffdc93}
+.checker-piece{--ui-action-outline:#294f38;}
+.checker-piece.owner-1{--ui-action-outline:#ffdc93;}
 
 /* Selection and valid drop cues retain the board fill and use a thin frame. */
-.checkers-scene :is(.checker-cell,.checker-piece){--interaction-ring-width:2px}
-.checkers-scene .checker-cell.playroom-drop-hover{outline-width:2px!important;outline-offset:-2px;background-color:var(--color-material-board-dark,#84a286)!important;box-shadow:none!important}
-.playroom-drag-ghost.checker-piece{outline-width:2px!important}
+.checkers-scene :is(.checker-cell,.checker-piece){--interaction-ring-width:2px;}
+.checkers-scene .checker-cell.playroom-drop-hover{outline-width:var(--size-border-2_0,2px)!important;outline-offset:-2px;background-color:var(--color-material-board-dark,#84a286)!important;box-shadow:none!important;}
+.playroom-drag-ghost.checker-piece{outline-width:var(--size-border-2_0,2px)!important;}
 
-.checker-board{overflow:visible}.checker-cell:has(.is-playable,.is-selected){z-index:1}.checker-piece:is(.is-playable,.is-selected){outline-offset:0!important;--interaction-ring-width:2px}
+.checker-board{overflow:visible;}.checker-cell:has(.is-playable,.is-selected){z-index:1;}.checker-piece:is(.is-playable,.is-selected){outline-offset:0!important;--interaction-ring-width:2px;}

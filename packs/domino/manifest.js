@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["domino"] = {
   "id": "domino",
-  "version": "0.4.2",
+  "version": "0.4.4",
   "category": "board",
   "estimatedDuration": "10–15 мин",
   "tagline": "Соединяй числа и считай ходы соперников.",

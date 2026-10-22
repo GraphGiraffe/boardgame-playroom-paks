@@ -31,6 +31,7 @@
   if(action.type==='draw'){d.hands[actor].push(d.stock.pop());events.push(fact('drawn',actor));return {position:next,events,roundEnded:action.type!=='draw'&&((next.turn-d.ending.first+position.playerCount)%position.playerCount)<=((actor-d.ending.first+position.playerCount)%position.playerCount),turnEnded:action.type!=='draw'};}
   if(action.type==='pass'){d.passes++;events.push(fact('passed',actor));}
   else{d.passes=0;const tile=oriented(d.hands[actor].splice(d.hands[actor].findIndex(tile=>tile.id===action.card),1)[0],action.side,d.chain);
+   if(!d.chain.length)d.openingTileId=tile.id;
    action.side==='left'?d.chain.unshift(tile):d.chain.push(tile);events.push(fact('played',actor,{id:tile.id,a:tile.a,b:tile.b,side:action.side}));}
   next.turn=Ending.next(d.ending,actor,{remaining:1})??actor;
   if(!d.hands[actor].length){Ending.record(d.ending,[actor]);events.push(fact('cleared',actor));

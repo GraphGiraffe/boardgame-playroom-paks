@@ -81,6 +81,11 @@ def validate_manifest(manifest, label):
     name = manifest.get("name")
     if not isinstance(name, str) or not js_trim(name) or len(name.encode("utf-16-le", "surrogatepass")) // 2 > 120:
         raise ValueError(f"Нет названия пака или оно длиннее 120 символов: {label}")
+    if "shortName" in manifest:
+        short_name = manifest["shortName"]
+        if (not isinstance(short_name, str) or not js_trim(short_name)
+                or len(short_name.encode("utf-16-le", "surrogatepass")) // 2 > 60):
+            raise ValueError(f"Неверное короткое название пака: {label}")
     for key, filename in {**ENTRY_POINTS, "sounds": "sounds.js"}.items():
         if key in manifest and manifest[key] != filename:
             raise ValueError(f"Неподдерживаемая точка входа {key}: {label}")
