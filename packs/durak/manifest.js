@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["durak"] = {
   "id": "durak",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Отбивайся, подкидывай и избавляйся от карт.",
@@ -21,9 +21,6 @@
   "styles": "styles.css",
   "name": "Дурак",
   "sharedUi": true,
-  "sharedAssets": [
-    "card-back.svg"
-  ],
   "engineApi": 3,
   "stateVersion": 3,
   "viewApi": 2,
@@ -170,6 +167,19 @@
   "skinFamilies": [
     "card-face",
     "card-back"
+  ],
+  "presetSetting": {
+    "label": "Режим",
+    "options": [
+      {
+        "value": "classic",
+        "label": "Выбранные правила"
+      }
+    ]
+  },
+  "sharedAssetPacks": [
+    "standard-deck",
+    "mini-split-deck"
   ]
 };
 })(globalThis);

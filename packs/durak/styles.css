@@ -1,116 +1,103 @@
 
-.durak-scene .playing-card{width:66px;min-width:66px;height:97px;position:relative;display:block;background:#fffcf2;border:1px solid #e2decf;border-radius:10px;box-shadow:0 5px 0 #bdc7af;color:#375f4c;cursor:pointer;padding:0;overflow:hidden}
-.durak-scene .playing-card.red-suit{color:#d97459}
-.durak-scene .playing-card .card-corner{position:absolute;top:5px;left:7px;font-size:17px;line-height:1;font-weight:900;z-index:1}
-.durak-scene .playing-card .card-corner small{display:block;font-size:12px;text-align:center;line-height:1.2;margin-top:2px}
-.durak-scene .playing-card .card-corner.bottom{top:auto;left:auto;bottom:5px;right:7px;transform:rotate(180deg)}
-.durak-scene .playing-card .card-suit{font-size:40px;line-height:1;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
-.durak-stock{display:flex;gap:13px;align-items:center;justify-content:center;min-height:45px}
-.trump-stack{position:relative;width:74px;height:39px;margin-right:9px}
-.durak-scene .trump-stack>.playing-card{position:absolute;left:22px;top:-13px;transform:rotate(90deg) scale(.59);transform-origin:50% 50%;pointer-events:none}
-.trump-stack>.piece-back{width:34px;height:49px;min-width:34px;position:absolute;left:0;top:-4px;border-width:3px;border-radius:6px;box-shadow:0 3px 0 #b5c4a7}
-.trump-stack>.piece-back span{font-size:21px}
-.trump-caption{font-size:10px;color:#6e8360;display:flex;gap:8px;align-items:center}
-.trump-caption b{font-size:22px;color:#3c6651}
-.trump-caption b.red-suit{color:#d8795e}
-.durak-table{flex:1;min-height:139px;display:flex;justify-content:center;align-items:center;align-content:center;flex-wrap:wrap;gap:20px 19px;padding:14px 10px 24px;border:1px dashed var(--color-border-subtle,#becdaf);border-radius:22px;margin-top:4px;background:color-mix(in srgb,var(--color-surface-raised,#e3e9d6) 78%,transparent)}
-.durak-pair{position:relative;width:93px;height:110px;flex-shrink:0}
-.durak-scene .durak-pair .playing-card{width:59px;min-width:59px;height:85px;pointer-events:none}
-.attack-card{position:absolute;left:0;top:0;transform:rotate(-7deg)}
-.defense-card{position:absolute;left:29px;top:22px;transform:rotate(9deg);z-index:1}
-.defense-slot{position:absolute;left:32px;top:24px;width:57px;height:82px;border:1px dashed #aebf9c;border-radius:9px;pointer-events:none}
-.defend-target{position:absolute;left:30px;top:22px;width:61px;height:88px;border:2px dashed #5b845e;background:color-mix(in srgb,var(--color-surface-panel,#f3f5dc) 85%,transparent);border-radius:9px;z-index:2;font-size:11px;line-height:1.6;font-weight:750;color:#4b754d;cursor:pointer}
-.defend-target:hover{background:var(--color-surface-panel,#fffbe9)}
-.durak-role{text-align:center;font-size:10px;color:#738664}
-.durak-empty{text-align:center;color:#8a9c78}
-.durak-empty>span{font-size:48px;color:#b7c8a5;line-height:1}
-.durak-empty p{font-size:11px;margin:9px 0 0}
-@media(max-width:760px){.durak-scene .playing-card{width:60px;min-width:60px;height:84px}
-.durak-scene .playing-card .card-corner{font-size:15px;left:6px}
-.durak-scene .playing-card .card-corner small{font-size:11px}
-.durak-scene .playing-card .card-suit{font-size:34px}
-.durak-table{gap:16px 10px;padding:13px 4px 20px;min-height:131px;border-radius:18px}
-.durak-pair{width:92px;height:107px}
-.durak-stock{min-height:39px}
-.durak-role{font-size:9px}
+.durak-scene .playing-card{width:var(--size-length-66_0,64px);min-width:var(--size-length-66_0,64px);height:var(--size-length-97_0,96px);position:relative;display:block;background:#fffcf2;border:var(--size-border-1_0,1px) solid #e2decf;border-radius:var(--size-radius-10_0,8px);box-shadow:0 5px 0 #bdc7af;color:#375f4c;cursor:pointer;padding:0;overflow:hidden;}
+.durak-scene .playing-card.red-suit{color:#d97459;}
+.durak-stock{display:flex;gap:var(--size-space-13_0,12px);align-items:center;justify-content:center;min-height:var(--size-length-45_0,44px);}
+.trump-stack{position:relative;width:var(--size-length-74_0,72px);height:var(--size-length-39_0,40px);margin-right:var(--size-space-9_0,8px);}
+.durak-scene .trump-stack>.playing-card{position:absolute;left:22px;top:-13px;transform:rotate(90deg) scale(.59);transform-origin:50% 50%;pointer-events:none;}
+.trump-stack>.piece-back{width:var(--size-length-34_0,32px);height:var(--size-length-49_0,48px);min-width:var(--size-length-34_0,32px);position:absolute;left:0;top:-4px;border-width:var(--size-border-3_0,2px);border-radius:var(--size-radius-6_0,4px);box-shadow:0 3px 0 #b5c4a7;}
+.trump-stack>.piece-back span{font-size:var(--size-type-21_0,20px);}
+.trump-caption{font-size:var(--size-type-10_0,10px);color:#6e8360;display:flex;gap:var(--size-space-8_0,8px);align-items:center;}
+.trump-caption b{font-size:var(--size-type-22_0,20px);color:#3c6651;}
+.trump-caption b.red-suit{color:#d8795e;}
+.durak-table{flex:1;min-height:var(--size-length-139_0,140px);display:flex;justify-content:center;align-items:center;align-content:center;flex-wrap:wrap;gap:var(--size-space-20_0,20px) var(--size-space-19_0,20px);padding:var(--size-space-14_0,12px) var(--size-space-10_0,8px) var(--size-space-24_0,24px);border:var(--size-border-1_0,1px) dashed var(--color-border-subtle,#becdaf);border-radius:var(--size-radius-22_0,20px);margin-top:var(--size-space-4_0,4px);background:color-mix(in srgb,var(--color-surface-raised,#e3e9d6) 78%,transparent);}
+.durak-pair{position:relative;width:var(--size-length-93_0,92px);height:var(--size-length-110_0,108px);flex-shrink:0;}
+.durak-scene .durak-pair .playing-card{width:var(--size-length-59_0,60px);min-width:var(--size-length-59_0,60px);height:var(--size-length-85_0,84px);pointer-events:none;}
+.attack-card{position:absolute;left:0;top:0;transform:rotate(-7deg);}
+.defense-card{position:absolute;left:29px;top:22px;transform:rotate(9deg);z-index:1;}
+.defense-slot{position:absolute;left:32px;top:24px;width:var(--size-length-57_0,56px);height:var(--size-length-82_0,80px);border:var(--size-border-1_0,1px) dashed #aebf9c;border-radius:var(--size-radius-9_0,8px);pointer-events:none;}
+.defend-target{position:absolute;left:30px;top:22px;width:var(--size-length-61_0,60px);height:var(--size-length-88_0,88px);border:var(--size-border-2_0,2px) dashed #5b845e;background:color-mix(in srgb,var(--color-surface-panel,#f3f5dc) 85%,transparent);border-radius:var(--size-radius-9_0,8px);z-index:2;font-size:var(--size-type-11_0,10px);line-height:1.6;font-weight:750;color:#4b754d;cursor:pointer;}
+.defend-target:hover{background:var(--color-surface-panel,#fffbe9);}
+.durak-role{text-align:center;font-size:var(--size-type-10_0,10px);color:#738664;}
+.durak-empty{text-align:center;color:#8a9c78;}
+.durak-empty>span{font-size:var(--size-type-48_0,48px);color:#b7c8a5;line-height:1;}
+.durak-empty p{font-size:var(--size-type-11_0,10px);margin:var(--size-space-9_0,8px) 0 0;}
+@media(max-width:760px){.durak-scene .playing-card{width:var(--size-length-60_0,60px);min-width:var(--size-length-60_0,60px);height:var(--size-length-84_0,84px);}
+.durak-table{gap:var(--size-space-16_0,16px) var(--size-space-10_0,8px);padding:var(--size-space-13_0,12px) var(--size-space-4_0,4px) var(--size-space-20_0,20px);min-height:var(--size-length-131_0,132px);border-radius:var(--size-radius-18_0,16px);}
+.durak-pair{width:var(--size-length-92_0,92px);height:var(--size-length-107_0,108px);}
+.durak-stock{min-height:var(--size-length-39_0,40px);}
+.durak-role{font-size:var(--size-type-9_0,10px);}
 }
-@media(max-height:710px) and (orientation:portrait){.durak-table{min-height:123px}
-.durak-role{display:none}
-.durak-stock{margin-top:3px}
+@media(max-height:710px) and (orientation:portrait){.durak-table{min-height:var(--size-length-123_0,124px);}
+.durak-role{display:none;}
+.durak-stock{margin-top:var(--size-space-3_0,2px);}
 }
-@media(max-width:370px){.durak-table{gap:14px 8px}
-.durak-pair{width:78px;height:98px}
-.durak-scene .durak-pair .playing-card{width:52px;min-width:52px;height:76px}
-.defense-card{left:24px;top:19px}
-.defense-slot{left:24px;top:19px;width:52px;height:76px}
-.defend-target{left:22px;top:18px;width:56px;height:78px}
+@media(max-width:370px){.durak-table{gap:var(--size-space-14_0,12px) var(--size-space-8_0,8px);}
+.durak-pair{width:var(--size-length-78_0,76px);height:var(--size-length-98_0,96px);}
+.durak-scene .durak-pair .playing-card{width:var(--size-length-52_0,52px);min-width:var(--size-length-52_0,52px);height:var(--size-length-76_0,76px);}
+.defense-card{left:24px;top:19px;}
+.defense-slot{left:24px;top:19px;width:var(--size-length-52_0,52px);height:var(--size-length-76_0,76px);}
+.defend-target{left:22px;top:18px;width:var(--size-length-56_0,56px);height:var(--size-length-78_0,76px);}
 }
-.durak-scene .durak-table{--durak-table-min:calc(var(--durak-rows) * 64px + (var(--durak-rows) - 1) * 8px + 20px);min-height:var(--durak-table-min);display:grid;grid-template-columns:repeat(var(--durak-columns),minmax(0,77px));grid-template-rows:repeat(var(--durak-rows),minmax(0,1fr));justify-content:center;align-content:stretch;gap:8px 12px;padding:8px 6px 12px}
-.durak-scene .durak-pair{width:100%;height:100%;max-height:105px;min-height:64px;align-self:center}
-.durak-scene .durak-pair :is(.attack-card,.defense-card,.defense-slot,.defend-target){position:absolute;top:0;left:0;height:calc(100% - 20px);max-height:85px;aspect-ratio:59/85;width:auto;min-width:44px;max-width:calc(100% - 18px);transform:none}
-.durak-scene .durak-pair :is(.defense-card,.defense-slot,.defend-target){top:20px;left:18px}
-.durak-scene .durak-pair .playing-card{width:100%;min-width:0;height:100%;border-radius:7px;box-shadow:0 3px 0 #bdc7af}
-.durak-scene .durak-pair .card-corner{display:flex;align-items:center;gap:1px;left:4px;top:4px;font-size:13px;line-height:14px}
-.durak-scene .durak-pair .card-corner small{display:inline;margin:0;font-size:11px;line-height:14px}
-.durak-scene .durak-pair .card-corner.bottom{display:none}
-.durak-scene .durak-pair .card-suit{font-size:26px;top:60%}
-.durak-scene .durak-pair .defend-target{font-size:10px;line-height:1.3;border-radius:7px;padding:0}
-@media(max-width:760px) and (orientation:portrait){.durak-scene>.durak-stock{grid-column:2;grid-row:1;display:grid;grid-template-columns:auto auto;grid-template-rows:49px 22px;gap:0 5px;min-height:0;margin:0;padding-top:5px}
-.durak-scene .trump-stack{grid-column:1/-1;grid-row:1;align-self:center;justify-self:center;margin:0;transform:scale(.85)}
-.durak-scene .trump-caption{font-size:9px;gap:4px}
-.durak-scene .trump-caption b{font-size:18px}
-.durak-scene .durak-stock .table-chip{padding:3px 5px;font-size:9px;white-space:nowrap}
-.durak-scene>.durak-role{grid-column:1/-1;grid-row:3}
+.durak-scene .durak-table{--durak-table-min:calc(var(--durak-rows) * 64px + (var(--durak-rows) - 1) * 8px + 20px);min-height:var(--durak-table-min);display:grid;grid-template-columns:repeat(var(--durak-columns),minmax(0,77px));grid-template-rows:repeat(var(--durak-rows),minmax(0,1fr));justify-content:center;align-content:stretch;gap:var(--size-space-8_0,8px) var(--size-space-12_0,12px);padding:var(--size-space-8_0,8px) var(--size-space-6_0,4px) var(--size-space-12_0,12px);}
+.durak-scene .durak-pair{width:100%;height:100%;max-height:var(--size-length-105_0,104px);min-height:var(--size-length-64_0,64px);align-self:center;}
+.durak-scene .durak-pair :is(.attack-card,.defense-card,.defense-slot,.defend-target){position:absolute;top:0;left:0;height:calc(100% - var(--size-length-20_0,20px));max-height:var(--size-length-85_0,84px);aspect-ratio:59/85;width:auto;min-width:var(--size-length-44_0,44px);max-width:calc(100% - var(--size-length-18_0,16px));transform:none;}
+.durak-scene .durak-pair :is(.defense-card,.defense-slot,.defend-target){top:20px;left:18px;}
+.durak-scene .durak-pair .playing-card{width:100%;min-width:0;height:100%;border-radius:var(--size-radius-7_0,8px);box-shadow:0 3px 0 #bdc7af;}
+.durak-scene .durak-pair .defend-target{font-size:var(--size-type-10_0,10px);line-height:1.3;border-radius:var(--size-radius-7_0,8px);padding:0;}
+@media(max-width:760px) and (orientation:portrait){.durak-scene>.durak-stock{grid-column:2;grid-row:1;display:grid;grid-template-columns:auto auto;grid-template-rows:49px 22px;gap:0 var(--size-space-5_0,4px);min-height:0;margin:0;padding-top:var(--size-space-5_0,4px);}
+.durak-scene .trump-stack{grid-column:1/-1;grid-row:1;align-self:center;justify-self:center;margin:0;transform:scale(.85);}
+.durak-scene .trump-caption{font-size:var(--size-type-9_0,10px);gap:var(--size-space-4_0,4px);}
+.durak-scene .trump-caption b{font-size:var(--size-type-18_0,18px);}
+.durak-scene .durak-stock .table-chip{padding:var(--size-space-3_0,2px) var(--size-space-5_0,4px);font-size:var(--size-type-9_0,10px);white-space:nowrap;}
+.durak-scene>.durak-role{grid-column:1/-1;grid-row:3;}
 }
-@media(orientation:landscape) and (max-height:540px){.durak-stock{grid-column:1;grid-row:1;min-height:0;align-self:center;flex-wrap:nowrap;gap:5px}
-.trump-stack{width:60px;margin-right:3px;transform:scale(.8);transform-origin:center}
-.trump-caption{font-size:9px;gap:4px}
-.trump-caption b{font-size:18px}
-.durak-stock .table-chip{padding:4px 5px;font-size:9px}
-.durak-table{grid-column:1;grid-row:2/4;min-height:var(--durak-table-min);height:100%;margin:0;padding:6px 4px;gap:2px 3px;align-items:center;align-content:center;border-radius:14px}
-.durak-role{display:none}
-.durak-scene .scene-hint{font-size:9px;line-height:1.3}
+@media(orientation:landscape) and (max-height:540px){.durak-stock{grid-column:1;grid-row:1;min-height:0;align-self:center;flex-wrap:nowrap;gap:var(--size-space-5_0,4px);}
+.trump-stack{width:var(--size-length-60_0,60px);margin-right:var(--size-space-3_0,2px);transform:scale(.8);transform-origin:center;}
+.trump-caption{font-size:var(--size-type-9_0,10px);gap:var(--size-space-4_0,4px);}
+.trump-caption b{font-size:var(--size-type-18_0,18px);}
+.durak-stock .table-chip{padding:var(--size-space-4_0,4px) var(--size-space-5_0,4px);font-size:var(--size-type-9_0,10px);}
+.durak-table{grid-column:1;grid-row:2/4;min-height:var(--durak-table-min);height:100%;margin:0;padding:var(--size-space-6_0,4px) var(--size-space-4_0,4px);gap:var(--size-space-2_0,2px) var(--size-space-3_0,2px);align-items:center;align-content:center;border-radius:var(--size-radius-14_0,12px);}
+.durak-role{display:none;}
+.durak-scene .scene-hint{font-size:var(--size-type-9_0,10px);line-height:1.3;}
 }
-.durak-scene .playing-card.art-card .durak-art-face{position:relative;width:66px;height:97px;border:2px solid var(--color-material-card-trick-face,#fffbed);border-radius:10px;background:var(--color-material-card-trick-face,#fffbed);color:var(--color-material-card-trick-ink,#385e49);overflow:hidden}
-.durak-scene .playing-card.art-card.red-suit .durak-art-face{color:var(--color-material-card-trick-red,#d56b52)}
-.durak-scene .playing-card.art-card .durak-art-face .card-corner{position:absolute!important;display:flex!important;align-items:center;gap:0;top:5px!important;left:2px!important;right:auto!important;bottom:auto!important;font:850 13px/1 system-ui,sans-serif!important;letter-spacing:0!important}
-.durak-scene .playing-card.art-card .durak-art-face .card-corner small{display:inline!important;font:850 10px/1 system-ui,sans-serif!important;margin:0!important}
-.durak-scene .playing-card.art-card .durak-art-face .card-corner.bottom{top:auto!important;left:auto!important;bottom:5px!important;right:4px!important;transform:rotate(180deg)}
-.durak-scene .playing-card.art-card .durak-art-face .card-suit{position:absolute;inset:0;display:grid;place-items:center;font:700 40px/1 system-ui,sans-serif!important;transform:none!important}
-.durak-scene .playing-card.art-card .durak-art-compact .card-corner{font-size:21px!important;top:2px!important;left:2px!important;z-index:1;display:block!important}
-.durak-scene .playing-card.art-card .durak-art-compact .card-corner small{display:block!important;font-size:20px!important}
-.durak-scene .playing-card.art-card .durak-art-compact .card-suit{padding-top:25px;font-size:35px!important}
-.durak-scene .playing-card.art-card{border-radius:15.15%/10.31%!important}
+.durak-scene .playing-card.art-card{border-radius:15.15%/10.31%!important;}
 /* Stock geometry belongs to the pack; the app positions the group. */
-.field-group-stock .durak-stock{display:flex;flex-direction:column;gap:12px;align-items:center;padding:12px 10px;min-width:0}
-.field-group-stock .trump-stack{flex:none;margin:0 0 0 9px}
-.field-group-stock .trump-caption{flex-wrap:wrap;justify-content:center}
+.field-group-stock .durak-stock{display:flex;flex-direction:column;gap:var(--size-space-12_0,12px);align-items:center;padding:var(--size-space-12_0,12px) var(--size-space-10_0,8px);min-width:0;}
+.field-group-stock .trump-stack{flex:none;margin:0 0 0 var(--size-space-9_0,8px);}
+.field-group-stock .trump-caption{flex-wrap:wrap;justify-content:center;}
 /* Preserve full card proportions in the stock and the play area. */
-.field-group-stock .trump-stack{width:100px;height:104px;margin:0;transform:none}
-.durak-scene .field-group-stock .trump-stack>.playing-card{width:66px;min-width:66px;height:97px;left:24px;top:6px;transform:rotate(90deg);transform-origin:center}
-.field-group-stock .trump-stack>.piece-back{width:60px;min-width:60px;height:84px;left:0;top:8px;border-width:4px;border-radius:9px}
-.field-group-stock .durak-stock{padding:6px 0;gap:8px}
-.field-group-play .durak-table{grid-template-columns:repeat(var(--durak-columns),minmax(0,90px));min-height:150px;gap:8px;padding:8px;align-content:center;grid-auto-rows:122px;grid-template-rows:none}
-.field-group-play .durak-pair{height:122px;min-height:122px;max-height:122px}
-.field-group-play .durak-pair :is(.attack-card,.defense-card,.defense-slot,.defend-target){height:102px;max-height:102px;min-width:0;max-width:calc(100% - 18px);aspect-ratio:66/97}
-@container (max-width:400px){.field-group-play .durak-table{grid-template-columns:repeat(min(var(--durak-columns),2),minmax(0,90px))}
+.field-group-stock .trump-stack{width:var(--size-length-100_0,100px);height:var(--size-length-104_0,104px);margin:0;transform:none;}
+.durak-scene .field-group-stock .trump-stack>.playing-card{width:var(--size-length-66_0,64px);min-width:var(--size-length-66_0,64px);height:var(--size-length-97_0,96px);left:24px;top:6px;transform:rotate(90deg);transform-origin:center;}
+.field-group-stock .trump-stack>.piece-back{width:var(--size-length-60_0,60px);min-width:var(--size-length-60_0,60px);height:var(--size-length-84_0,84px);left:0;top:8px;border-width:var(--size-border-4_0,4px);border-radius:var(--size-radius-9_0,8px);}
+.field-group-stock .durak-stock{padding:var(--size-space-6_0,4px) 0;gap:var(--size-space-8_0,8px);}
+.field-group-play .durak-table{grid-template-columns:repeat(var(--durak-columns),minmax(0,90px));min-height:var(--size-length-150_0,148px);gap:var(--size-space-8_0,8px);padding:var(--size-space-8_0,8px);align-content:center;grid-auto-rows:122px;grid-template-rows:none;}
+.field-group-play .durak-pair{height:var(--size-length-122_0,120px);min-height:var(--size-length-122_0,120px);max-height:var(--size-length-122_0,120px);}
+.field-group-play .durak-pair :is(.attack-card,.defense-card,.defense-slot,.defend-target){height:var(--size-length-102_0,100px);max-height:var(--size-length-102_0,100px);min-width:0;max-width:calc(100% - var(--size-length-18_0,16px));aspect-ratio:66/97;}
+@container (max-width:400px){.field-group-play .durak-table{grid-template-columns:repeat(min(var(--durak-columns),2),minmax(0,90px));}
 }
 
-.durak-scene .defend-target svg{width:24px;height:24px;display:block;margin:auto}
-.durak-scene .trump-stack>.shared-card-back{position:absolute;left:0;top:8px;width:60px;height:84px;border-radius:9px;box-shadow:0 3px 0 #b5c4a7}
+.durak-scene .defend-target svg{width:var(--size-length-24_0,24px);height:var(--size-length-24_0,24px);display:block;margin:auto;}
+.durak-scene .trump-stack>.shared-card-back{position:absolute;left:0;top:8px;width:var(--size-length-60_0,60px);height:var(--size-length-84_0,84px);border-radius:var(--size-radius-9_0,8px);box-shadow:0 3px 0 #b5c4a7;}
 
 /* One card size for stock, trump, attack and defence, before field fitting. */
-.durak-scene .game-field-groups{--field-card-width:56px;--field-card-height:78.4px;grid-template-columns:90px minmax(0,1fr)}
-.durak-scene .field-group-stock .trump-stack{width:90px;height:94px}
-.durak-scene .field-group-stock .trump-stack>.playing-card,.durak-scene .trump-stack>.shared-card-back{width:var(--field-card-width);min-width:var(--field-card-width);height:var(--field-card-height)}
-.durak-scene .field-group-stock .trump-stack>.playing-card{left:22px;top:8px}
-.durak-scene .field-group-play .durak-table{grid-template-columns:repeat(var(--durak-columns),minmax(0,74px));grid-auto-rows:98.4px;min-height:114.4px}
-.durak-scene .field-group-play .durak-pair{height:98.4px;min-height:98.4px;max-height:98.4px}
-.durak-scene .field-group-play .durak-pair :is(.attack-card,.defense-card,.defense-slot,.defend-target){width:var(--field-card-width);height:var(--field-card-height);max-height:var(--field-card-height);max-width:none;aspect-ratio:5/7}
-@container (max-width:400px){.durak-scene .field-group-play .durak-table{grid-template-columns:repeat(min(var(--durak-columns),2),minmax(0,74px))}}
+.durak-scene .game-field-groups{--field-card-width:56px;--field-card-height:78.4px;grid-template-columns:90px minmax(0,1fr);}
+.durak-scene .field-group-stock .trump-stack{width:var(--size-length-90_0,88px);height:var(--size-length-94_0,92px);}
+.durak-scene .field-group-stock .trump-stack>.playing-card,.durak-scene .trump-stack>.shared-card-back{width:var(--field-card-width);min-width:var(--field-card-width);height:var(--field-card-height);}
+.durak-scene .field-group-stock .trump-stack>.playing-card{left:22px;top:8px;}
+.durak-scene .field-group-play .durak-table{grid-template-columns:repeat(var(--durak-columns),minmax(0,74px));grid-auto-rows:98.4px;min-height:var(--size-length-114_4,116px);}
+.durak-scene .field-group-play .durak-pair{height:var(--size-length-98_4,100px);min-height:var(--size-length-98_4,100px);max-height:var(--size-length-98_4,100px);}
+.durak-scene .field-group-play .durak-pair :is(.attack-card,.defense-card,.defense-slot,.defend-target){width:var(--field-card-width);height:var(--field-card-height);max-height:var(--field-card-height);max-width:none;aspect-ratio:5/7;}
+@container (max-width:400px){.durak-scene .field-group-play .durak-table{grid-template-columns:repeat(min(var(--durak-columns),2),minmax(0,74px));}}
 
 /* Stock is one grid item; subsequent pairs can occupy the space below it. */
-.durak-scene .game-field-groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));width:100%;min-width:204px;max-width:330px;gap:10px 12px;align-items:center}
-.durak-scene .field-group-stock{min-height:0;min-width:0}
-.durak-scene .field-group-play,.durak-scene .field-group-play .durak-table{display:contents}
-.durak-scene .field-group-play .durak-pair{width:74px;justify-self:center}
+.durak-scene .game-field-groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));width:100%;min-width:var(--size-length-204_0,208px);max-width:var(--size-length-330_0,320px);gap:var(--size-space-10_0,8px) var(--size-space-12_0,12px);align-items:center;}
+.durak-scene .field-group-stock{min-height:0;min-width:0;}
+.durak-scene .field-group-play,.durak-scene .field-group-play .durak-table{display:contents;}
+.durak-scene .field-group-play .durak-pair{width:var(--size-length-74_0,72px);justify-self:center;}
+
+/* Keep stock labels adjacent to the actual card silhouette. */
+.durak-scene .field-group-stock .durak-stock{gap:3px;padding:0;}
+.durak-scene .field-group-stock .trump-stack{height:calc(var(--field-card-height) + 8px);}
+.durak-scene .field-group-stock .trump-caption{gap:4px;line-height:1.1;}
+
+.durak-scene .trump-stack>.trump-placeholder{position:absolute;left:22px;top:8px;width:var(--field-card-width);height:var(--field-card-height);transform:rotate(90deg);transform-origin:center;pointer-events:none;}

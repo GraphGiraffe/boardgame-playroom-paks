@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["uno"] = {
   "id": "uno",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Подбирай цвет и значение. Освободи руку первым.",
@@ -114,6 +114,9 @@
   },
   "skinFamilies": [
     "card-back"
+  ],
+  "sharedAssetPacks": [
+    "uno-deck"
   ]
 };
 })(globalThis);

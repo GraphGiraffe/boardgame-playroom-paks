@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["gofish"] = {
   "id": "gofish",
-  "version": "0.2.2",
+  "version": "0.2.4",
   "name": "Спроси рыбу",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
@@ -22,10 +22,9 @@
   "styles": "styles.css",
   "sharedUi": true,
   "sharedAssetPacks": [
-    "mini-cards"
-  ],
-  "sharedAssets": [
-    "card-back.svg"
+    "mini-cards",
+    "standard-deck",
+    "mini-split-deck"
   ],
   "settings": [
     {
@@ -81,6 +80,15 @@
   "skinFamilies": [
     "card-face",
     "card-back"
-  ]
+  ],
+  "presetSetting": {
+    "label": "Режим",
+    "options": [
+      {
+        "value": "classic",
+        "label": "Классика"
+      }
+    ]
+  }
 };
 })(globalThis);

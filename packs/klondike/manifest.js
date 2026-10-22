@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["klondike"] = {
   "id": "klondike",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "name": "Косынка",
   "category": "solitaire",
   "estimatedDuration": "10–30 мин",
@@ -30,9 +30,6 @@
   "view": "view.js",
   "styles": "styles.css",
   "sharedUi": true,
-  "sharedAssets": [
-    "card-back.svg"
-  ],
   "engineApi": 3,
   "stateVersion": 1,
   "viewApi": 2,
@@ -55,7 +52,8 @@
   ],
   "sharedAssetPacks": [
     "mini-split-deck",
-    "solitaire-board"
+    "solitaire-board",
+    "standard-deck"
   ],
   "skinFamilies": [
     "card-face",

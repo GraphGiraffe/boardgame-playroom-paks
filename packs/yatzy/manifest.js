@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["yatzy"] = {
   "id": "yatzy",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "name": "Ятзи",
   "category": "dice",
   "estimatedDuration": "15–25 мин",
@@ -86,6 +86,15 @@
   ],
   "skinFamilies": [
     "die"
-  ]
+  ],
+  "presetSetting": {
+    "label": "Режим",
+    "options": [
+      {
+        "value": "classic",
+        "label": "Классика"
+      }
+    ]
+  }
 };
 })(globalThis);
