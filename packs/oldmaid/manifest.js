@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["oldmaid"] = {
   "id": "oldmaid",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "name": "Акулина",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
@@ -21,9 +21,6 @@
   "view": "view.js",
   "styles": "styles.css",
   "sharedUi": true,
-  "sharedAssets": [
-    "card-back.svg"
-  ],
   "settings": [
     {
       "key": "deck",
@@ -121,6 +118,19 @@
   "skinFamilies": [
     "card-face",
     "card-back"
+  ],
+  "presetSetting": {
+    "label": "Режим",
+    "options": [
+      {
+        "value": "classic",
+        "label": "Классика"
+      }
+    ]
+  },
+  "sharedAssetPacks": [
+    "standard-deck",
+    "mini-split-deck"
   ]
 };
 })(globalThis);

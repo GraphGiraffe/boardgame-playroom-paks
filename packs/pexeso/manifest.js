@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["pexeso"] = {
   "id": "pexeso",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "name": "Пексесо",
   "category": "cards",
   "estimatedDuration": "5–20 мин",
@@ -21,9 +21,6 @@
   "view": "view.js",
   "styles": "styles.css",
   "sharedUi": true,
-  "sharedAssets": [
-    "card-back.svg"
-  ],
   "settings": [
     {
       "key": "deck",
@@ -68,7 +65,9 @@
   "sharedAssetPacks": [
     "cartoon-deck",
     "characters-minimal",
-    "characters-simple"
+    "characters-simple",
+    "standard-deck",
+    "mini-split-deck"
   ],
   "ruleGroups": [
     {

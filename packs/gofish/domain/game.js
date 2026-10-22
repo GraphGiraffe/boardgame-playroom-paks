@@ -60,7 +60,7 @@
     }
     d.attempts[actor]++;
     const given=d.hands[action.target].filter(card=>card.rank===action.rank);
-    events.push(fact('asked',actor,{target:action.target,rank:action.rank}));
+    events.push(fact('asked',actor,{target:action.target,rank:action.rank,card:{...d.hands[actor].find(card=>card.rank===action.rank)}}));
     if(given.length){
       d.hands[action.target]=d.hands[action.target].filter(card=>card.rank!==action.rank);d.hands[actor].push(...given);
       events.push(fact('given',action.target,{target:actor,count:given.length}));book(next,actor,events);

@@ -84,42 +84,42 @@
       "mini-split": {
         "protectedZones": [
           {
-            "x": 0.13,
+            "x": 0.1,
             "y": 0.03,
-            "width": 0.48,
+            "width": 0.38,
             "height": 0.24
           },
           {
             "x": 0.13,
             "y": 0.33,
-            "width": 0.74,
+            "width": 0.37,
             "height": 0.57
           }
         ],
-        "horizontal": 0.87,
+        "horizontal": 0.5,
         "vertical": 0.9,
-        "arc": 0.95,
+        "arc": 0.5,
         "faceDown": 0.07,
         "wasteAxis": "horizontal"
       },
       "mini-split-four-color": {
         "protectedZones": [
           {
-            "x": 0.13,
+            "x": 0.1,
             "y": 0.03,
-            "width": 0.48,
+            "width": 0.38,
             "height": 0.24
           },
           {
             "x": 0.13,
             "y": 0.33,
-            "width": 0.74,
+            "width": 0.37,
             "height": 0.57
           }
         ],
-        "horizontal": 0.87,
+        "horizontal": 0.5,
         "vertical": 0.9,
-        "arc": 0.95,
+        "arc": 0.5,
         "faceDown": 0.07,
         "wasteAxis": "horizontal"
       },
@@ -153,7 +153,8 @@
         "faceDown": 0.07,
         "wasteAxis": "vertical"
       }
-    }
+    },
+    "type": "card-deck"
   },
   "card-back": {
     "default": "classic",
@@ -174,7 +175,8 @@
       "#d3c997": "material.card-back.rim",
       "#e3d9aa": "material.card-back.pattern",
       "#d7b36c": "material.card-back.mark"
-    }
+    },
+    "type": "card-deck"
   },
   "die": {
     "default": "classic",
@@ -189,7 +191,8 @@
       "face": "material.die.face",
       "rim": "material.die.rim",
       "ink": "material.die.ink"
-    }
+    },
+    "type": "die"
   },
   "ship": {
     "default": "classic",
@@ -219,7 +222,8 @@
       "face": "surface.panel",
       "ink": "text.primary",
       "rim": "border.subtle"
-    }
+    },
+    "type": "checker"
   },
   "round-token": {
     "default": "classic",
@@ -235,7 +239,8 @@
       "side": "token.side",
       "rim": "token.rim",
       "ink": "token.mark"
-    }
+    },
+    "type": "badge"
   },
   "domino": {
     "default": "classic",
@@ -250,7 +255,8 @@
       "face": "material.domino.face",
       "rim": "material.domino.rim",
       "ink": "material.domino.ink"
-    }
+    },
+    "type": "domino"
   },
   "board": {
     "default": "classic",
@@ -275,7 +281,8 @@
     "materials": {
       "face": "counter.face",
       "ink": "counter.mark"
-    }
+    },
+    "type": "counter"
   },
   "bubble": {
     "default": "classic",
@@ -317,6 +324,7 @@
     "materials": {
       "face": "material.card.face",
       "rim": "material.card.rim"
-    }
+    },
+    "type": "card-deck"
   }
 }
