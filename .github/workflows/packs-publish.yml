@@ -53,7 +53,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: GraphGiraffe/boardgame-playroom-utils
-          ref: 13ec9fd13f3b1c06a588300cbe30834462683736
+          ref: 65b6d96bfc5ba7268bae43ae8aba8c4cb642c809
           ssh-key: ${{ secrets.PLAYROOM_UTILS_READ_KEY }}
           path: .playroom-utils
           persist-credentials: false
@@ -84,6 +84,9 @@ jobs:
           mkdir -p dist/packs-release
           gh release view "$RELEASE" --repo "$GITHUB_REPOSITORY" --json tagName,isDraft --jq 'select(.tagName=="'"$RELEASE"'" and .isDraft==false) | .tagName' | grep -Fx "$RELEASE"
           gh release download "$RELEASE" --repo "$GITHUB_REPOSITORY" --pattern '*.playroom-pack.json' --pattern SHA256SUMS --dir dist/packs-release
+          if gh release view "$RELEASE" --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[].name' | grep -qx SOURCE-PROVENANCE.json; then
+            gh release download "$RELEASE" --repo "$GITHUB_REPOSITORY" --pattern SOURCE-PROVENANCE.json --dir dist/packs-release
+          fi
           args=(--channel "$CHANNEL" --bucket "$PLAYROOM_PACKS_BUCKET" --assets dist/packs-release --collection "${RELEASE#v}")
           if test -n "$ONLY"; then args+=(--only "$ONLY"); fi
           if test "$BOOTSTRAP" = true; then args+=(--bootstrap); fi
