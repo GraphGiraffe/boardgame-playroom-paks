@@ -1,0 +1,135 @@
+.mage-scene .mage-field{height:100%;width:100%;display:flex;flex-direction:column;align-items:center;min-height:0;gap:3px;position:relative;container-type:size}
+.mage-scene .public-sequence{flex:1}.mage-scene .public-sequence-stage{container-type:size;display:grid;place-items:center}.mage-scene .public-sequence-stage>[data-public-frame]{display:grid;place-items:center}
+.mage-scene .mage-grid{position:relative;display:grid;grid-template-columns:repeat(var(--mage-columns),minmax(0,1fr));grid-template-rows:repeat(var(--mage-columns),minmax(0,1fr));aspect-ratio:1;width:min(100cqw,100cqh);gap:2px;isolation:isolate}
+.mage-scene .mage-cell{position:relative;border:1px solid #8fa28166;border-radius:12%;background:#e9e8d6;min-width:0;min-height:0;padding:0;aspect-ratio:1;color:#82937b;opacity:1;container-type:inline-size}
+.mage-scene .tile-void{visibility:hidden}.mage-scene .tile-wall{background:#b2b9a9;color:#536756}.mage-scene .tile-base{background:#f3e8c8;color:#b08d4c}.mage-scene .tile-puddle{background:#d2e6e5;color:#6097a6}.mage-scene .tile-desert{background:#f0dfb6;color:#bc9b59}.mage-scene .tile-forest{background:#cbdebd;color:#70926c}.mage-scene .tile-air_island{background:#deebe0;color:#80a39b}.mage-scene .tile-spikes{background:#edd2bf;color:#b78067}.mage-scene .tile-falling_floor{background:#e1dac7;color:#9f9179}
+.mage-scene .mage-terrain{width:100%;height:100%;display:block}.mage-scene .mage-preview{outline:3px solid var(--color-interaction-selected,#d3aa45);outline-offset:-3px}.mage-scene .mage-risk{border-color:#c7794d;border-style:dashed}.mage-scene .mage-acting{outline:2px solid #fffbed;z-index:3}
+.mage-scene .mage-token{position:absolute;inset:22%;display:grid;place-items:center;border-radius:50%;background:var(--mage-color);color:#fffbed;border:2px solid #fff9e6;font-weight:800;font-size:clamp(6px,29cqi,26px);box-shadow:0 2px 1px #263c3633;z-index:2}
+.mage-scene .mage-shield{position:absolute;inset:-24%;pointer-events:none}.mage-scene .mage-shield svg{width:100%;height:100%}.mage-scene .mage-revealed{position:absolute;bottom:-18%;right:-18%;width:48%;height:48%;display:grid;place-items:center;background:#fffbed;color:#294338;border-radius:50%;padding:2px}.mage-scene .mage-revealed svg{width:100%;height:100%}
+.mage-scene .mage-moving{animation:mage-step var(--sequence-duration,850ms) ease both}.mage-scene .mage-effects{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;z-index:5}.mage-scene .mage-ray{fill:none;stroke:currentColor;stroke-width:9;stroke-linecap:round;stroke-dasharray:600;animation:mage-ray var(--sequence-duration,850ms) ease both}.mage-scene .mage-impact{fill:none;stroke:currentColor;stroke-width:7;transform-box:fill-box;transform-origin:center;animation:mage-hit var(--sequence-duration,850ms) ease both}
+.mage-scene .mage-controls{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap}.mage-scene .mage-controls .settings-range{width:clamp(130px,22vw,220px);margin:0;gap:0}.mage-scene .mage-controls .settings-range-heading{font-size:12px}.mage-scene .mage-plan-buttons{display:flex;align-items:center;gap:4px}.mage-scene .mage-direction{font-size:20px;min-width:18px;text-align:center}.mage-scene .mage-controls .ui-icon-button{width:32px;height:32px;min-height:32px;padding:5px}.mage-scene .mage-controls .scene-button{padding:6px 9px;min-height:32px;font-size:13px}
+.mage-scene .mage-card{position:relative;width:var(--size-card,64px)!important;height:var(--size-card,64px)!important;aspect-ratio:1;padding:0;border:2px solid transparent;border-radius:12%;background:transparent;flex:none}.mage-scene .mage-card.selected{border-color:var(--color-interaction-selected,#d3aa45)}.mage-scene .mage-card .piece-art{display:block;width:100%;height:100%;}.mage-scene .mage-mini-back{display:inline-block;width:20px;height:20px;margin-right:-5px}.mage-scene .mage-mini-back svg{width:100%;height:100%}
+.mage-scene .mage-warning{font-size:11px;text-align:center}
+.mage-scene .mage-hand{min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px;width:100%}.mage-scene .mage-hand-toolbar .settings-range{width:min(240px,100%);margin:0;gap:0}.mage-scene .mage-hand .settings-range-heading{font-size:12px}.mage-scene .mage-hand-row{display:grid;grid-template-columns:32px minmax(0,1fr) 32px;align-items:center;gap:4px;width:100%}.mage-scene .mage-hand-row>section{min-width:0;width:100%}.mage-scene .mage-hand-row>.ui-button{width:32px;height:32px;min-height:32px;padding:5px}
+@keyframes mage-step{0%{transform:translate(calc(var(--move-col) * (100% + 2px)),calc(var(--move-row) * (100% + 2px)))}60%,100%{transform:translate(0,0)}}
+@keyframes mage-ray{0%{stroke-dashoffset:600;opacity:0}25%{opacity:1}70%{stroke-dashoffset:0;opacity:1}100%{opacity:0}}
+@keyframes mage-hit{0%,25%{opacity:0;transform:scale(.2)}65%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(1.3)}}
+@media(prefers-reduced-motion:reduce){.mage-scene .mage-card .piece-art{transition:none}.mage-scene .mage-moving,.mage-scene .mage-ray,.mage-scene .mage-impact{animation:none}}
+
+.mage-scene .mage-hand-toolbar{display:flex;align-items:center;justify-content:center;gap:8px;width:100%}.mage-scene .mage-hand-toolbar>.ui-button{width:32px;height:32px;min-height:32px;padding:5px}
+
+.mage-scene .mage-hand-toolbar .settings-range{flex:1;min-width:0;width:auto}.mage-scene .mage-hand-toolbar .settings-range-heading{min-height:16px;font-size:11px}.mage-scene .mage-hand-toolbar .mage-controls{flex-wrap:nowrap;gap:4px}.mage-scene .mage-hand-row>[data-view-value] svg{width:100%;height:100%}.mage-scene .mage-hand-row>button:last-child svg{transform:scaleX(-1)}.mage-scene.is-public-playback .mage-warning{visibility:hidden}
+
+.mage-scene .mage-loot-hand{min-width:0;width:100%}.mage-scene .mage-loot-hand p{font-size:12px;text-align:center;margin:0 0 4px}
+
+/* Public routes and outcome feedback use authorized phase facts only. */
+.mage-scene .mage-pieces{position:absolute;inset:0;pointer-events:none;z-index:6}
+.mage-scene .mage-piece{position:absolute;width:calc((100% - (var(--mage-columns) - 1)*2px)/var(--mage-columns));height:calc((100% - (var(--mage-columns) - 1)*2px)/var(--mage-columns));left:calc(var(--col)*(100% + 2px)/var(--mage-columns));top:calc(var(--row)*(100% + 2px)/var(--mage-columns));container-type:inline-size}
+.mage-scene .mage-effects{z-index:5}.mage-scene .mage-attacks{z-index:7}
+.mage-scene .mage-trail{fill:none;stroke:currentColor;stroke-width:18;stroke-linecap:round;stroke-dasharray:1;animation:mage-trail var(--sequence-duration,650ms) ease-out both}
+.mage-scene .mage-jet,.mage-scene .mage-gust{fill:none;stroke:currentColor;stroke-width:20;stroke-linecap:round;stroke-dasharray:1;animation:mage-trail var(--sequence-duration,650ms) ease-out both}
+.mage-scene .mage-jet-light{stroke:#c5f1f6;stroke-width:6}
+.mage-scene .mage-gust{stroke-width:9;stroke-dasharray:.13 .07}
+.mage-scene .mage-tornado{fill:none;stroke:currentColor;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;animation:mage-tornado var(--sequence-duration,650ms) ease both}
+.mage-scene .mage-projectile{animation:mage-projectile var(--sequence-duration,650ms) ease-in both}
+.mage-scene .mage-attack-earth .mage-projectile{fill:currentColor;stroke:#fff1c8;stroke-width:3;stroke-linejoin:round}
+.mage-scene .mage-fist-lines{fill:none;stroke:#68512f;stroke-width:4}
+.mage-scene [data-public-feedback~="killer"]{outline:3px solid #eac75d;outline-offset:2px;box-shadow:0 0 14px #f4cb53cc}
+.mage-scene [data-public-feedback~="damage"]{animation:mage-damage var(--sequence-duration,650ms) ease both}
+.mage-scene [data-public-feedback~="death"]{animation:mage-death var(--sequence-duration,650ms) ease both}
+.mage-scene .mage-token[data-public-feedback~="fall"]{animation:mage-fall var(--sequence-duration,650ms) ease both}
+@keyframes mage-trail{0%{stroke-dashoffset:1;opacity:.2}55%{stroke-dashoffset:0;opacity:.9}100%{stroke-dashoffset:0;opacity:.18}}
+@keyframes mage-projectile{0%{transform:translateX(0);opacity:0}12%{opacity:1}70%{transform:translateX(var(--flight));opacity:1}100%{transform:translateX(var(--flight));opacity:0}}
+@keyframes mage-tornado{0%{opacity:0;transform:scale(.3) translateY(15px)}35%,70%{opacity:1;transform:scale(1) translateY(-6px)}100%{opacity:0;transform:scale(1.1) translateY(-12px)}}
+@keyframes mage-damage{0%,100%{transform:translateX(0);filter:none}20%,40%,60%{transform:translateX(-4px);filter:sepia(1) saturate(8) hue-rotate(310deg);background-color:#d64c45;box-shadow:0 0 0 3px #ed544e}30%,50%{transform:translateX(4px);background-color:#d64c45;box-shadow:0 0 0 3px #ed544e}}
+@keyframes mage-death{0%{filter:none;transform:translateX(0)}20%,40%{transform:translateX(-4px);background-color:#d64c45;box-shadow:0 0 0 3px #ed544e}30%,50%{transform:translateX(4px);background-color:#d64c45}75%,100%{transform:translateX(0);filter:brightness(.3) grayscale(1);opacity:.55}}
+@keyframes mage-fall{0%{transform:scale(1);filter:none}20%,40%{transform:translateX(-3px);background-color:#d64c45}30%{transform:translateX(3px)}60%{transform:scale(.85) rotate(12deg);filter:brightness(.4)}100%{transform:scale(.12) rotate(35deg);filter:brightness(.15);opacity:0}}
+@media(prefers-reduced-motion:reduce){.mage-scene .mage-moving,.mage-scene .mage-trail,.mage-scene .mage-projectile,.mage-scene .mage-jet,.mage-scene .mage-gust,.mage-scene .mage-tornado,.mage-scene [data-public-feedback]{animation:none}}
+
+/* The same sliding segments as Battleship, extended to an optional third action. */
+.mage-scene .mage-action-switch{flex:1;min-width:0}.mage-scene .mage-action-switch .shared-page-tabs{max-width:none;grid-template-columns:repeat(var(--page-count),minmax(0,1fr));border-radius:16px}
+.mage-scene .mage-action-switch .shared-page-tabs::before{width:calc((100% - 8px)/var(--page-count));border-radius:12px}
+.mage-scene .mage-action-switch button{font-size:12px;padding:6px 4px;min-height:32px}
+.mage-scene .mage-hand-toolbar .mage-controls .mage-ready{width:44px;height:44px;min-height:44px;padding:10px}
+.mage-scene .mage-hand-row{grid-template-columns:28px minmax(0,1fr) 28px;gap:6px}
+.mage-scene .mage-hand-row>.mage-rotate{--ui-target:28px;--ui-control-radius:9px;--ui-control-size:28px;min-width:28px;width:28px;height:28px;min-height:28px;padding:5px;border-radius:9px;box-shadow:0 3px 0 var(--color-border-subtle,#b5bda4),inset 0 1px 0 #fff9;transform:translateY(-2px)}
+.mage-scene .mage-hand-row>.mage-rotate svg{width:18px;height:18px}
+.mage-scene .mage-hand-row>.mage-rotate:active{transform:translateY(1px);box-shadow:inset 0 1px 2px #29483e33}
+.mage-scene .mage-hand-toolbar{gap:6px}.mage-scene .mage-spell-art{width:100%;height:100%}
+.mage-scene .mage-phase-reveal{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#f3f2dfe8;border-radius:14px;padding:12px;z-index:10;pointer-events:none;text-align:center}
+.mage-scene .mage-phase-reveal>strong{font-size:clamp(16px,4cqw,24px)}
+.mage-scene .mage-phase-cards{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px;max-width:100%}
+.mage-scene .mage-phase-player{display:grid;justify-items:center;gap:4px;font-size:13px}
+.mage-scene .mage-phase-card{width:clamp(64px,22cqw,144px);aspect-ratio:1}.mage-scene .mage-phase-card .piece-art{width:100%;height:100%;}
+.mage-action-diagram{display:block;width:160px;max-width:100%;color:var(--ink);margin:8px auto;stroke-width:1.5px}.mage-action-diagram [stroke-width]{stroke-width:1.5px}
+
+.mage-scene .mage-spell-paint{transform-origin:50px 50px;transform:rotate(var(--mage-direction,0deg));transition:transform .16s ease}
+@media(prefers-reduced-motion:reduce){.mage-scene .mage-spell-paint{transition:none}}
+
+/* Simultaneous choices have no displayed player order; the crown marks an available ultimate. */
+.mage-scene .mage-ultimate{position:relative;z-index:1;display:grid;place-items:center;width:70%;height:70%}
+.mage-scene .mage-ultimate>span{display:grid;place-items:center;width:100%;height:100%;padding:0;border:0;background:none}
+.mage-scene .mage-ultimate svg{width:100%;height:100%;max-width:none;max-height:none}
+.mage-scene .mage-action-switch button{display:flex;align-items:center;justify-content:center}
+.mage-scene .mage-action-switch button>svg,.mage-scene .mage-action-switch svg{width:22px;height:22px}
+.mage-scene .mage-action-switch span{border:0;padding:0;background:none}
+
+/* A private preview follows the selected element and the hand orientation. */
+.mage-scene .mage-preview{outline-color:var(--mage-selected);box-shadow:inset 0 0 0 100px color-mix(in srgb,var(--mage-selected) 24%,transparent)}
+.mage-scene .mage-selected-token{outline:2px solid var(--mage-selected);outline-offset:2px;box-shadow:0 0 0 5px color-mix(in srgb,var(--mage-selected) 32%,transparent)}
+.mage-scene .mage-facing{position:absolute;inset:0;z-index:1;transform:rotate(var(--mage-direction));pointer-events:none}
+.mage-scene .mage-facing svg{display:block;width:100%;height:100%}
+
+/* Direction stays below each face; air movement points along its diagonal. */
+.mage-scene .mage-card{margin-bottom:16px}
+.mage-scene .mage-card-facing{position:absolute;top:calc(100% + 3px);left:calc(50% - 7px);width:14px;height:14px;pointer-events:none}
+.mage-scene .mage-card-facing svg{display:block;width:100%;height:100%;transform:rotate(var(--mage-bearing));transform-origin:center}
+.mage-scene .mage-phase-card{position:relative;margin-bottom:16px}
+
+/* The shrinking rim remains visible above every terrain illustration. */
+.mage-scene .mage-risk::after{content:"";position:absolute;inset:0;border-radius:inherit;background:#d83c3680;pointer-events:none;animation:mage-risk-pulse 2.4s ease-in-out infinite}
+@keyframes mage-risk-pulse{0%,100%{opacity:.4}50%{opacity:.85}}
+.mage-scene .mage-token.is-selected{outline-offset:2px!important;--color-interaction-selected:#dfb83d}
+.mage-scene .mage-preview{outline-color:color-mix(in srgb,var(--mage-selected) var(--piece-highlight-strength),transparent)}
+.mage-scene [data-score-id="kills"]::before,.result-scores[data-game="mage-brawl"] [data-score-id="kills"]::before{content:"⚔";margin-right:3px}
+
+@media(prefers-reduced-motion:reduce){.mage-scene .mage-risk::after{animation:none;opacity:.65}}
+
+.mage-scene .mage-cell.is-playable{outline:3px solid var(--piece-interaction-color);outline-offset:-3px!important}
+
+.mage-scene .mage-token-health{position:absolute;bottom:6%;left:50%;transform:translateX(-50%);z-index:4;width:72%;height:auto;aspect-ratio:3;overflow:visible}
+.mage-scene .mage-hp-dot{fill:#fff;stroke:#fff;stroke-width:1.2}
+.mage-scene .mage-hp-dot.is-empty{fill:var(--mage-color)}
+
+/* Narrow landscape side panel: controls use height, leaving the full width to cards. */
+@media(orientation:landscape){
+ .mage-scene .mage-hand-toolbar{flex-direction:column;gap:6px}
+ .mage-scene .mage-hand-toolbar .mage-controls{order:-1;width:100%;justify-content:space-evenly}
+ .mage-scene .mage-action-switch{flex:none;width:100%}
+ .mage-scene .mage-hand-row{grid-template-columns:1fr 1fr;gap:4px 0}
+ .mage-scene .mage-hand-row>.mage-rotate:first-child{grid-column:1;grid-row:1;justify-self:start}
+ .mage-scene .mage-hand-row>.mage-rotate:last-child{grid-column:2;grid-row:1;justify-self:end}
+ .mage-scene .mage-hand-row>section{grid-column:1 / -1;grid-row:2}
+}
+
+.mage-scene .mage-plan-preview{z-index:5;opacity:.72;pointer-events:none}
+.mage-scene .mage-plan-locked{--piece-interaction-color:#638658;outline-color:#638658!important;opacity:1}
+.mage-scene .mage-plan-order{position:absolute;top:2px;left:2px;border-radius:50%;background:#638658;color:white;width:16px;height:16px;font-size:11px;line-height:16px;z-index:4}
+.mage-scene .mage-reset-plan{width:32px;height:32px;min-height:32px;padding:5px}
+
+.mage-scene .mage-reset-plan{flex:none}
+.mage-scene .mage-reset-plan:disabled{color:#899188;background:#e1e4dc;opacity:.6;box-shadow:none}
+@media(orientation:landscape){
+ .mage-scene .mage-hand-toolbar:has(.mage-reset-plan){display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:center;justify-items:center}
+ .mage-scene .mage-hand-toolbar:has(.mage-reset-plan) .mage-controls{display:contents}
+ .mage-scene .mage-hand-toolbar:has(.mage-reset-plan)>.mage-reset-plan{grid-column:1;grid-row:1}
+ .mage-scene .mage-hand-toolbar:has(.mage-reset-plan) .mage-ready{grid-column:2;grid-row:1}
+ .mage-scene .mage-hand-toolbar:has(.mage-reset-plan) [data-command="card-help"]{grid-column:3;grid-row:1}
+ .mage-scene .mage-hand-toolbar:has(.mage-reset-plan)>.mage-action-switch{grid-column:1 / -1;grid-row:2}
+}
+
+.mage-action-switch button{position:relative}
+.mage-action-switch .mage-type-used{position:absolute;right:4px;top:2px;display:grid;place-items:center;width:1.1em;height:1.1em;border-radius:50%;background:#dcebc6;color:#315b43;border:1px solid #638765;font-size:.75em;font-weight:700}
+
+/* A committed action keeps its fixed bearing when the remaining hand rotates. */
+.mage-scene .mage-plan-locked .mage-spell-paint{transition:none}

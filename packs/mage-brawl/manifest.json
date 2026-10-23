@@ -1,0 +1,239 @@
+{
+  "id": "mage-brawl",
+  "version": "0.1.0",
+  "name": "Стихийная потасовка",
+  "category": "board",
+  "estimatedDuration": "15–40 мин",
+  "tagline": "Выберите стихию. Раскройте планы одновременно.",
+  "capabilities": {
+    "hands": true,
+    "surfaces": [
+      "combined",
+      "table",
+      "player"
+    ],
+    "viewStateScope": "match",
+    "firstPlayer": false,
+    "quietActions": [
+      "plan",
+      "unready"
+    ]
+  },
+  "rules": "rules.js",
+  "view": "view.js",
+  "styles": "styles.css",
+  "engineApi": 3,
+  "stateVersion": 1,
+  "viewApi": 2,
+  "tileTheme": "blue",
+  "sharedUi": true,
+  "sharedAssets": [],
+  "tags": [
+    "board",
+    "logic"
+  ],
+  "playModes": [
+    {
+      "id": "individual",
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "teams": false
+    }
+  ],
+  "sourceModules": {
+    "rules": [
+      "domain/bots.js",
+      "domain/game.js",
+      "presentation/scene.js"
+    ],
+    "view": [
+      "presentation/scene.js"
+    ],
+    "locales": {
+      "ru": [
+        "locales/ru/game.json"
+      ]
+    }
+  },
+  "skinFamilies": [
+    "board",
+    "card-back"
+  ],
+  "presetSetting": {
+    "label": "Режим",
+    "options": [
+      {
+        "value": "classic",
+        "label": "Классика"
+      }
+    ]
+  },
+  "sharedDomain": [
+    "tactical-grid",
+    "decision-window",
+    "effect-batch",
+    "bot-policy"
+  ],
+  "sounds": "sounds.js",
+  "settings": [
+    {
+      "key": "actionsPerTurn",
+      "label": "Действий за ход",
+      "default": "1",
+      "control": "slider",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "help": "Все заранее выбирают указанное количество действий. Сначала разыгрываются первые действия всех игроков, затем вторые."
+    },
+    {
+      "key": "differentActionTypes",
+      "label": "Разные типы действий",
+      "default": "0",
+      "control": "slider",
+      "options": [
+        {
+          "value": "0",
+          "label": "Нет"
+        },
+        {
+          "value": "1",
+          "label": "Да"
+        }
+      ],
+      "help": "При двух действиях нельзя повторить тип: движение, атака или ультимейт.",
+      "visibleWhen": {
+        "actionsPerTurn": "2"
+      }
+    },
+    {
+      "key": "health",
+      "label": "Здоровье",
+      "default": "mode",
+      "control": "slider",
+      "options": [
+        {
+          "value": "mode",
+          "label": "Авто (3 / 4)"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        }
+      ],
+      "help": "Авто: 3 при одном действии, 4 при двух. Явное значение независимо от числа действий. Это также максимум лечения и здоровье при возрождении."
+    },
+    {
+      "key": "lives",
+      "label": "Жизни",
+      "default": "2",
+      "control": "slider",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        }
+      ],
+      "help": "Число жизней. После потери жизни вы получаете ульту, если можете возродиться."
+    },
+    {
+      "key": "handLimit",
+      "label": "Стартовый лимит руки",
+      "default": "mode",
+      "control": "slider",
+      "options": [
+        {
+          "value": "mode",
+          "label": "Авто (3 / 4)"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        },
+        {
+          "value": "7",
+          "label": "7"
+        },
+        {
+          "value": "8",
+          "label": "8"
+        }
+      ],
+      "help": "Авто: 3 при одном действии, 4 при двух. Явное значение независимо от числа действий. Убийство увеличивает личный лимит на 1."
+    }
+  ],
+  "ruleGroups": [
+    {
+      "label": "Правила",
+      "fields": [
+        "actionsPerTurn",
+        "differentActionTypes",
+        "handLimit",
+        "health",
+        "lives"
+      ]
+    }
+  ]
+}

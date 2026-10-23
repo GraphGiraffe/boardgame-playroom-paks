@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["tictactoe"] = {
   "id": "tictactoe",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "name": "Крестики-нолики",
   "category": "board",
   "estimatedDuration": "2–5 мин",
