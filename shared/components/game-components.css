@@ -85,3 +85,26 @@ body.reduced-motion .player-panel.is-turn-skipped,.reduced-motion .player-panel.
 /* Drag destinations use the same contour as selection, without a rectangular halo. */
 :is(.game-scene,.app-game-layout) [data-drop-piece].playroom-drop-hover{outline-offset:-2px!important;box-shadow:none!important;--piece-interaction-color:var(--color-interaction-selected,#d3aa45);}
 :is(.game-scene,.app-game-layout) [data-drop-piece].playroom-drop-hover:has(.piece-contour){outline:none!important;background-color:transparent!important;}
+
+/* All game objects share a quiet pulse; only the interaction contour changes. */
+@property --piece-highlight-strength{syntax:"<percentage>";inherits:true;initial-value:100%;}
+@keyframes piece-highlight-pulse{0%,100%{--piece-highlight-strength:100%}50%{--piece-highlight-strength:58%}}
+:is(.game-scene,.app-game-layout){animation:piece-highlight-pulse 2.6s ease-in-out infinite}
+:is(.game-scene,.app-game-layout) :is(.is-playable,.is-selected,.solitaire-hint,.is-drop-target,.playroom-drop-hover){outline-color:color-mix(in srgb,var(--piece-interaction-color,var(--color-interaction-available,#638658)) var(--piece-highlight-strength),transparent)!important}
+:is(.game-scene,.app-game-layout) :is(.is-playable,.is-selected,.solitaire-hint,.is-drop-target,.playroom-drop-hover) :is(.piece-contour,.card-outline){stroke-opacity:var(--piece-highlight-strength)}
+.player-score.is-token-counter.is-overlapping{gap:0!important;isolation:isolate}
+.player-score.is-overlapping .counter-token{position:relative}
+.player-score.is-overlapping .counter-token+.counter-token{margin-left:calc(var(--counter-token-width,13px) * -.54)}
+.player-score.is-overlapping .counter-token.is-empty{opacity:1;fill:var(--counter-token-empty-fill,var(--color-surface-panel,#e9eddf))}
+@media(prefers-reduced-motion:reduce){:is(.game-scene,.app-game-layout){animation:none;--piece-highlight-strength:100%}}
+
+.hand-track.is-overlapping{display:block!important;flex-wrap:nowrap!important;overflow-x:auto!important;overflow-y:hidden!important;padding-top:8px;padding-bottom:18px}
+.hand-overlap-row{display:grid;grid-template-columns:repeat(calc(var(--hand-count) - 1),minmax(0,var(--scene-card-width,var(--size-card)))) var(--scene-card-width,var(--size-card));gap:2px;justify-content:safe center;margin:auto;max-width:100%}
+.hand-overlap-row>.hand-card{position:relative;z-index:1}
+.hand-overlap-row>.hand-card.is-selected{z-index:3;transform:translateY(-4px)!important}
+
+.hand-overlap-row:has(>.hand-card:only-child){grid-template-columns:var(--scene-card-width,var(--size-card))}
+
+.player-score.token-heart .counter-token,.player-score.token-crown .counter-token{stroke:color-mix(in srgb,currentColor 78%,#27352c);stroke-width:1;paint-order:fill stroke}
+.player-score.is-token-counter .counter-token.is-empty{opacity:1;fill:none;stroke:color-mix(in srgb,currentColor 60%,transparent)}
+.player-score.is-token-counter:is(.token-heart,.token-meeple) .counter-token.is-empty{fill:#fff}
