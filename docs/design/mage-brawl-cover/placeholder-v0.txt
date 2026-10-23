@@ -1,0 +1,1 @@
+ const cover=()=>C.cover('<rect x="65" y="18" width="160" height="145" rx="14" fill="#cdddb4"/><path d="M105 18v145M145 18v145M185 18v145M65 54h160M65 90h160M65 126h160" stroke="#809d79" stroke-width="2"/><circle cx="125" cy="72" r="17" fill="#cf674f"/><path d="m165 94-17 29h34Z" fill="#4285aa"/>');

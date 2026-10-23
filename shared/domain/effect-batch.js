@@ -1,0 +1,4 @@
+(function(r,f){const a=f();if(typeof module==='object'&&module.exports)module.exports=a;r.PlayroomEffectBatch=a;})(globalThis,function(){
+ class Batch{constructor(){this.entries=new Map();}entry(id){if(!this.entries.has(id))this.entries.set(id,{damage:0,healing:0,fall:false,fallSources:[],sources:new Set()});return this.entries.get(id);}damage(id,n,sources=[]){const e=this.entry(id);e.damage+=n;for(const source of sources)if(source!==id)e.sources.add(source);}heal(id,n){this.entry(id).healing+=n;}fall(id,sources=[]){const e=this.entry(id);e.fall=true;e.fallSources=sources.filter(s=>s!==id);}outcome(id,health,max){const e=this.entries.get(id);return e?{health:Math.max(0,Math.min(max,health+e.healing-e.damage)),fall:e.fall,sources:e.fall?[...e.fallSources]:[...e.sources]}:{health,fall:false,sources:[]};}}
+ return Object.freeze({Batch});
+});
