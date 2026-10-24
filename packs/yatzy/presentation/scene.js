@@ -25,11 +25,14 @@
   const metric=id=>message(id==='points'?'meta.points':'meta.wins');
   function scene(projection){
     const d=projection.data;
-    return {contractVersion:1,id:'yatzy-table',family:'score-table',round:{number:Math.min(projection.data.roundLimit,Math.floor(projection.data.round/projection.playerCount)+1),limit:projection.data.roundLimit,starts:projection.data.roundStarts},
+    return {contractVersion:1,id:'yatzy-table',family:'score-table',rolls:d.rolls,dice:d.dice.map((value,index)=>({value,held:d.held[index]})),upper:d.upper,bonuses:d.bonuses,totals:d.totals,round:{number:Math.min(projection.data.roundLimit,Math.floor(projection.data.round/projection.playerCount)+1),limit:projection.data.roundLimit,starts:projection.data.roundStarts},
       rows:categories.keys.map(key=>({id:key,label:message('category.'+key),
-        cells:d.scores.map((row,player)=>({player,value:row[key]??null,preview:d.previews[key],
+        cells:d.scores.map((row,player)=>({player,value:row[key]??null,preview:d.previews[key],label:message('actions.score',{category:message('category.'+key),points:d.previews[key]}),
           command:player===projection.turn?projection.actions.find(a=>a.type==='score'&&a.key===key)||null:null}))})),
-      players:d.totals.map((value,player)=>({id:player,metrics:[{id:'points',kind:'points',value,format:'integer',label:metric('points'),resultUsage:true},{id:'wins',kind:'wins',value:projection.winners.includes(player)?1:0,label:metadata.scoreLabel,resultUsage:false}]}))};
+      players:d.totals.map((value,player)=>({player,metrics:[{id:'points',kind:'points',value,format:'integer',label:metric('points'),resultUsage:true},{id:'wins',kind:'wins',value:projection.winners.includes(player)?1:0,label:metadata.scoreLabel,resultUsage:false}]}))};
   }
-  return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}),action,choice,event,metric,scene});
+
+ // Geometry contains only public identities from the authorized projection.
+ function sceneLayout(p){const d=p.data;return {geometry:{topology:'fixed'},zones:[{id:'field',kind:'board'}],objects:d.dice.map((_,index)=>({ref:{namespace:'die',id:String(index)},zone:'field',index})),interactions:p.actions.map(command=>({command,target:{zone:'field'}}))};}
+ return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}),action,choice,event,metric,scene:p=>({...scene(p),...sceneLayout(p)})});
 });

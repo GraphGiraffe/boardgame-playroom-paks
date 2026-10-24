@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["uno"] = {
   "id": "uno",
-  "version": "0.5.4",
+  "version": "0.6.0",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Подбирай цвет и значение. Освободи руку первым.",
@@ -57,10 +57,10 @@
     }
   ],
   "name": "UNO",
-  "engineApi": 3,
+  "engineApi": 4,
   "stateVersion": 2,
   "sounds": "sounds.js",
-  "viewApi": 2,
+  "viewApi": 3,
   "tags": [
     "cards",
     "shedding"

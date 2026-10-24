@@ -45,7 +45,7 @@
    for(const capture of captured){d.pawns[capture.owner][capture.pawn]=-1;events.push(fact('captured',actor,{owner:action.owner,target:capture.owner}));}
    events.push(fact('moved',actor,{owner:action.owner,pawn:action.pawn,from,to}));
    const members=next.preset==='teams'?[B.team(action.owner),B.team(action.owner)+2]:[action.owner];
-   if(members.every(player=>B.home(d.pawns[player]))&&Ending.record(d.ending,members)){
+   if(members.every(player=>B.home(d.pawns[player]))&&Ending.record(d.ending,members,next,'finished')){
     events.push(fact('won',actor,{members}));d.used.fill(true);completeBatch(next,actor);
    }else{if(guaranteed)d.used.fill(true);if(guaranteed||!B.moves(next,actor).length)completeBatch(next,actor);}
   }
@@ -56,7 +56,7 @@
   const score=command=>projection.data.pawns[command.owner][command.pawn]<0?70:projection.data.pawns[command.owner][command.pawn]+projection.data.dice[command.dieIndex];return score(b)-score(a);
  })[0]||commands[0];}
  function result(position){const own=position.data.pawns.map(row=>row.filter(n=>n===57).length),values=position.preset==='teams'?own.map((_,player)=>own[player%2]+own[player%2+2]):own;
-  return {winners:position.winners,places:Ending.places(position.data.ending,values),
+  return {winners:position.winners,...Ending.result(position.data.ending),places:Ending.places(position.data.ending,values),
    metrics:position.preset==='teams'?[{id:'team-home',values,display:'ranking'},{id:'home',values:own}]:[{id:'home',values}]};
  }
  return Object.freeze({contractVersion:1,id:'ludo',minPlayers:2,maxPlayers:4,create,validate,actions,reduce,project,bot,result});

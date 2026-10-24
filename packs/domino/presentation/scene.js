@@ -6,13 +6,22 @@
  function event(value){const p=value.params;
   if(value.type==='domino.drawn')return {message:message('events.drawn'),kind:'draw',sound:{id:'draw',target:value.actor},transfer:{player:value.actor,count:1,from:'stock'}};
   if(value.type==='domino.passed')return {message:message('events.passed'),kind:'pass',feedback:{kind:'skip',player:value.actor},speech:{speaker:value.actor,text:message('speech.pass')}};
-  if(value.type==='domino.played')return {message:message('events.played',{a:p.a,b:p.b,side:message('side.'+p.side)}),kind:'play',reveal:{kind:'card',card:{id:p.id,a:p.a,b:p.b},entity:'tile-'+p.id},sound:{id:'move'}};
+  if(value.type==='domino.played')return {message:message('events.played',{a:p.a,b:p.b,side:message('side.'+p.side)}),kind:'play',reveal:{kind:'card',card:{id:p.id,a:p.a,b:p.b},entity:{namespace:'tile',id:p.id}},sound:{id:'move'}};
   if(value.type==='domino.cleared')return {message:message('events.cleared'),finish:true};
   if(value.type==='domino.fish')return {message:message(value.actor===null?'events.fish-draw':'events.fish-win',{best:p.best}),finish:true};
   throw Error('DOMINO_EVENT_UNKNOWN');
  }
  const metric=()=>message('meta.pips');
- const scene=projection=>({contractVersion:1,id:'domino-chain',family:'tile-chain',chain:projection.data.chain,
-  players:projection.data.hands.map((hand,player)=>({player,hand,metrics:[{id:'points',kind:'points',value:projection.data.points[player],label:metadata.scoreLabel,resultUsage:false}]})),stockCount:projection.data.stock.length});
- return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}),action,event,metric,scene});
+ const scene=projection=>({contractVersion:1,id:'domino-chain',family:'tile-chain',chain:projection.data.chain,openingTileId:projection.data.openingTileId,
+  placements:projection.actions.filter(command=>command.type==='play').map(command=>{
+   const card=projection.data.hands[projection.actor].find(card=>card.id===command.card),chain=projection.data.chain;
+   let {a,b}=card;const join=chain.length?(command.side==='left'?chain[0].a:chain.at(-1).b):null;
+   if(join!==null&&(command.side==='left'?b:a)!==join)[a,b]=[b,a];
+   return {command,a,b,join};
+  }),
+  players:projection.data.hands.map((hand,player)=>({player,finishPlace:(projection.data.ending?.groups||[]).findIndex(group=>group.includes(player))+1,hand,metrics:[{id:'points',kind:'points',value:projection.data.points[player],label:metadata.scoreLabel,resultUsage:false}]})),stockCount:projection.data.stock.length});
+
+ // Geometry contains only public identities from the authorized projection.
+ function sceneLayout(p){const d=p.data;return {geometry:{topology:'fixed'},zones:[{id:'field',kind:'table'},...d.hands.map((hand,owner)=>({id:'hand-'+owner,kind:'hand',owner,count:hand.length}))],objects:[...d.hands.flatMap((hand,owner)=>hand.flatMap((card,index)=>card&&!card.hidden&&card.id!=null?[{ref:{namespace:'tile',id:String(card.id)},zone:'hand-'+owner,index}]:[])),...d.chain.map((tile,index)=>({ref:{namespace:'tile',id:String(tile.id)},zone:'field',index}))],interactions:p.actions.map(command=>({command,target:command.card!=null?{entity:{namespace:'tile',id:String(command.card)}}:{zone:'field'}}))};}
+ return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}),action,event,metric,scene:p=>({...scene(p),...sceneLayout(p)})});
 });

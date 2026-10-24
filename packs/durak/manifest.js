@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["durak"] = {
   "id": "durak",
-  "version": "0.5.4",
+  "version": "0.6.0",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Отбивайся, подкидывай и избавляйся от карт.",
@@ -21,9 +21,9 @@
   "styles": "styles.css",
   "name": "Дурак",
   "sharedUi": true,
-  "engineApi": 3,
+  "engineApi": 4,
   "stateVersion": 3,
-  "viewApi": 2,
+  "viewApi": 3,
   "tags": [
     "cards",
     "shedding"
@@ -140,7 +140,8 @@
     }
   },
   "sharedDomain": [
-    "standard-deck"
+    "standard-deck",
+    "end-policy"
   ],
   "ruleGroups": [
     {

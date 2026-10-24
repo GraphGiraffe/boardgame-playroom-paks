@@ -1,6 +1,6 @@
 # Mage Brawl: arena cover
 
-Current approved cover: **v7**, accepted by owner on 2026-10-23 ("Сохраняем"). Master: `arena-v7-preview.png`. Runtime: `packs/mage-brawl/assets/covers/arena-v7.webp`. Earlier entries below are iteration history.
+Current approved cover: **v8**, palette variant 3 accepted by owner on 2026-10-24 ("3 вариант"). Master: `arena-v8-preview.png`. Runtime: `packs/mage-brawl/assets/covers/arena-v8.webp`. Earlier entries below are iteration history.
 
 Built-in imagegen, 2026-10-23. Owner selected “Battle on the arena”. Reference: current Mage Brawl gameplay art. Original generated PNG preserved here; runtime uses only assets/covers/arena-v1.webp. Previous placeholder preserved separately.
 
@@ -26,3 +26,6 @@ v6 enlarges the fist and shortens the forearm, retaining the thumb on top. Owner
 
 ## v7 — accepted and saved, 2026-10-23
 Owner accepted the large faceted stone fist with short forearm and thumb on top. Exported transparent WebP within 840x504, quality 88; view references v7. Previous runtime v3 preserved in this archive, removed from runtime asset closure. No full HTML rebuild, commit or publication in this save step.
+
+## v8 — accepted light pastel palette, 2026-10-24
+Owner selected variant 3 after comparison with actual Ludo and Go Fish covers. Light sage tornado, honey sandstone fist, dusty sky blue wave and apricot coral fire, warm ivory highlights. Four generated palette candidates preserved in `palette-2026-10-24/`. Approved v7 master and runtime preserved in this archive. Transparent runtime export within 840x504, WebP quality 88. Local asset update only; no application HTML build or publication.

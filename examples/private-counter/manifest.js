@@ -6,7 +6,7 @@
   "id": "private-counter",
   "name": "Учебный счётчик",
   "version": "0.4.0",
-  "engineApi": 3,
+  "engineApi": 4,
   "stateVersion": 2,
   "rules": "rules.js",
   "view": "view.js",
@@ -18,7 +18,7 @@
       "player"
     ]
   },
-  "viewApi": 2,
+  "viewApi": 3,
   "tags": [
     "pieces"
   ],

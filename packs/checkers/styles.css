@@ -34,3 +34,6 @@
 .playroom-drag-ghost.checker-piece{outline-width:var(--size-border-2_0,2px)!important;}
 
 .checker-board{overflow:visible;}.checker-cell:has(.is-playable,.is-selected){z-index:1;}.checker-piece:is(.is-playable,.is-selected){outline-offset:0!important;--interaction-ring-width:2px;}
+
+/* A selection is a screen-space ring, independent of board scale. */
+.checker-piece:is(.is-playable,.is-selected) .piece-contour,.playroom-drag-ghost.checker-piece .piece-contour{stroke-width:2px;vector-effect:non-scaling-stroke;}

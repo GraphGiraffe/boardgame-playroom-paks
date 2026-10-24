@@ -121,7 +121,7 @@
   }
   function result(position){
     const values=[0,1].map(player=>position.winners.includes(player)?1:0);
-    return {winners:position.winners,places:values.map(value=>value?1:2),metrics:[{id:'wins',values},
+    return {winners:position.winners,lastPlayers:position.winners.length===1?[1-position.winners[0]]:[],places:values.map(value=>value?1:2),metrics:[{id:'wins',values},
       {id:'hits',values:position.data.shots.map(shots=>shots.filter(shot=>shot.hit).length)}]};
   }
   return Object.freeze({contractVersion:1,id:'battleship',minPlayers:2,maxPlayers:2,rounds:true,preparing:position=>position.data.phase==='setup',create,validate,actions,reduce,project,bot,result});
