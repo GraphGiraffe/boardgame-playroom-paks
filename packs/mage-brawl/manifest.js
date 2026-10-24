@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["mage-brawl"] = {
   "id": "mage-brawl",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "name": "Стихийная потасовка",
   "category": "board",
   "estimatedDuration": "15–40 мин",
@@ -75,7 +75,7 @@
     {
       "key": "actionsPerTurn",
       "label": "Действий за ход",
-      "default": "1",
+      "default": "2",
       "control": "slider",
       "options": [
         {
@@ -92,7 +92,7 @@
     {
       "key": "differentActionTypes",
       "label": "Разные типы действий",
-      "default": "0",
+      "default": "1",
       "control": "slider",
       "options": [
         {

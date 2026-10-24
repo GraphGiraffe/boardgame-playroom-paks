@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["durak"] = {
   "id": "durak",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Отбивайся, подкидывай и избавляйся от карт.",
@@ -66,7 +66,7 @@
     {
       "key": "deck",
       "label": "Колода",
-      "default": "36",
+      "default": "54",
       "options": [
         {
           "value": "36",

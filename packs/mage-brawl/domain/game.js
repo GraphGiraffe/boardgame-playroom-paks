@@ -36,9 +36,9 @@
  function create({playerCount,firstPlayer,preset,rng,options={}}){
   if(!Number.isInteger(playerCount)||playerCount<2||playerCount>8||preset!=='classic')throw Error('MAGE_OPTIONS_INVALID');
   const option=(key,fallback,min,max)=>{const v=options[key];if(v===undefined||v==='mode')return fallback;const n=Number(v);if(!Number.isInteger(n)||n<min||n>max)throw Error('MAGE_OPTIONS_INVALID');return n;};
-  const steps=option('actionsPerTurn',1,1,2),health=option('health',steps===2?4:3,1,6),lives=option('lives',2,1,4),handLimit=option('handLimit',steps===2?4:3,2,8),copies=Math.max(playerCount+1,Math.ceil(playerCount*handLimit/4)+1);
+  const steps=option('actionsPerTurn',2,1,2),health=option('health',steps===2?4:3,1,6),lives=option('lives',2,1,4),handLimit=option('handLimit',steps===2?4:3,2,8),copies=Math.max(playerCount+1,Math.ceil(playerCount*handLimit/4)+1);
   const size=sizeFor(playerCount),l=(size-2)/2,seed=(rng>>>0)||1,d={size,inset:0,round:1,first:firstPlayer??0,seed,random:seed,board:[],players:[],deck:[],discard:[],phase:'planning',respawn:[],shrink:null,window:null,frames:[]};
-  d.config={steps,health,lives,handLimit,copies,differentActionTypes:!!option('differentActionTypes',0,0,1)};d.drafts={};
+  d.config={steps,health,lives,handLimit,copies,differentActionTypes:!!option('differentActionTypes',1,0,1)};d.drafts={};
   d.board=Array(playerCount).fill('base');for(const t of ['puddle','desert','air_island','forest'])d.board.push(...Array(l).fill(t));for(const t of ['falling_floor','wall','spikes'])d.board.push(...Array(2*l).fill(t));while(d.board.length<size*size)d.board.push('ground');shuffle(d,d.board);
   d.deck=shuffle(d,elements.flatMap((element,e)=>Array.from({length:copies},(_,i)=>({id:'card:'+(e*copies+i),element}))));const spawn=shuffle(d,bases(d));d.startingBases=clone(spawn);
   for(let i=0;i<playerCount;i++){const p={pos:spawn[i],health,lives,maxHand:handLimit,hand:[],ultimate:0,eliminatedRound:null,bot:B.resolve(options.players?.[i]?.botSettings,strategies,seed,i)};d.players.push(p);draw(d,p,handLimit);openSpawn(d,p);}
