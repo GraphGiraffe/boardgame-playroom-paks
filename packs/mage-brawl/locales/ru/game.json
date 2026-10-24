@@ -119,5 +119,8 @@
   "mage-brawl.ui.reset-plan": "Сбросить план",
   "mage-brawl.ui.first-action": "Закрепить первое действие",
   "mage-brawl.ui.second-action": "Подтвердить второе действие",
-  "mage-brawl.ui.action-number": "Действие {number}"
+  "mage-brawl.ui.action-number": "Действие {number}",
+  "mage-brawl.ui.order-heading": "Порядок действий",
+  "mage-brawl.ui.resolution-order": "Движение → Атака. В каждой фазе: Воздух → Земля → Вода → Огонь.",
+  "mage-brawl.ui.order-detail": "Сначала все движения, затем все атаки.\n\nВ каждой фазе: Воздух → Земля → Вода → Огонь. Действия одной стихии срабатывают одновременно.\n\nПри двух действиях этот порядок повторяется для второго действия."
 }

@@ -18,7 +18,7 @@
 
 .mage-scene .mage-hand-toolbar{display:flex;align-items:center;justify-content:center;gap:8px;width:100%}.mage-scene .mage-hand-toolbar>.ui-button{width:32px;height:32px;min-height:32px;padding:5px}
 
-.mage-scene .mage-hand-toolbar .settings-range{flex:1;min-width:0;width:auto}.mage-scene .mage-hand-toolbar .settings-range-heading{min-height:16px;font-size:11px}.mage-scene .mage-hand-toolbar .mage-controls{flex-wrap:nowrap;gap:4px}.mage-scene .mage-hand-row>[data-view-value] svg{width:100%;height:100%}.mage-scene .mage-hand-row>button:last-child svg{transform:scaleX(-1)}.mage-scene.is-public-playback .mage-warning{visibility:hidden}
+.mage-scene .mage-hand-toolbar .settings-range{flex:1;min-width:0;width:auto}.mage-scene .mage-hand-toolbar .settings-range-heading{min-height:16px;font-size:11px}.mage-scene .mage-hand-toolbar .mage-controls{flex-wrap:nowrap;gap:4px}.mage-scene .mage-hand-row>[data-view-value] svg{width:100%;height:100%}.mage-scene.is-public-playback .mage-warning{visibility:hidden}
 
 .mage-scene .mage-loot-hand{min-width:0;width:100%}.mage-scene .mage-loot-hand p{font-size:12px;text-align:center;margin:0 0 4px}
 
@@ -81,8 +81,8 @@
 .mage-scene .mage-facing svg{display:block;width:100%;height:100%}
 
 /* Direction stays below each face; air movement points along its diagonal. */
-.mage-scene .mage-card{margin-bottom:16px}
-.mage-scene .mage-card-facing{position:absolute;top:calc(100% + 3px);left:calc(50% - 7px);width:14px;height:14px;pointer-events:none}
+.mage-scene .mage-card{margin-bottom:12px}
+.mage-scene .mage-card-facing{position:absolute;top:calc(100% + 2px);left:calc(50% - 5px);width:10px;height:10px;pointer-events:none}
 .mage-scene .mage-card-facing svg{display:block;width:100%;height:100%;transform:rotate(var(--mage-bearing));transform-origin:center}
 .mage-scene .mage-phase-card{position:relative;margin-bottom:16px}
 
@@ -133,3 +133,26 @@
 
 /* A committed action keeps its fixed bearing when the remaining hand rotates. */
 .mage-scene .mage-plan-locked .mage-spell-paint{transition:none}
+
+/* Public action order; the same glyphs are used in the hand and help. */
+.mage-order-hint{display:flex;align-items:center;justify-content:center;gap:8px;color:var(--ink,#29483e);font-size:14px;width:100%;padding:0}
+.mage-order-group{display:flex;align-items:center;gap:5px}.mage-order-item{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;flex:none}.mage-order-item>svg{width:21px;height:21px;display:block}.mage-order-divider{height:20px;width:1px;background:currentColor;opacity:.25}.mage-order-arrow{opacity:.5;font-size:14px}.mage-order-hint.is-expanded{flex-wrap:wrap;gap:12px;padding:12px 0}.mage-order-hint.is-expanded .mage-order-item>svg{width:24px;height:24px}.mage-order-hint.is-expanded small{font-size:11px}.mage-order-hint.is-expanded .mage-order-group{gap:6px}.mage-order-hint.is-expanded .mage-order-divider{display:none}
+.mage-scene .mage-hand{gap:2px}.mage-scene .mage-action-switch .mage-movement-icon{width:24px;height:24px}
+
+.mage-scene>.layout-auxiliary{display:none}
+@media(max-width:480px){.mage-order-hint.is-expanded{flex-direction:column}}
+
+
+/* Compact controls keep the same dimensions in both orientations. */
+.mage-scene{--square-hand-padding:4px 6px 0}
+.mage-scene .mage-hand-toolbar{gap:4px;--ui-control-size:32px;--ui-target:32px}
+.mage-scene .mage-hand-toolbar .mage-controls .mage-ready,.mage-scene .mage-hand-toolbar .mage-controls [data-command="card-help"],.mage-scene .mage-hand-toolbar>.mage-reset-plan{width:32px;height:32px;min-height:32px;padding:6px}
+.mage-scene .mage-hand-toolbar .mage-controls svg,.mage-scene .mage-reset-plan svg{width:20px;height:20px}
+.mage-scene .mage-action-switch .shared-page-tabs{padding:2px;border-radius:12px}
+.mage-scene .mage-action-switch .shared-page-tabs::before{inset:2px auto 2px 2px;width:calc((100% - 4px)/var(--page-count,2));border-radius:10px}
+.mage-scene .mage-action-switch button{height:26px;min-height:26px;padding:2px 4px}
+.mage-scene .mage-action-switch svg,.mage-scene .mage-action-switch .mage-movement-icon{width:20px;height:20px}
+
+/* Keep direction arrows legible over filled shields and target cells. */
+.mage-action-diagram .mage-diagram-arrow path{stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.mage-action-diagram .mage-diagram-arrow .mage-diagram-arrow-halo path{stroke:var(--color-surface-raised,#fffbed);stroke-width:4.5}
