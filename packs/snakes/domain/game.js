@@ -7,9 +7,9 @@
   const face=n=>Number.isInteger(n)&&n>=1&&n<=6;
   function create({playerCount,firstPlayer,preset='plus',rng,options={}}){
     if(!['plus','classic','quick'].includes(preset))throw Error('SNAKES_PRESET_INVALID');
-    const finish=Number(options.boardSize||(preset==='classic'?100:64));if(![64,100].includes(finish))throw Error('SNAKES_SIZE_INVALID');
+    const finish=Number(options.boardSize||(preset==='quick'?64:100));if(![64,100].includes(finish))throw Error('SNAKES_SIZE_INVALID');
     const preview={rng:(rng^0x9e3779b9)>>>0},dice=Array.from({length:preset==='plus'?2:1},()=>rollDie(6,preview));
-    return {playerCount,turn:firstPlayer,status:'playing',winners:[],rng,preset,data:{ending:Ending.create(playerCount,firstPlayer,options.endMode,undefined,Number(options.maxRounds||0)),positions:Array(playerCount).fill(0),dice:preset==='plus'?dice:dice[0],sides:6,finish,links:{...routes[finish===64?'quick':'classic']},phase:'roll',effects:Array.from({length:playerCount},()=>({adjust:false,less:false,skip:false,shield:false})),adjusting:false,special:preset==='plus'?{...cells[finish]}:{}}};
+    return {playerCount,turn:firstPlayer,status:'playing',winners:[],rng,preset,data:{ending:Ending.create(playerCount,firstPlayer,options.endMode??'round',undefined,Number(options.maxRounds||0)),positions:Array(playerCount).fill(0),dice:preset==='plus'?dice:dice[0],sides:6,finish,links:{...routes[finish===64?'quick':'classic']},phase:'roll',effects:Array.from({length:playerCount},()=>({adjust:false,less:false,skip:false,shield:false})),adjusting:false,special:preset==='plus'?{...cells[finish]}:{}}};
   }
   function validate(p){
     const d=p.data,valid=n=>Number.isInteger(n)&&n>=0&&n<=d.finish;

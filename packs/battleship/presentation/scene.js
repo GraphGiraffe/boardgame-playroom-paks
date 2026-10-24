@@ -7,7 +7,7 @@
   const message=(key,params={})=>({key:'battleship.'+key,params});
   const coordinate=cell=>String.fromCharCode(65+cell%10)+(Math.floor(cell/10)+1);
   const metadata={name:message('meta.name'),description:message('meta.description'),scoreLabel:message('meta.wins'),
-    presets:[{id:'russian',label:message('meta.russian')},{id:'classic',label:message('meta.classic')}],
+    presets:[{id:'classic',label:message('meta.classic')},{id:'russian',label:message('meta.russian')}],
     rules:[1,2,3].map(n=>message('rules.'+n))};
   function action(command,projection){
     const d=projection.data;
