@@ -25,3 +25,7 @@ Use the shared tooltip behavior: long press reveals; release inside activates on
 Themes in hub configure app theme/avatar style only. In-game settings show active pack families with >1 available variant; hide empty skin block. Samples use actual runtime components and matching IDs, not independent lookalike drawings. Cancel rolls back preview; Принять to its right persists, closes, refreshes geometry immediately. UI-only preference changes do not alter rules, IDs or hidden projections.
 
 For artifact acceptance open the actual offline file:// HTML, not merely the dev server. Check missing resources/console errors, 320/390 portrait and short landscape, save/restore and selected skin/mode. SHA/ZIP integrity is separate from runtime behavior. Record exact roots, dirty state and commands; never reuse stale installed-packs or call a build a release. Run only risk-selected existing cases; documentation/plugin changes need their own tool checks, not an implicit app-wide gate.
+
+## 0.19 presentation performance
+
+Не клонировать все руки/поле ради одного эффекта: выбирать source hands, leaving board refs и затронутые flip slots. Проверять порядок async prepare → ответ/звук → transfer → set/reveal → counters в local/network/history. При resize инвалидировать координатные резервы, сохраняя объявленные зоны пустых рук. Быстрый режим сохраняет видимость действия, instant при наложении выбирает ответ.

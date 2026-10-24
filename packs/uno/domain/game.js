@@ -101,7 +101,7 @@
   if(card.value==='+2'||card.value==='+4'){const target=nextPlayer(s,actor),count=draw(s,target,card.value==='+2'?2:4).length;events.push(fact('draw-skipped',target,{count,heavy:card.value==='+4'}));steps=2;}
   s.turn=nextPlayer(s,actor,steps);d.uno.declared[actor]=false;
   if(d.hands[actor].length===1){if(d.uno.mode==='manual'){d.uno.situations[actor]={episode:s.revision,open:true,settled:false,called:false};d.uno.pending=actor;}else{d.uno.declared[actor]=true;events.push(fact('declared',actor,{automatic:true,count:1}));}}
-  if(!d.hands[actor].length){const points=d.hands.flat().reduce((sum,c)=>sum+(c.color==='wild'?50:/^\d$/.test(c.value)?Number(c.value):20),0);Ending.record(d.ending,[actor]);d.points[actor]=points;events.push(fact('won',actor,{points}));
+  if(!d.hands[actor].length){const points=d.hands.flat().reduce((sum,c)=>sum+(c.color==='wild'?50:/^\d$/.test(c.value)?Number(c.value):20),0);Ending.record(d.ending,[actor],s,'cards');d.points[actor]=points;events.push(fact('won',actor,{points}));
    if(d.ending.mode==='winner'||s.playerCount-d.ending.groups.flat().length<=1){s.status='finished';s.winners=Ending.winners(d.ending);}else if(Ending.done(d.ending,s.turn))s.turn=nextPlayer(s,actor);}syncPending(s);
  }
  function reduce(position,actor,action){const next=JSON.parse(JSON.stringify(position)),events=[];next.revision=(position.revision??0)+1;perform(next,actor,action,events);return {position:next,events,turnEnded:action.type==='play'||action.type==='pass'};}
@@ -118,6 +118,6 @@
  function observe(s){return {situations:s.data.uno.situations};}
  function botReaction(s,actor,actions,memory){const u=s.data.uno;if(s.data.hands[actor].length===1&&!u.declared[actor]&&!u.calls.includes(actor))return actions.find(a=>a.type==='declare-uno');const target=memory.situations.findIndex((w,i)=>i!==actor&&w.open&&!w.settled&&!u.declared[i]);return target<0?null:actions.find(a=>a.type==='accuse-uno'&&a.target===target);}
  const score=s=>s.data.points;
- const result=s=>({winners:s.winners,places:Ending.places(s.data.ending,s.data.points),metrics:[{id:'points',values:s.data.points},{id:'hand-count',values:s.data.hands.map(hand=>hand.length)}]});
+ const result=s=>({winners:s.winners,...Ending.result(s.data.ending),places:Ending.places(s.data.ending,s.data.points),metrics:[{id:'points',values:s.data.points},{id:'hand-count',values:s.data.hands.map(hand=>hand.length)}]});
  return Object.freeze({contractVersion:1,id:'uno',minPlayers:2,maxPlayers:6,create,validate,actions,reactions,reactionWindows,reactionControl,reduce,project,bot,botReaction,observe,score,result});
 });

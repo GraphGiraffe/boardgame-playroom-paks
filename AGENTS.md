@@ -1,11 +1,11 @@
-# Работа с коллекцией ХОД 0.7
+# Работа с коллекцией ХОД 0.8
 
-Коллекция 0.7.4 для приложения 0.18.6; engineApi 3, viewApi 2. [Руководство автора](docs/AUTHORING.md), [архитектура](docs/ARCHITECTURE.md), [будущие расширения](https://github.com/GraphGiraffe/boardgame-playroom-utils/blob/main/docs/project/packs/NEXT-PATCHES.md).
+Стабильный выпуск 0.19.0 / 0.8.0 использует API 4; предыдущая опубликованная база: коллекция 0.7.4 / приложение 0.18.6; engineApi 4, viewApi 3. [Руководство автора](docs/AUTHORING.md), [архитектура](docs/ARCHITECTURE.md), [будущие расширения](https://github.com/GraphGiraffe/boardgame-playroom-utils/blob/main/docs/project/packs/NEXT-PATCHES.md).
 
 - Проверить root/status/ветку; сохранять чужую работу. Игра целиком в packs/<id>; manifest.json источник метаданных, manifest.js генерирует build.py.
 - Domain чистый, без DOM/имён/переводов/часов/storage. RNG явный. Presentation получает projection, renderer не пересчитывает правила.
 - Не копировать SDK приложения. Shared helpers/assets канонические в shared, host синхронизирует digest явной сборкой.
-- Только API 3; каждое изменение опубликованного пака — новая версия. Точные старые bytes/теги сохранять. Не конвертировать сохранения молча.
+- Только API 4; каждое изменение опубликованного пака — новая версия. Точные старые bytes/теги сохранять. Не конвертировать сохранения молча.
 - UI использует общие Source/Target/Hand/Board/Reveal/ScoreTable, fixed scene; стили ограничены паком. Переключение skin не меняет semantics.
 - Не коммитить dist, временные экспорты, секреты, личные сохранения и соседние проекты.
 

@@ -2,6 +2,37 @@
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;root.PlayroomGameComponents=api;})(globalThis,function(){
  'use strict';
  const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+// Entity namespaces are semantic kinds; IDs identify physical instances, never faces.
+function entityRef(namespace,id){
+ if(typeof namespace!=='string'||!/^[a-z][a-z0-9_]{0,31}$/.test(namespace)||typeof id!=='string'||!id||id.length>256)throw Error('ENTITY_REF_INVALID');
+ return Object.freeze({namespace,id});
+}
+function entityKey(ref){
+ if(!ref||typeof ref!=='object'||Array.isArray(ref)||Object.keys(ref).some(key=>!['namespace','id'].includes(key)))throw Error('ENTITY_REF_INVALID');
+ const value=entityRef(ref.namespace,ref.id);return value.namespace+'-'+value.id;
+}
+function validMetric(value,{requireId=false,requireLabel=false,localized=false}={}){
+ const record=item=>item!==null&&typeof item==='object'&&!Array.isArray(item);
+ const identifier=id=>typeof id==='string'&&/^[a-z][a-z0-9-]{0,63}$/.test(id);
+ if(!record(value)||!['points','wins','pieces'].includes(value.kind)||!Number.isSafeInteger(value.value)||value.value<0)return false;
+ if(value.id===undefined?requireId:!identifier(value.id))return false;
+ if(value.label===undefined?requireLabel:!(typeof value.label==='string'||!localized&&record(value.label)&&typeof value.label.key==='string'))return false;
+ const d=value.display;
+ return d===undefined||record(d)&&['heart','meeple','crown'].includes(d.icon)&&
+  (d.capacity===undefined||Number.isInteger(d.capacity)&&d.capacity>=1&&d.capacity<=64)&&
+  (d.overlap===undefined||typeof d.overlap==='boolean');
+}
+function actionSelector({key,label,choices,value,disabled=false,stable=false,className=''}){
+  if(typeof key!=='string'||!key||typeof label!=='string'||!label||!Array.isArray(choices)||!choices.length)throw Error('ACTION_SELECTOR_INVALID');
+  const ids=new Set();
+  for(const choice of choices){
+    if(typeof choice.value!=='string'||!choice.value||ids.has(choice.value)||typeof choice.label!=='string'||!choice.label)throw Error('ACTION_SELECTOR_CHOICE_INVALID');
+    ids.add(choice.value);
+  }
+  const index=choices.findIndex(choice=>choice.value===value);
+  if(index<0)throw Error('ACTION_SELECTOR_VALUE_INVALID');
+  return `<div class="shared-page-tabs ${esc(className)}" style="--page-count:${choices.length};--page-index:${index}" role="group" aria-label="${esc(label)}">${choices.map(choice=>`<button type="button" ${stable?'data-view-layout="stable" ':''}data-view-key="${esc(key)}" data-view-value="${esc(choice.value)}" aria-pressed="${choice.value===value}" aria-label="${esc(choice.label)}" title="${esc(choice.label)}"${disabled||choice.disabled?' disabled':''}>${choice.html??esc(choice.label)}${choice.marker!=null?`<span class="shared-action-marker" aria-hidden="true">${esc(choice.marker)}</span>`:''}</button>`).join('')}</div>`;
+}
 function button({icon='',label='',ariaLabel=label,attrs='',variant='primary',className='',disabled=false,active,type='button'}={}, {icon:renderIcon}={}){
     icon=String(icon??'');label=String(label??'');ariaLabel=String(ariaLabel??'');
     if(!icon&&!label)throw Error('Button needs an icon or a label');
@@ -19,10 +50,12 @@ function art({main,compact,width=72,height=103,rotation=0}, variant='main') {
     const transform=({0:'',90:`translate(${height} 0) rotate(90)`,180:`translate(${width} ${height}) rotate(180)`,270:`translate(0 ${width}) rotate(-90)`})[rotation];
     return `<svg class="piece-art" viewBox="0 0 ${swap?height:width} ${swap?width:height}" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false" data-art-variant="${small?'compact':'main'}"><g${transform?` transform="${transform}"`:''}><foreignObject width="${width}" height="${height}"><div xmlns="http://www.w3.org/1999/xhtml" class="piece-artboard" style="width:${width}px;height:${height}px">${small?compact:main}</div></foreignObject></g></svg>`;
   }
-function publicFrames({id,frames,live,livePlayers='',label,playLabel,skipLabel,speedLabel,controls=true}) {
+function publicFrames({plan,frames,live,livePlayers='',label,playLabel,skipLabel,speedLabel,controls=true}) {
+  const {id,initial,final,groups}=plan||{};
+  if(!Array.isArray(groups)||groups.length!==frames?.length||initial!==0||final!==frames?.length)throw Error('PUBLIC_PLAN_INVALID');
   if(typeof id!=='string'||!Array.isArray(frames)||frames.length>32||frames.some(f=>typeof f.markup!=='string'||typeof f.label!=='string'))throw Error('PUBLIC_FRAMES_INVALID');
 
-  return `<section class="public-sequence" data-public-sequence="${esc(id)}"><div class="public-sequence-stage">${[...frames,{markup:live,label,players:livePlayers}].map((f,i)=>`<div data-public-frame="${i}" data-frame-label="${esc(f.label)}"${f.sound?` data-frame-sound="${esc(f.sound)}"`:""}${f.pack?` data-frame-pack="${esc(f.pack)}"`:""}${f.duration?` data-frame-duration="${esc(f.duration)}"`:""}${i?' hidden':''}>${f.markup}${f.players?`<template data-sequence-players>${f.players}</template>`:''}</div>`).join('')}</div>${controls?`<div class="public-sequence-controls"${frames.length?'':' style="visibility:hidden"'}><button type="button" class="scene-button" data-sequence-play aria-label="${esc(playLabel)}">${frames.length?'Ⅱ':'▶'}</button><output data-sequence-label aria-live="polite">${esc(frames[0]?.label||label)}</output><button type="button" class="scene-button" data-sequence-speed aria-label="${esc(speedLabel)}">1×</button><button type="button" class="scene-button" data-sequence-skip>${esc(skipLabel)}</button></div>`:''}</section>`;
+  return `<section class="public-sequence" data-public-sequence="${esc(id)}" data-presentation-plan="${esc(JSON.stringify({id,initial,final,groups}))}"><div class="public-sequence-stage">${[...frames,{markup:live,label,players:livePlayers}].map((f,i)=>`<div data-public-frame="${i}" data-frame-label="${esc(f.label)}"${f.sound?` data-frame-sound="${esc(f.sound)}"`:""}${f.pack?` data-frame-pack="${esc(f.pack)}"`:""}${groups[i]?` data-frame-duration="${esc(groups[i].duration)}"`:""}${i?' hidden':''}>${f.markup}${f.players?`<template data-sequence-players>${f.players}</template>`:''}</div>`).join('')}</div>${controls?`<div class="public-sequence-controls"${frames.length?'':' style="visibility:hidden"'}><button type="button" class="scene-button" data-sequence-play aria-label="${esc(playLabel)}">${frames.length?'Ⅱ':'▶'}</button><output data-sequence-label aria-live="polite">${esc(frames[0]?.label||label)}</output><button type="button" class="scene-button" data-sequence-speed aria-label="${esc(speedLabel)}">1×</button><button type="button" class="scene-button" data-sequence-skip>${esc(skipLabel)}</button></div>`:''}</section>`;
 }
 function countBadge(count,label=globalThis.PlayroomMessages.text("ui.game-components.737f7561bd7f"),{corner=false,hand=false}={}) {
     if(!Number.isSafeInteger(count)||count<0)throw Error('Invalid piece count');
@@ -51,9 +84,33 @@ const half=n=>`<span class="domino-half" aria-hidden="true">${Array.from({length
   return `<span data-piece-type="badge" class="player-status-badge ${tone}"${color}${badge.motion?` data-motion-counter="${esc(badge.motion)}"`:''}>${badge.icon?`<span class="player-status-icon" role="img" aria-label="${label}" title="${label}" tabindex="0" data-tooltip="${label}">${icon(badge.icon)}</span>`:label}</span>`;
  }
  const tokenShapes={heart:'M12 21S2 14 2 8a5 5 0 0 1 10-2A5 5 0 0 1 22 8c0 6-10 13-10 13Z',meeple:'M9 3a3 3 0 1 1 6 0v3l7 6-3 3-4-3 4 10h-6l-1-6-1 6H5l4-10-4 3-3-3 7-6Z',crown:'M3 6l5 5 4-8 4 8 5-5-2 13H5ZM6 22h12'};
+ // Structured items separate physical identity/selection from their printed markup.
+ function handLayout(items,{width='var(--scene-card-width,var(--size-card))',peek='24px'}={}){
+  if(!Array.isArray(items))throw Error('HAND_ITEMS_REQUIRED');
+  const ids=new Set();
+  for(const item of items){
+   if(!item||typeof item.id!=='string'||!item.id||typeof item.html!=='string'||ids.has(item.id)||['selected','locked'].some(key=>item[key]!==undefined&&typeof item[key]!=='boolean'))throw Error('HAND_ITEM_INVALID');
+   ids.add(item.id);
+  }
+  const raised=items.map(item=>item.selected===true||item.locked===true);
+  return {html:items.map(item=>item.html).join(''),count:items.length,
+   columns:items.map((item,i)=>i===items.length-1||raised[i]||raised[i+1]?width:`minmax(${peek},${width})`).join(' ')};
+ }
+ function tokenStrip({value,capacity=1,icon}={}){
+  if(!Number.isSafeInteger(value)||value<0||!Number.isSafeInteger(capacity)||capacity<0||capacity>64||!Object.hasOwn(tokenShapes,icon))throw Error('TOKEN_STRIP_INVALID');
+  const slots=Math.max(capacity,Math.min(value,8));
+  return Array.from({length:slots},(_,i)=>`<svg class="counter-token${i>=value?' is-empty':''}" style="z-index:${i<value?slots*2-i:slots-i}" viewBox="0 0 24 26" aria-hidden="true"><path d="${tokenShapes[icon]}"/></svg>`).join('')+(value>slots?`<b>×${value}</b>`:'');
+ }
+ function pieceIndicators({value,capacity,label='',className=''}={}){
+  if(!Number.isSafeInteger(value)||!Number.isSafeInteger(capacity)||capacity<1||capacity>64||value<0||value>capacity)throw Error('PIECE_INDICATORS_INVALID');
+  return `<svg class="piece-indicators ${esc(className)}" viewBox="0 0 ${capacity*12} 12" role="img" aria-label="${esc(label)}: ${value}">${Array.from({length:capacity},(_,i)=>`<circle class="piece-indicator${i>=value?' is-empty':''}" cx="${6+i*12}" cy="6" r="4.3"/>`).join('')}</svg>`;
+ }
+ const rotationController=Object.freeze({
+  direction(turns,steps=4){if(!Number.isSafeInteger(turns)||!Number.isSafeInteger(steps)||steps<2)throw Error('ROTATION_INVALID');return (turns%steps+steps)%steps;},
+  align(turns,direction,steps=4){this.direction(turns,steps);if(!Number.isSafeInteger(direction)||direction<0||direction>=steps)throw Error('ROTATION_INVALID');return turns+((direction-this.direction(turns,steps)+steps+Math.floor(steps/2))%steps-Math.floor(steps/2));}
+ });
  function scoreBadge(counter,{roundTokenArt}={}){
-  const display=counter.display,slots=display?Math.max(display.capacity||1,Math.min(counter.value,8)):0;
-  const tokens=display?Array.from({length:slots},(_,i)=>`<svg class="counter-token${i>=counter.value?' is-empty':''}" style="z-index:${i<counter.value?slots*2-i:slots-i}" viewBox="0 0 24 26" aria-hidden="true"><path d="${tokenShapes[display.icon]}"/></svg>`).join('')+(counter.value>slots?`<b>×${counter.value}</b>`:''):'';
+  const display=counter.display,tokens=display?tokenStrip({value:counter.value,...display}):'';
   return `<span class="player-score is-${counter.kind}${display?' is-token-counter token-'+display.icon+(display.overlap?' is-overlapping':''):''}" data-score-kind="${counter.kind}" data-score-id="${esc(counter.id||counter.kind)}" data-motion-counter="${esc(counter.id||counter.kind)}" aria-label="${esc(counter.label)}: ${counter.value}" title="${esc(counter.label)}: ${counter.value}">${display?tokens:counter.kind==='pieces'?roundTokenArt({value:counter.value}):counter.value}</span>`;
  }
 
@@ -132,14 +189,14 @@ function card(value,attrs='disabled',extra=''){
   const red=!hidden&&(value.color==='red'||suit==='♥'||suit==='♦');
   const label=hidden?globalThis.PlayroomMessages.text("ui.game-components.c13a6680430c"):value.joker?globalThis.PlayroomMessages.text("ui.game-components.232b69813cbf",{p0:String(red?globalThis.PlayroomMessages.text("ui.game-components.21b4d916f326"):globalThis.PlayroomMessages.text("ui.game-components.1ca9b6b05dfc"))}):`${rank} ${suit}`;
 
-  return `<${tag} data-size-role="card" class="shared-card ${hidden?'shared-card-back':''} ${red?'shared-red':''} ${extra}" ${tag==='button'?attrs:''} ${!hidden&&value.id?`data-entity="card-${H.esc(value.id)}"`:''} aria-label="${H.esc(label)}">${H.assetArt(hidden?'card-back':'card-face',{rank,suit,hidden,crown:!!value?.crown,backUrl:hidden?source('card-back',value?.assetSet):'',...(hidden?{assetSet:value?.assetSet,backUrls:Object.fromEntries((value?.assetSet?[value.assetSet]:['standard-deck','mini-split-deck']).map(set=>[set,source('card-back',set)]))}:{})},params=>cardFace(params))}</${tag}>`;
+  return `<${tag} data-size-role="card" class="shared-card ${hidden?'shared-card-back':''} ${red?'shared-red':''} ${extra}" ${tag==='button'?attrs:''} ${!hidden&&value.id?`data-entity="${H.esc(entityKey(entityRef('card',value.id)))}"`:''} aria-label="${H.esc(label)}">${H.assetArt(hidden?'card-back':'card-face',{rank,suit,hidden,crown:!!value?.crown,backUrl:hidden?source('card-back',value?.assetSet):'',...(hidden?{assetSet:value?.assetSet,backUrls:Object.fromEntries((value?.assetSet?[value.assetSet]:['standard-deck','mini-split-deck']).map(set=>[set,source('card-back',set)]))}:{})},params=>cardFace(params))}</${tag}>`;
  }
 function cardSlot({suit='',attrs='disabled',className='',label='',kind='empty'}={}){
   return `<button data-size-role="card" class="shared-card-slot ${esc(className)} ${suit==='♥'||suit==='♦'?'shared-red':''}" ${attrs} data-card-slot="${esc(kind)}" aria-label="${esc(label)}">${suit?H.assetArt('card-face',{suit,suitOnly:true},cardFace):''}</button>`;
  }
 const cover=content=>H.svg(`<ellipse data-cover-shadow cx="151" cy="158" rx="112" ry="14" fill="#365e4720"/><g data-cover-art>${content}</g>`);
   const die=(value,attrs='disabled',extra='')=>'<button class="shared-die '+extra+(/\bdisabled\b/.test(attrs)?'':' is-playable')+(/aria-pressed="true"/.test(attrs)?' is-selected':'')+'" '+attrs+' aria-label="'+globalThis.PlayroomMessages.text("ui.game-components.c21f8ac4292c")+H.esc(value||globalThis.PlayroomMessages.text("ui.game-components.22c66b66eaa1"))+'">'+H.assetArt('die',{value},()=>dieArt(value))+'</button>';
-  return Object.freeze({button:options=>button(options,{icon:H.icon}),card,cardSlot,die,cover,checkerArt:(king,movable)=>H.assetArt('checker',{king,movable},()=>checkerArt(king,movable)),dominoFace:(a,b,rotation=0)=>H.assetArt('domino',{a,b,rotation},()=>dominoFace(a,b,rotation)),shipSilhouette:size=>H.assetArt('ship',{size},()=>shipSilhouette(size)),scoreTable:params=>H.assetArt('score-table',params,()=>scoreTable(params)),boardCells,dieArt:(value,params={})=>H.assetArt('die',{value,...params},()=>dieArt(value,params)),bubbleClass});
+  return Object.freeze({entityRef,entityKey,validMetric,actionSelector,handLayout,tokenStrip,pieceIndicators,rotationController,button:options=>button(options,{icon:H.icon}),card,cardSlot,die,cover,checkerArt:(king,movable)=>H.assetArt('checker',{king,movable},()=>checkerArt(king,movable)),dominoFace:(a,b,rotation=0)=>H.assetArt('domino',{a,b,rotation},()=>dominoFace(a,b,rotation)),shipSilhouette:size=>H.assetArt('ship',{size},()=>shipSilhouette(size)),scoreTable:params=>H.assetArt('score-table',params,()=>scoreTable(params)),boardCells,dieArt:(value,params={})=>H.assetArt('die',{value,...params},()=>dieArt(value,params)),bubbleClass});
  }
- return Object.freeze({button,art,publicFrames,countBadge,shipSilhouette,checkerArt,dominoFace,dieArt,boardCells,bubbleClass,scoreTable,createHelpers,AssetResolver,defaultRenderers,pieceTypes,cardFrame,cardFace,cardBack,characterFace,scoreBadge});
+ return Object.freeze({entityRef,entityKey,validMetric,actionSelector,handLayout,tokenStrip,pieceIndicators,rotationController,button,art,publicFrames,countBadge,shipSilhouette,checkerArt,dominoFace,dieArt,boardCells,bubbleClass,scoreTable,createHelpers,AssetResolver,defaultRenderers,pieceTypes,cardFrame,cardFace,cardBack,characterFace,scoreBadge});
 });

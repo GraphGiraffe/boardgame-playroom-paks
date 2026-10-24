@@ -15,8 +15,11 @@
     throw Error('PEXESO_EVENT_UNKNOWN');
   }
   const metric=()=>message('meta.pairs');
-  function scene(projection){const d=projection.data;return {contractVersion:1,id:'pexeso-board',family:'memory-cards',
+  function scene(projection){const d=projection.data;return {contractVersion:1,id:'pexeso-board',family:'memory-cards',revealing:d.phase==='reveal',assetSet:d.deckSize===96?'cartoon-deck':'standard-deck',
     cards:d.board.map((card,index)=>({id:'card-'+index,index,card,matched:d.matched.includes(index),closing:d.phase==='reveal'&&d.flipped.includes(index)})),
     players:d.scores.map((value,player)=>({player,metrics:[{id:'pairs',kind:'points',value,label:metric(),resultUsage:true}]}))};}
-  return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}),action,event,metric,scene});
+
+ // Geometry contains only public identities from the authorized projection.
+ function sceneLayout(p){const d=p.data;return {geometry:{topology:'slots:'+d.board.length},zones:[{id:'field',kind:'board'}],objects:d.board.map((_,cell)=>({ref:{namespace:'slot',id:String(cell)},zone:'field',cell})),interactions:p.actions.map(command=>({command,target:command.index!=null?{entity:{namespace:'slot',id:String(command.index)}}:{zone:'field'}}))};}
+ return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}),action,event,metric,scene:p=>({...scene(p),...sceneLayout(p)})});
 });

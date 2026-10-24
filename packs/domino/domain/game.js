@@ -34,7 +34,7 @@
    if(!d.chain.length)d.openingTileId=tile.id;
    action.side==='left'?d.chain.unshift(tile):d.chain.push(tile);events.push(fact('played',actor,{id:tile.id,a:tile.a,b:tile.b,side:action.side}));}
   next.turn=Ending.next(d.ending,actor,{remaining:1})??actor;
-  if(!d.hands[actor].length){Ending.record(d.ending,[actor]);events.push(fact('cleared',actor));
+  if(!d.hands[actor].length){Ending.record(d.ending,[actor],next,'domino');events.push(fact('cleared',actor));
    const turn=Ending.next(d.ending,actor,{remaining:1});if(turn===null){next.status='finished';next.winners=Ending.winners(d.ending);}else next.turn=turn;
   }
   else if(d.passes>=position.playerCount-d.ending.groups.flat().length){const sums=d.hands.map(pips),best=Math.min(...sums),winners=sums.flatMap((value,index)=>value===best?[index]:[]);
@@ -44,7 +44,7 @@
  function project(position,viewer){const d=JSON.parse(JSON.stringify(position.data));d.points=score(position);d.hands=d.hands.map((hand,player)=>position.openHands||player===viewer?hand:hand.map(()=>({hidden:true})));d.stock=d.stock.map(()=>({hidden:true}));return d;}
  function bot(projection,actor,commands){return commands.slice().sort((a,b)=>{const left=projection.data.hands[actor].find(tile=>tile.id===a.card),right=projection.data.hands[actor].find(tile=>tile.id===b.card);return (right?right.a+right.b:0)-(left?left.a+left.b:0);})[0];}
  function score(position){const sums=position.data.hands.map(pips),winner=position.winners[0];return sums.map((_,player)=>position.status==='finished'&&player===winner?sums.reduce((a,b)=>a+b,0)-sums[player]:0);}
- function result(position){const values=position.data.hands.map(pips);return {winners:position.winners,
+ function result(position){const values=position.data.hands.map(pips);return {winners:position.winners,...Ending.result(position.data.ending),
   places:Ending.places(position.data.ending,values,false),metrics:[{id:'pips',values,order:'asc'}]};}
  return Object.freeze({contractVersion:1,rounds:true,id:'domino',minPlayers:2,maxPlayers:4,create,validate,actions,reduce,project,bot,score,result,oriented,pips});
 });

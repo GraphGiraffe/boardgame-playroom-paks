@@ -4,13 +4,20 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["battleship"] = {
   "id": "battleship",
-  "version": "0.2.4",
+  "version": "0.3.0",
   "name": "Морской бой",
   "category": "board",
   "estimatedDuration": "15–30 мин",
   "tagline": "Ищи палубы. Потопи весь чужой флот.",
   "capabilities": {
     "hands": false,
+    "quietActions": [
+      "auto",
+      "orient",
+      "place",
+      "move",
+      "remove"
+    ],
     "surfaces": [
       "combined",
       "table",
@@ -33,9 +40,9 @@
   "sharedAssets": [
     "ship.svg"
   ],
-  "engineApi": 3,
+  "engineApi": 4,
   "stateVersion": 4,
-  "viewApi": 2,
+  "viewApi": 3,
   "tileTheme": "blue",
   "tags": [
     "board"
