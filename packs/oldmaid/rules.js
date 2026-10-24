@@ -5,6 +5,7 @@
   const presentation=source?require('./presentation/scene.js'):root.PlayroomPackPresentation;
   const manifest=source?require('./manifest.json'):root.PlayroomPack;
   const locales=source?{ru:require('./locales/ru/game.json')}:root.PlayroomPackResources.locales;
-  const specification={definition:factory({shuffle:root.TabletopCore.shuffle,random:root.TabletopCore.random},Deck),presentation,locales,version:manifest.version,stateVersion:4};
+  const ending=source?require('../../shared/domain/end-policy.js'):root.PlayroomPackDomain.endPolicy;
+ const specification={definition:factory({ending,shuffle:root.TabletopCore.shuffle,random:root.TabletopCore.random},Deck),presentation,locales,version:manifest.version,stateVersion:4};
   if(source)root.TabletopCore.registerModel(specification);else root.TabletopCore.register(root.PlayroomPack.adaptModel(specification));
 })(globalThis);

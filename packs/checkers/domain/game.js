@@ -60,6 +60,6 @@
 
  }
  function result(position){const values=Array.from({length:2},(_,player)=>position.winners.includes(player)?1:0);
-  return {winners:position.winners,places:values.map(value=>1+new Set(values.filter(other=>other>value)).size),metrics:[{id:'wins',values}]};}
+  return {winners:position.winners,lastPlayers:position.winners.length===1?[1-position.winners[0]]:[],places:values.map(value=>1+new Set(values.filter(other=>other>value)).size),metrics:[{id:'wins',values}]};}
  return Object.freeze({contractVersion:1,id:'checkers',minPlayers:2,maxPlayers:2,create,validate,actions,reduce,project,bot,result});
 });

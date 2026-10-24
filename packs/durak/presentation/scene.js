@@ -18,15 +18,18 @@
   if(value.type==='durak.confirmed')return {message:message('events.confirmed'),kind:'attack'};
   if(value.type==='durak.passed')return {message:message('events.passed'),kind:'pass',feedback:{kind:'pass',player:actor},speech:{speaker:actor,text:message('speech.pass')}};
   if(value.type==='durak.taking')return {message:message('events.taking'),kind:'take',feedback:{kind:'take',player:actor},speech:{speaker:actor,text:message('speech.take')}};
-  if(value.type==='durak.attacked'||value.type==='durak.transferred')return {message:message(value.type==='durak.transferred'?'events.transferred':'events.attacked',{card:face(p.card)}),kind:'attack',reveal:{kind:'card',card:p.card,entity:'card-'+p.card.id},sound:{id:value.type==='durak.transferred'?'reverse':'attack'}};
-  if(value.type==='durak.defended')return {message:message('events.defended',{card:face(p.card),attack:face(p.attack)}),kind:'defend',reveal:{kind:'card',card:p.card,entity:'card-'+p.card.id}};
+  if(value.type==='durak.attacked'||value.type==='durak.transferred')return {message:message(value.type==='durak.transferred'?'events.transferred':'events.attacked',{card:face(p.card)}),kind:'attack',reveal:{kind:'card',card:p.card,entity:{namespace:'card',id:p.card.id}},sound:{id:value.type==='durak.transferred'?'reverse':'attack'}};
+  if(value.type==='durak.defended')return {message:message('events.defended',{card:face(p.card),attack:face(p.attack)}),kind:'defend',reveal:{kind:'card',card:p.card,entity:{namespace:'card',id:p.card.id}}};
   if(value.type==='durak.all-out')return {message:message('events.all-out'),finish:true};
   if(value.type==='durak.first-out')return {message:message('events.first-out',{players:{kind:'player-list-reference',indices:p.players}}),finish:true};
   if(value.type==='durak.last-fool')return {message:message('events.last-fool'),finish:true};
   throw Error('DURAK_EVENT_UNKNOWN');
  }
  const metric=id=>message(id==='hand-count'?'meta.hand-count':'meta.victory');
- const scene=projection=>({contractVersion:1,id:'durak-table',family:'card-table',table:projection.data.table,
-  stockCount:projection.data.drawPile.length,players:projection.data.hands.map((hand,player)=>({player,hand,metrics:[{id:'wins',kind:'wins',value:projection.winners.includes(player)?1:0,label:metadata.scoreLabel,resultUsage:true}],role:player===projection.data.defender?'defender':player===projection.data.attacker?'attacker':'thrower'}))});
- return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}),action,event,metric,scene,face});
+ const scene=projection=>({contractVersion:1,id:'durak-table',family:'card-table',table:projection.data.table,trump:projection.data.trump,discardCount:projection.data.discard.length,taking:projection.data.taking,composing:projection.data.composing,
+  stockCount:projection.data.drawPile.length,players:projection.data.hands.map((hand,player)=>({player,finishPlace:(projection.data.ending?.groups||[]).findIndex(group=>group.includes(player))+1,hand,metrics:[{id:'wins',kind:'wins',value:projection.winners.includes(player)?1:0,label:metadata.scoreLabel,resultUsage:true}],role:player===projection.data.defender?'defender':player===projection.data.attacker?'attacker':'thrower'}))});
+
+ // Geometry contains only public identities from the authorized projection.
+ function sceneLayout(p){const d=p.data;return {geometry:{topology:'fixed'},zones:[{id:'field',kind:'table'},...d.hands.map((hand,owner)=>({id:'hand-'+owner,kind:'hand',owner,count:hand.length}))],objects:[...d.hands.flatMap((hand,owner)=>hand.flatMap((card,index)=>card&&!card.hidden&&card.id!=null?[{ref:{namespace:'card',id:String(card.id)},zone:'hand-'+owner,index}]:[])),...d.table.flatMap((pair,index)=>[pair.attack,pair.defense].filter(Boolean).map(card=>({ref:{namespace:'card',id:String(card.id)},zone:'field',index})))],interactions:p.actions.map(command=>({command,target:command.card!=null?{entity:{namespace:'card',id:String(command.card)}}:{zone:'field'}}))};}
+ return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}),action,event,metric,scene:p=>({...scene(p),...sceneLayout(p)}),face});
 });

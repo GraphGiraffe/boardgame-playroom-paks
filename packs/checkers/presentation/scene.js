@@ -6,15 +6,18 @@
  const action=(command,projection)=>message(choice(command,projection).capture?'actions.capture':'actions.move',{from:B.cellName(command.from),to:B.cellName(command.to)});
  function event(value){const p=value.params;
   if(value.type==='checkers.moved')return {message:message(p.promoted?'events.promoted':'events.moved',{from:B.cellName(p.from),to:B.cellName(p.to),symbol:p.captured?'×':'→'}),
-   kind:p.captured?'capture':'move',sound:p.captured?{id:'attack.capture',target:p.target}:{id:p.promoted?'notify':'move'},presentation:{type:'move',from:p.from,to:p.to}};
+   kind:p.captured?'capture':'move',...(p.captured?{feedback:{kind:'capture',player:p.target}}:{}),sound:p.captured?{id:'attack.capture',target:p.target}:{id:p.promoted?'notify':'move'},presentation:{type:'move',from:p.from,to:p.to}};
   if(value.type==='checkers.won')return {message:message('events.won'),finish:true};
   if(value.type==='checkers.repeated')return {message:message('events.repeated'),finish:true};
   if(value.type==='checkers.quiet')return {message:message('events.quiet'),finish:true};
   throw Error('CHECKERS_EVENT_UNKNOWN');
  }
  const metric=()=>message('meta.wins');
- const scene=projection=>({contractVersion:1,id:'checkers-board',family:'grid-board',columns:8,rows:8,
+ const scene=projection=>({contractVersion:1,id:'checkers-board',family:'grid-board',columns:8,rows:8,forced:projection.data.forced,lightPlayer:projection.data.lightPlayer??0,
   pieces:projection.data.board.flatMap((piece,cell)=>piece?[{...piece,cell,captured:projection.data.captured.includes(cell)}]:[]),
   players:[0,1].map(player=>({player,metrics:[{id:'pieces',kind:'pieces',value:projection.data.board.filter(piece=>piece?.owner===player).length,label:message(player===(projection.data.lightPlayer??0)?'view.light':'view.dark'),resultUsage:true},{id:'wins',kind:'wins',value:projection.winners.includes(player)?1:0,label:metadata.scoreLabel,resultUsage:false}]}))});
- return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}),choice,action,event,metric,scene});
+
+ // Geometry contains only public identities from the authorized projection.
+ function sceneLayout(p){const d=p.data;return {geometry:{topology:'fixed'},zones:[{id:'field',kind:'board'}],objects:d.board.flatMap((piece,cell)=>piece?[{ref:{namespace:'checker',id:piece.id},zone:'field',cell,owner:piece.owner}]:[]),interactions:p.actions.map(command=>({command,target:command.from!=null&&d.board[command.from]?{entity:{namespace:'checker',id:d.board[command.from].id}}:{zone:'field'}}))};}
+ return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}),choice,action,event,metric,scene:p=>({...scene(p),...sceneLayout(p)})});
 });

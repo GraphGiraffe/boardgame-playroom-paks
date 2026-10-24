@@ -1,6 +1,6 @@
 {
   "id": "spider",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "name": "Паук",
   "category": "solitaire",
   "estimatedDuration": "10–30 мин",
@@ -27,9 +27,9 @@
   "view": "view.js",
   "styles": "styles.css",
   "sharedUi": true,
-  "engineApi": 3,
+  "engineApi": 4,
   "stateVersion": 1,
-  "viewApi": 2,
+  "viewApi": 3,
   "tileTheme": "green",
   "tags": [
     "cards"

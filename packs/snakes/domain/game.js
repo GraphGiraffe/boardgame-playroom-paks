@@ -36,7 +36,7 @@
       let to=d.links[landing]||landing;if(to<landing&&protect('snake'))to=landing;
       d.positions[actor]=to;d.lastMove={player:actor,from,landing,to,roll,finish:d.finish,trigger:command.type};
       fact('moved',{...d.lastMove,automatic});
-      if(to===d.finish){Ending.record(d.ending,[actor]);fact('won');return;}
+      if(to===d.finish){Ending.record(d.ending,[actor],next,'finished');fact('won');return;}
       const special=d.special[to];
       if(['skip','less'].includes(special)){if(!protect(special)){e[special]=true;fact('effect',{effect:special});}}
       else if(special==='adjust'||special==='shield'){e[special]=true;fact('effect',{effect:special});}
@@ -67,6 +67,6 @@
   }
   const project=p=>JSON.parse(JSON.stringify(p.data));
   function bot(p,actor,legal){if(p.data.phase!=='move')return legal[0];return legal.reduce((best,a)=>{const score=c=>{const v=destination(p.data,actor,c.dieIndex,c.delta),kind=p.data.special[v.to];return v.to+({skip:-7,less:-3,second:4,shield:3,adjust:2}[kind]||0);};return score(a)>score(best)?a:best;},legal[0]);}
-  function result(p){const values=p.data.positions;return {winners:p.winners,places:Ending.places(p.data.ending,values),metrics:[{id:'position',values}]};}
+  function result(p){const values=p.data.positions;return {winners:p.winners,...Ending.result(p.data.ending),places:Ending.places(p.data.ending,values),metrics:[{id:'position',values}]};}
   return Object.freeze({contractVersion:1,id:'snakes',minPlayers:2,maxPlayers:6,create,validate,actions,reduce,project,result,bot});
 });

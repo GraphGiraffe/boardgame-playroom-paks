@@ -9,7 +9,7 @@
  function event(value){const p=value.params;
   if(value.type==='ludo.rolled')return {message:message('events.rolled',{dice:p.dice.join(', ')}),kind:'roll',reveal:{kind:'dice',dice:p.dice.map(value=>({value}))},presentation:{type:'roll'}};
   if(value.type==='ludo.skipped')return {message:message('events.skipped'),kind:'pass',feedback:{kind:'skip',player:value.actor}};
-  if(value.type==='ludo.captured')return {message:message('events.captured',{owner:player(p.owner),target:player(p.target)}),kind:'capture'};
+  if(value.type==='ludo.captured')return {message:message('events.captured',{owner:player(p.owner),target:player(p.target)}),kind:'capture',feedback:{kind:'capture',player:p.target}};
   if(value.type==='ludo.moved')return {message:message('events.moved',{owner:player(p.owner),pawn:p.pawn+1,to:p.to===57?message('location.home'):p.to}),kind:'move',sound:{id:p.to===57?'success.special':p.from<0?'success':'move'},presentation:{type:'move',owner:p.owner,pawn:p.pawn}};
   if(value.type==='ludo.won')return {message:message(p.members.length>1?'events.team-won':'events.won',{first:player(p.members[0]),second:player(p.members.at(-1))}),finish:true};
   throw Error('LUDO_EVENT_UNKNOWN');
@@ -27,11 +27,21 @@
  };
  const location=(p,j,n)=>n<0?[base[p][0]+1.66+(j%2)*1.68,base[p][1]+1.66+Math.floor(j/2)*1.68]:n<52?route[(p*13+n)%52]:n<57?lane(p,n-52):finishLocation(p,j);
  const anchor=(p,j,n)=>n<0?`base-${p}-${j}`:n<52?`path-${(p*13+n)%52}`:n<57?`home-${p}-${n}`:`finish-${p}`;
- function sequence(last){if(!last)return undefined;const {owner:p,pawn:j,from,to}=last;return {trigger:'move',entry:from<0?'lift':undefined,arrival:to===57?'settle':undefined,entity:`token-${p}-${j}`,player:p,counter:'home',origin:{anchor:anchor(p,j,from)},steps:Array.from({length:from<0?1:to-from},(_,i)=>({anchor:anchor(p,j,from<0?0:from+i+1)}))};}
+ function sequence(last){if(!last)return undefined;const {owner:p,pawn:j,from,to}=last;return {trigger:'move',entry:from<0?'lift':undefined,arrival:to===57?'settle':undefined,entity:{namespace:'token',id:`${p}-${j}`},player:p,counter:'home',origin:{anchor:anchor(p,j,from)},steps:Array.from({length:from<0?1:to-from},(_,i)=>({anchor:anchor(p,j,from<0?0:from+i+1)}))};}
 
- function scene(projection){return {contractVersion:1,id:'ludo-board',family:'route-board',round:{number:projection.data.ending.round,limit:projection.data.ending.maxRounds||null,starts:projection.data.ending.starts},
+ function scene(projection){return {contractVersion:1,id:'ludo-board',family:'route-board',
+  dice:projection.data.dice.map((value,index)=>({value,used:projection.data.used[index],rollable:projection.data.rollIndices.includes(index),lastRolled:projection.data.lastRolled?.includes(index)||false})),
+  motionSequence:sequence(projection.data.last),
+  moves:projection.actions.filter(command=>command.type==='move').map(command=>{
+   const result=B.destination(projection,command),from=projection.data.pawns[command.owner][command.pawn],to=result.to;
+   return {command,from,to,capture:result.captured.length>0,anchor:anchor(command.owner,command.pawn,to),
+    route:Array.from({length:from<0?1:to-from},(_,i)=>anchor(command.owner,command.pawn,from<0?0:from+i+1))};
+  }),round:{number:projection.data.ending.round,limit:projection.data.ending.maxRounds||null,starts:projection.data.ending.starts},
   pawns:projection.data.pawns.flatMap((row,owner)=>row.map((progress,pawn)=>({id:'token-'+owner+'-'+pawn,owner,pawn,progress,point:location(owner,pawn,progress)}))),
-  players:projection.data.pawns.map((row,player)=>({player,teamId:projection.preset==='teams'?(player%2?'red':'blue'):null,team:projection.preset==='teams'?{id:player%2?'red':'blue',label:message(player%2?'view.red':'view.blue'),colorRole:player%2?'side.red':'side.blue'}:null,
+  players:projection.data.pawns.map((row,player)=>({player,finishPlace:(projection.data.ending?.groups||[]).findIndex(group=>group.includes(player))+1,teamId:projection.preset==='teams'?(player%2?'red':'blue'):null,team:projection.preset==='teams'?{id:player%2?'red':'blue',label:message(player%2?'view.red':'view.blue'),colorRole:player%2?'side.red':'side.blue'}:null,
    metrics:[{id:'home',kind:'pieces',value:row.filter(n=>n===57).length,label:metric('home'),resultUsage:true},{id:'wins',kind:'wins',value:projection.winners.includes(player)?1:0,label:metadata.scoreLabel,resultUsage:false}]}))};}
- return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}),action,event,metric,scene,route,base,lane,location,anchor,sequence,destination:B.destination});
+
+ // Geometry contains only public identities from the authorized projection.
+ function sceneLayout(p){const d=p.data;return {geometry:{topology:'fixed'},zones:[{id:'field',kind:'board'}],objects:d.pawns.flatMap((row,owner)=>row.map((progress,pawn)=>({ref:{namespace:'token',id:owner+'-'+pawn},zone:'field',owner,point:location(owner,pawn,progress)}))),interactions:p.actions.map(command=>({command,target:command.pawn!=null?{entity:{namespace:'token',id:command.owner+'-'+command.pawn}}:{zone:'field'}}))};}
+ return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}),action,event,metric,scene:p=>({...scene(p),...sceneLayout(p)}),route,base,lane,location,anchor,sequence,destination:B.destination});
 });

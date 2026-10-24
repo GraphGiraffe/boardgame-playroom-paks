@@ -48,8 +48,8 @@ def validate_manifest(manifest, label):
     ident, version = manifest.get("id"), manifest.get("version")
     if not isinstance(ident, str) or not ID.fullmatch(ident) or not isinstance(version, str) or not SEMVER.fullmatch(version):
         raise ValueError(f"Некорректные ID/версия пака: {label}")
-    if not number_equals(manifest.get("viewApi"), 2):
-        raise ValueError(f"Требуется viewApi 2: {label}")
+    if not number_equals(manifest.get("viewApi"), 3):
+        raise ValueError(f"Требуется viewApi 3: {label}")
     if "tileTheme" in manifest and manifest["tileTheme"] not in ("green", "coral", "blue", "gold", "violet"):
         raise ValueError(f"Некорректная тема карточки: {label}")
     registry = parse_json(Path(__file__).with_name("tags.json").read_text(encoding="utf-8"))
@@ -75,7 +75,7 @@ def validate_manifest(manifest, label):
                 for family, variant in defaults.items())):
         raise ValueError(f"Некорректные скины пака: {label}")
     state = manifest.get("stateVersion")
-    if (type(manifest.get("engineApi")) not in (int, float) or manifest.get("engineApi") != 3 or type(state) not in (int, float)
+    if (type(manifest.get("engineApi")) not in (int, float) or manifest.get("engineApi") != 4 or type(state) not in (int, float)
             or not 1 <= state <= MAX_SAFE_INTEGER or int(state) != state):
         raise ValueError(f"Неподдерживаемый API/состояние пака: {label}")
     name = manifest.get("name")

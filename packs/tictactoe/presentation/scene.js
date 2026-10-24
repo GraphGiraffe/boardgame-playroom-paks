@@ -27,7 +27,7 @@
   function scene(projection) {
     const commands = new Map(projection.actions.map(command => [command.cell, command]));
     return {contractVersion:1, family:'board', id:'tictactoe-board', columns:3, rows:3, label:message('board.label'),
-      players:projection.data.marks.map((mark, player) => ({id:player, mark,
+      players:projection.data.marks.map((mark, player) => ({player, mark,
         metrics:[{id:'wins', kind:'wins', value:projection.winners.includes(player) ? 1 : 0,
           format:'integer', label:metric('wins'), placement:'wins', resultUsage:true}]})),
       cells:projection.data.board.map((owner, cell) => ({id:'cell-' + cell, index:cell,
@@ -35,5 +35,8 @@
         label:owner === null ? message('board.empty-cell', {cell:cell + 1})
           : message('board.marked-cell', {cell:cell + 1, mark:projection.data.marks[owner]})}))};
   }
-  return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}), action, event, metric, scene});
+
+ // Geometry contains only public identities from the authorized projection.
+ function sceneLayout(p){const d=p.data;return {geometry:{topology:'fixed'},zones:[{id:'field',kind:'board'}],objects:d.board.flatMap((owner,cell)=>owner===null?[]:[{ref:{namespace:'mark',id:String(cell)},zone:'field',cell,owner}]),interactions:p.actions.map(command=>({command,target:{zone:'field'}}))};}
+ return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}), action, event, metric, scene:p=>({...scene(p),...sceneLayout(p)})});
 });
