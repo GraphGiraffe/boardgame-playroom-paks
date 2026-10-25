@@ -9,7 +9,7 @@
   const message = (key, params = {}) => ({key:'tictactoe.' + key, params});
   const metadata = Object.freeze({name:message('meta.name'), description:message('meta.description'),
     scoreLabel:message('meta.score-label'), presets:[{id:'classic', label:message('meta.classic')}],
-    rules:[1,2,3].map(index => message('rules.' + index))});
+    rules:Array.from({length:3},(_,i)=>message('rules.'+(i+1)))});
   function action(command) { return message('actions.place', {cell:command.cell + 1}); }
   function event(value) {
     switch (value.type) {

@@ -1,7 +1,7 @@
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;root.PlayroomPackPresentation=api;})(globalThis,function(){
  'use strict';const message=(key,params={})=>({key:'uno.'+key,params}),player=index=>({kind:'player-reference',index});
  const color=value=>message('color.'+value),face=card=>['skip','reverse','wild'].includes(card.value)?message('card.'+card.value):card.value;
- const metadata={name:message('meta.name'),description:message('meta.description'),scoreLabel:message('meta.score'),presets:['classic','quick'].map(id=>({id,label:message('presets.'+id)})),rules:Array.from({length:9},(_,i)=>message('rules.'+(i+1)))};
+ const metadata={name:message('meta.name'),description:message('meta.description'),scoreLabel:message('meta.score'),presets:['classic','quick'].map(id=>({id,label:message('presets.'+id)})),rules:Array.from({length:7},(_,i)=>message('rules.'+(i+1)))};
  function action(command,projection){if(command.type==='accuse-uno')return message('actions.accuse-uno',{target:player(command.target)});if(command.type==='play'){const card=projection.data.hands[projection.actor].find(card=>card.id===command.card);return message('actions.play',{card:face(card),color:color(command.color||card.color)});}return message('actions.'+command.type);}
  function choice(command){return command.type==='declare-uno'?{notify:true}:command.type==='accuse-uno'?{notify:true,targetKind:'player',targetPrompt:message('speech.uno')}:{};}
  function event(value){const p=value.params,actor=value.actor,who=player(actor),callTitle=message('notice.call-title',{player:who});

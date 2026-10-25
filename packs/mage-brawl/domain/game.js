@@ -19,16 +19,20 @@
  function draw(d,p,n){while(p.hand.length<n){if(!d.deck.length){shuffle(d,d.discard);d.deck.push(...d.discard);d.discard=[];}if(!d.deck.length)break;p.hand.push(d.deck.pop());}}
  function openSpawn(d,p){const vectors=[...G.directions,...G.directions.map(v=>G.add(v,G.rotate(v,1))),...G.directions.map(v=>v.map(x=>2*x))];if(vectors.some(v=>{const t=tile(d,G.add(p.pos,v));return t&&t!=='wall';}))return;const dirs=G.directions.filter(v=>inside(d,G.add(p.pos,v.map(x=>2*x))));if(dirs.length){const v=dirs[Math.floor(random(d)*dirs.length)];for(const k of [1,2]){const q=G.add(p.pos,v.map(x=>x*k));if(!tile(d,q)||tile(d,q)==='wall')d.board[q[0]*d.size+q[1]]='ground';}}}
  function begin(d){
-  const waiting=ordered(d,living(d).filter(i=>!d.players[i].pos));
+  const continuingRespawn=d.phase==='respawn',previousRespawn=d.respawn||[],waiting=living(d).filter(i=>!d.players[i].pos);
   if(!bases(d).length)for(const i of waiting){d.discard.push(...d.players[i].hand);Object.assign(d.players[i],{lives:0,health:0,hand:[],ultimate:0,eliminatedRound:d.round});}
   d.drafts={};d.window=W.create('round:'+d.round,[]);d.respawn=waiting.filter(i=>d.players[i].lives>0);d.phase=d.respawn.length&&freeBases(d).length?'respawn':'planning';
-  if(d.phase==='planning'){if(d.pendingDraw){for(const id of d.pendingDraw)if(d.players[id].lives)draw(d,d.players[id],d.players[id].hand.length+config(d).steps);delete d.pendingDraw;}if(living(d).length>1&&d.size-2*d.inset>sizeFor(living(d).length))d.shrink=d.round;if(d.nextFirst!==undefined){d.first=d.nextFirst;delete d.nextFirst;}d.window=W.create('round:'+d.round,ordered(d,active(d)));}
+  if(d.phase==='respawn'){
+   // Draw once per base-selection stage, never again after an individual choice.
+   d.respawn=continuingRespawn?previousRespawn.filter(i=>d.respawn.includes(i)):shuffle(d,d.respawn);
+  }
+  if(d.phase==='planning'){if(d.pendingDraw){for(const id of d.pendingDraw)if(d.players[id].pos)draw(d,d.players[id],d.players[id].hand.length+config(d).steps);delete d.pendingDraw;}if(living(d).length>1&&d.size-2*d.inset>sizeFor(living(d).length))d.shrink=d.round;if(d.nextFirst!==undefined){d.first=d.nextFirst;delete d.nextFirst;}d.window=W.create('round:'+d.round,ordered(d,active(d)));}
  }
  // Reward pools stay authoritative and hidden until every eligible source has chosen.
  function nextLoot(d){
   while(d.loot?.length){const reward=d.loot[0];reward.recipients=reward.recipients.filter(i=>d.players[i].lives>0);
    if(reward.cards.length&&reward.recipients.length)return reward;
-   (d.players[reward.victim].lives?d.players[reward.victim].hand:d.discard).push(...reward.cards);d.loot.shift();
+   d.discard.push(...reward.cards);d.loot.shift();
   }
   delete d.loot;return null;
  }
@@ -41,7 +45,7 @@
   d.config={steps,health,lives,handLimit,copies,differentActionTypes:!!option('differentActionTypes',1,0,1)};d.drafts={};
   d.board=Array(playerCount).fill('base');for(const t of ['puddle','desert','air_island','forest'])d.board.push(...Array(l).fill(t));for(const t of ['falling_floor','wall','spikes'])d.board.push(...Array(2*l).fill(t));while(d.board.length<size*size)d.board.push('ground');shuffle(d,d.board);
   d.deck=shuffle(d,elements.flatMap((element,e)=>Array.from({length:copies},(_,i)=>({id:'card:'+(e*copies+i),element}))));const spawn=shuffle(d,bases(d));d.startingBases=clone(spawn);
-  for(let i=0;i<playerCount;i++){const p={pos:spawn[i],health,lives,maxHand:handLimit,hand:[],ultimate:0,eliminatedRound:null,bot:B.resolve(options.players?.[i]?.botSettings,strategies,seed,i)};d.players.push(p);draw(d,p,handLimit);openSpawn(d,p);}
+  for(let i=0;i<playerCount;i++){const p={pos:spawn[i],health,lives,maxHand:handLimit,hand:[],ultimate:0,kills:0,damageDealt:0,eliminatedRound:null,bot:B.resolve(options.players?.[i]?.botSettings,strategies,seed,i)};d.players.push(p);draw(d,p,handLimit);openSpawn(d,p);}
   begin(d);return {playerCount,turn:d.first,status:'playing',winners:[],data:d};
  }
  function plans(d,actor,first=d.drafts?.[actor]){const p=d.players[actor];if(!p?.pos)return [];
@@ -61,7 +65,7 @@
  }
  // Public effects describe actions, never private physical card identities.
  const publicPlans=plans=>Object.fromEntries(Object.entries(plans).map(([id,c])=>[id,c.steps?{steps:c.steps.map(({element,action,direction})=>({element,action,direction}))}:(({element,action,direction})=>({element,action,direction}))(c)]));
- function publicBoard(d){return {board:[...d.board],inset:d.inset,players:d.players.map(p=>({pos:p.pos&&[...p.pos],health:p.health,lives:p.lives,maxHand:p.maxHand,kills:p.maxHand-config(d).handLimit,ultimate:p.ultimate,handCount:p.hand.length})),shrink:d.shrink};}
+ function publicBoard(d){return {board:[...d.board],inset:d.inset,players:d.players.map(p=>({pos:p.pos&&[...p.pos],health:p.health,lives:p.lives,maxHand:p.maxHand,kills:p.kills??p.maxHand-config(d).handLimit,ultimate:p.ultimate,handCount:p.hand.length})),shrink:d.shrink};}
  function resolve(d,{preview=false}={}){
   const sequences=Object.fromEntries(Object.entries(d.window.plans).map(([id,c])=>[id,c.steps||[c]])),pushSources={},events=[event('revealed',{plans:publicPlans(d.window.plans),round:d.round})];let chosen={},shields={},step=0;d.frames=[];
   d.frames.push({phase:'start',...publicBoard(d),ready:Object.keys(sequences).map(Number)});
@@ -73,41 +77,98 @@
    if(c.action!=='movement'&&(c.element==='fire'||c.element==='earth'&&c.action==='ultimate')){
     const ray=line(d,origin,v),stop=ray.find(q=>tile(d,q)==='wall'||occupant(d,q)>=0);
     fx.projectile={end:stop||G.add(ray.at(-1)||origin,v.map(x=>x*2)),miss:!stop};
+    if(stop&&c.element==='fire'&&c.action==='ultimate')fx.burst={origin:[...stop],cells:G.area(stop,G.directions)};
    }
    return fx;
   };
-  function apply(){const deaths=[];for(const id of new Set([...active(d),...batch.entries.keys()])){const p=d.players[id];if(!p.lives)continue;const out=batch.outcome(id,p.health,config(d).health),entry=batch.entries.get(id);if(entry&&(entry.damage||out.fall))outcomes.push({player:id,damage:entry.damage,death:out.fall||out.health===0,fall:out.fall,at:clone(fallAt[id]||p.pos),killers:[]});p.health=out.health;if(out.fall||p.health===0)deaths.push({id,sources:out.sources,cards:[...p.hand],ultimate:p.ultimate});}
-   for(const {id} of deaths){const p=d.players[id];p.lives--;p.health=0;p.pos=null;p.hand=[];if(p.lives>0)p.ultimate++;else{p.ultimate=0;p.eliminatedRound=d.round;}}
+  const credit=(target,amount,sources)=>{const ids=[...new Set(sources)].filter(id=>id!==target);for(const id of ids)d.players[id].damageDealt=(d.players[id].damageDealt||0)+amount/ids.length;};
+  const damage=(target,amount,sources)=>{batch.damage(target,amount,sources);credit(target,amount,sources);};
+  function apply(){const deaths=[];for(const id of new Set([...active(d),...batch.entries.keys()])){const p=d.players[id];if(!p.lives)continue;const out=batch.outcome(id,p.health,config(d).health),entry=batch.entries.get(id);if(entry&&(entry.damage||out.fall))outcomes.push({player:id,damage:entry.damage,death:out.fall||out.health===0,fall:out.fall,at:clone(fallAt[id]||p.pos),killers:[]});if(out.fall)credit(id,out.health,out.sources);p.health=out.health;if(out.fall||p.health===0)deaths.push({id,sources:out.sources,cards:[...p.hand],ultimate:p.ultimate});}
+   for(const {id} of deaths){const p=d.players[id];p.lives--;p.health=0;p.pos=null;p.hand=[];p.ultimate=0;if(!p.lives){p.eliminatedRound=d.round;}}
    for(const dead of deaths){const p=d.players[dead.id],killers=[...new Set(dead.sources)].filter(id=>id!==dead.id&&d.players[id].lives>0).sort((a,b)=>(a-dead.id+d.players.length)%d.players.length-(b-dead.id+d.players.length)%d.players.length);
-    for(const id of killers)d.players[id].maxHand++;
+    for(const id of killers){const p=d.players[id];p.kills=(p.kills??p.maxHand-config(d).handLimit)+1;}
     const feedback=outcomes.find(o=>o.player===dead.id);if(feedback)feedback.killers=[...killers];
-    if(killers.length){if(p.lives)p.ultimate-=dead.ultimate;for(let i=0;i<dead.ultimate;i++)d.players[killers[i%killers.length]].ultimate++;}
+    if(killers.length){for(let i=0;i<dead.ultimate;i++)d.players[killers[i%killers.length]].ultimate++;}
     if(dead.cards.length&&killers.length)(d.loot||=[]).push({victim:dead.id,cards:shuffle(d,dead.cards),recipients:killers});
-    else (p.lives?p.hand:d.discard).push(...dead.cards);
+    else d.discard.push(...dead.cards);
     events.push(event('life-lost',{player:dead.id,lives:p.lives,killer:killers[0]??null,killers}));
    }batch=new E.Batch();
   }
-  function move(id,dest,sources=[]){const p=d.players[id];if(!p.pos)return false;const old=p.pos;if(tile(d,old)==='falling_floor')d.board[old[0]*d.size+old[1]]=null;
-   motions.push({player:id,from:[...old],to:[...dest],element:phaseElement});
-   p.pos=dest;if(!tile(d,dest)){fallAt[id]=[...dest];batch.fall(id,sources);p.pos=null;
-   }else if(tile(d,dest)==='spikes')batch.damage(id,1,sources);
-   if(sources.length&&d.shrink&&ring(d,dest))pushSources[id]=[...new Set([...(pushSources[id]||[]),...sources])];return true;
+  // Every proposal reads the same phase snapshot. A dependent push chain either
+  // moves together or stays together; rejected moves never create new priority.
+  function displace(roots,{water=false}={}){
+   const positions=d.players.map(p=>p.pos&&[...p.pos]),at=new Map(positions.flatMap((p,id)=>p?[[G.key(p),id]]:[]));
+   const groups=[],collisions=new Map();
+   const collide=(id,sources)=>{if(!collisions.has(id))collisions.set(id,new Set());for(const source of sources)if(source!==id)collisions.get(id).add(source);};
+   for(const root of roots.values()){
+    const vector=[root.to[0]-positions[root.id][0],root.to[1]-positions[root.id][1]],group={moves:[root],blocked:tile(d,root.to)==='wall'};
+    if(water||root.forced){
+     let q=root.to;const seen=new Set([root.id]);
+     while(!group.blocked){
+      const id=at.get(G.key(q));if(id===undefined||roots.has(id)||seen.has(id))break;
+      if(shielded(shields,id,vector)){group.blocked=true;break;}
+      seen.add(id);const to=G.add(q,vector);group.moves.push({id,to,forced:true,sources:root.sources});
+      q=to;group.blocked=tile(d,q)==='wall';
+     }
+    }
+    groups.push(group);
+   }
+   const reject=(items)=>{for(const group of items)group.blocked=true;};
+   // Reject competing destinations (including two different pushes of one mage)
+   // before examining occupied cells. Cancellation then propagates backwards.
+   let changed=true;
+   while(changed){
+    changed=false;const byPlayer=new Map(),byCell=new Map();
+    for(const group of groups)if(!group.blocked)for(const move of group.moves){
+     const item={group,move};if(!byPlayer.has(move.id))byPlayer.set(move.id,[]);byPlayer.get(move.id).push(item);
+     const key=G.key(move.to);if(!byCell.has(key))byCell.set(key,[]);byCell.get(key).push(item);
+    }
+    const rejected=new Set();
+    for(const items of [...byPlayer.values(),...byCell.values()]){
+     if(new Set(items.map(({move})=>move.id)).size<2&&new Set(items.map(({move})=>G.key(move.to))).size<2)continue;
+     for(const {group} of items)rejected.add(group);
+     if(items.some(({move})=>move.forced)){const sources=items.flatMap(({move})=>move.sources);for(const {move} of items)collide(move.id,sources);}
+    }
+    if(rejected.size){reject(rejected);changed=true;continue;}
+    for(const group of groups)if(!group.blocked)for(const move of group.moves){
+     const target=at.get(G.key(move.to));
+     // A simultaneous swap or cycle is legal: only a stationary occupant blocks.
+     if(target!==undefined&&target!==move.id&&!byPlayer.has(target)){rejected.add(group);break;}
+    }
+    if(rejected.size){reject(rejected);changed=true;}
+   }
+   const moves=new Map();
+   for(const group of groups){
+    if(group.blocked){for(const move of group.moves)if(move.forced)collide(move.id,move.sources);continue;}
+    for(const move of group.moves){
+     const previous=moves.get(move.id);moves.set(move.id,{...move,sources:[...new Set([...(previous?.sources||[]),...move.sources])]});
+    }
+   }
+   for(const [id,sources] of collisions)damage(id,1,[...sources]);
+   // Collapse all departed floors before any arrival, including swaps/cycles.
+   for(const id of moves.keys()){const old=positions[id];if(tile(d,old)==='falling_floor')d.board[old[0]*d.size+old[1]]=null;}
+   for(const [id,{to,sources}] of moves){
+    const p=d.players[id];motions.push({player:id,from:positions[id],to:[...to],element:phaseElement});p.pos=[...to];
+    if(!tile(d,to)){fallAt[id]=[...to];batch.fall(id,sources);p.pos=null;}
+    else if(tile(d,to)==='spikes')damage(id,1,sources);
+    if(sources.length&&d.shrink&&ring(d,to))pushSources[id]=[...new Set([...(pushSources[id]||[]),...sources])];
+   }
   }
-  function push(id,v,sources,initiator=null,checkedTarget=false){if(!d.players[id].pos)return false;const origin=d.players[id].pos;const chain=G.train(origin,v,{occupant:q=>{const i=occupant(d,q);return i<0||i===initiator?null:i;},blocked:q=>tile(d,q)==='wall',stop:i=>(!checkedTarget||i!==id)&&shielded(shields,i,v)});
-   if(chain.blocked){for(const m of chain.members)batch.damage(m.id,1,sources);return false;}
-   for(const m of chain.members.reverse())move(m.id,m.to,sources);if(initiator!==null)move(initiator,origin);return true;
-  }
-  function hit(id,element,amount,actor,v){if(blocked(d,shields,id,element,v))return false;const total=amount+(terrain[tile(d,d.players[id].pos)]?.[0]===element?1:0);if(total>0)batch.damage(id,total,[actor]);return true;}
+  function hit(id,element,amount,actor,v){if(blocked(d,shields,id,element,v))return false;const total=amount+(terrain[tile(d,d.players[id].pos)]?.[0]===element?1:0);if(total>0)damage(id,total,[actor]);return true;}
   for(step=0;step<(preview?1:config(d).steps);step++){
   chosen=Object.fromEntries(Object.entries(sequences).filter(([id,seq])=>d.players[id].pos&&seq[step]).map(([id,seq])=>[id,seq[step]]));shields={};
   frame('reveal-actions');frame('reveal');
-  for(const element of elements){phaseElement=element;let performed=false;for(const id of ordered(d,active(d))){const c=chosen[id];if(!c||!d.players[id].pos||c.action!=='movement'||c.element!==element)continue;performed=true;const fx=effect(id,c),v=G.directions[c.direction];if(element==='earth')shields[id]=c.direction;else{const dest=geometry(d,id,c)[0],target=occupant(d,dest);if(tile(d,dest)!=='wall'){if(target>=0){if(element==='water')push(target,v,[id],id);}else move(id,dest);}}frame('movement-'+element,fx);}apply();if(performed)frame('movement-'+element);}
-  for(const element of elements){phaseElement=element;const attackers=ordered(d,active(d)).filter(id=>chosen[id]&&chosen[id].element===element&&chosen[id].action!=='movement');
+  for(const element of elements){
+   phaseElement=element;const movers=active(d).filter(id=>chosen[id]?.action==='movement'&&chosen[id].element===element),roots=new Map();
+   for(const id of movers){const c=chosen[id];frame('movement-'+element,effect(id,c));if(element==='earth')shields[id]=c.direction;
+    else roots.set(id,{id,to:geometry(d,id,c)[0],forced:false,sources:element==='water'?[id]:[]});}
+   if(roots.size)displace(roots,{water:element==='water'});apply();if(movers.length)frame('movement-'+element);
+  }
+  for(const element of elements){phaseElement=element;const attackers=active(d).filter(id=>chosen[id]&&chosen[id].element===element&&chosen[id].action!=='movement');
    for(const id of attackers)if(chosen[id].action==='ultimate')d.players[id].ultimate--;
    if(element==='air'){const pushes=new Map();for(const id of attackers){const c=chosen[id],origin=d.players[id].pos;frame('attack-'+element,effect(id,c));for(const q of geometry(d,id,c)){const target=occupant(d,q);if(target<0||target===id)continue;const v=c.action==='ultimate'?[q[0]-origin[0],q[1]-origin[1]]:G.directions[c.direction];if(!hit(target,element,0,id,v))continue;if(!pushes.has(target))pushes.set(target,[]);pushes.get(target).push({v,id});}}
-    for(const target of ordered(d,pushes.keys())){const entries=pushes.get(target),v=G.combine(entries.map(e=>e.v));if(v.some(Boolean))push(target,v,[...new Set(entries.map(e=>e.id))],null,true);}
+    const roots=new Map();for(const [id,entries] of pushes){const v=G.combine(entries.map(e=>e.v));if(v.some(Boolean))roots.set(id,{id,to:G.add(d.players[id].pos,v),forced:true,sources:[...new Set(entries.map(e=>e.id))]});}displace(roots);
    }else for(const id of attackers){const c=chosen[id],v=G.directions[c.direction],cells=geometry(d,id,c);frame('attack-'+element,effect(id,c));let actual=false;
-    if(element==='fire'&&c.action==='ultimate'&&cells.length){const initial=occupant(d,cells[0]);if(initial>=0&&blocked(d,shields,initial,element,v))continue;}
     for(const [index,q] of cells.entries()){const target=occupant(d,q);if(target<0)continue;const outward=element==='fire'&&c.action==='ultimate'&&index>0?[q[0]-cells[0][0],q[1]-cells[0][1]]:v;const ok=hit(target,element,element==='earth'?2:1,id,outward);actual=actual||ok;if(element==='water'&&!ok)break;}
     if(element==='water'&&c.action==='ultimate'&&actual)batch.heal(id,1);
    }apply();if(attackers.length||element==='fire')frame('attack-'+element);
@@ -119,8 +180,8 @@
   d.round++;d.nextFirst=(d.first+1)%d.players.length;if(nextLoot(d)){d.phase='loot';d.window=W.create('loot:'+d.round,[]);}else finishRound(d);if(d.shrink===d.round)events.push(event('shrink',{round:d.round}));events.push(event('round',{round:d.round}));return events;
  }
  function reduce(s,actor,c){const next=clone(s),d=next.data;let events=[],roundEnded=false;
-  if(c.type==='loot'){const reward=d.loot[0],victim=reward.victim;d.players[actor].hand.push(reward.cards.splice(c.index,1)[0]);reward.recipients.shift();events.push(event('loot',{player:actor,victim}));if(!nextLoot(d))finishRound(d);}
-  else if(c.type==='respawn'){const p=d.players[actor],replace=d.pendingDraw?.includes(actor);p.pos=[...c.pos];p.health=config(d).health;draw(d,p,Math.max(p.maxHand,p.hand.length+(replace?config(d).steps:0)));if(replace)d.pendingDraw=d.pendingDraw.filter(id=>id!==actor);openSpawn(d,p);begin(d);events.push(event('respawn',{player:actor}));}
+  if(c.type==='loot'){const reward=d.loot[0],victim=reward.victim;d.players[actor].hand.push(reward.cards.splice(c.index,1)[0]);d.players[actor].maxHand++;reward.recipients.shift();events.push(event('loot',{player:actor,victim}));if(!nextLoot(d))finishRound(d);}
+  else if(c.type==='respawn'){const p=d.players[actor],replace=d.pendingDraw?.includes(actor);p.pos=[...c.pos];p.health=config(d).health;p.ultimate++;d.discard.push(...p.hand);p.hand=[];draw(d,p,p.maxHand);if(replace)d.pendingDraw=d.pendingDraw.filter(id=>id!==actor);openSpawn(d,p);begin(d);events.push(event('respawn',{player:actor}));}
   else if(c.type==='unready'){delete d.drafts?.[actor];W.put(d.window,actor,null);}
   else if(config(d).steps===2&&!d.drafts?.[actor]){(d.drafts||={})[actor]=clone(c);d.window.versions[actor]++;}
   else if(W.put(d.window,actor,config(d).steps===2?{steps:[d.drafts[actor],c]}:c)){events=resolve(d);roundEnded=true;}
@@ -132,11 +193,11 @@
  function project(s,viewer){const d=s.data,first=d.drafts?.[viewer]||d.window?.plans[viewer]?.steps?.[0];let planned=d;
   if(first){planned=clone(d);planned.window.plans={[viewer]:first};resolve(planned,{preview:true});}
   const route=first?planned.frames.flatMap(f=>(f.motions||[]).filter(m=>m.player===viewer)):[];
-  return {config:clone(config(d)),size:d.size,inset:d.inset,round:d.round,first:d.first,board:[...d.board],...(d.startingBases?{startingBases:clone(d.startingBases)}:{}),phase:d.phase,shrink:d.shrink,deckCount:d.deck.length,respawn:[...d.respawn],window:decisionWindow(s),...(d.phase==='loot'?{loot:{victim:d.loot[0].victim,player:d.loot[0].recipients[0],count:d.loot[0].cards.length}}:{}),frames:clone(d.frames),previews:plans(d,viewer).map(c=>({command:c,origin:clone(planned.players[viewer]?.pos||null),cells:geometry(planned,viewer,c)})),...(first?{planned:{command:clone(first),origin:clone(d.players[viewer].pos),pos:clone(planned.players[viewer].pos),cells:geometry(d,viewer,first),motions:route}}:{}),players:d.players.map((p,i)=>({pos:p.pos&&[...p.pos],health:p.health,lives:p.lives,maxHand:p.maxHand,kills:p.maxHand-config(d).handLimit,ultimate:p.ultimate,handCount:p.hand.length,bot:clone(p.bot),...(i===viewer?{hand:clone(p.hand),draft:clone(d.drafts?.[i]??null),plan:clone(d.window?.plans[i]??null)}:{})}))};}
+  return {config:clone(config(d)),size:d.size,inset:d.inset,round:d.round,first:d.first,board:[...d.board],...(d.startingBases?{startingBases:clone(d.startingBases)}:{}),phase:d.phase,shrink:d.shrink,deckCount:d.deck.length,respawn:[...d.respawn],window:decisionWindow(s),...(d.phase==='loot'?{loot:{victim:d.loot[0].victim,player:d.loot[0].recipients[0],count:d.loot[0].cards.length}}:{}),frames:clone(d.frames),previews:plans(d,viewer).map(c=>({command:c,origin:clone(planned.players[viewer]?.pos||null),cells:geometry(planned,viewer,c)})),...(first?{planned:{command:clone(first),origin:clone(d.players[viewer].pos),pos:clone(planned.players[viewer].pos),cells:geometry(d,viewer,first),motions:route}}:{}),players:d.players.map((p,i)=>({pos:p.pos&&[...p.pos],health:p.health,lives:p.lives,maxHand:p.maxHand,kills:p.kills??p.maxHand-config(d).handLimit,ultimate:p.ultimate,handCount:p.hand.length,bot:clone(p.bot),...(i===viewer?{hand:clone(p.hand),draft:clone(d.drafts?.[i]??null),plan:clone(d.window?.plans[i]??null)}:{})}))};}
  function validPlan(d,id,c,first){return plans(d,id,first).some(p=>Object.keys(c).length===Object.keys(p).length&&Object.keys(p).every(k=>p[k]===c[k]));}
  const validCard=(card,c)=>!!card&&typeof card.id==='string'&&/^card:(0|[1-9]\d*)$/.test(card.id)&&Number(card.id.slice(5))<4*c.copies&&card.element===elements[Math.floor(Number(card.id.slice(5))/c.copies)];
- function validate(s){const d=s.data,c=config(d),cards=[...(d.deck||[]),...(d.discard||[]),...(d.players||[]).flatMap(p=>p.hand||[]),...(d.loot||[]).flatMap(r=>r.cards||[])];return new Set(cards.map(card=>card?.id)).size===cards.length&& Number.isInteger(c.steps)&&c.steps>=1&&c.steps<=2&&Number.isInteger(c.health)&&c.health>=1&&c.health<=6&&Number.isInteger(c.lives)&&c.lives>=1&&c.lives<=4&&Number.isInteger(c.handLimit)&&c.handLimit>=2&&c.handLimit<=8&&Number.isInteger(c.copies)&&c.copies>=Math.ceil(s.playerCount*c.handLimit/4)&&(d.startingBases===undefined||Array.isArray(d.startingBases)&&d.startingBases.length===s.playerCount&&d.startingBases.every(q=>Array.isArray(q)&&q.length===2&&q.every(v=>Number.isInteger(v)&&v>=0&&v<d.size))&&new Set(d.startingBases.map(G.key)).size===s.playerCount)&&[4,6,8,10].includes(d.size)&&Number.isInteger(d.inset)&&d.inset>=0&&d.inset*2<d.size&&Array.isArray(d.board)&&d.board.length===d.size*d.size&&d.board.every(t=>t===null||['ground','base','wall','spikes','falling_floor',...Object.keys(terrain)].includes(t))&&Array.isArray(d.players)&&d.players.length===s.playerCount&&d.players.every(p=>Number.isInteger(p.health)&&p.health>=0&&p.health<=config(d).health&&Number.isInteger(p.lives)&&p.lives>=0&&p.lives<=config(d).lives&&Number.isInteger(p.maxHand)&&p.maxHand>=config(d).handLimit&&Number.isInteger(p.ultimate)&&p.ultimate>=0&&Array.isArray(p.hand)&&p.hand.every(e=>validCard(e,c))&&(p.pos===null||inside(d,p.pos))&&(p.pos!==null?p.health>0&&p.lives>0:p.health===0))&&new Set(active(d).map(i=>G.key(d.players[i].pos))).size===active(d).length&&Array.isArray(d.deck)&&Array.isArray(d.discard)&&[...d.deck,...d.discard].every(e=>validCard(e,c))&&d.deck.length+d.discard.length+(d.loot||[]).reduce((n,r)=>n+r.cards.length,0)+d.players.reduce((n,p)=>n+p.hand.length,0)===4*config(d).copies&&Number.isInteger(d.random)&&Number.isInteger(d.round)&&d.round>0&&['respawn','planning','loot'].includes(d.phase)&&(!d.loot||Array.isArray(d.loot)&&d.loot.length>0&&d.loot.every(r=>Number.isInteger(r.victim)&&r.victim>=0&&r.victim<s.playerCount&&Array.isArray(r.cards)&&r.cards.every(e=>validCard(e,c))&&Array.isArray(r.recipients)&&r.recipients.length>0&&new Set(r.recipients).size===r.recipients.length&&r.recipients.every(i=>Number.isInteger(i)&&i>=0&&i<s.playerCount&&i!==r.victim)))&&(d.phase!=='loot'||d.loot?.[0]?.cards.length>0)&&d.window&&Array.isArray(d.window.participants)&&d.window.participants.every(i=>Number.isInteger(i)&&i>=0&&i<s.playerCount)&&Object.entries(d.drafts||{}).every(([i,c])=>d.window.participants.includes(+i)&&validPlan(d,+i,c,null))&&Object.entries(d.window.plans).every(([i,c])=>d.window.participants.includes(+i)&&(config(d).steps===1?validPlan(d,+i,c,null):Array.isArray(c.steps)&&c.steps.length===2&&validPlan(d,+i,c.steps[0],null)&&validPlan(d,+i,c.steps[1],c.steps[0])));}
- function result(s){const values=s.data.players.map(p=>p.eliminatedRound??s.data.round),ranking=values.map((v,i)=>s.data.players[i].lives*10000+v);return {winners:[...s.winners],places:ranking.map(v=>1+ranking.filter(x=>x>v).length),metrics:[{id:'survival',values}]};}
+ function validate(s){const d=s.data,c=config(d),cards=[...(d.deck||[]),...(d.discard||[]),...(d.players||[]).flatMap(p=>p.hand||[]),...(d.loot||[]).flatMap(r=>r.cards||[])];return new Set(cards.map(card=>card?.id)).size===cards.length&& Number.isInteger(c.steps)&&c.steps>=1&&c.steps<=2&&Number.isInteger(c.health)&&c.health>=1&&c.health<=6&&Number.isInteger(c.lives)&&c.lives>=1&&c.lives<=4&&Number.isInteger(c.handLimit)&&c.handLimit>=2&&c.handLimit<=8&&Number.isInteger(c.copies)&&c.copies>=Math.ceil(s.playerCount*c.handLimit/4)&&(d.startingBases===undefined||Array.isArray(d.startingBases)&&d.startingBases.length===s.playerCount&&d.startingBases.every(q=>Array.isArray(q)&&q.length===2&&q.every(v=>Number.isInteger(v)&&v>=0&&v<d.size))&&new Set(d.startingBases.map(G.key)).size===s.playerCount)&&[4,6,8,10].includes(d.size)&&Number.isInteger(d.inset)&&d.inset>=0&&d.inset*2<d.size&&Array.isArray(d.board)&&d.board.length===d.size*d.size&&d.board.every(t=>t===null||['ground','base','wall','spikes','falling_floor',...Object.keys(terrain)].includes(t))&&Array.isArray(d.players)&&d.players.length===s.playerCount&&d.players.every(p=>Number.isInteger(p.health)&&p.health>=0&&p.health<=config(d).health&&Number.isInteger(p.lives)&&p.lives>=0&&p.lives<=config(d).lives&&(p.damageDealt===undefined||Number.isFinite(p.damageDealt)&&p.damageDealt>=0)&&(p.kills===undefined||Number.isInteger(p.kills)&&p.kills>=0)&&Number.isInteger(p.maxHand)&&p.maxHand>=config(d).handLimit&&Number.isInteger(p.ultimate)&&p.ultimate>=0&&Array.isArray(p.hand)&&p.hand.every(e=>validCard(e,c))&&(p.pos===null||inside(d,p.pos))&&(p.pos!==null?p.health>0&&p.lives>0:p.health===0))&&new Set(active(d).map(i=>G.key(d.players[i].pos))).size===active(d).length&&Array.isArray(d.deck)&&Array.isArray(d.discard)&&[...d.deck,...d.discard].every(e=>validCard(e,c))&&d.deck.length+d.discard.length+(d.loot||[]).reduce((n,r)=>n+r.cards.length,0)+d.players.reduce((n,p)=>n+p.hand.length,0)===4*config(d).copies&&Number.isInteger(d.random)&&Number.isInteger(d.round)&&d.round>0&&['respawn','planning','loot'].includes(d.phase)&&(!d.loot||Array.isArray(d.loot)&&d.loot.length>0&&d.loot.every(r=>Number.isInteger(r.victim)&&r.victim>=0&&r.victim<s.playerCount&&Array.isArray(r.cards)&&r.cards.every(e=>validCard(e,c))&&Array.isArray(r.recipients)&&r.recipients.length>0&&new Set(r.recipients).size===r.recipients.length&&r.recipients.every(i=>Number.isInteger(i)&&i>=0&&i<s.playerCount&&i!==r.victim)))&&(d.phase!=='loot'||d.loot?.[0]?.cards.length>0)&&d.window&&Array.isArray(d.window.participants)&&d.window.participants.every(i=>Number.isInteger(i)&&i>=0&&i<s.playerCount)&&Object.entries(d.drafts||{}).every(([i,c])=>d.window.participants.includes(+i)&&validPlan(d,+i,c,null))&&Object.entries(d.window.plans).every(([i,c])=>d.window.participants.includes(+i)&&(config(d).steps===1?validPlan(d,+i,c,null):Array.isArray(c.steps)&&c.steps.length===2&&validPlan(d,+i,c.steps[0],null)&&validPlan(d,+i,c.steps[1],c.steps[0])));}
+ function result(s){const values=s.data.players.map(p=>p.eliminatedRound??s.data.round),ranking=values.map((v,i)=>s.data.players[i].lives*10000+v);return {winners:[...s.winners],places:ranking.map(v=>1+ranking.filter(x=>x>v).length),metrics:[{id:'survival',values},{id:'damage',maximumFractionDigits:1,values:s.data.players.map(p=>p.damageDealt||0)}]};}
  const rules={elements,terrain,inside,tile,occupant,ring,geometry,line,freeBases,shielded};
  function bot(projection,actor,commands,memory,context){const p=clone(projection);if(p.data.planned?.pos)p.data.players[actor].pos=p.data.planned.pos;const choices=commands.filter(c=>c.type!=='unready');return Bots.choose(p,actor,choices.length?choices:commands,rules,context);}
  return Object.freeze({contractVersion:1,id:'mage-brawl',minPlayers:2,maxPlayers:8,rounds:true,create,validate,actions,reduce,project,bot,result,decisionWindow,botContext:s=>({seed:s.data.seed}),geometry,rules});
