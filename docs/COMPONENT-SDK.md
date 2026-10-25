@@ -145,3 +145,13 @@ Await asynchronous prepare before starting effects. Concurrent cues share one gr
 Use authorized eventScenes for intermediate hand/count/board/result changes. Transfer cards first, then remove a completed set/pair, reveal it, then expose its result miniature. Rules commit independently of playback. History never exposes live controls. Exit places/timing are rule facts, not inferred from visual order.
 
 Capture only objects needed by the effect; do not clone whole hands or layouts for selection, rotation, or dice-only actions. Retain geometry, not hidden private markup. Viewport changes invalidate pixel reserves; absent/empty hands retain their declared layout zone. Test the generated offline artifact with the exact companion; source tests and publication are separate evidence.
+
+## Перетаскивание: рабочая ветка после 0.8.2
+
+Паки используют общий input приложения, без собственных pointer-обработчиков. Источник — `data-drag-piece` с уникальным ID; цель — `H.target(id, legalAction)` (для фишек также `H.boardTarget` с тем же `data-drop-piece`). `data-drop-snap` включает центрирование призрака. `data-drop-zone` расширяет попадание до контейнера и выбирает ближайшую разрешённую позицию. `fieldDropZone:true` предоставляет зону на общей оболочке поля, в том числе для групп `display:contents`.
+
+Лудо сохраняет выбор фишки через `data-drag-view-key="pawn"`. Змеи и лестницы предлагают только текущие разрешённые клетки выбранного броска/поправки. Дурак допускает сброс в поле для атаки и защиты; несколько защит выбираются по позиции, перевод остаётся явной командой. UNO оставляет явный выбор цвета джокера. Домино выбирает ближайший разрешённый конец. Обработка не вычисляет правила и не раскрывает скрытые карты.
+
+Требуется приложение 0.19.3-preview.1 или новее; это расширение ещё не опубликовано в стабильной коллекции 0.8.2. Контракт: [UI API](https://github.com/GraphGiraffe/boardgame-playroom/blob/dev/docs/GAME-ELEMENTS-API.md).
+
+В приложении 0.19.3 структурная сетка `fieldGroups` фиксирует вычисленные треки, зазоры и выравнивание до смены viewport/масштаба либо действия с `H.actionAttr(command,{allowLayoutChange:true})`. Собственные структурные сетки обозначайте стабильным уникальным `data-layout-grid`. Резервируйте полную вместимость заранее; фиксация не создаёт недостающие ячейки. Не заменяйте контур незаполненного места символом принятого действия при выборе/перетаскивании.

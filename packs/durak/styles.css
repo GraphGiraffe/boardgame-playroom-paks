@@ -90,10 +90,10 @@
 @container (max-width:400px){.durak-scene .field-group-play .durak-table{grid-template-columns:repeat(min(var(--durak-columns),2),minmax(0,74px));}}
 
 /* Stock is one grid item; subsequent pairs can occupy the space below it. */
-.durak-scene .game-field-groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));width:100%;min-width:var(--size-length-204_0,208px);max-width:var(--size-length-330_0,320px);gap:var(--size-space-10_0,8px) var(--size-space-12_0,12px);align-items:center;}
+.durak-scene .game-field-groups{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));width:100%;min-width:var(--size-length-204_0,208px);max-width:var(--size-length-330_0,320px);gap:var(--size-space-8_0,8px) 6px;align-items:start;}
 .durak-scene .field-group-stock{min-height:0;min-width:0;}
 .durak-scene .field-group-play,.durak-scene .field-group-play .durak-table{display:contents;}
-.durak-scene .field-group-play .durak-pair{width:var(--size-length-74_0,72px);justify-self:center;}
+.durak-scene .field-group-play .durak-pair{width:var(--size-length-74_0,72px);justify-self:center;align-self:start;}
 
 /* Keep stock labels adjacent to the actual card silhouette. */
 .durak-scene .field-group-stock .durak-stock{gap:3px;padding:0;}
@@ -101,3 +101,28 @@
 .durak-scene .field-group-stock .trump-caption{gap:4px;line-height:1.1;}
 
 .durak-scene .trump-stack>.trump-placeholder{position:absolute;left:22px;top:8px;width:var(--field-card-width);height:var(--field-card-height);transform:rotate(90deg);transform-origin:center;pointer-events:none;}
+
+/* Attack preview occupies exactly the next pair, never an existing defence. */
+.durak-scene .durak-attack-target{padding:0;border-radius:12.5% / 8.93%;}
+
+/* Fit four pair footprints where space permits, without shrinking the cards. */
+.durak-scene .field-group-stock .trump-stack{width:74px;margin-right:0}
+.durak-scene .field-group-stock .trump-stack>.playing-card,.durak-scene .trump-stack>.trump-placeholder{left:8px}
+
+/* Reserve the complete table, including unoccupied pairs, for the whole match. */
+.durak-scene .field-group-play .durak-reserved-pair{width:var(--size-length-74_0,72px);height:var(--size-length-98_4,100px);min-height:var(--size-length-98_4,100px);max-height:var(--size-length-98_4,100px);justify-self:center;visibility:hidden;pointer-events:none}
+
+/* A legal defence keeps the empty slot silhouette; selection is not a played card. */
+.durak-scene .durak-pair :is(.defense-slot,.defend-target){border:var(--size-border-1_0,1px) dashed #aebf9c;border-radius:var(--size-radius-9_0,8px);background:transparent;box-shadow:none;padding:0;}
+
+/* The trump token belongs to the stock card, not to the available stock count. */
+.durak-scene .field-group-stock .trump-stack{height:calc(var(--field-card-height) + 20px)}
+.durak-scene .stock-deck{position:absolute;left:0;top:8px;display:block;width:max-content;height:max-content;line-height:0}
+.durak-scene .stock-deck>:is(.shared-card-back,.trump-placeholder){position:relative;left:0;top:0;transform:none;width:var(--field-card-width);min-width:var(--field-card-width);height:var(--field-card-height);margin:0}
+.durak-scene .trump-token{position:absolute;right:-12px;bottom:-12px;width:24px;height:24px;z-index:2;display:block;border-radius:50%;border:1px solid #c5a04a;background:#e4bc59;color:var(--color-material-card-ink,#264e43);line-height:normal}
+.durak-scene .trump-token.is-red{color:var(--color-material-card-red,#b94f40)}
+.durak-scene .trump-token>:is(svg,.piece-art){width:100%;height:100%;display:block}
+
+/* Suit-only renderers retain their skin artwork, with no full-card whitespace. */
+.durak-scene .trump-token .shared-face.suit-only{font-size:68px}
+.durak-scene .trump-token>svg.mini-split-face{transform:scale(1.15);transform-origin:center}
