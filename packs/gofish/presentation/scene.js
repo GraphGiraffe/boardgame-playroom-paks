@@ -2,7 +2,7 @@
   'use strict';const message=(key,params={})=>({key:'gofish.'+key,params});
   const rank=number=>message(number>=11?'rank.'+number:'rank.numeric',{rank:number});
   const metadata={name:message('meta.name'),description:message('meta.description'),scoreLabel:message('meta.wins'),
-    presets:[{id:'classic',label:message('meta.classic')}],rules:[1,2,3,4].map(index=>message('rules.'+index))};
+    presets:[{id:'classic',label:message('meta.classic')}],rules:Array.from({length:5},(_,i)=>message('rules.'+(i+1)))};
   const action=command=>command.type==='draw'?message('actions.draw'):message('actions.ask',{rank:rank(command.rank),target:{kind:'player-reference',index:command.target}});
   function choice(command,projection){return command.type==='ask'?{card:projection.data.hands[projection.viewer].find(card=>card.rank===command.rank).id,targetKind:'player',targetSource:true}:{};}
   function event(value){

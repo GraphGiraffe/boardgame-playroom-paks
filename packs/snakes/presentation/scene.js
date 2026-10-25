@@ -3,7 +3,7 @@
 })(globalThis,function(){
   'use strict';const message=(key,params={})=>({key:'snakes.'+key,params});
   const metadata={name:message('meta.name'),description:message('meta.description'),scoreLabel:message('meta.wins'),
-    presets:['plus','classic'].map(id=>({id,label:message('presets.'+id)})),rules:[1,2,3,4,5,6,7,8].map(index=>message('rules.'+index))};
+    presets:['plus','classic'].map(id=>({id,label:message('presets.'+id)})),rules:Array.from({length:6},(_,i)=>message('rules.'+(i+1)))};
   const action=c=>message(c.type==='roll'?'actions.roll':'actions.move',{die:c.dieIndex+1,delta:c.delta>0?'+1':c.delta<0?'−1':'0'}),metric=()=>message('meta.position');
   function event(value){
     const p=value.params;

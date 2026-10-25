@@ -2,7 +2,7 @@
  'use strict';const message=(key,params={})=>({key:'durak.'+key,params});
  const face=card=>card.joker?message(card.color==='red'?'card.red-joker':'card.black-joker'):message('card.face',{rank:card.rank>=11?message('rank.'+card.rank):card.rank,suit:card.suit});
  const metadata={name:message('meta.name'),description:message('meta.description'),scoreLabel:message('meta.wins'),
-  presets:[{id:'classic',label:message('meta.classic')}],rules:[1,2,3,4,5,6].map(index=>message('rules.'+index))};
+  presets:[{id:'classic',label:message('meta.classic')}],rules:Array.from({length:10},(_,i)=>message('rules.'+(i+1)))};
  function action(command,projection){const d=projection.data,own=d.hands[projection.actor],card=own.find(card=>card.id===command.card);
   if(command.type==='done')return message(d.taking?'actions.end-throw':projection.playerCount===2?'actions.beaten':'actions.pass');
   if(command.type==='attack')return message(d.composing?'actions.open':'actions.attack',{card:face(card)});
