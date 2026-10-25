@@ -1,7 +1,7 @@
 (function(r,f){const a=f();if(typeof module==='object'&&module.exports)module.exports=a;r.PlayroomPackPresentation=a;})(globalThis,function(){
  const message=(key,params={})=>({key:'mage-brawl.'+key,params});
- const metadata={name:message('meta.name'),description:message('meta.description'),scoreLabel:message('meta.score-label'),presets:[{id:'classic',label:message('meta.classic'),description:message('modes.classic')}],rules:Array.from({length:9},(_,i)=>message('rules.'+(i+1))),botSettings:{strategies:['aggressor','fighter','mind','tactician','defender','random'].map(id=>({id,label:message('bot.'+id),description:message('bot.'+id+'.description')}))}};
- const action=c=>message('actions.'+c.type),event=e=>({message:message('events.'+e.type.split('.').at(-1)),kind:e.type.endsWith('revealed')?'play':'action'}),metric=()=>message('metric.survival');
+ const metadata={name:message('meta.name'),description:message('meta.description'),scoreLabel:message('meta.score-label'),presets:[{id:'classic',label:message('meta.classic'),description:message('modes.classic')}],rules:Array.from({length:13},(_,i)=>message('rules.'+(i+1))),botSettings:{strategies:['aggressor','fighter','mind','tactician','defender','random'].map(id=>({id,label:message('bot.'+id),description:message('bot.'+id+'.description')}))}};
+ const action=c=>message('actions.'+c.type),event=e=>({message:message('events.'+e.type.split('.').at(-1)),kind:e.type.endsWith('revealed')?'play':'action'}),metric=id=>message('metric.'+(id==='damage'?'damage':'survival'));
  const choice=(c,p)=>c.type==='loot'?{targetKind:'player',targetChoice:'card',target:p.data.loot.victim,cardIndex:c.index,targetCardShape:'square'}:{};
  function healthMetric(v,config={}){return {id:'health',kind:'points',value:v.health,label:message('ui.health'),placement:'score',resultUsage:false,display:{icon:'heart',capacity:config?.health||3,overlap:true}};}
  function playerMetrics(v,config={}){return [{id:'kills',kind:'points',value:v.kills,label:message('ui.kills'),placement:'score',resultUsage:false},...(v.ultimate>0?[{id:'ultimate',kind:'points',value:v.ultimate,label:message('ui.ultimate'),placement:'score',resultUsage:false,display:{icon:'crown',capacity:1}}]:[]),...((config?.lives||2)>1?[{id:'lives',kind:'points',value:Math.max(0,v.lives-1),label:message('ui.reserve-life'),placement:'score',resultUsage:false,display:{icon:'meeple',capacity:Math.max(1,(config?.lives||2)-1)}}]:[]),healthMetric(v,config)];}
@@ -40,7 +40,14 @@
       ...(outcome.death?[{id:prefix+':death',kind:'death',target}]:[]),
       ...(outcome.killers||[]).map((player,j)=>({id:prefix+':kill:'+j,kind:'kill',target:{entity:{namespace:'mage',id:String(player)}},victim:target.entity}))];
     })];
-   add({kind:'effects',phase:phase.phase,step:phase.step,effects,state:{...last,effect:null,effects,motions}},650,cues);
+   const bursts=effects.filter(e=>e.burst).map(e=>({...e,origin:e.burst.origin,cells:e.burst.cells,projectile:null,burst:null}));
+   if(bursts.length){
+    const before={...previous,outcomes:[],motions:[],effect:null};
+    add({kind:'effects',phase:phase.phase,step:phase.step,effects,state:{...before,effects}},650,cues.filter(c=>c.kind==='attack'));
+    add({kind:'effects',phase:phase.phase,step:phase.step,effects:bursts,state:{...before,effects:bursts}},650,
+     bursts.map((effect,i)=>({id:id+':burst:'+i,kind:'attack',target:{entity:{namespace:'mage',id:String(effect.actor)}},...effect})));
+    add({kind:'effects',phase:phase.phase,step:phase.step,effects:[],state:{...last,effect:null,effects:[],motions}},350,cues.filter(c=>c.kind!=='attack'));
+   }else add({kind:'effects',phase:phase.phase,step:phase.step,effects,state:{...last,effect:null,effects,motions}},650,cues);
   }
   const final=scenes.length;scenes.push({kind:'live',state:publicState});
   return {id:'mage:'+d.round+':'+JSON.stringify(raw[0]?.board||[]),initial:0,final,scenes,groups};

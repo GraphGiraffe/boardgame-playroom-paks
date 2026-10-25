@@ -1,6 +1,6 @@
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;root.PlayroomPackPresentation=api;})(globalThis,function(){
  'use strict';const message=(key,params={})=>({key:'domino.'+key,params});
- const metadata={name:message('meta.name'),description:message('meta.description'),scoreLabel:message('meta.points'),presets:['classic','quick'].map(id=>({id,label:message('presets.'+id)})),rules:[1,2,3,4,5].map(index=>message('rules.'+index))};
+ const metadata={name:message('meta.name'),description:message('meta.description'),scoreLabel:message('meta.points'),presets:['classic','quick'].map(id=>({id,label:message('presets.'+id)})),rules:Array.from({length:5},(_,i)=>message('rules.'+(i+1)))};
  function action(command,projection){if(command.type!=='play')return message('actions.'+command.type);
   const tile=projection.data.hands[projection.viewer].find(tile=>tile.id===command.card);return message(projection.data.chain.length?'actions.play-side':'actions.play',{a:tile.a,b:tile.b,side:message('side.'+command.side)});}
  function event(value){const p=value.params;

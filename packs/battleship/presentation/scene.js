@@ -8,7 +8,7 @@
   const coordinate=cell=>String.fromCharCode(65+cell%10)+(Math.floor(cell/10)+1);
   const metadata={name:message('meta.name'),description:message('meta.description'),scoreLabel:message('meta.wins'),
     presets:[{id:'classic',label:message('meta.classic')},{id:'russian',label:message('meta.russian')}],
-    rules:[1,2,3].map(n=>message('rules.'+n))};
+    rules:Array.from({length:5},(_,i)=>message('rules.'+(i+1)))};
   function action(command,projection){
     const d=projection.data;
     if(command.type==='fire')return message('actions.fire',{cell:coordinate(command.cell)});

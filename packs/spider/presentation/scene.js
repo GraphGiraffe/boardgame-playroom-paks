@@ -1,6 +1,6 @@
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;root.PlayroomPackPresentation=api;})(globalThis,function(){
 'use strict';const message=(key,params={})=>({key:'spider.'+key,params});
-const metadata={name:message('meta.name'),description:message('meta.description'),scoreLabel:message('meta.score'),presets:[{id:'classic',label:message('presets.classic')}],rules:[1,2,3].map(i=>message('rules.'+i))};
+const metadata={name:message('meta.name'),description:message('meta.description'),scoreLabel:message('meta.score'),presets:[{id:'classic',label:message('presets.classic')}],rules:Array.from({length:5},(_,i)=>message('rules.'+(i+1)))};
 const action=command=>message('actions.'+command.type),event=value=>({message:message('events.'+value.type.split('.').at(-1)),kind:value.type.endsWith('.finished')?'finish':'action',...(value.type.endsWith('.finished')?{}:{presentation:{type:value.type.split('.').at(-1),...(value.params?.card?{card:value.params.card}:{})}}),...(value.type.endsWith('.finished')?{finish:true}:{})}),metric=id=>message(id==='moves'?'meta.moves':id==='cleared'?'meta.cleared':'meta.score');
 
  // Geometry contains only public identities from the authorized projection.

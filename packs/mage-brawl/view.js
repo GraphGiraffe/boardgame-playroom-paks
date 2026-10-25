@@ -91,7 +91,7 @@
   function attackArt(fx){
    if(!fx||fx.action==='movement')return '';
    const x=fx.origin[1]*100+50,y=fx.origin[0]*100+50;
-   return (fx.projectile?[fx.projectile.end,...fx.cells.slice(1)]:fx.cells.length?fx.cells:[fx.aim||fx.origin]).map(q=>{
+   return (fx.projectile?[fx.projectile.end]:fx.cells.length?fx.cells:[fx.aim||fx.origin]).map(q=>{
     const tx=q[1]*100+50,ty=q[0]*100+50,dist=Math.hypot(tx-x,ty-y),angle=Math.atan2(ty-y,tx-x)*180/Math.PI;
     const impact=fx.projectile?.miss?'':`<circle class="mage-impact" cx="${tx}" cy="${ty}" r="29"/>`;
     if(fx.element==='water')return `<g class="mage-attack-water"><path class="mage-jet" pathLength="1" d="M${x} ${y}Q${(x+tx)/2+12} ${(y+ty)/2-12} ${tx} ${ty}"/><path class="mage-jet mage-jet-light" pathLength="1" d="M${x} ${y}Q${(x+tx)/2-7} ${(y+ty)/2+7} ${tx} ${ty}"/>${impact}</g>`;

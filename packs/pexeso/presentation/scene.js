@@ -3,7 +3,7 @@
 })(globalThis,function(){
   'use strict';const message=(key,params={})=>({key:'pexeso.'+key,params});
   const metadata={name:message('meta.name'),description:message('meta.description'),scoreLabel:message('meta.wins'),
-    presets:['easy','medium','hard'].map(id=>({id,label:message('presets.'+id)})),rules:[1,2,3].map(index=>message('rules.'+index))};
+    presets:['easy','medium','hard'].map(id=>({id,label:message('presets.'+id)})),rules:Array.from({length:4},(_,i)=>message('rules.'+(i+1)))};
   const action=command=>message('actions.flip',{index:command.index+1});
   function event(value){
     const name=value.type.slice(7);

@@ -1,7 +1,7 @@
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;root.PlayroomPackPresentation=api;})(globalThis,function(){
   'use strict';const message=(key,params={})=>({key:'oldmaid.'+key,params});
   const metadata={name:message('meta.name'),description:message('meta.description'),scoreLabel:message('meta.score'),
-    presets:[{id:'classic',label:message('meta.classic')}],rules:[1,2,3,4].map(index=>message('rules.'+index))};
+    presets:[{id:'classic',label:message('meta.classic')}],rules:Array.from({length:4},(_,i)=>message('rules.'+(i+1)))};
   const action=command=>message('actions.draw',{index:command.cardIndex+1,target:{kind:'player-reference',index:command.target}});
   const choice=()=>({targetKind:'player',targetChoice:'card'}),metric=()=>message('meta.points');
   function event(value){

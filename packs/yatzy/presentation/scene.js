@@ -6,7 +6,7 @@
   'use strict';
   const message=(key,params={})=>({key:'yatzy.'+key,params});
   const metadata={name:message('meta.name'),description:message('meta.description'),scoreLabel:message('meta.wins'),
-    presets:[{id:'classic',label:message('meta.classic')}],rules:[1,2,3,4].map(n=>message('rules.'+n))};
+    presets:[{id:'classic',label:message('meta.classic')}],rules:Array.from({length:6},(_,i)=>message('rules.'+(i+1)))};
   function action(command,projection){
     if(command.type==='roll')return message(projection?.data.rolls?'actions.reroll':'actions.roll');
     if(command.type==='hold')return message('actions.hold',{die:command.index+1});

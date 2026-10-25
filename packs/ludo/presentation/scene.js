@@ -3,7 +3,7 @@
  if(typeof module==='object'&&module.exports)module.exports=api;root.PlayroomPackPresentation=api;})(globalThis,function(B){
  'use strict';const message=(key,params={})=>({key:'ludo.'+key,params}),player=index=>({kind:'player-reference',index});
  const metadata={name:message('meta.name'),description:message('meta.description'),scoreLabel:message('meta.wins'),
-  presets:['classic','teams'].map(id=>({id,label:message('presets.'+id)})),rules:[1,2,3,4,5].map(index=>message('rules.'+index))};
+  presets:['classic','teams'].map(id=>({id,label:message('presets.'+id)})),rules:Array.from({length:7},(_,i)=>message('rules.'+(i+1)))};
  function action(command,projection){if(command.type==='roll')return message('actions.roll');
   const to=B.destination(projection,command).to;return message('actions.move',{dieIndex:command.dieIndex+1,die:projection.data.dice[command.dieIndex],pawn:command.pawn+1,to:to===57?message('location.home'):to});}
  function event(value){const p=value.params;
