@@ -118,9 +118,8 @@
  function observe(s){return {situations:s.data.uno.situations};}
  function declarationTiming(s,actor,settings,memory){
   // A stable episode decision: polling or another player's reaction must not reroll it.
-  if(!settings)return {skip:false,delay:null};
   let hash=2166136261;for(const ch of `${actor}:${memory.situations[actor].episode}:${s.data.hands[actor].map(c=>c.id).join(',')}`)hash=Math.imul(hash^ch.charCodeAt(0),16777619)>>>0;
-  const chance=hash/4294967296,[forget,late]=({easy:[.25,.70],medium:[.10,.45],hard:[.01,.08]})[settings.difficulty||'medium'];
+  const chance=hash/4294967296,[forget,late]=({easy:[.25,.70],medium:[.10,.45],hard:[.01,.08]})[settings?.difficulty||'medium'];
   return {skip:chance<forget,delay:chance<late?1200+hash%1401:0};
  }
  function botReactionDelay(s,actor,settings,memory){return declarationTiming(s,actor,settings,memory).delay;}
