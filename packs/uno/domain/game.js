@@ -105,7 +105,7 @@
    if(d.ending.mode==='winner'||s.playerCount-d.ending.groups.flat().length<=1){s.status='finished';s.winners=Ending.winners(d.ending);}else if(Ending.done(d.ending,s.turn))s.turn=nextPlayer(s,actor);}syncPending(s);
  }
  function reduce(position,actor,action){const next=JSON.parse(JSON.stringify(position)),events=[];next.revision=(position.revision??0)+1;perform(next,actor,action,events);return {position:next,events,turnEnded:action.type==='play'||action.type==='pass'};}
- function project(position,viewer){const d=JSON.parse(JSON.stringify(position.data));d.hands=d.hands.map((hand,player)=>position.openHands||player===viewer?hand:hand.map(()=>({hidden:true})));d.drawPile=d.drawPile.map(()=>({hidden:true}));delete d.uno.pending;delete d.uno.situations;if(viewer!==position.turn)d.drawn=d.drawn===null?null:true;return d;}
+ function project(position,viewer){const d=JSON.parse(JSON.stringify(position.data));d.hands=d.hands.map((hand,player)=>position.openHands||player===viewer?hand:hand.map(()=>({hidden:true})));d.drawPile=d.drawPile.map(()=>({hidden:true}));d.uno.declarationOpen=d.uno.situations.map(w=>w.open&&!w.settled&&!w.called);delete d.uno.pending;delete d.uno.situations;if(viewer!==position.turn)d.drawn=d.drawn===null?null:true;return d;}
  function bot(s,actor,actions,memory,context={}){
       const d = s.data, plays = actions.filter(a => a.type === 'play');
       if (!plays.length) return actions[0];
@@ -118,9 +118,8 @@
  function observe(s){return {situations:s.data.uno.situations};}
  function declarationTiming(s,actor,settings,memory){
   // A stable episode decision: polling or another player's reaction must not reroll it.
-  if(!settings)return {skip:false,delay:null};
   let hash=2166136261;for(const ch of `${actor}:${memory.situations[actor].episode}:${s.data.hands[actor].map(c=>c.id).join(',')}`)hash=Math.imul(hash^ch.charCodeAt(0),16777619)>>>0;
-  const chance=hash/4294967296,[forget,late]=({easy:[.25,.70],medium:[.10,.45],hard:[.01,.08]})[settings.difficulty||'medium'];
+  const chance=hash/4294967296,[forget,late]=({easy:[.25,.70],medium:[.10,.45],hard:[.01,.08]})[settings?.difficulty||'medium'];
   return {skip:chance<forget,delay:chance<late?1200+hash%1401:0};
  }
  function botReactionDelay(s,actor,settings,memory){return declarationTiming(s,actor,settings,memory).delay;}
