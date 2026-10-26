@@ -19,3 +19,10 @@
   const cover = () => C.cover('<g transform="translate(76 16) rotate(-7 74 74)"><rect x="2" y="6" width="148" height="148" rx="16" fill="#bcab83"/><rect width="148" height="148" rx="16" fill="#fff9e6"/><path d="M49 9v130M98 9v130M9 49h130M9 98h130" stroke="#c9bb93" stroke-width="3"/><path d="m15 14 21 22m0-22L15 36m99 80 21 22m0-22-21 22" stroke="#c8775c" stroke-width="7" stroke-linecap="round"/><circle cx="74" cy="74" r="16" fill="none" stroke="#4e7966" stroke-width="7"/></g>');
   V.register('tictactoe', render, cover, {surfaces:{table:render, player:render}});
 })(globalThis);
+
+(function(root){
+ const source=typeof require==='function'&&!root.PlayroomPack;
+ const tutorial=source?require('./presentation/tutorial.js'):root.PlayroomPackTutorial;
+ const tr=root.PlayroomViews.helpers.translator(source?{ru:require('./locales/ru/game.json')}:root.PlayroomPackResources.locales);
+ root.PlayroomViews.registerTutorial?.("tictactoe",tutorial(tr));
+})(globalThis);

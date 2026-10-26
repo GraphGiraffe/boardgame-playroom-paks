@@ -9,7 +9,7 @@
 Эталоны: **tictactoe** (простое поле/полная модель), **yatzy** (публичные кубики/таблица/подтверждение), **gofish** (скрытая рука и публичные события), **private-counter** в examples (не входит в коллекцию).
 
 ```json
-{"sourceModules":{"rules":["domain/game.js","presentation/scene.js"],"view":["presentation/scene.js"],"locales":{"ru":["locales/ru/game.json"]}}}
+{"sourceModules":{"rules":["domain/game.js","presentation/scene.js"],"view":["presentation/scene.js","presentation/tutorial.js"],"locales":{"ru":["locales/ru/game.json"]}}}
 ```
 
 GameModel Definition contractVersion=1: create/validate/actions/reduce/project/result/bot, дополнительные start/score/observe/reactions при необходимости. actions возвращают command + visibility; reduce возвращает position/events/turnEnded и при объявленном цикле roundEnded. Actor и viewer различать. RNG хранить в состоянии и передавать явно; бот видит разрешённую проекцию/память, не неизвестные карты.
@@ -126,3 +126,11 @@ PresentationPlan. Поля правил renderer недоступны.
 ## Правила для новых игроков
 
 Следуйте [структуре и проверке книг правил](PLAYER-RULES.md): цель → подготовка → ход → особые механики → завершение. Один локализованный элемент `rules` содержит заголовок первой строкой и абзацы следующими строками. Пояснения настроек и текущие значения приложение выводит отдельно в конце. Короткая памятка карты не заменяет полные правила. Проверять объяснение эффекта по domain, а не только по старой формулировке.
+
+## Сложность ботов
+
+Новые настройки участника: `botSettings:{strategy,difficulty}`, уровни `easy`, `medium` (по умолчанию), `hard`. Стратегия остаётся независимым выбором, если пак её предоставляет. Пятый аргумент `bot(projection,actor,commands,memory,context)` содержит `difficulty`, `depth`, `errorRate` и воспроизводимый `random()`. Сложность меняет оценку решений и шанс ошибки; сложный бот не безошибочен. Память Пексесо использует вероятности 35/18/6%, без периодической зависимости от номера хода.
+
+Runtime применяет альтернативное решение того же типа; не дублируйте эту вероятность в паке. Для собственной модели ошибки объявите `botHandlesDifficulty:true`. `botMistakes` ограничивает допустимые альтернативы без доступа к закрытому состоянию. Точные контракты — SDK приложения. Для старых runtime используйте значения по умолчанию аргумента context. Автоматические действия человека не должны получать ошибки бота.
+
+Сценарии обучения описываются чистой фабрикой в `presentation/tutorial.js` с внедрённым переводчиком. `view.js` регистрирует её результат после renderer. Модуль включается только в sourceModules.view; он не меняет модель, не обращается к DOM/storage/сети. [Границы приложения](https://github.com/GraphGiraffe/boardgame-playroom/blob/main/docs/DEVELOPER-ARCHITECTURE.md).

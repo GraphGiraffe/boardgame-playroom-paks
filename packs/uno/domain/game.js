@@ -106,18 +106,26 @@
  }
  function reduce(position,actor,action){const next=JSON.parse(JSON.stringify(position)),events=[];next.revision=(position.revision??0)+1;perform(next,actor,action,events);return {position:next,events,turnEnded:action.type==='play'||action.type==='pass'};}
  function project(position,viewer){const d=JSON.parse(JSON.stringify(position.data));d.hands=d.hands.map((hand,player)=>position.openHands||player===viewer?hand:hand.map(()=>({hidden:true})));d.drawPile=d.drawPile.map(()=>({hidden:true}));delete d.uno.pending;delete d.uno.situations;if(viewer!==position.turn)d.drawn=d.drawn===null?null:true;return d;}
- function bot(s,actor,actions){
+ function bot(s,actor,actions,memory,context={}){
       const d = s.data, plays = actions.filter(a => a.type === 'play');
       if (!plays.length) return actions[0];
       const totals = Object.fromEntries(colors.map(c => [c, d.hands[actor].filter(card => card.color === c).length]));
       return plays.sort((a, b) => {
         const ca = d.hands[actor].find(c => c.id === a.card), cb = d.hands[actor].find(c => c.id === b.card);
-        return (cb.color !== 'wild') - (ca.color !== 'wild') || (totals[b.color] || 0) - (totals[a.color] || 0);
+        const threat=d.hands.some((h,i)=>i!==actor&&h.length<=2),power=c=>['skip','reverse','+2','+4'].includes(c.value)?1:0;return (context.depth===3&&threat?power(cb)-power(ca):0)||(cb.color !== 'wild')-(ca.color !== 'wild')||(context.depth===1?0:(totals[b.color]||0)-(totals[a.color]||0));
       })[0];
     }
  function observe(s){return {situations:s.data.uno.situations};}
- function botReaction(s,actor,actions,memory){const u=s.data.uno;if(s.data.hands[actor].length===1&&!u.declared[actor]&&!u.calls.includes(actor))return actions.find(a=>a.type==='declare-uno');const target=memory.situations.findIndex((w,i)=>i!==actor&&w.open&&!w.settled&&!u.declared[i]);return target<0?null:actions.find(a=>a.type==='accuse-uno'&&a.target===target);}
+ function declarationTiming(s,actor,settings,memory){
+  // A stable episode decision: polling or another player's reaction must not reroll it.
+  if(!settings)return {skip:false,delay:null};
+  let hash=2166136261;for(const ch of `${actor}:${memory.situations[actor].episode}:${s.data.hands[actor].map(c=>c.id).join(',')}`)hash=Math.imul(hash^ch.charCodeAt(0),16777619)>>>0;
+  const chance=hash/4294967296,[forget,late]=({easy:[.25,.70],medium:[.10,.45],hard:[.01,.08]})[settings.difficulty||'medium'];
+  return {skip:chance<forget,delay:chance<late?1200+hash%1401:0};
+ }
+ function botReactionDelay(s,actor,settings,memory){return declarationTiming(s,actor,settings,memory).delay;}
+ function botReaction(s,actor,actions,memory,settings){const u=s.data.uno;if(s.data.hands[actor].length===1&&!u.declared[actor]&&!u.calls.includes(actor)&&!declarationTiming(s,actor,settings,memory).skip)return actions.find(a=>a.type==='declare-uno');const target=memory.situations.findIndex((w,i)=>i!==actor&&w.open&&!w.settled&&!u.declared[i]);return target<0?null:actions.find(a=>a.type==='accuse-uno'&&a.target===target);}
  const score=s=>s.data.points;
  const result=s=>({winners:s.winners,...Ending.result(s.data.ending),places:Ending.places(s.data.ending,s.data.points),metrics:[{id:'points',values:s.data.points},{id:'hand-count',values:s.data.hands.map(hand=>hand.length)}]});
- return Object.freeze({contractVersion:1,id:'uno',minPlayers:2,maxPlayers:6,create,validate,actions,reactions,reactionWindows,reactionControl,reduce,project,bot,botReaction,observe,score,result});
+ return Object.freeze({contractVersion:1,id:'uno',minPlayers:2,maxPlayers:6,create,validate,actions,reactions,reactionWindows,reactionControl,reduce,project,bot,botReaction,botReactionDelay,observe,score,result});
 });

@@ -35,3 +35,10 @@
   };
   V.register('durak',render,()=>coverComponents.cover(`<g transform="translate(72 27) rotate(-17 40 57)"><g data-cover-card="durak-style" transform="scale(0.9875 0.965517)" font-family="system-ui,sans-serif" font-weight="700"><rect y="5" width="80" height="116" rx="12" fill="#c5b9a5"/><rect width="80" height="116" rx="12" fill="#fffbed"/><text x="13" y="30" font-size="24" fill="#df785e">6</text><text x="40" y="83" text-anchor="middle" font-size="67" fill="#df785e">♥</text></g></g><g transform="translate(137 19) rotate(15 40 58)"><g data-cover-card="durak-style" transform="scale(1 1)" font-family="system-ui,sans-serif" font-weight="700"><rect y="5" width="80" height="116" rx="12" fill="#c5b9a5"/><rect width="80" height="116" rx="12" fill="#fffbed"/><text x="13" y="30" font-size="24" fill="#426553">6</text><text x="40" y="83" text-anchor="middle" font-size="67" fill="#426553">♠</text></g></g><g transform="translate(212 121)"><circle r="18" fill="#e4bc59"/><text y="7" text-anchor="middle" font-size="23" fill="#426553">♠</text></g>`),{reveal:value=>card(value.card,'disabled'),surfaces:{table:(s,v,a,ui)=>render(s,v,a,{...ui,surface:'table'}),player:(s,v,a,ui)=>render(s,v,a,{...ui,surface:'player'})}});
 })();
+
+(function(root){
+ const source=typeof require==='function'&&!root.PlayroomPack;
+ const tutorial=source?require('./presentation/tutorial.js'):root.PlayroomPackTutorial;
+ const tr=root.PlayroomViews.helpers.translator(source?{ru:require('./locales/ru/game.json')}:root.PlayroomPackResources.locales);
+ root.PlayroomViews.registerTutorial?.("durak",tutorial(tr));
+})(globalThis);

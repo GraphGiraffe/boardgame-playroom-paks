@@ -1,6 +1,6 @@
 {
   "id": "spider",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "name": "Паук",
   "category": "solitaire",
   "estimatedDuration": "10–30 мин",
@@ -53,7 +53,8 @@
       "presentation/scene.js"
     ],
     "view": [
-      "presentation/scene.js"
+      "presentation/scene.js",
+      "presentation/tutorial.js"
     ],
     "locales": {
       "ru": [

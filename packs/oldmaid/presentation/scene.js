@@ -22,7 +22,7 @@
  function eventScenes(p){
   const events=p.events.filter(e=>e.revision===p.revision),pairs=events.filter(e=>e.type==='oldmaid.paired');
   if(!pairs.length)return [];
-  const data=JSON.parse(JSON.stringify(p.data));
+  const data={...p.data,hands:p.data.hands.map(hand=>[...hand]),discard:[...p.data.discard],outOrder:[...p.data.outOrder],points:[...p.data.points]};
   for(const e of pairs){
    const ids=new Set(e.params.cards.map(c=>c.id));
    data.hands[e.actor].push(...e.params.cards.map(c=>p.viewer===e.actor||p.openHands?c:{hidden:true}));
@@ -34,12 +34,12 @@
    if(e.type==='oldmaid.paired'){
     const ids=new Set(e.params.cards.map(c=>c.id));
     if(p.viewer===e.actor||p.openHands)data.hands[e.actor]=data.hands[e.actor].filter(c=>!ids.has(c.id));
-    else data.hands[e.actor].splice(-e.params.cards.length);
-    data.discard.push(...e.params.cards);
+    else data.hands[e.actor]=data.hands[e.actor].slice(0,-e.params.cards.length);
+    data.discard=[...data.discard,...e.params.cards];
     if(!data.hands[e.actor].length){data.outOrder=[...p.data.outOrder];data.points=[...p.data.points];}
    }
    if(['oldmaid.drawn','oldmaid.paired'].includes(e.type)){
-    const projection={...p,actions:[],data:JSON.parse(JSON.stringify(data))};
+    const projection={...p,actions:[],data};
     const checkpoint={...scene(projection),...sceneLayout(projection)};
     for(const person of checkpoint.players)if(data.hands[person.player].length)person.finishPlace=0;
     frames.push({eventId:e.id,scene:checkpoint});

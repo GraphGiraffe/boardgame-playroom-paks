@@ -49,11 +49,17 @@
       data:{board, marks:[...position.data.marks]}}, events};
   }
   function project(position) { return {board:[...position.data.board], marks:[...position.data.marks]}; }
-  function bot(projection, actor, choices) {
+  function bot(projection, actor, choices, memory, context={}) {
     const winningMove = owner => choices.find(action => {
       const board = [...projection.data.board]; board[action.cell] = owner; return wins(board, owner);
     });
-    return winningMove(actor) || winningMove(1 - actor) || choices.find(action => action.cell === 4) || choices[0];
+    const depth=context.depth??2,random=context.random||(()=>0);
+    if(depth===3){
+      const cache=new Map();
+      const search=(board,turn)=>{const key=board.map(v=>v===null?'.':v).join('')+turn;if(cache.has(key))return cache.get(key);if(wins(board,actor))return 1;if(wins(board,1-actor))return -1;const cells=board.flatMap((v,i)=>v===null?[i]:[]);if(!cells.length)return 0;const scores=cells.map(i=>{const next=[...board];next[i]=turn;return search(next,1-turn);});const value=turn===actor?Math.max(...scores):Math.min(...scores);cache.set(key,value);return value;};
+      const scored=choices.map(action=>{const board=[...projection.data.board];board[action.cell]=actor;return {action,score:search(board,1-actor)};}),best=Math.max(...scored.map(v=>v.score)),pool=scored.filter(v=>v.score===best);return pool[Math.floor(random()*pool.length)].action;
+    }
+    return winningMove(actor)||winningMove(1-actor)||(depth>1?choices.find(action=>action.cell===4):null)||choices[Math.floor(random()*choices.length)];
   }
   function result(position) {
     const values = [0,1].map(owner => position.winners.includes(owner) ? 1 : 0);

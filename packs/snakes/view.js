@@ -52,3 +52,10 @@
   };
   V.register('snakes',render,()=>coverComponents.cover(`<g transform="translate(58 24) rotate(-9 88 66)"><rect y="6" width="177" height="129" rx="13" fill="#c2bca0"/><rect width="177" height="129" rx="13" fill="#fffae5"/>${Array.from({length:20},(_,i)=>`<rect x="${9+i%5*32}" y="${9+Math.floor(i/5)*28}" width="32" height="28" rx="1" fill="${(i%5+Math.floor(i/5))%2?'#d6ddad':'#ede8bd'}"/>`).join('')}<g stroke="#b79a55" stroke-width="4" stroke-linecap="round"><path d="m40 106 52-78m-25 89 51-78"/><path d="m48 94 28 9m-19-24 29 9m-19-24 29 9m-19-24 28 9"/></g><path d="M133 22c-36 9 26 32-4 45s-5 30-13 40" fill="none" stroke="#d8886b" stroke-width="8" stroke-linecap="round"/><circle cx="133" cy="22" r="6" fill="#d8886b"/><circle cx="134" cy="20" r="1" fill="#fff8dd"/><circle cx="26" cy="96" r="10" fill="#3f7659"/><circle cx="147" cy="41" r="10" fill="#d9af4d"/></g><g transform="translate(211 118) rotate(10)"><rect y="4" width="36" height="36" rx="9" fill="#c2b69a"/><rect width="36" height="36" rx="9" fill="#fff9e6"/>${[[11,11],[25,11],[18,18],[11,25],[25,25]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="3" fill="#59775c"/>`).join('')}</g>`),{surfaces:{table:(s,v,a,ui)=>{const view=render(s,v,a,{...ui,surface:'table'});return view;},player:(s,v,a,ui)=>render(s,v,a,{...ui,surface:'player'})}});
 })();
+
+(function(root){
+ const source=typeof require==='function'&&!root.PlayroomPack;
+ const tutorial=source?require('./presentation/tutorial.js'):root.PlayroomPackTutorial;
+ const tr=root.PlayroomViews.helpers.translator(source?{ru:require('./locales/ru/game.json')}:root.PlayroomPackResources.locales);
+ root.PlayroomViews.registerTutorial?.("snakes",tutorial(tr));
+})(globalThis);

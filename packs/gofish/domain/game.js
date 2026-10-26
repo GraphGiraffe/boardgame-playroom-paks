@@ -48,7 +48,7 @@
   function actions(position,actor){
     if(position.status!=='playing'||actor!==position.turn)return [];
     const d=position.data,ranks=[...new Set(d.hands[actor].map(card=>card.rank))],targets=d.hands.flatMap((hand,player)=>player!==actor&&hand.length?[player]:[]);
-    const commands=!ranks.length||!targets.length?(d.drawPile.length?[{type:'draw'}]:[]):ranks.flatMap(rank=>targets.map(target=>({type:'ask',rank,target})));
+    const commands=!ranks.length||!targets.length?(d.drawPile.length?[{type:'draw'}]:[]):d.hands[actor].flatMap(card=>targets.map(target=>({type:'ask',rank:card.rank,target,cardId:card.id})));
     // Even the set of available ranks reveals the actor's private hand.
     return commands.map(command=>({command,visibility:'private'}));
   }
@@ -60,7 +60,7 @@
     }
     d.attempts[actor]++;
     const given=d.hands[action.target].filter(card=>card.rank===action.rank);
-    events.push(fact('asked',actor,{target:action.target,rank:action.rank,card:{...d.hands[actor].find(card=>card.rank===action.rank)}}));
+    events.push(fact('asked',actor,{target:action.target,rank:action.rank,card:{...d.hands[actor].find(card=>card.id===action.cardId)}}));
     if(given.length){
       d.hands[action.target]=d.hands[action.target].filter(card=>card.rank!==action.rank);d.hands[actor].push(...given);
       events.push(fact('given',action.target,{target:actor,count:given.length}));book(next,actor,events);
@@ -79,7 +79,11 @@
     d.hands=d.hands.map((hand,player)=>position.openHands||player===viewer?hand:hand.map(()=>({hidden:true})));
     d.drawPile=d.drawPile.map(()=>({hidden:true}));return d;
   }
-  const bot=(projection,actor,commands)=>commands[projection.data.attempts[actor]%commands.length];
+  const bot=(projection,actor,commands,memory,context={})=>{
+    const choices=commands.filter((c,i)=>commands.findIndex(other=>other.type===c.type&&other.rank===c.rank&&other.target===c.target)===i),d=projection.data;
+    const score=c=>c.type!=='ask'?0:(context.depth===1?0:d.hands[actor].filter(card=>card.rank===c.rank).length)+(context.depth===3?d.hands[c.target].length/10:0)+d.hands[c.target].filter(card=>!card.hidden&&card.rank===c.rank).length*10;
+    const best=Math.max(...choices.map(score)),pool=choices.filter(c=>score(c)===best);return pool[Math.floor((context.random?.()??0)*pool.length)];
+  };
   function result(position){const values=position.data.books.map(row=>row.length);return {winners:position.winners,
     places:values.map(value=>1+new Set(values.filter(other=>other>value)).size),metrics:[{id:'books',values}]};}
   return Object.freeze({contractVersion:1,rounds:true,id:'gofish',minPlayers:2,maxPlayers:6,create,validate,actions,reduce,project,bot,result});

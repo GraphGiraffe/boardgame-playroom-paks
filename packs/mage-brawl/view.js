@@ -103,11 +103,14 @@
   function board(shown,interactive=!ui.replay){
    const inset=shown.phase==='shrink'?Math.max(0,shown.inset-1):shown.inset||0,columns=d.size-2*inset;
    const occupants=new Map(shown.players.flatMap((p,i)=>p.pos?[[key(p.pos),i]]:[])),fx=shown.effect,spellEffects=shown.effects||(fx?[fx]:[]);
+   const highlights=[];
    const cells=shown.board.map((tile,index)=>{
     const pos=[Math.floor(index/d.size),index%d.size];if(pos.some(v=>v<inset||v>=d.size-inset))return '';
     const basePlayer=d.startingBases?.findIndex(q=>key(q)===key(pos))??-1,id=occupants.get(key(pos)),respawn=interactive&&actions.find(c=>c.type==='respawn'&&key(c.pos)===key(pos)),label=text('tile.'+(tile||'void')),revealed=shown.plans?.[id];
     const planLabel=revealed?text('ui.'+revealed.action)+(shown.phase==='reveal-actions'?'':' · '+text('element.'+revealed.element)+' · '+text('ui.direction.'+revealed.direction)):'';
-    return `<button type="button" role="gridcell" style="--mage-base-color:${basePlayer>=0?H.playerColor(basePlayer):'#b6b99a'};--mage-selected:${colors[marks.has(key(pos))?element:first?.element]||colors.air}" class="mage-cell tile-${tile||'void'}${respawn?' is-playable':''}${interactive&&(marks.has(key(pos))||fixedMarks.has(key(pos)))?' mage-preview':''}${shown.shrink&&pos.some(v=>v===shown.inset||v===d.size-shown.inset-1)?' mage-risk':''}${fx?.actor===id?' mage-acting':''}" ${respawn?H.actionAttr(respawn):'disabled'} data-tooltip="${esc(text('tile-help.'+(tile||'void')))}" title="${esc(label)}" aria-label="${esc(label)}${id!==undefined?' · '+esc(s.players[id].name)+(planLabel?' · '+esc(planLabel):''):''}">${terrainArt(tile)}</button>`;
+    const selected=interactive&&(marks.has(key(pos))||fixedMarks.has(key(pos))),acting=id!==undefined&&fx?.actor===id;
+    highlights.push(`<span class="mage-cell-highlight${selected?' is-preview':''}${respawn?' is-respawn':''}${acting?' is-acting':''}" style="--mage-selected:${colors[marks.has(key(pos))?element:first?.element]||colors.air}"></span>`);
+    return `<button type="button" role="gridcell" style="--mage-base-color:${basePlayer>=0?H.playerColor(basePlayer):'#b6b99a'};--mage-selected:${colors[marks.has(key(pos))?element:first?.element]||colors.air}" class="mage-cell tile-${tile||'void'}${respawn?' is-playable':''}${interactive&&(marks.has(key(pos))||fixedMarks.has(key(pos)))?' mage-preview':''}${shown.shrink&&pos.some(v=>v===shown.inset||v===d.size-shown.inset-1)?' mage-risk':''}${acting?' mage-acting':''}" ${respawn?H.actionAttr(respawn):'disabled'} data-tooltip="${esc(text('tile-help.'+(tile||'void')))}" title="${esc(label)}" aria-label="${esc(label)}${id!==undefined?' · '+esc(s.players[id].name)+(planLabel?' · '+esc(planLabel):''):''}">${terrainArt(tile)}</button>`;
    }).join('');
    const pieces=shown.players.map((p,id)=>{
     const moves=shown.motions?.filter(m=>m.player===id)||[],motion=moves.at(-1),out=shown.outcomes?.find(o=>o.player===id),pos=p.pos||out?.at||motion?.to;
@@ -118,7 +121,7 @@
    }).join('');
    const trails=(shown.motions||[]).map(m=>`<path class="mage-trail" pathLength="1" style="color:${colors[m.element]}" d="M${m.from[1]*100+50} ${m.from[0]*100+50}L${m.to[1]*100+50} ${m.to[0]*100+50}"/>`).join('');
    const effects=`<svg class="mage-effects mage-routes" viewBox="${inset*100} ${inset*100} ${columns*100} ${columns*100}" aria-hidden="true">${trails}</svg><svg class="mage-effects mage-attacks" viewBox="${inset*100} ${inset*100} ${columns*100} ${columns*100}" aria-hidden="true" style="color:${colors[fx?.element]||'#fffbed'}">${spellEffects.map(f=>`<g style="color:${colors[f.element]}">${attackArt(f)}</g>`).join('')}</svg>`;
-   return `<div class="mage-grid" role="grid" aria-label="${esc(text('ui.arena'))}" style="--mage-columns:${columns};--mage-selected:${colors[element]||colors.air}">${cells}${effects}${interactive&&double?planGhosts(inset,columns):''}<div class="mage-pieces">${pieces}</div></div>`;
+   return `<div class="mage-grid" role="grid" aria-label="${esc(text('ui.arena'))}" style="--mage-columns:${columns};--mage-selected:${colors[element]||colors.air}">${cells}${effects}${interactive&&double?planGhosts(inset,columns):''}<div class="mage-pieces">${pieces}</div><div class="mage-highlights" aria-hidden="true">${highlights.join('')}</div></div>`;
   }
   function planGhosts(inset,columns){
    if(!mine?.pos||d.phase!=='planning'||ui.replay)return '';
@@ -144,19 +147,26 @@
   const panelMarkup=(shown,live=false)=>playerContent(shown,live).map((content,i)=>H.playerPanel({...s,turn:live&&d.phase!=='planning'?s.turn:-1},i,viewer,content,live?actions:[]).replace('<article ',`<article data-public-feedback="${feedback(shown,i)}" `)).join('');
   const plan=s.scene.plan;
   const frames=plan.scenes.slice(0,plan.final).map(scene=>{
-   const shown=scene.state,label=scene.kind==='start'?text('phase.start'):(double?text('ui.action-number',{number:scene.step+1})+' · ':'')+text('phase.'+scene.phase);
+   const progress=globalThis.PlayroomMessages.text('progress.round',{number:Math.max(1,s.scene.round.number-1)}),shown=scene.state,label=scene.kind==='start'?text('phase.start'):(double?text('ui.action-number',{number:scene.step+1})+' · ':'')+text('phase.'+scene.phase);
    if(scene.kind==='reveal'){
     const reveals=scene.effects.map(f=>`<div class="mage-phase-player"><strong style="color:${H.playerColor(f.actor)}">${esc(s.players[f.actor].name)}</strong><div class="mage-phase-card" style="--mage-direction:${f.direction*90}deg">${card(f.element,f.action)}${cardDirection(f.element,f.action,f.direction)}</div><span>${esc(text('ui.'+f.action))}</span></div>`).join('');
-    return {label,markup:board(shown,false)+`<div class="mage-phase-reveal" role="status"><strong>${esc(label)}</strong><div class="mage-phase-cards">${reveals}</div></div>`,players:panelMarkup(shown),pack:'mage-brawl',sound:'mage.reveal'};
+    return {progress,label,markup:board(shown,false)+`<div class="mage-phase-reveal" role="status"><strong>${esc(label)}</strong><div class="mage-phase-cards">${reveals}</div></div>`,players:panelMarkup(shown),pack:'mage-brawl',sound:'mage.reveal'};
    }
    const effects=scene.effects||[];
-   return {label,markup:board(shown,false),players:panelMarkup(shown),pack:'mage-brawl',sound:effects.length?(effects[0].action==='movement'?(effects[0].element==='earth'?'mage.shield':'mage.move'):'mage.'+effects[0].element):scene.phase==='shrink'?'mage.fall':''};
+   return {progress,label,markup:board(shown,false),players:panelMarkup(shown),pack:'mage-brawl',sound:effects.length?(effects[0].action==='movement'?(effects[0].element==='earth'?'mage.shield':'mage.move'):'mage.'+effects[0].element):scene.phase==='shrink'?'mage.fall':''};
   });
-  const field=root.PlayroomGameComponents.publicFrames({plan,frames,live:board(d),livePlayers:panelMarkup(d,true),controls:false,label:text(d.phase==='loot'?'ui.loot':d.phase==='respawn'?'ui.respawn':'ui.plan'),playLabel:text('ui.replay'),skipLabel:text('ui.live'),speedLabel:text('ui.speed')});
+  const field=root.PlayroomGameComponents.publicFrames({plan,frames,live:board(d),livePlayers:panelMarkup(d,true),liveProgress:globalThis.PlayroomMessages.text('progress.round',{number:s.scene.round.number}),controls:false,label:text(d.phase==='loot'?'ui.loot':d.phase==='respawn'?'ui.respawn':'ui.plan'),playLabel:text('ui.replay'),skipLabel:text('ui.live'),speedLabel:text('ui.speed')});
   const players=playerContent(d.frames?.[0]||d,!d.frames?.length);
   return {api:3,family:'board',showTurn:false,className:'mage-scene'+(frames.length?' is-public-playback':''),fieldSizing:'scroll',layout:{focus:'field',wideHand:true},playerContent:players,elements:{auxiliary:orderHint(),field:`<div class="mage-field">${field}</div>`,hand,actions:ui.replay||own.length||d.loot?.player===viewer?'':`<div class="mage-controls">${controls}</div>`}};
  }
  const coverAsset=root.PlayroomPack?.asset('assets/covers/arena-v8.webp');
  const cover=()=>C.cover(`<image x="6" y="2" width="288" height="172" preserveAspectRatio="xMidYMid meet" href="${esc(coverAsset||'')}"/>`);
  V.register('mage-brawl',render,cover,{surfaces:{table:render,player:render}});
+})(globalThis);
+
+(function(root){
+ const source=typeof require==='function'&&!root.PlayroomPack;
+ const tutorial=source?require('./presentation/tutorial.js'):root.PlayroomPackTutorial;
+ const tr=root.PlayroomViews.helpers.translator(source?{ru:require('./locales/ru/game.json')}:root.PlayroomPackResources.locales);
+ root.PlayroomViews.registerTutorial?.("mage-brawl",tutorial(tr));
 })(globalThis);

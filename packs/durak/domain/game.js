@@ -55,8 +55,8 @@ const d=s.data,actions=[],ranks=new Set(d.table.map(p=>p.attack.rank));
  }
  function reduce(position,actor,action){const next=JSON.parse(JSON.stringify(position)),events=[];perform(next,actor,action,events);return {position:next,events,turnEnded:events.some(event=>['durak.taken','durak.discarded'].includes(event.type))};}
  function project(position,viewer){const d=JSON.parse(JSON.stringify(position.data));d.hands=d.hands.map((hand,player)=>position.openHands||player===viewer?hand:hand.map(()=>({hidden:true})));d.drawPile=d.drawPile.map(()=>({hidden:true}));return d;}
- function bot(s,actor,actions){
-const d=s.data;if(d.composing&&actions.some(a=>a.type==='confirm'))return actions.find(a=>a.type==='confirm');const exchange=actions.find(a=>a.type==='exchange');if(exchange)return exchange;const cards=actions.filter(a=>a.card);if(!cards.length)return actions[0];return cards.sort((a,b)=>{const ca=d.hands[actor].find(c=>c.id===a.card),cb=d.hands[actor].find(c=>c.id===b.card),cost=c=>(c.joker?40+(c.color==='red'?1:0):c.rank+(c.suit===d.trump.suit?20:0));return cost(ca)-cost(cb);})[0];
+ function bot(s,actor,actions,memory,context={}){
+const d=s.data;if(d.composing&&actions.some(a=>a.type==='confirm'))return actions.find(a=>a.type==='confirm');const exchange=actions.find(a=>a.type==='exchange');if(exchange)return exchange;const cards=actions.filter(a=>a.card);if(!cards.length)return actions[0];return cards.sort((a,b)=>{const ca=d.hands[actor].find(c=>c.id===a.card),cb=d.hands[actor].find(c=>c.id===b.card),cost=c=>(c.joker?40+(c.color==='red'?1:0):c.rank+(c.suit===d.trump.suit?({1:0,2:20,3:30}[context.depth??2]):0));return cost(ca)-cost(cb);})[0];
  }
  function result(position){const values=position.data.hands.map((_,player)=>position.winners.includes(player)?1:0);return {winners:position.winners,
   ...(position.data.ending?Ending.result(position.data.ending):{}),places:position.data.ending?Ending.places(position.data.ending,values):values.map(value=>1+new Set(values.filter(other=>other>value)).size),metrics:[{id:'wins',values},{id:'hand-count',values:position.data.hands.map(hand=>hand.length)}]};}
