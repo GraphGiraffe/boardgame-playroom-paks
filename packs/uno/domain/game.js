@@ -105,7 +105,7 @@
    if(d.ending.mode==='winner'||s.playerCount-d.ending.groups.flat().length<=1){s.status='finished';s.winners=Ending.winners(d.ending);}else if(Ending.done(d.ending,s.turn))s.turn=nextPlayer(s,actor);}syncPending(s);
  }
  function reduce(position,actor,action){const next=JSON.parse(JSON.stringify(position)),events=[];next.revision=(position.revision??0)+1;perform(next,actor,action,events);return {position:next,events,turnEnded:action.type==='play'||action.type==='pass'};}
- function project(position,viewer){const d=JSON.parse(JSON.stringify(position.data));d.hands=d.hands.map((hand,player)=>position.openHands||player===viewer?hand:hand.map(()=>({hidden:true})));d.drawPile=d.drawPile.map(()=>({hidden:true}));delete d.uno.pending;delete d.uno.situations;if(viewer!==position.turn)d.drawn=d.drawn===null?null:true;return d;}
+ function project(position,viewer){const d=JSON.parse(JSON.stringify(position.data));d.hands=d.hands.map((hand,player)=>position.openHands||player===viewer?hand:hand.map(()=>({hidden:true})));d.drawPile=d.drawPile.map(()=>({hidden:true}));d.uno.declarationOpen=d.uno.situations.map(w=>w.open&&!w.settled&&!w.called);delete d.uno.pending;delete d.uno.situations;if(viewer!==position.turn)d.drawn=d.drawn===null?null:true;return d;}
  function bot(s,actor,actions,memory,context={}){
       const d = s.data, plays = actions.filter(a => a.type === 'play');
       if (!plays.length) return actions[0];
