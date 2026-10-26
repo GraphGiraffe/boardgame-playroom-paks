@@ -4,7 +4,7 @@
   const metadata={name:message('meta.name'),description:message('meta.description'),scoreLabel:message('meta.wins'),
     presets:[{id:'classic',label:message('meta.classic')}],rules:Array.from({length:5},(_,i)=>message('rules.'+(i+1)))};
   const action=command=>command.type==='draw'?message('actions.draw'):message('actions.ask',{rank:rank(command.rank),target:{kind:'player-reference',index:command.target}});
-  function choice(command,projection){return command.type==='ask'?{card:projection.data.hands[projection.viewer].find(card=>card.rank===command.rank).id,targetKind:'player',targetSource:true}:{};}
+  function choice(command,projection){return command.type==='ask'?{card:command.cardId,targetKind:'player',targetSource:true}:{};}
   function event(value){
     const {actor,params:p}=value;
     if(value.type==='gofish.booked')return {message:message('events.booked',{rank:rank(p.rank)}),kind:'capture',sound:{id:'success'},
@@ -18,12 +18,13 @@
     throw Error('GOFISH_EVENT_UNKNOWN');
   }
   const metric=()=>message('meta.books');
+  const ordered=hand=>[...hand].sort((a,b)=>(a.rank??0)-(b.rank??0));
   const scene=projection=>({contractVersion:1,id:'gofish-table',family:'card-table',stockCount:projection.data.drawPile.length,
-    players:projection.data.hands.map((hand,player)=>({player,hand,books:projection.data.books[player],bookCards:projection.data.bookCards[player],
+    players:projection.data.hands.map((hand,player)=>({player,hand:ordered(hand),books:projection.data.books[player],bookCards:projection.data.bookCards[player],
       metrics:[{id:'books',kind:'points',value:projection.data.books[player].length,label:metric(),resultUsage:true}]}))});
 
  // Geometry contains only public identities from the authorized projection.
- function sceneLayout(p){const d=p.data;return {geometry:{topology:'fixed'},zones:[{id:'field',kind:'table'},...d.hands.map((hand,owner)=>({id:'hand-'+owner,kind:'hand',owner,count:hand.length}))],objects:d.hands.flatMap((hand,owner)=>hand.flatMap((card,index)=>card&&!card.hidden&&card.id!=null?[{ref:{namespace:'card',id:String(card.id)},zone:'hand-'+owner,index}]:[])),interactions:p.actions.map(command=>({command,target:command.cardId!=null?{entity:{namespace:'card',id:String(command.cardId)}}:{zone:'field'}}))};}
+ function sceneLayout(p){const d=p.data;return {geometry:{topology:'fixed'},zones:[{id:'field',kind:'table'},...d.hands.map((hand,owner)=>({id:'hand-'+owner,kind:'hand',owner,count:hand.length}))],objects:d.hands.flatMap((hand,owner)=>ordered(hand).flatMap((card,index)=>card&&!card.hidden&&card.id!=null?[{ref:{namespace:'card',id:String(card.id)},zone:'hand-'+owner,index}]:[])),interactions:p.actions.map(command=>({command,target:command.cardId!=null?{entity:{namespace:'card',id:String(command.cardId)}}:{zone:'field'}}))};}
  // Arrival checkpoints restore only cards disclosed by public set facts.
  // Rules already resolved the set; presentation delays its removal until reveal.
  function eventScenes(p){
@@ -39,11 +40,11 @@
   for(const e of events){
    if(e.type==='gofish.booked'){
     if(p.viewer===e.actor){const ids=new Set(e.params.cards.map(c=>c.id));data.hands[e.actor]=data.hands[e.actor].filter(c=>!ids.has(c.id));}
-    else data.hands[e.actor].splice(-e.params.count);
-    data.books[e.actor].push(e.params.rank);data.bookCards[e.actor].push(e.params.cards[0]);
+    else data.hands[e.actor]=data.hands[e.actor].slice(0,-e.params.count);
+    data.books[e.actor]=[...data.books[e.actor],e.params.rank];data.bookCards[e.actor]=[...data.bookCards[e.actor],e.params.cards[0]];
    }
    if(['gofish.given','gofish.drawn','gofish.booked'].includes(e.type)){
-    const projected={...p,actions:[],data:JSON.parse(JSON.stringify(data))};
+    const projected={...p,actions:[],data};
     frames.push({eventId:e.id,scene:{...scene(projected),...sceneLayout(projected)}});
    }
   }

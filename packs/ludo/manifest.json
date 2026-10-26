@@ -1,6 +1,6 @@
 {
   "id": "ludo",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "name": "Лудо",
   "category": "board",
   "estimatedDuration": "20–40 мин",
@@ -183,7 +183,8 @@
     ],
     "view": [
       "domain/board.js",
-      "presentation/scene.js"
+      "presentation/scene.js",
+      "presentation/tutorial.js"
     ],
     "locales": {
       "ru": [

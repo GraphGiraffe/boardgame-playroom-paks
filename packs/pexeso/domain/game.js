@@ -75,21 +75,24 @@
     delete d.seen;return d;
   }
   function observe(position){return {seen:{...position.data.seen}};}
-  function bot(projection,actor,commands,memory){
+  function bot(projection,actor,commands,memory,context={}){
     const d=projection.data,cards=new Map(cardsFor(d.deckSize).map(card=>[card.id,card]));
+    const random=context.random||(()=>.5),rate=context.errorRate??18,level=context.difficulty||'medium';
     const knownCard=index=>cards.get(memory.seen[index]);
     const known=commands.filter(action=>knownCard(action.index)),unseen=commands.filter(action=>!knownCard(action.index));
-    const explore=pool=>{const options=pool?.length?pool:unseen.length?unseen:commands;return options[((projection.revision||0)+actor)%options.length];};
-    const mistake=((projection.revision||0)+actor)%5===3;
+    const pick=pool=>pool[Math.floor(random()*pool.length)];
+    const explore=pool=>pick(pool?.length?pool:level==='easy'?commands:unseen.length?unseen:commands);
+    const mistake=random()*100<rate;
     if(d.phase==='second'){
       const wanted=pair(knownCard(d.flipped[0])),match=known.find(action=>pair(knownCard(action.index))===wanted);
       const alternatives=commands.filter(action=>!knownCard(action.index)||pair(knownCard(action.index))!==wanted);
       return match&&(!mistake||!alternatives.length)?match:explore(alternatives);
     }
-    for(const action of known)if(!mistake&&known.some(other=>other.index!==action.index&&pair(knownCard(action.index))===pair(knownCard(other.index))))return action;
+    const pairs=known.filter(action=>known.some(other=>other.index!==action.index&&pair(knownCard(action.index))===pair(knownCard(other.index))));
+    if(pairs.length&&!mistake)return pick(pairs);
     return explore();
   }
   function result(position){const values=position.data.scores;return {winners:position.winners,
     places:values.map(value=>1+new Set(values.filter(other=>other>value)).size),metrics:[{id:'pairs',values}]};}
-  return Object.freeze({contractVersion:1,id:'pexeso',minPlayers:2,maxPlayers:4,create,validate,actions,reduce,project,observe,bot,result});
+  return Object.freeze({contractVersion:1,id:'pexeso',minPlayers:2,maxPlayers:4,botHandlesDifficulty:true,create,validate,actions,reduce,project,observe,bot,result});
 });

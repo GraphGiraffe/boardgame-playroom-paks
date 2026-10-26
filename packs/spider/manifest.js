@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["spider"] = {
   "id": "spider",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "name": "Паук",
   "category": "solitaire",
   "estimatedDuration": "10–30 мин",

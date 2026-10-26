@@ -37,3 +37,10 @@
 <path d="M18 6q22-8 44 0" fill="none" stroke="#552f29" stroke-width="2" stroke-linecap="round"/>
 </g><path d="m124 79 9 8m-4-19 8 6m60 36 6 7" stroke="#bbaa80" stroke-width="2.8" stroke-linecap="round" fill="none"/><g transform="translate(141 80) rotate(22 24.0 24.0)"><g transform="scale(0.48)"><rect y="6" width="100" height="100" rx="18" fill="#b9b39a"/><rect width="100" height="100" rx="18" fill="#fff9e8"/><circle cx="27" cy="27" r="7.5" fill="#426b57"/><circle cx="73" cy="27" r="7.5" fill="#426b57"/><circle cx="50" cy="50" r="7.5" fill="#426b57"/><circle cx="27" cy="73" r="7.5" fill="#426b57"/><circle cx="73" cy="73" r="7.5" fill="#426b57"/></g></g><g transform="translate(211 111) rotate(-16 21.5 21.5)"><g transform="scale(0.43)"><rect y="6" width="100" height="100" rx="18" fill="#b9b39a"/><rect width="100" height="100" rx="18" fill="#fff9e8"/><circle cx="27" cy="25" r="7.5" fill="#c2735e"/><circle cx="73" cy="25" r="7.5" fill="#c2735e"/><circle cx="27" cy="50" r="7.5" fill="#c2735e"/><circle cx="73" cy="50" r="7.5" fill="#c2735e"/><circle cx="27" cy="75" r="7.5" fill="#c2735e"/><circle cx="73" cy="75" r="7.5" fill="#c2735e"/></g></g>`),{seating:'row',surfaces:{table:(s,v,a,ui)=>{const scene=render(s,v,a,ui);const controls=scene.elements.actions;scene.elements.actions='';scene.elements.status=a.length?controls:`<div class="yatzy-dice">${s.scene.dice.map(({value:n,held})=>C.die(s.scene.rolls?n:null,`${!held?'data-motion-lead="roll"':''} disabled`,held?'held':'')).join('')}</div>`;return scene;},player:render}});
 })();
+
+(function(root){
+ const source=typeof require==='function'&&!root.PlayroomPack;
+ const tutorial=source?require('./presentation/tutorial.js'):root.PlayroomPackTutorial;
+ const tr=root.PlayroomViews.helpers.translator(source?{ru:require('./locales/ru/game.json')}:root.PlayroomPackResources.locales);
+ root.PlayroomViews.registerTutorial?.("yatzy",tutorial(tr));
+})(globalThis);

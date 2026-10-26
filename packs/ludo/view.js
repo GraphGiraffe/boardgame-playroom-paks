@@ -7,7 +7,7 @@
  const {route,base,lane,location,anchor}=P;
  const render=(s,viewer,actions,ui={})=>{
   const rollEvent=s.events?.findLast(event=>event.kind==='roll'),rollPlayer=ui.presentationTurn??s.turn;
-  const scene=s.scene,roll=actions.find(a=>a.type==='roll'),moves=actions.filter(a=>a.type==='move'),selected=ui.viewState?.pawn;
+  const scene=s.scene,roll=actions.find(a=>a.type==='roll'),moves=actions.filter(a=>a.type==='move'),selected=moves.some(a=>`${a.owner}:${a.pawn}`===ui.viewState?.pawn)?ui.viewState.pawn:null;
   const occupants=new Map();
   scene.pawns.forEach(({owner:p,pawn:j,progress:n})=>{if(n<0)return;const key=anchor(p,j,n);if(!occupants.has(key))occupants.set(key,[]);occupants.get(key).push(`${p}:${j}`);});
   const targets=new Map(),dots=new Set();
@@ -31,7 +31,7 @@
   const cells=route.map(([x,y],i)=>cellMarkup(`path-${i}`,`grid-column:${x+1};grid-row:${y+1};${i%13===0?`background:${colors[i/13]}`:''}`,text('view.cell',{cell:i+1})+(i%13===0?text('view.start'):i%13===8?text('view.safe'):''),i%13===0?startArrow(i/13):i%13===8?safeStar:'')).join('')+colors.map((color,p)=>Array.from({length:5},(_,n)=>{const [x,y]=lane(p,n);return cellMarkup(`home-${p}-${n+52}`,`grid-column:${x+1};grid-row:${y+1};background:${colors[p]}`,text('view.home-cell',{cell:n+1}));}).join('')).join('');
   const finishes=colors.map((_,p)=>{const [x,y]=location(p,0,57);return cellMarkup(`finish-${p}`,`position:absolute;left:${(x+.5)/15*100}%;top:${(y+.5)/15*100}%;width:6.667%;transform:translate(-50%,-50%)`, text('view.finish'));}).join('');
   const pawns=scene.pawns.map(({owner:p,pawn:j,progress:n,point})=>{
-   const [x,y]=point,key=`${p}:${j}`,playable=moves.some(a=>a.owner===p&&a.pawn===j),active=selected===key&&moves.length>0,group=n===57?[key]:occupants.get(anchor(p,j,n))||[key],index=group.indexOf(key),offset=H.tokenLayout.cell(index,group.length),offsetX=offset.x,offsetY=offset.y,size=n===57?3.8:group.length<=1?5.4:group.length<=4?4.7:group.length<=9?2.85:2.1;
+   const [x,y]=point,key=`${p}:${j}`,playable=moves.some(a=>a.owner===p&&a.pawn===j),active=selected===key&&playable,group=n===57?[key]:occupants.get(anchor(p,j,n))||[key],index=group.indexOf(key),offset=H.tokenLayout.cell(index,group.length),offsetX=offset.x,offsetY=offset.y,size=n===57?3.8:group.length<=1?5.4:group.length<=4?4.7:group.length<=9?2.85:2.1;
    const exit=moves.find(a=>a.owner===p&&a.pawn===j&&n<0),destination=targets.get(anchor(p,j,n));
    const team=s.scene?.players?.find(player=>player.player===p)?.teamId,actorTeam=s.scene?.players?.find(player=>player.player===s.turn)?.teamId;
    const friendly=p===s.turn||team!=null&&team===actorTeam;
@@ -47,3 +47,10 @@
  };
  V.register('ludo',render,()=>C.cover(`<g transform="translate(76 13) rotate(-7 76 76)"><rect x="2" y="5" width="150" height="150" rx="12" fill="#b6af8f"/><rect width="150" height="150" rx="12" fill="#fff8e7"/>${base.map(([x,y],p)=>`<rect x="${x*10+5}" y="${y*10+5}" width="50" height="50" rx="8" fill="${colors[p]}"/><circle cx="${x*10+30}" cy="${y*10+30}" r="14" fill="#fffae5"/>`).join('')}<path d="M60 0v150M90 0v150M0 60h150M0 90h150" stroke="#d3c6a5" stroke-width="2"/><circle cx="75" cy="75" r="12" fill="#ceaa52"/></g>`),{surfaces:{table:(s,v,a,ui)=>{const scene=render(s,v,a,ui);scene.elements.status=scene.elements.actions;scene.elements.actions='';return scene;},player:render}});
 })();
+
+(function(root){
+ const source=typeof require==='function'&&!root.PlayroomPack;
+ const tutorial=source?require('./presentation/tutorial.js'):root.PlayroomPackTutorial;
+ const tr=root.PlayroomViews.helpers.translator(source?{ru:require('./locales/ru/game.json')}:root.PlayroomPackResources.locales);
+ root.PlayroomViews.registerTutorial?.("ludo",tutorial(tr));
+})(globalThis);

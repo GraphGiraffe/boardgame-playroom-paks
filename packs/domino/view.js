@@ -41,3 +41,10 @@
   };
   V.register('domino',render,()=>coverComponents.cover(`<g transform="translate(61 40) rotate(-19 39 53)"><rect y="5" width="71" height="110" rx="12" fill="#b8baaa"/><rect width="71" height="110" rx="12" fill="#fffbed"/><path d="M9 55h53" stroke="#e2decd" stroke-width="2"/>${[[21,21],[50,35],[21,73],[50,91],[21,91],[50,73]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="6" fill="#3f6654"/>`).join('')}</g><g transform="translate(136 19) rotate(17 38 56)"><rect y="5" width="75" height="117" rx="12" fill="#b8baaa"/><rect width="75" height="117" rx="12" fill="#fffbed"/><path d="M10 58h55" stroke="#e2decd" stroke-width="2"/>${[[21,20],[53,20],[37,32],[21,44],[53,44],[21,76],[53,76],[21,100],[53,100],[21,88],[53,88]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="6" fill="#3f6654"/>`).join('')}</g>`),{reveal:value=>tile(value.card,'disabled','hand-card'),surfaces:{table:(s,v,a,ui)=>render(s,v,[],{...ui,surface:'table'}),player:(s,v,a,ui)=>render(s,v,a,{...ui,surface:'player'})}});
 })();
+
+(function(root){
+ const source=typeof require==='function'&&!root.PlayroomPack;
+ const tutorial=source?require('./presentation/tutorial.js'):root.PlayroomPackTutorial;
+ const tr=root.PlayroomViews.helpers.translator(source?{ru:require('./locales/ru/game.json')}:root.PlayroomPackResources.locales);
+ root.PlayroomViews.registerTutorial?.("domino",tutorial(tr));
+})(globalThis);
