@@ -9,3 +9,5 @@ shared/pack_compiler.py — один compiler контейнера, закреп
 [Полная схема взаимодействия модулей](https://github.com/GraphGiraffe/boardgame-playroom/blob/main/docs/DEVELOPER-ARCHITECTURE.md), [SDK](https://github.com/GraphGiraffe/boardgame-playroom/blob/main/docs/SDK-0.18.md), [AUTHORING](AUTHORING.md).
 
 [Следующие патчи](https://github.com/GraphGiraffe/boardgame-playroom-utils/blob/main/docs/project/packs/NEXT-PATCHES.md) содержат только подготовку, не новый runtime. Исходные арты и дизайн-итерации сохраняются отдельно от оптимизированных поставляемых изображений.
+
+Обучение каждого пака: `presentation/tutorial.js` — чистое описание целей, `view.js` — регистрация. Прогресс, курсор и сохранение настройки принадлежат разным модулям host; ни один из них не исполняет domain-команды.

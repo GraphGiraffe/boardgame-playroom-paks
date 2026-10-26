@@ -9,12 +9,13 @@
     if(playerCount!==2||!G.fleets[preset]||![0,1].includes(firstPlayer))throw Error('BATTLESHIP_OPTIONS_INVALID');
     return {playerCount,turn:firstPlayer,status:'playing',winners:[],rng,preset,
       data:{announceSinking:options.announceSinking!=='off',ships:[[],[]],shots:[[],[]],marks:[[],[]],sunk:[[],[]],
-        phase:'setup',starter:firstPlayer,orientation:[false,false],ready:[false,false]}};
+        phase:'setup',starter:firstPlayer,orientation:[false,false],ready:[false,false],setupVersions:[0,0]}};
   }
   function validate(position){
     const d=position.data,sizes=G.fleets[position.preset];
     if(!sizes||!Number.isSafeInteger(position.rng)||position.rng<0||position.rng>4294967295||
        !['setup','battle'].includes(d.phase)||![0,1].includes(d.starter)||
+       d.setupVersions!==undefined&&(!Array.isArray(d.setupVersions)||d.setupVersions.length!==2||!d.setupVersions.every(v=>Number.isSafeInteger(v)&&v>=0))||
        !Array.isArray(d.orientation)||d.orientation.length!==2||!d.orientation.every(v=>typeof v==='boolean')||
        !Array.isArray(d.ready)||d.ready.length!==2||!d.ready.every(v=>typeof v==='boolean')||
        !Array.isArray(d.ships)||d.ships.length!==2||!Array.isArray(d.shots)||d.shots.length!==2)return false;
@@ -38,7 +39,7 @@
       Array.isArray(d.sunk)&&d.sunk.length===2;
   }
   function actions(position,actor){
-    if(position.status!=='playing'||position.turn!==actor)return [];
+    if(position.status!=='playing'||![0,1].includes(actor)||position.data.phase!=='setup'&&position.turn!==actor)return [];
     const d=position.data;
     if(d.phase==='battle')return Array.from({length:100},(_,cell)=>cell)
       .filter(cell=>!d.shots[actor].some(x=>x.cell===cell)&&!d.marks[actor].includes(cell))
@@ -61,6 +62,7 @@
   function reduce(position,actor,a){
     const next=clone(position),d=next.data,events=[];
     if(d.phase==='setup'){
+      d.setupVersions=d.setupVersions||[0,0];d.setupVersions[actor]++;
       if(a.type==='orient')d.orientation[actor]=!d.orientation[actor];
       else if(a.type==='ready'){
         d.ready[actor]=true;events.push(event('ready',actor));
@@ -91,7 +93,9 @@
   function project(position,viewer){
     const d=clone(position.data),setup=d.phase==='setup',sizes=G.fleets[position.preset];
     d.fleetCounts=d.ships.map((ships,player)=>{
-      if(setup&&player!==viewer||!setup&&position.status!=='finished'&&!d.announceSinking&&player!==viewer)return null;
+      // Fleet composition is public; reserve its indicators before hidden placement.
+      if(setup&&player!==viewer)return [...new Set(sizes)].map(size=>({size,count:sizes.filter(n=>n===size).length}));
+      if(!setup&&position.status!=='finished'&&!d.announceSinking&&player!==viewer)return null;
       return [...new Set(sizes)].map(size=>({size,count:sizes.filter(n=>n===size).length-
         (setup?ships.filter(ship=>ship.length===size).length:d.sunk[1-player].filter(ship=>ship.length===size).length)}));
     });
@@ -101,7 +105,7 @@
     }
     return d;
   }
-  function bot(projection,actor,commands){
+  function bot(projection,actor,commands,memory,context={}){
     const ready=commands.find(a=>a.type==='ready'),auto=commands.find(a=>a.type==='auto');
     if(ready||auto)return ready||auto;
     const d=projection.data,shots=d.shots[actor],knownSunk=d.announceSinking?d.sunk[actor]:[];
@@ -116,13 +120,15 @@
       if(G.halo(line).some(cell=>hits.includes(cell)&&!line.includes(cell)))continue;
       for(const cell of line)if(available.has(cell))score.set(cell,(score.get(cell)||0)+matched.length*matched.length);
     }
+    if((context.depth??2)===1&&hits.length){score.clear();for(const hit of hits)for(const cell of [hit-10,hit+10,...(hit%10?[hit-1]:[]),...(hit%10<9?[hit+1]:[])])if(available.has(cell))score.set(cell,1);}
     const best=Math.max(0,...score.values()),choices=best?commands.filter(a=>score.get(a.cell)===best):commands;
-    return choices[(shots.length+actor)%choices.length];
+    const randomState={rng:context.rng??1};
+    return choices[Math.floor(ports.random(randomState)*choices.length)];
   }
   function result(position){
     const values=[0,1].map(player=>position.winners.includes(player)?1:0);
     return {winners:position.winners,lastPlayers:position.winners.length===1?[1-position.winners[0]]:[],places:values.map(value=>value?1:2),metrics:[{id:'wins',values},
       {id:'hits',values:position.data.shots.map(shots=>shots.filter(shot=>shot.hit).length)}]};
   }
-  return Object.freeze({contractVersion:1,id:'battleship',minPlayers:2,maxPlayers:2,rounds:true,preparing:position=>position.data.phase==='setup',create,validate,actions,reduce,project,bot,result});
+  return Object.freeze({contractVersion:1,id:'battleship',minPlayers:2,maxPlayers:2,rounds:true,preparing:position=>position.data.phase==='setup',botContext:position=>({rng:position.rng}),decisionWindow:position=>position.status==='playing'&&position.data.phase==='setup'?{id:'fleet-setup',participants:[0,1],ready:[0,1].filter(i=>position.data.ready[i]),versions:{0:position.data.setupVersions?.[0]||0,1:position.data.setupVersions?.[1]||0}}:null,create,validate,actions,reduce,project,bot,result});
 });

@@ -200,5 +200,5 @@
  function result(s){const values=s.data.players.map(p=>p.eliminatedRound??s.data.round),ranking=values.map((v,i)=>s.data.players[i].lives*10000+v);return {winners:[...s.winners],places:ranking.map(v=>1+ranking.filter(x=>x>v).length),metrics:[{id:'survival',values},{id:'damage',maximumFractionDigits:1,values:s.data.players.map(p=>p.damageDealt||0)}]};}
  const rules={elements,terrain,inside,tile,occupant,ring,geometry,line,freeBases,shielded};
  function bot(projection,actor,commands,memory,context){const p=clone(projection);if(p.data.planned?.pos)p.data.players[actor].pos=p.data.planned.pos;const choices=commands.filter(c=>c.type!=='unready');return Bots.choose(p,actor,choices.length?choices:commands,rules,context);}
- return Object.freeze({contractVersion:1,id:'mage-brawl',minPlayers:2,maxPlayers:8,rounds:true,create,validate,actions,reduce,project,bot,result,decisionWindow,botContext:s=>({seed:s.data.seed}),geometry,rules});
+ return Object.freeze({contractVersion:1,id:'mage-brawl',minPlayers:2,maxPlayers:8,rounds:true,botHandlesDifficulty:true,create,validate,actions,reduce,project,bot,result,decisionWindow,botContext:s=>({seed:s.data.seed}),geometry,rules});
 });

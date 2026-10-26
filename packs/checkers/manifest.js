@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["checkers"] = {
   "id": "checkers",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "category": "board",
   "estimatedDuration": "15–30 мин",
   "tagline": "Бери шашки и пробивайся в дамки.",

@@ -68,10 +68,14 @@
       bonuses:upper.map(value=>value>=63?50:0),
       previews:Object.fromEntries(categories.keys.map(key=>[key,categories.value(d.dice,key)]))};
   }
-  function bot(projection,actor,commands){
-    const d=projection.data;
+  function bot(projection,actor,commands,memory,context={}){
+    const d=projection.data,depth=context.depth??2;
+    if(depth===3&&d.rolls>0){const made=commands.find(c=>c.type==='score'&&['yatzy','fullHouse','smallStraight','largeStraight'].includes(c.key)&&d.previews[c.key]>0);if(made)return made;}
     if(d.rolls===0)return commands.find(a=>a.type==='roll');
-    if(d.rolls<3&&d.dice.filter(value=>value===Math.max(...d.dice)).length<4)return commands.find(a=>a.type==='roll');
+    if(depth>1&&d.rolls<3){
+      const counts=Array.from({length:7},(_,n)=>d.dice.filter(v=>v===n).length),target=counts.reduce((best,n,i)=>n>counts[best]||n===counts[best]&&i>best?i:best,1);
+      if(counts[target]<5){const hold=commands.find(c=>c.type==='hold'&&d.held[c.index]!== (d.dice[c.index]===target));if(hold)return hold;return commands.find(a=>a.type==='roll');}
+    }else if(d.rolls<3)return commands.find(a=>a.type==='roll');
     return commands.filter(a=>a.type==='score').sort((a,b)=>d.previews[b.key]-d.previews[a.key])[0];
   }
   function result(position){

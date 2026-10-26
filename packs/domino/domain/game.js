@@ -42,7 +42,7 @@
   return {position:next,events,roundEnded:action.type!=='draw'&&((next.turn-d.ending.first+position.playerCount)%position.playerCount)<=((actor-d.ending.first+position.playerCount)%position.playerCount),turnEnded:action.type!=='draw'};
  }
  function project(position,viewer){const d=JSON.parse(JSON.stringify(position.data));d.points=score(position);d.hands=d.hands.map((hand,player)=>position.openHands||player===viewer?hand:hand.map(()=>({hidden:true})));d.stock=d.stock.map(()=>({hidden:true}));return d;}
- function bot(projection,actor,commands){return commands.slice().sort((a,b)=>{const left=projection.data.hands[actor].find(tile=>tile.id===a.card),right=projection.data.hands[actor].find(tile=>tile.id===b.card);return (right?right.a+right.b:0)-(left?left.a+left.b:0);})[0];}
+ function bot(projection,actor,commands,memory,context={}){return commands.slice().sort((a,b)=>{const left=projection.data.hands[actor].find(tile=>tile.id===a.card),right=projection.data.hands[actor].find(tile=>tile.id===b.card);const hand=projection.data.hands[actor],value=t=>!t?0:(context.depth===1?1:t.a+t.b)+(context.depth===3?hand.filter(o=>o.a===t.a||o.b===t.a||o.a===t.b||o.b===t.b).length+(t.a===t.b?3:0):0);return value(right)-value(left);})[0];}
  function score(position){const sums=position.data.hands.map(pips),winner=position.winners[0];return sums.map((_,player)=>position.status==='finished'&&player===winner?sums.reduce((a,b)=>a+b,0)-sums[player]:0);}
  function result(position){const values=position.data.hands.map(pips);return {winners:position.winners,...Ending.result(position.data.ending),
   places:Ending.places(position.data.ending,values,false),metrics:[{id:'pips',values,order:'asc'}]};}

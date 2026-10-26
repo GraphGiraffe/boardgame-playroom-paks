@@ -40,7 +40,7 @@
   return {position:next,events,turnEnded:true};
  }
  const project=position=>JSON.parse(JSON.stringify(position.data));
- function bot(s,actor,actions){
+ function bot(s,actor,actions,memory,context={}){
 
       const candidates = actions.map(a => {
         const piece = s.data.board[a.from], row = Math.floor(a.to / 8), col = a.to % 8;
@@ -52,11 +52,11 @@
         if (promotion) trial.board[a.to].king = true;
         trial.captured = [];
         for (let i = 0; i < 64; i++) if (trial.board[i]?.owner === 1 - actor && captures(trial, i).some(m => m.victim === a.to)) risk = 5;
-        return { a, value: (promotion ? 10 : 0) + (take.victim != null ? 4 : 0) - risk + (piece.king ? 0 : (actor === (s.data.lightPlayer??0) ? 7 - row : row) * 0.15) + (col > 1 && col < 6 ? 0.1 : 0) };
+        return { a, value: (promotion ? 10 : 0) + (take.victim != null ? 4 : 0) - risk*({1:0,2:1,3:1.6}[context.depth??2]) + (piece.king ? 0 : (actor === (s.data.lightPlayer??0) ? 7 - row : row) * 0.15) + (col > 1 && col < 6 ? 0.1 : 0) };
       });
       const best = Math.max(...candidates.map(c => c.value));
       const chosen = candidates.filter(c => c.value === best);
-      return chosen[(s.revision||0) % chosen.length].a;
+      return chosen[Math.floor((context.random?.()??0)*chosen.length)].a;
 
  }
  function result(position){const values=Array.from({length:2},(_,player)=>position.winners.includes(player)?1:0);

@@ -1,6 +1,6 @@
 {
   "id": "mage-brawl",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "name": "Стихийная потасовка",
   "category": "board",
   "estimatedDuration": "15–40 мин",
@@ -54,7 +54,8 @@
       "presentation/scene.js"
     ],
     "view": [
-      "presentation/scene.js"
+      "presentation/scene.js",
+      "presentation/tutorial.js"
     ],
     "locales": {
       "ru": [

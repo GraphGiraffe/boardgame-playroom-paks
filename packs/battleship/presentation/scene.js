@@ -40,12 +40,12 @@
       vertical:!!(active&&d.orientation[viewer]),selected:player===viewer&&selected==='new:'+size}));
   }
   function scene(projection,context={viewer:projection.viewer}){
-    return {contractVersion:1,id:'battleship-fields',phase:projection.data.phase,personalSurfaceAllowed:projection.data.phase!=='setup',family:'grid-board',columns:10,rows:10,setup:projection.data.phase==='setup',orientation:projection.data.orientation,shots:projection.data.shots,marks:projection.data.marks,
+    return {contractVersion:1,id:'battleship-fields',phase:projection.data.phase,ready:projection.data.ready,personalSurfaceAllowed:projection.data.phase!=='setup',family:'grid-board',columns:10,rows:10,setup:projection.data.phase==='setup',orientation:projection.data.orientation,shots:projection.data.shots,marks:projection.data.marks,
       players:[0,1].map(player=>({player,indicators:fleet(projection,player,context),metrics:[{id:'wins',kind:'wins',value:projection.winners.includes(player)?1:0,label:metadata.scoreLabel,resultUsage:true}]})),
       fleets:[0,1].map(player=>({player,ships:projection.data.ships[player],indicators:fleet(projection,player,context)}))};
   }
 
  // Geometry contains only public identities from the authorized projection.
  function sceneLayout(p){const d=p.data;return {geometry:{topology:'fixed'},zones:[{id:'field',kind:'table'},...d.ships.map((_,owner)=>({id:'fleet-'+owner,kind:'board',owner}))],objects:d.ships.flatMap((ships,owner)=>ships.flatMap((cells,index)=>cells.every(Number.isInteger)?[{ref:{namespace:'ship',id:owner+'-'+index},zone:'fleet-'+owner,owner,cells}]:[])),interactions:p.actions.map(command=>({command,target:{zone:'field'}}))};}
- return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}),action,event,metric,scene:p=>({...scene(p),...sceneLayout(p)}),fleet,coordinate});
+ return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}),action,choice:command=>({preserveSelection:command.type==='orient'||command.type==='move'}),event,metric,scene:p=>({...scene(p),...sceneLayout(p)}),fleet,coordinate});
 });

@@ -3,7 +3,7 @@
  const profiles={aggressor:[.85,.10,3,.4,4,.50],fighter:[.85,.35,2.4,1.2,7,.50],mind:[.60,.55,1.5,1.7,7,1],tactician:[.60,.45,1.5,1.5,7,.50],defender:[.28,.72,-.8,3,2,.75],random:[1/3,1/3,1,1,1,.25]};
  const dirs=[[-1,0],[0,1],[1,0],[0,-1]],add=(a,b)=>a.map((n,i)=>n+b[i]),distance=(a,b)=>Math.abs(a[0]-b[0])+Math.abs(a[1]-b[1]),same=(a,b)=>!!a&&!!b&&a.every((n,i)=>n===b[i]);
  function choose(projection,actor,commands,R,context={}){
-  if(!commands.length)return null;const d=projection.data,me=d.players[actor],name=me.bot.resolvedStrategy,[ap,dp,approach,safety,finishing,count]=profiles[name];
+  if(!commands.length)return null;const d=projection.data,me=d.players[actor],name=me.bot.resolvedStrategy,[ap,dp,approach,safety,finishing,baseCount]=profiles[name],level=me.bot.difficulty||context.difficulty||'medium',count=baseCount*({easy:.25,medium:.65,hard:1}[level]);
   const rng=B.random(context.seed??1,d.window.id+':'+actor),pick=a=>a[Math.floor(rng()*a.length)],best=pairs=>{const m=Math.max(...pairs.map(p=>p[0]));return pick(pairs.filter(p=>p[0]===m))[1];};
   const enemies=d.players.flatMap((p,i)=>i!==actor&&p.pos?[{...p,id:i}]:[]),prob=(id,e)=>{const total=4*(d.config?.copies||d.players.length+1)-me.hand.length,available=(d.config?.copies||d.players.length+1)-me.hand.filter(x=>x.element===e).length,n=Math.min(d.players[id].handCount,total);let none=1;for(let i=0;i<n;i++)none*=Math.max(0,total-available-i)/(total-i);return 1-none;};
   const immune=(p,e)=>R.terrain[R.tile(d,p.pos)]?.[1]===e,loss=p=>p.lives>1?2+3*count*(p.handCount>1)-.75*safety:4+5*Math.min(1,p.ultimate);

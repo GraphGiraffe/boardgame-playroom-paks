@@ -39,3 +39,10 @@
   }
   V.register('uno',render,()=>coverComponents.cover(`<g transform="translate(61 24) rotate(-18 43 61)"><rect y="5" width="85" height="121" rx="13" fill="#9daa83"/><rect width="85" height="121" rx="13" fill="#fff8e9"/><rect x="6" y="6" width="73" height="109" rx="9" fill="#e1b94f"/><text x="15" y="30" font-size="19" fill="#fffaf0">2</text><ellipse cx="43" cy="60" rx="25" ry="38" fill="#fae8a9" transform="rotate(25 43 60)"/><text x="43" y="78" text-anchor="middle" font-size="51" fill="#a0802b">2</text></g><g transform="translate(112 16) rotate(12 44 62)"><rect y="6" width="88" height="124" rx="13" fill="#b9bc95"/><rect width="88" height="124" rx="13" fill="#fff9ed"/><rect x="6" y="6" width="76" height="112" rx="9" fill="#df785e"/><text x="15" y="30" font-size="19" fill="#fffaf0">7</text><ellipse cx="44" cy="61" rx="26" ry="40" fill="#f9c9a8" transform="rotate(25 44 61)"/><text x="44" y="80" text-anchor="middle" font-size="56" fill="#b9553e">7</text></g>`),{reveal:value=>card(value.card,'disabled'),surfaces:{table:(s,v,a,ui)=>render(s,v,a,{...ui,surface:'table'}),player:(s,v,a,ui)=>render(s,v,a,{...ui,surface:'player'})}});
 })();
+
+(function(root){
+ const source=typeof require==='function'&&!root.PlayroomPack;
+ const tutorial=source?require('./presentation/tutorial.js'):root.PlayroomPackTutorial;
+ const tr=root.PlayroomViews.helpers.translator(source?{ru:require('./locales/ru/game.json')}:root.PlayroomPackResources.locales);
+ root.PlayroomViews.registerTutorial?.("uno",tutorial(tr));
+})(globalThis);
