@@ -4,6 +4,8 @@
 
 ## Слои
 
+Сначала прочитайте [карту архитектуры и владельцев состояния](ARCHITECTURE.md). Для обучения — [контракт сценариев и пользовательского прогресса](https://github.com/GraphGiraffe/boardgame-playroom/blob/main/docs/TUTORIALS.md).
+
 `packs/<id>/manifest.json` — метаданные/версии/режимы/доступные места/settings/capabilities/sourceModules. `domain/` — чистые правила. `presentation/` — SceneModel, ActionChoice labels и Event presentation после projection. `locales/ru/` — тексты. `rules.js` — только регистрация Definition в SDK. `view.js`/styles.css — Web renderer через общие компоненты; необязательные assets поставляются локально.
 
 Эталоны: **tictactoe** (простое поле/полная модель), **yatzy** (публичные кубики/таблица/подтверждение), **gofish** (скрытая рука и публичные события), **private-counter** в examples (не входит в коллекцию).
@@ -12,7 +14,7 @@
 {"sourceModules":{"rules":["domain/game.js","presentation/scene.js"],"view":["presentation/scene.js","presentation/tutorial.js"],"locales":{"ru":["locales/ru/game.json"]}}}
 ```
 
-GameModel Definition contractVersion=1: create/validate/actions/reduce/project/result/bot, дополнительные start/score/observe/reactions при необходимости. actions возвращают command + visibility; reduce возвращает position/events/turnEnded и при объявленном цикле roundEnded. Actor и viewer различать. RNG хранить в состоянии и передавать явно; бот видит разрешённую проекцию/память, не неизвестные карты.
+GameModel Definition contractVersion=1: create/validate/actions/reduce/project/result/bot, дополнительные score/observe/reactions и decisionWindow при необходимости; GameModel.start — метод runtime, начальные события возвращаются из create. actions возвращают command + visibility; reduce возвращает position/events/turnEnded и при объявленном цикле roundEnded. Actor и viewer различать. RNG хранить в состоянии и передавать явно; бот видит разрешённую проекцию/память, не неизвестные карты.
 
 Domain события — typed facts с visibility; presentation добавляет MessageRef, speech/notice/sound/feedback/reveal/sequence. Сначала privacy, потом перевод и Web. Полное состояние не передаётся гостю и не прячется CSS. Описание событий/метрик/прогресса — [SDK 0.18](https://github.com/GraphGiraffe/boardgame-playroom/blob/main/docs/SDK-0.18.md).
 
@@ -73,13 +75,13 @@ node scripts/codex/test.cjs case/pack-models,case/view-contract
 
 Компилятор оставляет потреблённые domain/presentation/locales модули только внутри правил и представления, не рядом вторыми файлами. scripts/styles общего набора также входят в view.js/styles.css один раз. Исходники остаются в репозитории и source ZIP. Авторские .md/.txt из assets не входят в runtime. Аудио хранится в assets/ один раз: sounds.js задаёт метаданные и получает src через PlayroomPack.asset, без второй base64-копии. Подробные персонажи characters — архивный набор; рабочие стили minimal («Стандартный») и simple («Простой»).
 
-## Стандартные размеры (локальный кандидат sizes.1)
+## Стандартные размеры
 
 Основные карты, кубики, костяшки и фишки используют роли `--size-card`, `--size-die`, `--size-domino`, `--size-token`; миниатюры — отдельную роль. Не увеличивайте основную карту через ширину контейнера. Стили используют стандартные `--size-space-*`, `--size-type-*`, `--size-radius-*`, `--size-length-*` с fallback для автономного пака. Канонический каталог хоста — `core/size-tokens.json`, описание — app `docs/SIZE-SYSTEM.md`. При одинаковом viewport/ступени основной размер карты не зависит от game ID. Клетки доски и внутренние SVG-координаты производны от стандартного artboard; нестандартные базовые размеры требуют объяснения.
 
 ### Размерные роли, поведение и будущие зоны
 
-В совместимом кандидате стандартных размеров хост предоставляет `--size-*` и `--ui-duration-*`; автономные CSS fallback обязательны. Коэффициенты `stacking` и `protectedZones` остаются в манифесте скина: горизонтальное/вертикальное раскрытие, дуга, faceDown и ось сброса не заменяются произвольным паковым масштабом. UI-обводки в экранных px и SVG rim в viewBox имеют разные единицы.
+Хост предоставляет `--size-*` и `--ui-duration-*`; автономные CSS fallback обязательны. Коэффициенты `stacking` и `protectedZones` остаются в манифесте скина: горизонтальное/вертикальное раскрытие, дуга, faceDown и ось сброса не заменяются произвольным паковым масштабом. UI-обводки в экранных px и SVG rim в viewBox имеют разные единицы.
 
 Существующие `family`, `layout.focus`, `surface`, `actionReserve`, `playerContent.counters/badges/indicators` задают состав зон; общая раскладка не должна знать ID игры. Контекстные действия с участником и подтверждение цели не должны сдвигать fixed field или перекрывать доступные цели. Новые группы смешанной руки, inspect, вращаемые/исследуемые тайлы описаны в проекте контракта `playroom/core/size-tokens.json:extensibleZones`; это пока не новый API и не реализация правил. Не передавать скрытые лица/URL ради увеличенного просмотра или анимации раскрытия.
 
@@ -92,7 +94,7 @@ Renderer использует `H.button({icon:'play',label:'Играть',varian
 Общие типы элементов, принадлежность окантовки типу колоды и независимые рубашки
 наборов описаны в [PIECE-TYPES.md](PIECE-TYPES.md).
 
-## Одновременный выбор и квадратные карты (локальный кандидат Mage Brawl)
+## Одновременный выбор и квадратные карты
 
 Общие чистые модули `decision-window`, `tactical-grid`, `effect-batch`, `bot-policy` подключаются через `sharedDomain`. Окно публикует только ID, участников, готовность и версии; планы раскрываются по правилам пакета. Batch сохраняет отдельные причины падения и урона: падение имеет приоритет над лечением и определяет награду независимо от порядка регистрации урона. RNG профилей/ошибок отделяется от колоды; одинаковое решение в том же окне не разыгрывается заново.
 
@@ -103,7 +105,7 @@ Mage Brawl основан на prototype `97d984a`, A/v3.0 с уточнения
 `publicFrames` выводит первый публичный кадр сразу в HTML. Кадр может содержать `players` — разметку стандартных `H.playerPanel`, собранную из публичного снимка; `livePlayers` соответствует итоговому `live`. Начальный `playerContent` должен соответствовать первому кадру. `sound`/`pack` задают cue кадра. Контроллер синхронно переключает поле и стандартные панели, а приватная рука недоступна до итогового кадра. Начальный снимок создаётся до расходования карт и ульты, без планов. `PlayroomPublicSequence.defer(host, callback)` откладывает только окно результата, не авторитетные правила.
 
 
-### Контракт участников сцены (локальная миграция компонентов)
+### Контракт участников сцены
 
 `presentation.scene(projection)` возвращает ровно одного участника на каждый
 индекс игрока: `{player, metrics}`. Поле `id` вместо `player` не допускается.
@@ -121,7 +123,7 @@ PresentationPlan. Поля правил renderer недоступны.
 
 ## Компонентная миграция
 
-[Текущий SDK и два сценария](COMPONENT-SDK.md) описывают EntityRef, закрытые решения, метрики и границы общего проигрывателя. Это локальный кандидат engineApi 4/viewApi 3/protocol 3; публикация выполняется отдельно.
+[Текущий SDK и два сценария](COMPONENT-SDK.md) описывают EntityRef, закрытые решения, метрики и границы общего проигрывателя. Это опубликованный контракт engineApi 4/viewApi 3/protocol 3 в стабильной линии 0.19 / 0.8.
 
 ## Правила для новых игроков
 
