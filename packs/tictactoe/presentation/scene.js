@@ -9,7 +9,7 @@
   const message = (key, params = {}) => ({key:'tictactoe.' + key, params});
   const metadata = Object.freeze({name:message('meta.name'), description:message('meta.description'),
     scoreLabel:message('meta.score-label'), presets:[{id:'classic', label:message('meta.classic')}],
-    rules:Array.from({length:3},(_,i)=>message('rules.'+(i+1)))});
+    rules:Array.from({length:3},(_,i)=>message('rules.'+(i+1))),rulebook:{"sections":[{"text":{"key":"tictactoe.rules.1","params":{}},"blocks":[{"type":"paragraph","text":{"key":"tictactoe.book.text.1","params":{}}}]},{"text":{"key":"tictactoe.rules.2","params":{}},"blocks":[{"type":"paragraph","text":{"key":"tictactoe.book.text.2","params":{}}}],"layout":"stack","figures":[{"id":"place","caption":{"key":"tictactoe.book.figure.place","params":{}},"role":"diagram"}]},{"text":{"key":"tictactoe.rules.3","params":{}},"blocks":[{"type":"list","ordered":false,"items":[{"key":"tictactoe.book.text.3","params":{}},{"key":"tictactoe.book.text.4","params":{}}]}],"layout":"stack","figures":[{"id":"line","caption":{"key":"tictactoe.book.figure.line","params":{}},"role":"diagram"}]}]}});
   function action(command) { return message('actions.place', {cell:command.cell + 1}); }
   function event(value) {
     switch (value.type) {

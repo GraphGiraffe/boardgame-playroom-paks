@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["domino"] = {
   "id": "domino",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "category": "board",
   "estimatedDuration": "10–15 мин",
   "tagline": "Соединяй числа и считай ходы соперников.",
@@ -92,6 +92,14 @@
   },
   "skinFamilies": [
     "domino"
+  ],
+  "releases": [
+    {
+      "version": "0.5.4",
+      "changes": [
+        "Короткие правила: абзацы, списки, таблицы и иллюстрации игровых элементов и интерфейса."
+      ]
+    }
   ]
 };
 })(globalThis);

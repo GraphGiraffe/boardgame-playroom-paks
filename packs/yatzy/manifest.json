@@ -1,6 +1,6 @@
 {
   "id": "yatzy",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "name": "Ятзи",
   "category": "dice",
   "estimatedDuration": "15–25 мин",
@@ -53,7 +53,8 @@
     "view": [
       "domain/categories.js",
       "presentation/scene.js",
-      "presentation/tutorial.js"
+      "presentation/tutorial.js",
+      "presentation/rule-illustrations.js"
     ],
     "locales": {
       "ru": [
@@ -108,5 +109,13 @@
         "label": "Классика"
       }
     ]
-  }
+  },
+  "releases": [
+    {
+      "version": "0.3.3",
+      "changes": [
+        "Короткие правила: абзацы, списки, таблицы и иллюстрации игровых элементов и интерфейса."
+      ]
+    }
+  ]
 }
