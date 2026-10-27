@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["yatzy"] = {
   "id": "yatzy",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "name": "Ятзи",
   "category": "dice",
   "estimatedDuration": "15–25 мин",
@@ -95,6 +95,14 @@
         "label": "Классика"
       }
     ]
-  }
+  },
+  "releases": [
+    {
+      "version": "0.3.3",
+      "changes": [
+        "Короткие правила: абзацы, списки, таблицы и иллюстрации игровых элементов и интерфейса."
+      ]
+    }
+  ]
 };
 })(globalThis);

@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["pexeso"] = {
   "id": "pexeso",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "name": "Пексесо",
   "category": "cards",
   "estimatedDuration": "5–20 мин",
@@ -104,6 +104,14 @@
   ],
   "defaultSkins": {
     "character-face": "minimal"
-  }
+  },
+  "releases": [
+    {
+      "version": "0.3.3",
+      "changes": [
+        "Короткие правила: абзацы, списки, таблицы и иллюстрации игровых элементов и интерфейса."
+      ]
+    }
+  ]
 };
 })(globalThis);

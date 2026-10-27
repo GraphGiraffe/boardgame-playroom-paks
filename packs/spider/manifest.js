@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["spider"] = {
   "id": "spider",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "name": "Паук",
   "category": "solitaire",
   "estimatedDuration": "10–30 мин",
@@ -161,6 +161,14 @@
         "label": "Классический"
       }
     ]
-  }
+  },
+  "releases": [
+    {
+      "version": "0.2.3",
+      "changes": [
+        "Короткие правила: абзацы, списки, таблицы и иллюстрации игровых элементов и интерфейса."
+      ]
+    }
+  ]
 };
 })(globalThis);

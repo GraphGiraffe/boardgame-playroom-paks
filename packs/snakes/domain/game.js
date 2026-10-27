@@ -20,10 +20,10 @@
       JSON.stringify(d.special)===JSON.stringify(p.preset==='plus'?cells[d.finish]:{})&&Object.keys(d.special).every(cell=>!Object.hasOwn(d.links,cell))&&d.links&&Object.entries(d.links).every(([a,b])=>valid(+a)&&+a>0&&+a<d.finish&&valid(b)&&b>0&&b!==+a)&&
       (!d.lastMove||[d.lastMove.from,d.lastMove.landing,d.lastMove.to].every(valid));
   }
-  function destination(d,actor,dieIndex,delta=0){const distance=d.dice[dieIndex]+delta,from=d.positions[actor],landing=from+distance>d.finish?2*d.finish-from-distance:from+distance;return {distance,from,landing,to:d.links[landing]&&!(d.links[landing]<landing&&d.effects[actor].shield)?d.links[landing]:landing};}
+  function destination(d,actor,dieIndex,delta=0){const distance=d.dice[dieIndex]+delta,from=d.positions[actor],landing=from+distance>d.finish?2*d.finish-from-distance:from+distance;return {distance,from,landing,to:distance>0&&d.links[landing]&&!(d.links[landing]<landing&&d.effects[actor].shield)?d.links[landing]:landing};}
   function actions(p,actor){
     if(p.status!=='playing'||actor!==p.turn)return [];
-    const commands=p.data.phase==='roll'?[{type:'roll'}]:p.data.dice.flatMap((die,dieIndex)=>(p.data.adjusting?[-1,1]:[0]).filter(delta=>die+delta>=1&&die+delta<=6).map(delta=>({type:'move',dieIndex,delta})));
+    const commands=p.data.phase==='roll'?[{type:'roll'}]:p.data.dice.flatMap((die,dieIndex)=>(p.data.adjusting?[-1,1]:[0]).map(delta=>({type:'move',dieIndex,delta})));
     return commands.map(command=>({command,visibility:'public'}));
   }
   function reduce(position,actor,command){
@@ -32,7 +32,9 @@
     const protect=kind=>{if(!e.shield)return false;e.shield=false;fact('protected',{effect:kind});return true;};
     const extra=plus&&command.type==='move'&&d.dice.length===2&&d.dice[0]===d.dice[1];
     function travel(roll,automatic=false){
-      const from=d.positions[actor];let landing=from+roll;if(landing>d.finish)landing=2*d.finish-landing;
+      const from=d.positions[actor];
+      if(roll===0){d.lastMove={player:actor,from,landing:from,to:from,roll,finish:d.finish,trigger:command.type};fact('moved',{...d.lastMove,automatic});return;}
+      let landing=from+roll;if(landing>d.finish)landing=2*d.finish-landing;
       let to=d.links[landing]||landing;if(to<landing&&protect('snake'))to=landing;
       d.positions[actor]=to;d.lastMove={player:actor,from,landing,to,roll,finish:d.finish,trigger:command.type};
       fact('moved',{...d.lastMove,automatic});
@@ -66,7 +68,7 @@
     return {position:next,events,turnEnded:true};
   }
   const project=p=>JSON.parse(JSON.stringify(p.data));
-  function bot(p,actor,legal,memory,context={}){if(p.data.phase!=='move')return legal[0];return legal.reduce((best,a)=>{const score=c=>{const v=destination(p.data,actor,c.dieIndex,c.delta),kind=p.data.special[v.to];return v.to+(context.depth===1?0:context.depth===3?1.5:1)*({skip:-7,less:-3,second:4,shield:3,adjust:2}[kind]||0);};return score(a)>score(best)?a:best;},legal[0]);}
+  function bot(p,actor,legal,memory,context={}){if(p.data.phase!=='move')return legal[0];return legal.reduce((best,a)=>{const score=c=>{const v=destination(p.data,actor,c.dieIndex,c.delta),kind=v.distance>0?p.data.special[v.to]:undefined;return v.to+(context.depth===1?0:context.depth===3?1.5:1)*({skip:-7,less:-3,second:4,shield:3,adjust:2}[kind]||0);};return score(a)>score(best)?a:best;},legal[0]);}
   function result(p){const values=p.data.positions;return {winners:p.winners,...Ending.result(p.data.ending),places:Ending.places(p.data.ending,values),metrics:[{id:'position',values}]};}
   return Object.freeze({contractVersion:1,id:'snakes',minPlayers:2,maxPlayers:6,create,validate,actions,reduce,project,result,bot});
 });

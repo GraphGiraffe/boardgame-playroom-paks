@@ -1,6 +1,6 @@
 {
   "id": "checkers",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "category": "board",
   "estimatedDuration": "15–30 мин",
   "tagline": "Бери шашки и пробивайся в дамки.",
@@ -41,7 +41,8 @@
     "view": [
       "domain/board.js",
       "presentation/scene.js",
-      "presentation/tutorial.js"
+      "presentation/tutorial.js",
+      "presentation/rule-illustrations.js"
     ],
     "locales": {
       "ru": [
@@ -76,5 +77,13 @@
   "skinFamilies": [
     "checker",
     "board"
+  ],
+  "releases": [
+    {
+      "version": "0.5.3",
+      "changes": [
+        "Короткие правила: абзацы, списки, таблицы и иллюстрации игровых элементов и интерфейса."
+      ]
+    }
   ]
 }
