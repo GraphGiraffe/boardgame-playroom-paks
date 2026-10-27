@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["gofish"] = {
   "id": "gofish",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "name": "Спроси рыбу",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
@@ -89,6 +89,14 @@
         "label": "Классика"
       }
     ]
-  }
+  },
+  "releases": [
+    {
+      "version": "0.3.3",
+      "changes": [
+        "Короткие правила: абзацы, списки, таблицы и иллюстрации игровых элементов и интерфейса."
+      ]
+    }
+  ]
 };
 })(globalThis);

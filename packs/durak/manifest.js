@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["durak"] = {
   "id": "durak",
-  "version": "0.6.4",
+  "version": "0.6.5",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Отбивайся, подкидывай и избавляйся от карт.",
@@ -181,6 +181,14 @@
   "sharedAssetPacks": [
     "standard-deck",
     "mini-split-deck"
+  ],
+  "releases": [
+    {
+      "version": "0.6.5",
+      "changes": [
+        "Короткие правила: абзацы, списки, таблицы и иллюстрации игровых элементов и интерфейса."
+      ]
+    }
   ]
 };
 })(globalThis);

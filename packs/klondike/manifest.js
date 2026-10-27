@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["klondike"] = {
   "id": "klondike",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "name": "Косынка",
   "category": "solitaire",
   "estimatedDuration": "10–30 мин",
@@ -200,6 +200,14 @@
         "label": "Классический"
       }
     ]
-  }
+  },
+  "releases": [
+    {
+      "version": "0.2.3",
+      "changes": [
+        "Короткие правила: абзацы, списки, таблицы и иллюстрации игровых элементов и интерфейса."
+      ]
+    }
+  ]
 };
 })(globalThis);

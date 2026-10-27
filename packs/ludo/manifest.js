@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["ludo"] = {
   "id": "ludo",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "name": "Лудо",
   "category": "board",
   "estimatedDuration": "20–40 мин",
@@ -254,6 +254,15 @@
   },
   "skinFamilies": [
     "die"
+  ],
+  "releases": [
+    {
+      "version": "0.3.5",
+      "changes": [
+        "Короткие правила: абзацы, списки, таблицы и иллюстрации игровых элементов и интерфейса.",
+        "Принятый объёмный дизайн фишек с белой обводкой верхней поверхности."
+      ]
+    }
   ]
 };
 })(globalThis);

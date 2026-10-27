@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["battleship"] = {
   "id": "battleship",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "name": "Морской бой",
   "category": "board",
   "estimatedDuration": "15–30 мин",
@@ -103,6 +103,14 @@
   },
   "skinFamilies": [
     "ship"
+  ],
+  "releases": [
+    {
+      "version": "0.3.5",
+      "changes": [
+        "Короткие правила: абзацы, списки, таблицы и иллюстрации игровых элементов и интерфейса."
+      ]
+    }
   ]
 };
 })(globalThis);

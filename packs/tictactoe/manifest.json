@@ -1,6 +1,6 @@
 {
   "id": "tictactoe",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "name": "Крестики-нолики",
   "category": "board",
   "estimatedDuration": "2–5 мин",
@@ -42,7 +42,8 @@
     ],
     "view": [
       "presentation/scene.js",
-      "presentation/tutorial.js"
+      "presentation/tutorial.js",
+      "presentation/rule-illustrations.js"
     ],
     "locales": {
       "ru": [
@@ -61,5 +62,13 @@
         "label": "Классика"
       }
     ]
-  }
+  },
+  "releases": [
+    {
+      "version": "0.3.4",
+      "changes": [
+        "Короткие правила: абзацы, списки, таблицы и иллюстрации игровых элементов и интерфейса."
+      ]
+    }
+  ]
 }

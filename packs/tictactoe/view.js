@@ -17,7 +17,7 @@
         `<button data-interaction-shape="cell" class="ttt-cell ${cell.mark === 'X' ? 'cross' : cell.mark === 'O' ? 'nought' : ''}" role="gridcell" ${available(cell) ? H.actionAttr(available(cell)) : 'disabled'} aria-label="${text(cell.label)}"><span data-motion-effect="pulse" data-motion-trigger="place" data-motion-key="cell" data-motion-value="${cell.index}">${mark(cell.mark)}</span></button>`).join('')}</div>`}};
   }
   const cover = () => C.cover('<g transform="translate(76 16) rotate(-7 74 74)"><rect x="2" y="6" width="148" height="148" rx="16" fill="#bcab83"/><rect width="148" height="148" rx="16" fill="#fff9e6"/><path d="M49 9v130M98 9v130M9 49h130M9 98h130" stroke="#c9bb93" stroke-width="3"/><path d="m15 14 21 22m0-22L15 36m99 80 21 22m0-22-21 22" stroke="#c8775c" stroke-width="7" stroke-linecap="round"/><circle cx="74" cy="74" r="16" fill="none" stroke="#4e7966" stroke-width="7"/></g>');
-  V.register('tictactoe', render, cover, {surfaces:{table:render, player:render}});
+  V.register('tictactoe', render, cover, {illustrations:(source?require('./presentation/rule-illustrations.js'):globalThis.PlayroomPackRuleIllustrations).create({mark}),surfaces:{table:render, player:render}});
 })(globalThis);
 
 (function(root){

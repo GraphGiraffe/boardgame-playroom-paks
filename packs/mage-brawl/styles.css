@@ -4,7 +4,8 @@
 .mage-scene .mage-cell{--mage-cell-outline:max(2px,calc((100cqi - (var(--mage-columns) - 1)*2px)/var(--mage-columns)*.05));position:relative;border:1px solid #8fa28166;border-radius:12%;background:#e9e8d6;min-width:0;min-height:0;padding:0;aspect-ratio:1;color:#82937b;opacity:1;container-type:inline-size}
 .mage-scene .tile-void{visibility:hidden}.mage-scene .tile-wall{background:#b2b9a9;color:#536756}.mage-scene .tile-base{background:#f3e8c8;color:#b08d4c}.mage-scene .tile-puddle{background:#d2e6e5;color:#6097a6}.mage-scene .tile-desert{background:#f0dfb6;color:#bc9b59}.mage-scene .tile-forest{background:#cbdebd;color:#70926c}.mage-scene .tile-air_island{background:#deebe0;color:#80a39b}.mage-scene .tile-spikes{background:#edd2bf;color:#b78067}.mage-scene .tile-falling_floor{background:#e1dac7;color:#9f9179}
 .mage-scene .mage-terrain{width:100%;height:100%;display:block}.mage-scene .mage-preview{outline:var(--mage-cell-outline) solid var(--color-interaction-selected,#d3aa45);outline-offset:calc(-1*var(--mage-cell-outline))}.mage-scene .mage-risk{border-color:#c7794d;border-style:dashed}.mage-scene .mage-acting{outline:var(--mage-cell-outline) solid #fffbed;z-index:3}
-.mage-scene .mage-token{position:absolute;inset:22%;display:grid;place-items:center;border-radius:50%;background:var(--mage-color);color:#fffbed;border:2px solid #fff9e6;font-weight:800;font-size:clamp(6px,29cqi,26px);box-shadow:0 2px 1px #263c3633;z-index:2}
+.mage-scene .mage-token{position:absolute;inset:22%;display:grid;place-items:center;border-radius:50%;background:transparent;color:#fffbed;border:0;font-weight:800;font-size:clamp(6px,29cqi,26px);box-shadow:none;z-index:2;--round-token-fill:var(--mage-color);--round-token-side:color-mix(in srgb,var(--mage-color) 65%,black);--round-token-rim:#fffbed}
+.mage-scene .mage-token>.pawn-token-art{position:absolute;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
 .mage-scene .mage-shield{position:absolute;inset:-24%;pointer-events:none}.mage-scene .mage-shield svg{width:100%;height:100%}.mage-scene .mage-revealed{position:absolute;bottom:-18%;right:-18%;width:48%;height:48%;display:grid;place-items:center;background:#fffbed;color:#294338;border-radius:50%;padding:2px}.mage-scene .mage-revealed svg{width:100%;height:100%}
 .mage-scene .mage-moving{animation:mage-step var(--sequence-duration,850ms) ease both}.mage-scene .mage-effects{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;z-index:5}.mage-scene .mage-ray{fill:none;stroke:currentColor;stroke-width:9;stroke-linecap:round;stroke-dasharray:600;animation:mage-ray var(--sequence-duration,850ms) ease both}.mage-scene .mage-impact{fill:none;stroke:currentColor;stroke-width:7;transform-box:fill-box;transform-origin:center;animation:mage-hit var(--sequence-duration,850ms) ease both}
 .mage-scene .mage-controls{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap}.mage-scene .mage-controls .settings-range{width:clamp(130px,22vw,220px);margin:0;gap:0}.mage-scene .mage-controls .settings-range-heading{font-size:12px}.mage-scene .mage-plan-buttons{display:flex;align-items:center;gap:4px}.mage-scene .mage-direction{font-size:20px;min-width:18px;text-align:center}.mage-scene .mage-controls .ui-icon-button{width:32px;height:32px;min-height:32px;padding:5px}.mage-scene .mage-controls .scene-button{padding:6px 9px;min-height:32px;font-size:13px}
@@ -67,7 +68,7 @@
 @media(prefers-reduced-motion:reduce){.mage-scene .mage-spell-paint{transition:none}}
 
 /* Simultaneous choices have no displayed player order; the crown marks an available ultimate. */
-.mage-scene .mage-ultimate{position:relative;z-index:1;display:grid;place-items:center;width:70%;height:70%}
+.mage-scene .mage-ultimate{position:absolute;left:50%;top:45%;transform:translate(-50%,-50%);z-index:1;display:grid;place-items:center;width:44%;height:44%}
 .mage-scene .mage-ultimate>span{display:grid;place-items:center;width:100%;height:100%;padding:0;border:0;background:none}
 .mage-scene .mage-ultimate svg{width:100%;height:100%;max-width:none;max-height:none}
 .mage-scene .mage-action-switch button{display:flex;align-items:center;justify-content:center}
@@ -97,7 +98,7 @@
 
 .mage-scene .mage-cell.is-playable{outline:var(--mage-cell-outline) solid var(--piece-interaction-color);outline-offset:calc(-1*var(--mage-cell-outline))!important}
 
-.mage-scene .mage-token-health{position:absolute;bottom:6%;left:50%;transform:translateX(-50%);z-index:4;width:72%;height:auto;aspect-ratio:3;overflow:visible}
+.mage-scene .mage-token-health{position:absolute;bottom:24%;left:50%;transform:translateX(-50%);z-index:4;width:50%;height:auto;aspect-ratio:3;overflow:visible}
 .mage-scene .piece-indicator{fill:#fff;stroke:#fff;stroke-width:1.2}
 .mage-scene .piece-indicator.is-empty{fill:var(--mage-color)}
 
@@ -164,3 +165,5 @@
 .mage-scene .mage-cell-highlight.is-preview{border:var(--mage-ring) solid color-mix(in srgb,var(--mage-selected) var(--piece-highlight-strength,100%),transparent)}
 .mage-scene .mage-cell-highlight.is-respawn{border:var(--mage-ring) solid var(--piece-interaction-color,#638658)}
 .mage-scene .mage-cell-highlight.is-acting{border:var(--mage-ring) solid #fffbed}
+
+.mage-scene .mage-cell-highlight.is-preview.is-attack-preview{--mage-ring:max(3px,calc((100cqi - (var(--mage-columns) - 1)*2px)/var(--mage-columns)*.075))}

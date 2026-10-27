@@ -1,6 +1,6 @@
 {
   "id": "oldmaid",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "name": "Акулина",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
@@ -103,7 +103,8 @@
     ],
     "view": [
       "presentation/scene.js",
-      "presentation/tutorial.js"
+      "presentation/tutorial.js",
+      "presentation/rule-illustrations.js"
     ],
     "locales": {
       "ru": [
@@ -143,5 +144,13 @@
   "sharedAssetPacks": [
     "standard-deck",
     "mini-split-deck"
+  ],
+  "releases": [
+    {
+      "version": "0.3.3",
+      "changes": [
+        "Короткие правила: абзацы, списки, таблицы и иллюстрации игровых элементов и интерфейса."
+      ]
+    }
   ]
 }

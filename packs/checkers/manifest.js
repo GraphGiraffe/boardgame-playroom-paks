@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["checkers"] = {
   "id": "checkers",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "category": "board",
   "estimatedDuration": "15–30 мин",
   "tagline": "Бери шашки и пробивайся в дамки.",
@@ -63,6 +63,14 @@
   "skinFamilies": [
     "checker",
     "board"
+  ],
+  "releases": [
+    {
+      "version": "0.5.3",
+      "changes": [
+        "Короткие правила: абзацы, списки, таблицы и иллюстрации игровых элементов и интерфейса."
+      ]
+    }
   ]
 };
 })(globalThis);
