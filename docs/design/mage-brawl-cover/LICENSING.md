@@ -1,0 +1,1 @@
+Original Mage Brawl cover artwork in this directory: [CC BY-NC-ND 4.0](../../../LICENSES/CC-BY-NC-ND-4.0.txt). Attribution: GraphGiraffe (https://github.com/GraphGiraffe). External references retain their respective rights. See [repository scope](../../../LICENSING.md).
