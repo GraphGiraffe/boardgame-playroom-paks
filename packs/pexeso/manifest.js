@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["pexeso"] = {
   "id": "pexeso",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "name": "Пексесо",
   "category": "cards",
   "estimatedDuration": "5–20 мин",
@@ -106,6 +106,12 @@
     "character-face": "minimal"
   },
   "releases": [
+    {
+      "version": "0.3.4",
+      "changes": [
+        "Обновлён общий компонент пустого карточного слота; правила игры не изменены."
+      ]
+    },
     {
       "version": "0.3.3",
       "changes": [

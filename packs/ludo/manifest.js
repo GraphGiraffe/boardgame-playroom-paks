@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["ludo"] = {
   "id": "ludo",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "name": "Лудо",
   "category": "board",
   "estimatedDuration": "20–40 мин",
@@ -256,6 +256,12 @@
     "die"
   ],
   "releases": [
+    {
+      "version": "0.3.6",
+      "changes": [
+        "Обновлён общий компонент пустого карточного слота; правила игры не изменены."
+      ]
+    },
     {
       "version": "0.3.5",
       "changes": [

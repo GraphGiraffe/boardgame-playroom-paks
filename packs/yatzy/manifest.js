@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["yatzy"] = {
   "id": "yatzy",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "name": "Ятзи",
   "category": "dice",
   "estimatedDuration": "15–25 мин",
@@ -97,6 +97,12 @@
     ]
   },
   "releases": [
+    {
+      "version": "0.3.4",
+      "changes": [
+        "Обновлён общий компонент пустого карточного слота; правила игры не изменены."
+      ]
+    },
     {
       "version": "0.3.3",
       "changes": [

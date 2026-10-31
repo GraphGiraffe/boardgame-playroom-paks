@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["battleship"] = {
   "id": "battleship",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "name": "Морской бой",
   "category": "board",
   "estimatedDuration": "15–30 мин",
@@ -105,6 +105,12 @@
     "ship"
   ],
   "releases": [
+    {
+      "version": "0.3.6",
+      "changes": [
+        "Обновлён общий компонент пустого карточного слота; правила игры не изменены."
+      ]
+    },
     {
       "version": "0.3.5",
       "changes": [
