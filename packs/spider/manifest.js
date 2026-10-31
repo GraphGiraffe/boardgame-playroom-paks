@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["spider"] = {
   "id": "spider",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "name": "Паук",
   "category": "solitaire",
   "estimatedDuration": "10–30 мин",
@@ -163,6 +163,12 @@
     ]
   },
   "releases": [
+    {
+      "version": "0.2.4",
+      "changes": [
+        "Обновлён общий компонент пустого карточного слота; правила игры не изменены."
+      ]
+    },
     {
       "version": "0.2.3",
       "changes": [

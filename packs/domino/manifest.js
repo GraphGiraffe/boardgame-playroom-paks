@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["domino"] = {
   "id": "domino",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "category": "board",
   "estimatedDuration": "10–15 мин",
   "tagline": "Соединяй числа и считай ходы соперников.",
@@ -94,6 +94,12 @@
     "domino"
   ],
   "releases": [
+    {
+      "version": "0.5.5",
+      "changes": [
+        "Обновлён общий компонент пустого карточного слота; правила игры не изменены."
+      ]
+    },
     {
       "version": "0.5.4",
       "changes": [

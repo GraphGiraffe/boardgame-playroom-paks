@@ -176,9 +176,82 @@ def pack_files(pack, manifest):
             files.add(local_file(pack, path.name))
     return sorted(files)
 
+def compile_rulebook_markdown(source):
+    """Optional authoring input; emit inert structured data, never raw HTML."""
+    try:
+        import mistune
+    except ImportError as error:
+        raise ValueError("Markdown rules require mistune 3: python3 -m pip install 'mistune>=3,<4'") from error
+    if mistune.__version__.split(".")[0] != "3":
+        raise ValueError("Markdown rules require mistune 3")
+    if not isinstance(source, str) or len(source.encode("utf-8")) > 128 * 1024:
+        raise ValueError("Markdown rulebook is too large")
+    def plain(nodes):
+        return "".join(node.get("raw", "") if node["type"] in ("text", "codespan") else plain(node.get("children", [])) for node in nodes)
+    def inline(nodes):
+        result = []
+        for node in nodes:
+            kind = node["type"]
+            if kind == "text":
+                result.append(node["raw"])
+            elif kind in ("softbreak", "linebreak"):
+                result.append("\n")
+            elif kind == "codespan":
+                result.append({"type": "code", "children": [node["raw"]]})
+            elif kind in ("strong", "emphasis"):
+                result.append({"type": kind, "children": inline(node["children"])})
+            elif kind == "link":
+                url = node.get("attrs", {}).get("url", "")
+                if not re.match(r"^https?://", url, re.IGNORECASE):
+                    raise ValueError("Markdown links require http(s)")
+                result.append({"type": "link", "url": url, "children": inline(node["children"])})
+            else:
+                raise ValueError("Unsupported Markdown inline: " + kind)
+        return result
+    document = {"sections": []}
+    for node in mistune.create_markdown(renderer="ast", plugins=["table"])(source):
+        kind = node["type"]
+        if kind in ("blank_line", "thematic_break"):
+            continue
+        if kind == "heading":
+            document["sections"].append({"title": plain(node["children"]), "blocks": []})
+            continue
+        if not document["sections"]:
+            raise ValueError("Start Markdown rules with a heading")
+        section = document["sections"][-1]
+        if kind == "paragraph" and len(node["children"]) == 1 and node["children"][0]["type"] == "image":
+            image = node["children"][0]
+            identity = image.get("attrs", {}).get("url", "")
+            if not re.fullmatch(r"[a-zA-Z0-9_-]{1,64}", identity):
+                raise ValueError("Markdown illustrations must reference a local illustration ID")
+            section.setdefault("figures", []).append({"id": identity, "caption": plain(image["children"]), "role": "diagram"})
+        elif kind == "paragraph":
+            section["blocks"].append({"type": "paragraph", "text": inline(node["children"])})
+        elif kind == "list":
+            items = []
+            for item in node["children"]:
+                if any(child["type"] not in ("block_text", "paragraph", "blank_line") for child in item["children"]):
+                    raise ValueError("Nested Markdown lists are not supported")
+                values = []
+                for child in item["children"]:
+                    if child["type"] != "blank_line":
+                        if values: values.append("\n")
+                        values.extend(inline(child["children"]))
+                items.append(values)
+            section["blocks"].append({"type": "list", "ordered": bool(node.get("attrs", {}).get("ordered")), "items": items})
+        elif kind == "table":
+            head, body = node["children"]
+            section["blocks"].append({"type": "table", "headers": [inline(cell["children"]) for cell in head["children"]], "rows": [[inline(cell["children"]) for cell in row["children"]] for row in body["children"]]})
+        else:
+            raise ValueError("Unsupported Markdown block: " + kind)
+    if not document["sections"] or len(document["sections"]) > 64:
+        raise ValueError("Markdown rulebook requires 1-64 sections")
+    return document
+
+
 def bundle_source_modules(files, source, read):
     """Compile local layers and data into fixed, autonomous entrypoints."""
-    if not isinstance(source, dict) or set(source) - {"rules", "view", "locales"}:
+    if not isinstance(source, dict) or set(source) - {"rules", "view", "locales", "rulebooks"}:
         raise ValueError("Некорректные sourceModules")
     scripts = {}
     for entry in ("rules", "view"):
@@ -208,7 +281,19 @@ def bundle_source_modules(files, source, read):
                 raise ValueError("Повтор ключей или неверный каталог: " + path)
             catalog.update(messages)
         catalogs[locale] = catalog
-    resources = "globalThis.PlayroomPackResources = " + json_text({"locales": catalogs}).rstrip() + ";\n"
+    rulebooks = source.get("rulebooks", {})
+    if not isinstance(rulebooks, dict) or len(rulebooks) > 32:
+        raise ValueError("Invalid Markdown rulebooks")
+    compiled_books = {}
+    for locale, path in rulebooks.items():
+        if (locale not in catalogs or not isinstance(path, str) or not path_ok(path)
+                or not path.startswith("locales/" + locale + "/") or not path.endswith(".md")):
+            raise ValueError("Invalid Markdown rulebook path or locale")
+        compiled_books[locale] = compile_rulebook_markdown(read(path))
+    payload = {"locales": catalogs}
+    if compiled_books:
+        payload["rulebooks"] = compiled_books
+    resources = "globalThis.PlayroomPackResources = " + json_text(payload).rstrip() + ";\n"
     for entry, paths in scripts.items():
         for path in paths:
             files[path] = read(path)
