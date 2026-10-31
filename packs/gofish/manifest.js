@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["gofish"] = {
   "id": "gofish",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "name": "Спроси рыбу",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
@@ -91,6 +91,12 @@
     ]
   },
   "releases": [
+    {
+      "version": "0.3.4",
+      "changes": [
+        "Обновлён общий компонент пустого карточного слота; правила игры не изменены."
+      ]
+    },
     {
       "version": "0.3.3",
       "changes": [

@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["snakes"] = {
   "id": "snakes",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "category": "board",
   "estimatedDuration": "5–15 мин",
   "tagline": "Лестницы поднимают. Змеи возвращают назад.",
@@ -154,6 +154,12 @@
     "die"
   ],
   "releases": [
+    {
+      "version": "0.5.6",
+      "changes": [
+        "Обновлён общий компонент пустого карточного слота; правила игры не изменены."
+      ]
+    },
     {
       "version": "0.5.5",
       "changes": [
