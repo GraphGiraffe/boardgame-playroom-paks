@@ -12,4 +12,11 @@
 .battleship-scene .battle-grid [data-drop-piece].playroom-drop-hover{outline-offset:-3px!important;}
 .battleship-scene .layout-field,.battleship-scene .game-field-content{overflow-x:clip;}
 
-@media(orientation:landscape){.battleship-scene .battle-panel{flex-direction:row;gap:var(--size-space-4_0,4px);}.battleship-scene .battle-panel>.player-indicators{flex-direction:column;width:var(--size-length-48_0,48px);max-width:var(--size-length-48_0,48px);align-items:stretch;}.battleship-scene .battle-panel .battle-grid{width:min(calc(100cqw - var(--size-length-52_0,52px)),100cqh);height:auto;margin:0;}.battleship-scene .battle-panel .fleet-indicator{padding:var(--size-space-2_0,2px);font-size:var(--size-type-10_0,10px);}.battleship-scene .battle-panel .fleet-ship-icon{max-width:var(--size-length-30_0,28px);}}
+/* Fleet tokens keep the same row above the square board in both orientations. */
+.battleship-scene .battle-panel .battle-grid{width:min(100cqw,calc(100cqh - 32px));height:auto}
+.battleship-scene .battle-panel>.player-indicators{flex-direction:row;flex-wrap:nowrap;width:auto;gap:4px;min-height:28px}
+
+/* Controls sit directly on the table; only the active selector thumb has a fill. */
+@media(orientation:landscape){
+ .battleship-scene :is(.battle-placement-controls,.battle-field-controls),.battleship-scene .battle-field-controls>.shared-page-tabs{background:transparent;box-shadow:none}
+}

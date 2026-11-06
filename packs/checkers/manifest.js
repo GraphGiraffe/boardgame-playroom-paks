@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["checkers"] = {
   "id": "checkers",
-  "version": "0.5.4",
+  "version": "0.5.5-preview.7",
   "category": "board",
   "estimatedDuration": "15–30 мин",
   "tagline": "Бери шашки и пробивайся в дамки.",
@@ -65,6 +65,18 @@
     "board"
   ],
   "releases": [
+    {
+      "version": "0.5.5-preview.7",
+      "changes": [
+        "Обновлены общие компоненты отображения карточных мастей и жетонов."
+      ]
+    },
+    {
+      "version": "0.5.5-preview.6",
+      "changes": [
+        "Обновлён общий каталог оформления и сведения о версии пака. Правила и игровой процесс не изменены."
+      ]
+    },
     {
       "version": "0.5.4",
       "changes": [

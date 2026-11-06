@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["domino"] = {
   "id": "domino",
-  "version": "0.5.5",
+  "version": "0.5.6-preview.8",
   "category": "board",
   "estimatedDuration": "10–15 мин",
   "tagline": "Соединяй числа и считай ходы соперников.",
@@ -94,6 +94,24 @@
     "domino"
   ],
   "releases": [
+    {
+      "version": "0.5.6-preview.8",
+      "changes": [
+        "Счётчики базара и стола перенесены в общую строку статуса без растягивания."
+      ]
+    },
+    {
+      "version": "0.5.6-preview.7",
+      "changes": [
+        "Убрана дополнительная бежевая подложка поля."
+      ]
+    },
+    {
+      "version": "0.5.6-preview.6",
+      "changes": [
+        "Обновлён общий каталог оформления и сведения о версии пака. Правила и игровой процесс не изменены."
+      ]
+    },
     {
       "version": "0.5.5",
       "changes": [

@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["oldmaid"] = {
   "id": "oldmaid",
-  "version": "0.3.4",
+  "version": "0.3.5-preview.7",
   "name": "Акулина",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
@@ -134,6 +134,19 @@
     "mini-split-deck"
   ],
   "releases": [
+    {
+      "version": "0.3.5-preview.7",
+      "changes": [
+        "Обновлены общие компоненты отображения карточных мастей и жетонов."
+      ]
+    },
+    {
+      "version": "0.3.5-preview.6",
+      "changes": [
+        "Угловые номиналы поверх рамки, единое выравнивание индексов и узкая «10» с прежним шрифтом.",
+        "Уточнены безопасные области номиналов и мастей при перекрытии карт."
+      ]
+    },
     {
       "version": "0.3.4",
       "changes": [

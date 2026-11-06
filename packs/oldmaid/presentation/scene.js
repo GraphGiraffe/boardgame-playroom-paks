@@ -47,5 +47,7 @@
   }
   return frames;
  }
+ // Concise, separately authored player introduction; full rulebook stays intact.
+ metadata.rulebook.brief={"sections":[{"title":{"key":"oldmaid.brief.0.title","params":{}},"paragraphs":[{"key":"oldmaid.brief.0.text","params":{}}],"layout":"row","figures":[{"id":"pair","caption":{"key":"oldmaid.brief.0.caption","params":{}},"role":"diagram"}]},{"title":{"key":"oldmaid.brief.1.title","params":{}},"paragraphs":[{"key":"oldmaid.brief.1.text","params":{}}],"layout":"row","figures":[{"id":"choose","caption":{"key":"oldmaid.brief.1.caption","params":{}},"role":"diagram"}]},{"title":{"key":"oldmaid.brief.2.title","params":{}},"paragraphs":[{"key":"oldmaid.brief.2.text","params":{}}]}]};
  return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}),action,choice,event,metric,eventScenes,scene:p=>({...scene(p),...sceneLayout(p)})});
 });

@@ -319,7 +319,7 @@ def build_pack(pack, shared=None):
         files["rules.js"] = "\n".join([*sources, files["rules.js"]])
         files["view.js"] = "\n".join([*sources, files["view.js"]])
     if manifest.get("sharedUi"):
-        files["view.js"] = (shared / "components/round-token.js").read_text(encoding="utf-8") + "\n" + (shared / "components/game-components.js").read_text(encoding="utf-8") + "\n" + (shared / "view-kit.js").read_text(encoding="utf-8") + "\n" + files["view.js"]
+        files["view.js"] = (shared / "components/vector-art.js").read_text(encoding="utf-8") + "\n" + (shared / "components/round-token.js").read_text(encoding="utf-8") + "\n" + (shared / "components/game-components.js").read_text(encoding="utf-8") + "\n" + (shared / "view-kit.js").read_text(encoding="utf-8") + "\n" + files["view.js"]
         files["styles.css"] = (shared / "view-kit.css").read_text(encoding="utf-8") + "\n" + files["styles.css"]
         for name in manifest.get("sharedAssets", []):
             if not re.fullmatch(r"[a-z][a-z0-9-]*\.svg", name):

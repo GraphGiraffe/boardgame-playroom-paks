@@ -54,5 +54,7 @@
  }
  // Geometry contains only public identities from the authorized projection.
  function sceneLayout(p){const d=p.data;return {geometry:{topology:'grid:'+d.size+':'+d.inset},zones:[{id:'field',kind:'board'},...d.players.map((v,owner)=>({id:'hand-'+owner,kind:'hand',owner,count:v.handCount}))],objects:d.players.flatMap((v,owner)=>[...(v.pos?[{ref:{namespace:'mage',id:String(owner)},zone:'field',owner,point:v.pos}]:[]),...(v.hand||[]).map((card,index)=>({ref:{namespace:'card',id:card.id},zone:'hand-'+owner,index}))]),interactions:p.actions.map(command=>({command,target:command.cardId?{entity:{namespace:'card',id:command.cardId}}:{zone:'field'}}))};}
+ // Concise, separately authored player introduction; full rulebook stays intact.
+ metadata.rulebook.brief={"sections":[{"title":{"key":"mage-brawl.brief.0.title","params":{}},"paragraphs":[{"key":"mage-brawl.brief.0.text","params":{}}],"layout":"row","figures":[{"id":"type-control","caption":{"key":"mage-brawl.brief.0.caption","params":{}},"role":"diagram"}]},{"title":{"key":"mage-brawl.brief.1.title","params":{}},"paragraphs":[{"key":"mage-brawl.brief.1.text","params":{}}],"layout":"row","figures":[{"id":"order","caption":{"key":"mage-brawl.brief.1.caption","params":{}},"role":"diagram"}]},{"title":{"key":"mage-brawl.brief.2.title","params":{}},"paragraphs":[{"key":"mage-brawl.brief.2.text","params":{}}]}]};
  return Object.freeze({metadata,action,choice,event,metric,scene:p=>({...scene(p),...sceneLayout(p)}),playerMetrics,healthMetric,phaseGroups,presentationPlan,message});
 });

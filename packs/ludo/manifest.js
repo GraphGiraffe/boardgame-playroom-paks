@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["ludo"] = {
   "id": "ludo",
-  "version": "0.3.6",
+  "version": "0.3.7-preview.8",
   "name": "Лудо",
   "category": "board",
   "estimatedDuration": "20–40 мин",
@@ -256,6 +256,24 @@
     "die"
   ],
   "releases": [
+    {
+      "version": "0.3.7-preview.8",
+      "changes": [
+        "Явное расположение карточек игроков и уточнённые зоны управления."
+      ]
+    },
+    {
+      "version": "0.3.7-preview.7",
+      "changes": [
+        "Убрана подложка кубиков; используется привязка карточек к базам."
+      ]
+    },
+    {
+      "version": "0.3.7-preview.6",
+      "changes": [
+        "Обновлён общий каталог оформления и сведения о версии пака. Правила и игровой процесс не изменены."
+      ]
+    },
     {
       "version": "0.3.6",
       "changes": [

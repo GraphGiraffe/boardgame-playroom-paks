@@ -15,3 +15,22 @@
 .yatzy-scene .yatzy-score tbody th,.yatzy-scene .yatzy-score tbody td{height:24px;padding-block:1px}
 .yatzy-scene .yatzy-score button{height:20px;min-height:20px;padding-block:0;line-height:18px}
 .yatzy-scene .yatzy-score thead th,.yatzy-scene .yatzy-score tfoot th,.yatzy-scene .yatzy-score tfoot td{height:28px}
+
+/* Retain the controls owner while public dice change between live and inert. */
+.yatzy-scene .yatzy-public-controls{display:contents}
+
+/* Table headings must not change the avatar typography. */
+.yatzy-scene .yatzy-score .avatar{font-weight:400}
+@media(orientation:landscape){.yatzy-scene .yatzy-score{font-size:var(--size-type-10_0,10px)}}
+
+/* The authored control group follows the host self-card slot without its own sheet. */
+.yatzy-scene .yatzy-controls{grid-template-columns:minmax(0,1fr);grid-template-rows:auto 44px;align-content:start;background:transparent;box-shadow:none;padding:0}
+.yatzy-scene .yatzy-controls>.yatzy-dice{grid-column:1;grid-row:1;order:0}
+.yatzy-scene .yatzy-controls>.yatzy-roll{grid-column:1;grid-row:2;order:1}
+
+/* Five equal slots shrink the physical dice together; never clip or hide a die. */
+.yatzy-scene .yatzy-dice{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));width:100%;min-width:0;justify-items:center;align-items:center;box-sizing:border-box}
+.yatzy-scene .yatzy-dice>.shared-die{width:100%!important;max-width:var(--size-die,36px)!important;min-width:0!important;height:auto!important;min-height:0!important;aspect-ratio:1;padding:0}
+
+
+.scene.replaying .yatzy-scene .yatzy-controls{display:flex;min-height:0;gap:0}

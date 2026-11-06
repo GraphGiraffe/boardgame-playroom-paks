@@ -63,8 +63,7 @@
     if(a.type==='recycle'){d.stock=d.waste.reverse().map(c=>({...c,open:false}));d.waste=[];d.passes++;if(d.config.scoring==='standard')score(d,d.config.draw===1?-100:d.passes>3?-20:0);}
     if(a.type==='collect'){let m;while((m=commands(next).find(c=>c.target==='foundation'))){const col=m.source==='waste'?d.waste:d.tableau[m.from],card=copy(col[m.index]);transfers.push({card,from:m.source==='waste'?'waste':'tableau-'+m.from+'-'+m.index,to:'home-'+card.suit});move(d,m);stable(d);}}
     if(spider)score(d,-1);stable(d);d.moves++;
-    const barrier=spider&&d.config.undo==='last'&&(a.type==='draw'||d.completed.length!==before.completed.length);
-    if(barrier)d.history=[];else if(d.config.undo!=='off')d.history=(d.config.undo==='last'?[]:d.history).concat([before]).slice(-100);
+    if(d.config.undo!=='off')d.history=(d.config.undo==='last'?[]:d.history).concat([before]).slice(-100);
    }
    const won=spider?d.completed.length===8:d.foundations.reduce((n,c)=>n+c.length,0)===52;
    if(won){next.status='finished';next.winners=[0];}
