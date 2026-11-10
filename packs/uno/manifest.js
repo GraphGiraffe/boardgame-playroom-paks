@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["uno"] = {
   "id": "uno",
-  "version": "0.6.8-preview.17",
+  "version": "0.6.8-preview.18",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Подбирай цвет и значение. Освободи руку первым.",
@@ -28,15 +28,27 @@
       "options": [
         {
           "value": "manual",
-          "label": "Вручную"
+          "label": "Вручную",
+          "preview": {
+            "actor": "human"
+          },
+          "description": "Одну карту объявляет игрок кнопкой UNO!"
         },
         {
           "value": "auto",
-          "label": "Авто"
+          "label": "Авто",
+          "preview": {
+            "actor": "bot"
+          },
+          "description": "UNO объявляется автоматически, без обвинений."
         }
       ],
       "help": "«Вручную»: когда осталась одна карта, нажмите UNO. За забытое объявление по обвинению соперника берут две карты; за ошибочное обвинение две карты берёт обвинитель. «Авто»: приложение объявляет UNO за вас, обвинений нет.",
-      "control": "slider"
+      "control": "slider",
+      "preview": {
+        "kind": "declaration",
+        "label": "UNO!"
+      }
     },
     {
       "key": "endMode",
@@ -46,14 +58,28 @@
       "options": [
         {
           "value": "winner",
-          "label": "До победителя"
+          "label": "До победителя",
+          "description": "Первая пустая рука завершает партию.",
+          "preview": {
+            "kind": "symbol",
+            "icon": "trophy"
+          }
         },
         {
           "value": "last",
-          "label": "До последнего"
+          "label": "До последнего",
+          "description": "Продолжают до последнего участника с картами.",
+          "preview": {
+            "kind": "symbol",
+            "icon": "people"
+          }
         }
       ],
-      "control": "slider"
+      "control": "slider",
+      "preview": {
+        "kind": "symbol",
+        "icon": "trophy"
+      }
     }
   ],
   "name": "UNO",
@@ -103,11 +129,21 @@
     "options": [
       {
         "value": "quick",
-        "label": "5"
+        "label": "5",
+        "preview": {
+          "kind": "cards",
+          "count": 5
+        },
+        "description": "Стартовая рука каждого игрока — 5 карт."
       },
       {
         "value": "classic",
-        "label": "7"
+        "label": "7",
+        "preview": {
+          "kind": "cards",
+          "count": 7
+        },
+        "description": "Стартовая рука каждого игрока — 7 карт."
       }
     ],
     "help": "Число карт у каждого игрока при начальной раздаче. Правила специальных карт сохраняются."
@@ -119,6 +155,13 @@
     "uno-deck"
   ],
   "releases": [
+    {
+      "version": "0.6.8-preview.18",
+      "changes": [
+        "Начальная рука показывает пять или семь карт; ручное и автоматическое объявление UNO имеют разные наглядные подсказки.",
+        "Добавлены короткие пояснения выбранных параметров."
+      ]
+    },
     {
       "version": "0.6.8-preview.14",
       "changes": [
