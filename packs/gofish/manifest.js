@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["gofish"] = {
   "id": "gofish",
-  "version": "0.3.5-preview.11",
+  "version": "0.3.5-preview.12",
   "name": "Спроси рыбу",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
@@ -34,15 +34,20 @@
       "options": [
         {
           "value": "36",
-          "label": "36 карт"
+          "label": "36 карт",
+          "description": "От шестёрки до туза: 9 квартетов, без джокеров."
         },
         {
           "value": "52",
-          "label": "52 карты"
+          "label": "52 карты",
+          "description": "От двойки до туза: 13 квартетов, без джокеров."
         }
       ],
       "help": "36 карт — девять достоинств от шестёрки до туза, 9 квартетов. 52 карты — тринадцать достоинств от двойки до туза, 13 квартетов. В обоих вариантах джокеров нет.",
-      "control": "select"
+      "control": "select",
+      "preview": {
+        "kind": "cards"
+      }
     }
   ],
   "engineApi": 4,
@@ -91,6 +96,12 @@
     ]
   },
   "releases": [
+    {
+      "version": "0.3.5-preview.12",
+      "changes": [
+        "Размер колоды показан картами с точным количеством; выбранный вариант кратко объясняет состав квартетов."
+      ]
+    },
     {
       "version": "0.3.5-preview.9",
       "changes": [

@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["snakes"] = {
   "id": "snakes",
-  "version": "0.5.7-preview.10",
+  "version": "0.5.7-preview.11",
   "category": "board",
   "estimatedDuration": "5–15 мин",
   "tagline": "Лестницы поднимают. Змеи возвращают назад.",
@@ -141,11 +141,21 @@
     "options": [
       {
         "value": "classic",
-        "label": "Простой"
+        "label": "Простой",
+        "preview": {
+          "kind": "dice",
+          "count": 1
+        },
+        "description": "Один кубик; лестницы вперёд, змеи назад."
       },
       {
         "value": "plus",
-        "label": "ЗиЛ+"
+        "label": "ЗиЛ+",
+        "preview": {
+          "kind": "dice",
+          "count": 2
+        },
+        "description": "Два кубика и особые клетки с эффектами."
       }
     ],
     "help": "Простой: один кубик, змеи и лестницы. ЗиЛ+: два кубика на выбор, особые клетки и эффекты на следующий ход."
@@ -154,6 +164,12 @@
     "die"
   ],
   "releases": [
+    {
+      "version": "0.5.7-preview.11",
+      "changes": [
+        "Простой режим показывает один кубик, ЗиЛ+ — два; короткие пояснения отражают наличие особых клеток."
+      ]
+    },
     {
       "version": "0.5.7-preview.8",
       "changes": [
