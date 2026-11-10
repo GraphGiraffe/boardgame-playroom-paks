@@ -1,6 +1,6 @@
 {
   "id": "ludo",
-  "version": "0.3.7-preview.12",
+  "version": "0.3.7-preview.13",
   "name": "Лудо",
   "category": "board",
   "estimatedDuration": "20–40 мин",
@@ -55,19 +55,25 @@
       "options": [
         {
           "value": "1",
-          "label": "1"
+          "label": "1",
+          "description": "Бросается один кубик."
         },
         {
           "value": "2",
-          "label": "2"
+          "label": "2",
+          "description": "Два кубика, каждый используется отдельно."
         },
         {
           "value": "3",
-          "label": "3"
+          "label": "3",
+          "description": "Три кубика, каждый используется отдельно."
         }
       ],
       "help": "Кубики бросаются вместе, но каждый используется отдельно. Одной фишкой можно использовать несколько кубиков.",
-      "control": "slider"
+      "control": "slider",
+      "preview": {
+        "kind": "dice"
+      }
     },
     {
       "key": "sixReroll",
@@ -76,15 +82,29 @@
       "options": [
         {
           "value": "off",
-          "label": "Нет"
+          "label": "Нет",
+          "description": "Шестёрки не дают переброса.",
+          "preview": {
+            "kind": "symbol",
+            "icon": "close"
+          }
         },
         {
           "value": "on",
-          "label": "Да"
+          "label": "Да",
+          "description": "Использованные шестёрки перебрасываются.",
+          "preview": {
+            "kind": "symbol",
+            "icon": "refresh"
+          }
         }
       ],
       "help": "После использования доступных ходов перебрасываются только кубики с шестёрками. Остальные не перебрасываются.",
-      "control": "slider"
+      "control": "slider",
+      "preview": {
+        "kind": "symbol",
+        "icon": "refresh"
+      }
     },
     {
       "key": "guaranteedExit",
@@ -93,15 +113,29 @@
       "options": [
         {
           "value": "off",
-          "label": "Нет"
+          "label": "Нет",
+          "description": "Для выхода с базы нужна шестёрка.",
+          "preview": {
+            "kind": "symbol",
+            "icon": "close"
+          }
         },
         {
           "value": "on",
-          "label": "Да"
+          "label": "Да",
+          "description": "После трёх неудач — выход любым кубиком.",
+          "preview": {
+            "kind": "symbol",
+            "icon": "first"
+          }
         }
       ],
       "help": "Если все незавершённые фишки на базе, после трёх неудачных наборов одну можно вывести любым кубиком.",
-      "control": "slider"
+      "control": "slider",
+      "preview": {
+        "kind": "symbol",
+        "icon": "first"
+      }
     },
     {
       "key": "startPawn",
@@ -110,15 +144,29 @@
       "options": [
         {
           "value": "off",
-          "label": "Нет"
+          "label": "Нет",
+          "description": "Все четыре фишки начинают на базе.",
+          "preview": {
+            "kind": "symbol",
+            "icon": "close"
+          }
         },
         {
           "value": "on",
-          "label": "Да"
+          "label": "Да",
+          "description": "Одна фишка сразу стоит на стартовой клетке.",
+          "preview": {
+            "kind": "symbol",
+            "icon": "pieces"
+          }
         }
       ],
       "help": "В начале партии у каждого игрока одна фишка сразу стоит на стартовой клетке; остальные остаются на базе.",
-      "control": "slider"
+      "control": "slider",
+      "preview": {
+        "kind": "symbol",
+        "icon": "pieces"
+      }
     },
     {
       "key": "endMode",
@@ -128,18 +176,37 @@
       "options": [
         {
           "value": "winner",
-          "label": "До победителя"
+          "label": "До победителя",
+          "description": "Первый финиш завершает партию.",
+          "preview": {
+            "kind": "symbol",
+            "icon": "trophy"
+          }
         },
         {
           "value": "round",
-          "label": "Последний раунд"
+          "label": "Последний раунд",
+          "description": "Остальные заканчивают текущий круг.",
+          "preview": {
+            "kind": "symbol",
+            "icon": "clock"
+          }
         },
         {
           "value": "last",
-          "label": "До последнего"
+          "label": "До последнего",
+          "description": "Все финишируют; места — по порядку финиша.",
+          "preview": {
+            "kind": "symbol",
+            "icon": "people"
+          }
         }
       ],
-      "control": "slider"
+      "control": "slider",
+      "preview": {
+        "kind": "symbol",
+        "icon": "trophy"
+      }
     },
     {
       "key": "maxRounds",
@@ -149,30 +216,40 @@
       "options": [
         {
           "value": "3",
-          "label": "3"
+          "label": "3",
+          "description": "После лимита закончить круг и сравнить фишки дома."
         },
         {
           "value": "5",
-          "label": "5"
+          "label": "5",
+          "description": "После лимита закончить круг и сравнить фишки дома."
         },
         {
           "value": "10",
-          "label": "10"
+          "label": "10",
+          "description": "После лимита закончить круг и сравнить фишки дома."
         },
         {
           "value": "20",
-          "label": "20"
+          "label": "20",
+          "description": "После лимита закончить круг и сравнить фишки дома."
         },
         {
           "value": "50",
-          "label": "50"
+          "label": "50",
+          "description": "После лимита закончить круг и сравнить фишки дома."
         },
         {
           "value": "0",
-          "label": "∞"
+          "label": "∞",
+          "description": "Без ограничения числа раундов."
         }
       ],
-      "control": "slider"
+      "control": "slider",
+      "preview": {
+        "kind": "symbol",
+        "icon": "clock"
+      }
     }
   ],
   "sourceModules": {
@@ -257,19 +334,45 @@
     "options": [
       {
         "value": "classic",
-        "label": "Обычный"
+        "label": "Обычный",
+        "preview": {
+          "kind": "teams",
+          "teamSizes": [
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "description": "Каждый за себя: 2–4 игрока."
       },
       {
         "value": "teams",
-        "label": "Командный"
+        "label": "Командный",
+        "preview": {
+          "kind": "teams",
+          "teamSizes": [
+            2,
+            2
+          ]
+        },
+        "description": "Две команды по двое; после финиша помогают партнёру."
       }
     ],
-    "help": "Обычный: каждый играет за себя, 2–4 игрока. Командный: две команды по два игрока; после финиша своих фишек игрок помогает партнёру."
+    "help": "Обычный: каждый играет за себя, 2–4 игрока. Командный: две команды по два игрока; после финиша своих фишек игрок помогает партнёру.",
+    "presentation": "mode"
   },
   "skinFamilies": [
     "die"
   ],
   "releases": [
+    {
+      "version": "0.3.7-preview.13",
+      "changes": [
+        "Режимы наглядно показывают самостоятельную и командную игру; количество кубиков отображается настоящими кубиками.",
+        "Добавлены короткие пояснения выбранных параметров."
+      ]
+    },
     {
       "version": "0.3.7-preview.10",
       "changes": [

@@ -1,6 +1,6 @@
 {
   "id": "oldmaid",
-  "version": "0.3.5-preview.11",
+  "version": "0.3.5-preview.12",
   "name": "Акулина",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
@@ -25,15 +25,26 @@
       "options": [
         {
           "value": "36",
-          "label": "35 карт"
+          "label": "36",
+          "preview": {
+            "count": 35
+          },
+          "description": "Из колоды 36 убрана дама треф; в игре 35 карт."
         },
         {
           "value": "52",
-          "label": "51 карта"
+          "label": "52",
+          "preview": {
+            "count": 51
+          },
+          "description": "Из колоды 52 убрана дама треф; в игре 51 карта."
         }
       ],
       "help": "В игре 35 или 51 карта: из исходной колоды 36 или 52 карты убрана дама треф.",
-      "control": "select"
+      "control": "select",
+      "preview": {
+        "kind": "cards"
+      }
     },
     {
       "key": "drawFrom",
@@ -42,15 +53,29 @@
       "options": [
         {
           "value": "any",
-          "label": "У любого"
+          "label": "У любого",
+          "description": "Карту можно взять у любого соперника.",
+          "preview": {
+            "kind": "symbol",
+            "icon": "people"
+          }
         },
         {
           "value": "next",
-          "label": "У следующего"
+          "label": "У следующего",
+          "description": "Только у следующего по кругу, пропуская пустые руки.",
+          "preview": {
+            "kind": "symbol",
+            "icon": "first"
+          }
         }
       ],
       "help": "Выберите любого соперника с картами либо только следующего по кругу. Пустые руки пропускаются.",
-      "control": "slider"
+      "control": "slider",
+      "preview": {
+        "kind": "symbol",
+        "icon": "people"
+      }
     },
     {
       "key": "endMode",
@@ -60,14 +85,28 @@
       "options": [
         {
           "value": "winner",
-          "label": "До победителя"
+          "label": "До победителя",
+          "description": "Первый выход с пустой рукой завершает партию.",
+          "preview": {
+            "kind": "symbol",
+            "icon": "trophy"
+          }
         },
         {
           "value": "last",
-          "label": "До последнего"
+          "label": "До последнего",
+          "description": "Продолжают до участника с Акулиной.",
+          "preview": {
+            "kind": "symbol",
+            "icon": "people"
+          }
         }
       ],
-      "control": "slider"
+      "control": "slider",
+      "preview": {
+        "kind": "symbol",
+        "icon": "trophy"
+      }
     }
   ],
   "engineApi": 4,
@@ -146,6 +185,13 @@
     "mini-split-deck"
   ],
   "releases": [
+    {
+      "version": "0.3.5-preview.12",
+      "changes": [
+        "Исходные колоды 36 и 52 показаны с реальным количеством 35 и 51 карт после удаления дамы треф.",
+        "Короткие пояснения уточняют выбор соперника и условия завершения партии."
+      ]
+    },
     {
       "version": "0.3.5-preview.9",
       "changes": [
