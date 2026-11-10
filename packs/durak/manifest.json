@@ -1,6 +1,6 @@
 {
   "id": "durak",
-  "version": "0.6.7-preview.13",
+  "version": "0.6.7-preview.14",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Отбивайся, подкидывай и избавляйся от карт.",
@@ -45,19 +45,38 @@
       "options": [
         {
           "value": "simple",
-          "label": "Простой"
+          "label": "Простой",
+          "description": "По пять карт, без подкидывания.",
+          "preview": {
+            "kind": "symbol",
+            "icon": "hand"
+          }
         },
         {
           "value": "throwin",
-          "label": "Подкидной"
+          "label": "Подкидной",
+          "description": "По шесть карт; подкидывают достоинства со стола.",
+          "preview": {
+            "kind": "symbol",
+            "icon": "cards"
+          }
         },
         {
           "value": "transfer",
-          "label": "Переводной"
+          "label": "Переводной",
+          "description": "До первой защиты можно перевести атаку.",
+          "preview": {
+            "kind": "symbol",
+            "icon": "shuffle"
+          }
         }
       ],
       "help": "Простой: по пять карт, заранее составленный заход из одной карты, пары с третьей или двух пар с пятой, без подкидывания. Подкидной: по шесть, можно подкидывать достоинства со стола. Переводной: дополнительно можно перевести атаку до первой защиты.",
-      "control": "slider"
+      "control": "slider",
+      "preview": {
+        "kind": "symbol",
+        "icon": "cards"
+      }
     },
     {
       "key": "deck",
@@ -66,19 +85,25 @@
       "options": [
         {
           "value": "36",
-          "label": "36 карт"
+          "label": "36 карт",
+          "description": "От шестёрок до тузов, без джокеров."
         },
         {
           "value": "52",
-          "label": "52 карты"
+          "label": "52 карты",
+          "description": "От двоек до тузов, без джокеров."
         },
         {
           "value": "54",
-          "label": "54 карты"
+          "label": "54 карты",
+          "description": "52 обычные карты и два джокера."
         }
       ],
       "help": "36 карт — от шестёрок до тузов; 52 — от двоек до тузов; 54 — те же 52 и два джокера. Масти и число карт не меняют выбранный вариант боя.",
-      "control": "select"
+      "control": "select",
+      "preview": {
+        "kind": "cards"
+      }
     },
     {
       "key": "jokerMode",
@@ -87,18 +112,32 @@
       "options": [
         {
           "value": "color",
-          "label": "По цвету"
+          "label": "По цвету",
+          "description": "Сила джокера зависит от цвета козыря.",
+          "preview": {
+            "kind": "symbol",
+            "icon": "cards"
+          }
         },
         {
           "value": "universal",
-          "label": "Универсальные"
+          "label": "Универсальные",
+          "description": "Бьют обычные карты; красный старше чёрного.",
+          "preview": {
+            "kind": "symbol",
+            "icon": "star"
+          }
         }
       ],
       "visibleWhen": {
         "deck": "54"
       },
       "help": "Только для колоды 54. «По цвету»: джокер цвета козыря старше всех; другой бьёт некозырные карты своего цвета и сам бьётся козырем. «Универсальные»: оба бьют обычные карты, красный бьёт чёрного.",
-      "control": "slider"
+      "control": "slider",
+      "preview": {
+        "kind": "symbol",
+        "icon": "cards"
+      }
     },
     {
       "key": "endCondition",
@@ -107,15 +146,29 @@
       "options": [
         {
           "value": "firstout",
-          "label": "До победителя"
+          "label": "До победителя",
+          "description": "Первая пустая рука после конца колоды — победа.",
+          "preview": {
+            "kind": "symbol",
+            "icon": "trophy"
+          }
         },
         {
           "value": "lastfool",
-          "label": "До последнего"
+          "label": "До последнего",
+          "description": "Продолжают до последнего участника с картами.",
+          "preview": {
+            "kind": "symbol",
+            "icon": "people"
+          }
         }
       ],
       "help": "До победителя: после окончания взятки и исчерпания колоды первый вышедший побеждает. До последнего: игра продолжается до одного оставшегося с картами.",
-      "control": "slider"
+      "control": "slider",
+      "preview": {
+        "kind": "symbol",
+        "icon": "trophy"
+      }
     }
   ],
   "legacyPresets": {
@@ -196,6 +249,12 @@
     "mini-split-deck"
   ],
   "releases": [
+    {
+      "version": "0.6.7-preview.14",
+      "changes": [
+        "Размеры колоды показаны картами с точным количеством; выбранные варианты игры, джокеров и завершения сопровождаются короткими пояснениями."
+      ]
+    },
     {
       "version": "0.6.7-preview.11",
       "changes": [
