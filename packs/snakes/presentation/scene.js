@@ -43,5 +43,7 @@
    return {eventId:e.id,scene:{...scene(projected),...sceneLayout(projected)}};
   });
  }
+ // Concise, separately authored player introduction; full rulebook stays intact.
+ metadata.rulebook.brief={"sections":[{"title":{"key":"snakes.brief.0.title","params":{}},"paragraphs":[{"key":"snakes.brief.0.text","params":{}}],"layout":"row","figures":[{"id":"dice","caption":{"key":"snakes.brief.0.caption","params":{}},"role":"diagram"}]},{"title":{"key":"snakes.brief.1.title","params":{}},"paragraphs":[{"key":"snakes.brief.1.text","params":{}}],"layout":"row","figures":[{"id":"links","caption":{"key":"snakes.brief.1.caption","params":{}},"role":"diagram"}]},{"title":{"key":"snakes.brief.2.title","params":{}},"paragraphs":[{"key":"snakes.brief.2.text","params":{}}]}]};
  return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}),action,event,metric,scene:p=>({...scene(p),...sceneLayout(p)}),position,sequence,eventScenes});
 });

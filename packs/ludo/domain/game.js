@@ -95,5 +95,6 @@
   return {winners:position.winners,...Ending.result(position.data.ending),places:Ending.places(position.data.ending,values),
    metrics:position.preset==='teams'?[{id:'team-home',values,display:'ranking'},{id:'home',values:own}]:[{id:'home',values}]};
  }
- return Object.freeze({contractVersion:1,id:'ludo',minPlayers:2,maxPlayers:4,botMistakes:(p,actor,commands)=>{const exits=commands.filter(c=>c.type==='move'&&p.data.pawns[c.owner][c.pawn]<0&&p.data.dice[c.dieIndex]===6);return exits.length?exits:commands;},create,validate,actions,reduce,project,bot,result});
+ function localChoices(p){if(p.actor<0||p.status!=='playing')return [];return actions(p,p.actor);}
+ return Object.freeze({contractVersion:1,id:'ludo',turnOrder:p=>({next:Ending.next(p.data.ending,p.turn)}),minPlayers:2,maxPlayers:4,botMistakes:(p,actor,commands)=>{const exits=commands.filter(c=>c.type==='move'&&p.data.pawns[c.owner][c.pawn]<0&&p.data.dice[c.dieIndex]===6);return exits.length?exits:commands;},create,validate,actions,localChoices,reduce,project,bot,result});
 });

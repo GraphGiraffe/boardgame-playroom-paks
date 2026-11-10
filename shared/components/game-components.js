@@ -1,6 +1,7 @@
 // Canonical scalable Web component geometry. Values, visibility and actions are external.
-(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;root.PlayroomGameComponents=api;})(globalThis,function(){
+(function(root,factory){const api=factory(root);if(typeof module==='object'&&module.exports)module.exports=api;root.PlayroomGameComponents=api;})(globalThis,function(root){
  'use strict';
+ const V=root.PlayroomVectorArt||(typeof require==='function'?require('./vector-art.js'):null);
  const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Entity namespaces are semantic kinds; IDs identify physical instances, never faces.
 function entityRef(namespace,id){
@@ -48,13 +49,27 @@ function art({main,compact,width=72,height=103,rotation=0}, variant='main') {
     if(![0,90,180,270].includes(rotation))throw Error('Invalid artwork rotation');
     const small=variant==='compact' && typeof compact==='string' && compact.length>0,swap=rotation===90||rotation===270;
     const transform=({0:'',90:`translate(${height} 0) rotate(90)`,180:`translate(${width} ${height}) rotate(180)`,270:`translate(0 ${width}) rotate(-90)`})[rotation];
+    const markup=small?compact:main;
+    if(/^<svg\b/.test(markup))return V.viewport({width:swap?height:width,height:swap?width:height,className:'piece-art',attrs:`aria-hidden="true" focusable="false" data-art-variant="${small?'compact':'main'}"`,content:`<g${transform?` transform="${transform}"`:''}>${V.place(markup,{x:0,y:0,width,height})}</g>`});
+    // Compatibility with immutable archived viewApi-3 HTML recipes.
     return `<svg class="piece-art" viewBox="0 0 ${swap?height:width} ${swap?width:height}" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false" data-art-variant="${small?'compact':'main'}"><g${transform?` transform="${transform}"`:''}><foreignObject width="${width}" height="${height}"><div xmlns="http://www.w3.org/1999/xhtml" class="piece-artboard" style="width:${width}px;height:${height}px">${small?compact:main}</div></foreignObject></g></svg>`;
   }
-function publicFrames({plan,frames,live,livePlayers='',liveProgress='',label,playLabel,skipLabel,speedLabel,controls=true}) {
+function publicFrames({plan,frames,source=null,live,livePlayers='',liveProgress='',label,playLabel,skipLabel,speedLabel,controls=true,lazy=false}) {
   const {id,initial,final,groups}=plan||{};
+  if(source){
+   const f=source.initial;
+   if(typeof id!=='string'||!Array.isArray(groups)||groups.length>64||initial!==0||final!==groups.length||typeof source.id!=='string'||!f||typeof f.markup!=='string'||typeof f.label!=='string')throw Error('PUBLIC_PLAN_INVALID');
+   return `<section class="public-sequence" data-public-sequence="${esc(id)}" data-public-lazy data-public-frame-source="${esc(source.id)}" data-presentation-plan="${esc(JSON.stringify({id,initial,final,groups}))}"><div class="public-sequence-stage"><div data-public-display data-dom-key="public-display" data-public-frame="0">${f.markup}${f.players?`<template data-sequence-players>${f.players}</template>`:''}</div></div></section>`;
+  }
   if(!Array.isArray(groups)||groups.length!==frames?.length||initial!==0||final!==frames?.length)throw Error('PUBLIC_PLAN_INVALID');
-  if(typeof id!=='string'||!Array.isArray(frames)||frames.length>32||frames.some(f=>typeof f.markup!=='string'||typeof f.label!=='string'))throw Error('PUBLIC_FRAMES_INVALID');
+  if(typeof id!=='string'||!Array.isArray(frames)||frames.length>64||frames.some(f=>typeof f.markup!=='string'||typeof f.label!=='string'))throw Error('PUBLIC_FRAMES_INVALID');
 
+  if(lazy){
+   const records=[...frames,{markup:live,label,players:livePlayers,progress:liveProgress}].map((f,i)=>({...f,duration:groups[i]?.duration||650}));
+   const bank=JSON.stringify(records).replace(/</g,'\\u003c').replace(/>/g,'\\u003e').replace(/&/g,'\\u0026');
+   const f=records[0],players=f.players?`<template data-sequence-players>${f.players}</template>`:'';
+   return `<section class="public-sequence" data-public-sequence="${esc(id)}" data-public-lazy data-presentation-plan="${esc(JSON.stringify({id,initial,final,groups}))}"><div class="public-sequence-stage"><div data-public-display data-dom-key="public-display" data-public-frame="0">${f.markup}${players}</div></div><template data-public-frame-bank>${bank}</template></section>`;
+  }
   return `<section class="public-sequence" data-public-sequence="${esc(id)}" data-presentation-plan="${esc(JSON.stringify({id,initial,final,groups}))}"><div class="public-sequence-stage">${[...frames,{markup:live,label,players:livePlayers,progress:liveProgress}].map((f,i)=>`<div data-public-frame="${i}" data-frame-label="${esc(f.label)}" data-frame-progress="${esc(f.progress||'')}"${f.sound?` data-frame-sound="${esc(f.sound)}"`:""}${f.pack?` data-frame-pack="${esc(f.pack)}"`:""}${groups[i]?` data-frame-duration="${esc(groups[i].duration)}"`:""}${i?' hidden':''}>${f.markup}${f.players?`<template data-sequence-players>${f.players}</template>`:''}</div>`).join('')}</div>${controls?`<div class="public-sequence-controls"${frames.length?'':' style="visibility:hidden"'}><button type="button" class="scene-button" data-sequence-play aria-label="${esc(playLabel)}">${frames.length?'Ⅱ':'▶'}</button><output data-sequence-label aria-live="polite">${esc(frames[0]?.label||label)}</output><button type="button" class="scene-button" data-sequence-speed aria-label="${esc(speedLabel)}">1×</button><button type="button" class="scene-button" data-sequence-skip>${esc(skipLabel)}</button></div>`:''}</section>`;
 }
 function countBadge(count,label=globalThis.PlayroomMessages.text("ui.game-components.737f7561bd7f"),{corner=false,hand=false}={}) {
@@ -64,7 +79,6 @@ function countBadge(count,label=globalThis.PlayroomMessages.text("ui.game-compon
 function shipSilhouette(size){const width=16+size*9;return `<svg class="fleet-ship-icon" width="${width}" height="20" viewBox="0 0 ${width} 20" aria-hidden="true"><path d="M2 11H${width-3}l-5 7H8Z" fill="currentColor"/><path d="M5 10H${width-8}" fill="none" stroke="currentColor" stroke-width="2"/>${Array.from({length:size},(_,i)=>`<rect x="${7+i*9}" y="4" width="4" height="6" rx="1" fill="currentColor"/>`).join('')}</svg>`;}
 const checkerArt=(king,movable)=>`<svg class="checker-art" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><circle cx="50" cy="56" r="42" fill="var(--checker-shadow)"/><circle class="piece-contour" cx="50" cy="49" r="42" fill="var(--checker-fill)" stroke="var(--checker-edge)" stroke-width="7"/><circle cx="50" cy="49" r="31" fill="none" stroke="var(--checker-ring)" stroke-width="4"/>${king?'<path d="M27 60 23 37 37 47 50 29 63 47 77 37 73 60ZM29 66H71" fill="none" stroke="var(--checker-mark)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>':''}</svg>`;
 const dots={0:[],1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8],7:[0,2,3,4,5,6,8],8:[0,1,2,3,5,6,7,8],9:[0,1,2,3,4,5,6,7,8]};
-const half=n=>`<span class="domino-half" aria-hidden="true">${Array.from({length:9},(_,i)=>`<i class="${(dots[n]||dots[9]).includes(i)?'pip':''}"></i>`).join('')}</span>`;
 
  const pipPlaces=Object.freeze({1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]});
  function dieArt(value,{frame='flat'}={}){if(value!==null&&value!==undefined&&(!Number.isInteger(value)||value<0||value>1000))throw Error('DIE_VALUE_INVALID');
@@ -73,13 +87,16 @@ const half=n=>`<span class="domino-half" aria-hidden="true">${Array.from({length
   const mark=value>6?'<text x="30" y="30" text-anchor="middle" dominant-baseline="central" fill="var(--die-mark,currentColor)" font-family="system-ui,sans-serif" font-size="22" font-weight="800">'+value+'</text>':dots.map(i=>'<circle cx="'+((raised?18:14)+i%3*(raised?12:16))+'" cy="'+((raised?17:14)+Math.floor(i/3)*(raised?12:16))+'" r="'+(raised?3.7:4)+'" fill="var(--die-mark,'+(raised?'#456750':'currentColor')+')"/>').join('');
   return '<svg class="'+(raised?'shared-die-art is-raised':'shared-die-art')+'" viewBox="0 0 60 60" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">'+body+mark+'</svg>';
  }
- const dominoFace=(a,b,rotation=0)=>art({main:'<div class="domino-art-face">'+half(a)+'<span class="domino-divider"></span>'+half(b)+'</div>',width:48,height:84,rotation});
+ function dominoFace(a,b,rotation=0){
+  const marks=(value,y)=>`<g data-domino-half="${y?'lower':'upper'}">${(dots[value]||dots[9]).map(i=>`<circle cx="${14+i%3*10}" cy="${y+11+Math.floor(i/3)*10}" r="4" fill="var(--color-material-domino-ink,#365f4c)"/>`).join('')}</g>`;
+  return V.viewport({width:48,height:84,rotation,className:'piece-art domino-print',attrs:'aria-hidden="true" focusable="false"',content:`<rect class="piece-contour" x="1" y="1" width="46" height="82" rx="7" fill="var(--color-material-domino-face,#fffbed)" stroke="var(--color-material-domino-rim,#9cae98)" stroke-width="2"/><path d="M8 42H40" stroke="var(--color-material-domino-rim,#9cae98)" stroke-width="1.5"/>${marks(a,0)}${marks(b,42)}`});
+ }
  function boardCells(columns=8,rows=8,flipped=false){if(!Number.isInteger(columns)||columns<1||columns>32||!Number.isInteger(rows)||rows<1||rows>32)throw Error('BOARD_SIZE_INVALID');return Array.from({length:columns*rows},(_,i)=>{const index=flipped?columns*rows-i-1:i,row=Math.floor(index/columns),column=index%columns;return {index,row,column,dark:(row+column)%2===1};});}
  const bubbleClass=({kind='game',result=null}={})=>'game-speech is-'+(kind==='chat'?'chat':'game')+(result==='success'?' is-success':result==='error'?' is-error':'');
  function scoreTable({head,body,foot='',className='',attributes=''}={}){if(typeof head!=='string'||typeof body!=='string'||typeof foot!=='string')throw Error('SCORE_TABLE_INVALID');return '<table class="'+esc(className)+'" '+attributes+'><thead>'+head+'</thead><tbody>'+body+'</tbody>'+(foot?'<tfoot>'+foot+'</tfoot>':'')+'</table>';}
  function statusBadge(value,{icon}={}){
   const badge=typeof value==='string'?{label:value}:value,label=esc(badge.label);
-  if(badge.position==='avatar-bottom')return `<span data-piece-type="badge" class="player-avatar-label${badge.icon?' is-icon':''}" role="img" aria-label="${label}" title="${label}">${badge.icon?icon(badge.icon):label}</span>`;
+  if(['avatar-bottom','avatar-center'].includes(badge.position))return `<span data-piece-type="badge" class="player-avatar-label${badge.icon?' is-icon':''}${badge.position==='avatar-center'?' is-center':''}${badge.value>1?' has-multiplier':''}"${/^#[0-9a-f]{6}$/i.test(badge.color||'')?` style="background:${badge.color};color:#111"`:''} role="img" aria-label="${label}" title="${label}">${badge.icon?icon(badge.icon):label}${badge.icon&&badge.value>1?`<b>×${badge.value}</b>`:''}</span>`;
   const tone=['success','danger'].includes(badge.tone)?'is-'+badge.tone:'',color=/^#[0-9a-f]{6}$/i.test(badge.color||'')?` style="background:${badge.color};color:#fff;border-color:${badge.color}"`:'';
   return `<span data-piece-type="badge" class="player-status-badge ${tone}"${color}${badge.motion?` data-motion-counter="${esc(badge.motion)}"`:''}>${badge.icon?`<span class="player-status-icon" role="img" aria-label="${label}" title="${label}" tabindex="0" data-tooltip="${label}">${icon(badge.icon)}</span>`:label}</span>`;
  }
@@ -99,7 +116,7 @@ const half=n=>`<span class="domino-half" aria-hidden="true">${Array.from({length
  function tokenStrip({value,capacity=1,icon}={}){
   if(!Number.isSafeInteger(value)||value<0||!Number.isSafeInteger(capacity)||capacity<0||capacity>64||!Object.hasOwn(tokenShapes,icon))throw Error('TOKEN_STRIP_INVALID');
   const slots=Math.max(capacity,Math.min(value,8));
-  return Array.from({length:slots},(_,i)=>`<svg class="counter-token${i>=value?' is-empty':''}" style="z-index:${i<value?slots*2-i:slots-i}" viewBox="0 0 24 26" aria-hidden="true"><path d="${tokenShapes[icon]}"/></svg>`).join('')+(value>slots?`<b>×${value}</b>`:'');
+  return Array.from({length:slots},(_,i)=>V.viewport({width:24,height:26,className:'counter-token'+(i>=value?' is-empty':''),attrs:`style="z-index:${i<value?slots*2-i:slots-i}" aria-hidden="true"`,content:`<path d="${tokenShapes[icon]}"/>`})).join('')+(value>slots?`<b>×${value}</b>`:'');
  }
  function pieceIndicators({value,capacity,label='',className=''}={}){
   if(!Number.isSafeInteger(value)||!Number.isSafeInteger(capacity)||capacity<1||capacity>64||value<0||value>capacity)throw Error('PIECE_INDICATORS_INVALID');
@@ -115,13 +132,14 @@ const half=n=>`<span class="domino-half" aria-hidden="true">${Array.from({length
  }
 
  // Physical card geometry belongs to the type; a deck supplies only its printing.
- function cardFrame(drawing,{shape='portrait'}={}){
+ function cardFrame(drawing,{shape='portrait',foreground=''}={}){
   if(!['portrait','square'].includes(shape))throw Error('CARD_SHAPE_INVALID');const height=shape==='square'?100:140;
-  if(/data-piece-type="card-deck"/.test(drawing.slice(0,drawing.indexOf('>'))))return drawing;
-  const match=/^<svg\b([^>]*)>([\s\S]*)<\/svg>$/.exec(drawing);if(!match)throw Error('CARD_PRINT_SVG_REQUIRED');
-  const box=/viewBox="([^"]+)"/.exec(match[1])?.[1]||'0 0 100 140';
-  const metadata=(match[1].match(/data-[\w-]+="[^"]*"/g)||[]).join(' '),classes=/class="([^"]+)"/.exec(match[1])?.[1]||'';
-  return `<svg class="piece-art card-deck-art ${esc(classes)}" data-piece-type="card-deck" ${metadata} data-card-shape="${shape}" viewBox="0 0 100 ${height}" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false"><rect class="card-depth" x=".5" y="2.5" width="99" height="${height-4}" rx="12.5" fill="var(--color-material-card-side,#aebcae)" stroke="var(--card-outline,#94a58f)" stroke-width="1"/><rect class="card-surface" x="1.5" y="1.5" width="97" height="${height-6}" rx="11.5" fill="var(--color-material-card-face,#fffbed)"/><g style="clip-path:path('M13 1.5H87A11.5 11.5 0 0 1 98.5 13V${height-16}A11.5 11.5 0 0 1 87 ${height-4.5}H13A11.5 11.5 0 0 1 1.5 ${height-16}V13A11.5 11.5 0 0 1 13 1.5Z')"><svg class="card-deck-print" x="1.5" y="1.5" width="97" height="${height-6}" style="width:97px;height:${height-6}px;overflow:hidden" viewBox="${esc(box)}" preserveAspectRatio="none">${match[2]}</svg></g><rect class="card-rim piece-contour" x="1.5" y="1.5" width="97" height="${height-6}" rx="11.5" fill="none" stroke="var(--color-material-card-rim,#e5e6d4)" stroke-width="3"/><rect class="card-outline" x=".5" y=".5" width="99" height="${height-4}" rx="12.5" fill="none" stroke="var(--card-outline,#94a58f)" stroke-width="1"/></svg>`;
+  if(/data-piece-type="card-deck"/.test(drawing.slice(0,drawing.indexOf('>'))))return V.normalize(drawing);
+  const normalized=V.normalize(drawing),header=normalized.slice(0,normalized.indexOf('>')),metadata=(header.match(/data-(?!art-)[\w-]+="[^"]*"/g)||[]).join(' ');
+  const printing=V.place(normalized,{x:1.5,y:1.5,width:97,height:height-6,attrs:'data-art-role="print"'});
+  const indexInk=foreground?V.place(foreground,{x:1.5,y:1.5,width:97,height:height-6,attrs:'data-art-role="index-ink"'}):'';
+  const clip=`M13 1.5H87A11.5 11.5 0 0 1 98.5 13V${height-16}A11.5 11.5 0 0 1 87 ${height-4.5}H13A11.5 11.5 0 0 1 1.5 ${height-16}V13A11.5 11.5 0 0 1 13 1.5Z`;
+  return V.viewport({width:100,height,className:'piece-art card-deck-art',attrs:`data-piece-type="card-deck" ${metadata} data-card-shape="${shape}" aria-hidden="true" focusable="false"`,content:`<rect class="card-depth" x=".5" y="2.5" width="99" height="${height-4}" rx="12.5" fill="var(--color-material-card-side,#aebcae)" stroke="var(--card-outline,#94a58f)" stroke-width="1"/><rect class="card-surface" x="1.5" y="1.5" width="97" height="${height-6}" rx="11.5" fill="var(--color-material-card-face,#fffbed)"/><g style="clip-path:path('${clip}')">${printing}</g><rect class="card-rim piece-contour" x="1.5" y="1.5" width="97" height="${height-6}" rx="11.5" fill="none" stroke="var(--color-material-card-rim,#e5e6d4)" stroke-width="3"/><rect class="card-outline" x=".5" y=".5" width="99" height="${height-4}" rx="12.5" fill="none" stroke="var(--card-outline,#94a58f)" stroke-width="1"/>${indexInk}`});
  }
  function cardPose({x,half,count,enabled=true,maxAngle=9,minAngle=3,countAngle=12,radiusDivisor=10}){
   if(!enabled)return {angle:0,y:0};
@@ -135,9 +153,15 @@ const half=n=>`<span class="domino-half" aria-hidden="true">${Array.from({length
  function cardFace({rank='',suit='',backUrl='',hidden=false,compact=false,inlineIndex=false,suitOnly=false,crown=false,main:recipe,variant='main',...geometry}={}){
   if(hidden)return cardBack({backUrl,shape:geometry.shape});
   if(typeof recipe==='string')return cardFrame(art({main:recipe,compact,...geometry},variant));
-  if(suitOnly&&!hidden)return art({main:`<div class="shared-face suit-only"><strong>${esc(suit)}</strong></div>`,width:70,height:98});
-  const main=`<div class="shared-face${inlineIndex?' inline-index-face':''}"><span class="shared-card-corner card-corner">${esc(rank)}<small>${esc(suit)}</small></span><strong>${esc(suit)}</strong>${crown?'<svg class="shared-card-crown" viewBox="0 0 40 32" aria-hidden="true"><path d="m3 10 8 7L20 2l9 15 8-7-5 20H8Z" fill="var(--color-material-card-crown,#c9a44f)"/></svg>':''}<span class="shared-card-corner card-corner bottom">${esc(rank)}<small>${esc(suit)}</small></span></div>`;
-  return cardFrame(art({main,width:70,height:98},compact?'compact':'main'));
+  const mark=V.text(suit,{x:35,y:49,size:suitOnly?40:34,attrs:'data-art-anchor="center"'});
+  if(suitOnly)return V.viewport({width:70,height:70,className:'piece-art suit-only',attrs:'aria-hidden="true" focusable="false"',content:V.text(suit,{x:35,y:35,size:54})});
+  // Indices share the left inset and stay in the declared overlap window.
+  // Their ink is above the physical rim; only the face illustration is clipped.
+  const rankAttrs=String(rank).length>1?'textLength="10" lengthAdjust="spacingAndGlyphs"':'';
+  const corner=inlineIndex?V.text(rank,{x:0,y:8.5,size:14,anchor:'start',attrs:rankAttrs})+V.text(suit,{x:14,y:8.5,size:14,anchor:'start'}):V.text(rank,{x:0,y:9,anchor:'start',attrs:rankAttrs})+V.text(suit,{x:5,y:23,size:14});
+  const origin=inlineIndex?[4,4]:[4,5],index=`<g data-card-index="top" transform="translate(${origin[0]} ${origin[1]})">${corner}</g>`,inverted=`<g data-card-index="bottom" transform="translate(${70-origin[0]} ${98-origin[1]}) rotate(180)">${corner}</g>`;
+  const crownArt=crown?'<svg x="42" y="10" width="23" height="19" viewBox="0 0 40 32" preserveAspectRatio="xMidYMid meet"><path d="m3 10 8 7L20 2l9 15 8-7-5 20H8Z" fill="var(--color-material-card-crown,#c9a44f)"/></svg>':'';
+  return cardFrame(V.viewport({width:70,height:98,className:'piece-art standard-card-print'+(inlineIndex?' inline-index-face':''),attrs:'aria-hidden="true" focusable="false"',content:mark+crownArt}),{foreground:V.viewport({width:70,height:98,content:index+inverted})});
  }
  function characterFace({character='',characterSources={},source=''}={}, {variant='minimal'}={}){
   const uri=characterSources[variant]||characterSources.minimal||source;
@@ -145,9 +169,9 @@ const half=n=>`<span class="domino-half" aria-hidden="true">${Array.from({length
  }
  // A type owns geometry/rendering operations. Asset variants and pack rules specialize it.
  const pieceTypes=Object.freeze({
-  'card-deck':Object.freeze({ratio:Object.freeze([5,7]),frame:cardFrame,face:cardFrame,back:cardFrame,pose:cardPose,stacking:Object.freeze({horizontal:.32,arc:.42,vertical:.23,faceDown:.14})}),
-  die:Object.freeze({ratio:Object.freeze([1,1]),render:params=>dieArt(params.value,params)}),
-  checker:Object.freeze({ratio:Object.freeze([1,1]),render:params=>checkerArt(params.king,params.movable)}),
+  'card-deck':Object.freeze({ratio:Object.freeze([5,7]),frame:V.render(cardFrame),face:V.render(cardFrame),back:V.render(cardFrame),pose:cardPose,stacking:Object.freeze({horizontal:.32,arc:.42,vertical:.23,faceDown:.14})}),
+  die:Object.freeze({ratio:Object.freeze([1,1]),render:params=>V.normalize(dieArt(params.value,params))}),
+  checker:Object.freeze({ratio:Object.freeze([1,1]),render:params=>V.normalize(checkerArt(params.king,params.movable))}),
   domino:Object.freeze({ratio:Object.freeze([4,7]),render:params=>dominoFace(params.a,params.b,params.rotation||0)}),
   counter:Object.freeze({render:params=>countBadge(params.value,params.label,params)}),
   badge:Object.freeze({render:scoreBadge,status:statusBadge})
@@ -179,25 +203,30 @@ const half=n=>`<span class="domino-half" aria-hidden="true">${Array.from({length
    if(resolved.type==='card-deck'&&!params.suitOnly)markup=pieceTypes['card-deck'].frame(markup);
    if(resolved.type&&resolved.type!=='card-deck')markup=markup.replace(/^(<[^ >]+)/,`$1 data-piece-type="${resolved.type}"`);
    if(family==='card-face'&&resolved.stacking)markup=markup.replace(/^(<svg[^>]*)(>)/,`$1 data-card-stacking="${esc(JSON.stringify(resolved.stacking))}"$2`);
-   return markup;
+   return /^<svg\b/.test(markup)?V.normalize(markup):markup;
   }
  }
  function createHelpers(H,source){
-function card(value,attrs='disabled',extra=''){
+function cardDescriptor(value,attrs='disabled',extra=''){
   const tag=attrs==='disabled'?'span':'button',hidden=!value||value.hidden;
   const rank=hidden?'':value.joker?globalThis.PlayroomMessages.text("ui.game-components.2f0a8ec85914"):({14:globalThis.PlayroomMessages.text("ui.game-components.7614b90a1064"),13:globalThis.PlayroomMessages.text("ui.game-components.130b874a5c04"),12:globalThis.PlayroomMessages.text("ui.game-components.55cea60d6cce"),11:globalThis.PlayroomMessages.text("ui.game-components.8b7b577aa31e")})[value.rank]||value.rank,suit=hidden?'':value.suit||'';
   const red=!hidden&&(value.color==='red'||suit==='♥'||suit==='♦');
   const label=hidden?globalThis.PlayroomMessages.text("ui.game-components.c13a6680430c"):value.joker?globalThis.PlayroomMessages.text("ui.game-components.232b69813cbf",{p0:String(red?globalThis.PlayroomMessages.text("ui.game-components.21b4d916f326"):globalThis.PlayroomMessages.text("ui.game-components.1ca9b6b05dfc"))}):`${rank} ${suit}`;
 
-  return `<${tag} data-size-role="card" class="shared-card ${hidden?'shared-card-back':''} ${red?'shared-red':''} ${extra}" ${tag==='button'?attrs:''} ${!hidden&&value.id?`data-entity="${H.esc(entityKey(entityRef('card',value.id)))}"`:''} aria-label="${H.esc(label)}">${H.assetArt(hidden?'card-back':'card-face',{rank,suit,hidden,crown:!!value?.crown,backUrl:hidden?source('card-back',value?.assetSet):'',...(hidden?{assetSet:value?.assetSet,backUrls:Object.fromEntries((value?.assetSet?[value.assetSet]:['standard-deck','mini-split-deck']).map(set=>[set,source('card-back',set)]))}:{})},params=>cardFace(params))}</${tag}>`;
+  return {tag,className:`shared-card ${hidden?'shared-card-back':''} ${red?'shared-red':''} ${extra}`,attrs:tag==='button'?attrs:'',entity:!hidden&&value.id?entityKey(entityRef('card',value.id)):null,label,family:hidden?'card-back':'card-face',params:{rank,suit,hidden,crown:!!value?.crown,backUrl:hidden?source('card-back',value?.assetSet):'',...(hidden?{assetSet:value?.assetSet,backUrls:Object.fromEntries((value?.assetSet?[value.assetSet]:['standard-deck','mini-split-deck']).map(set=>[set,source('card-back',set)]))}:{})}};
  }
+function renderCard({tag,className,attrs,entity,label,family,params}){
+  return `<${tag} data-size-role="card" class="${className}" ${attrs} ${entity?`data-entity="${H.esc(entity)}"`:''} aria-label="${H.esc(label)}">${H.assetArt(family,params,p=>cardFace(p))}</${tag}>`;
+ }
+function card(value,attrs='disabled',extra=''){return renderCard(cardDescriptor(value,attrs,extra));}
+
 function cardSlot({suit='',attrs='disabled',className='',label='',kind='empty',tag='button'}={}){
   if(!['button','span'].includes(tag))throw Error('Invalid card slot tag');
   return `<${tag} data-size-role="card" class="shared-card-slot ${esc(className)} ${suit==='♥'||suit==='♦'?'shared-red':''}" ${attrs} data-card-slot="${esc(kind)}" aria-label="${esc(label)}">${suit?H.assetArt('card-face',{suit,suitOnly:true},cardFace):''}</${tag}>`;
  }
 const cover=content=>H.svg(`<ellipse data-cover-shadow cx="151" cy="158" rx="112" ry="14" fill="#365e4720"/><g data-cover-art>${content}</g>`);
   const die=(value,attrs='disabled',extra='')=>'<button class="shared-die '+extra+(/\bdisabled\b/.test(attrs)?'':' is-playable')+(/aria-pressed="true"/.test(attrs)?' is-selected':'')+'" '+attrs+' aria-label="'+globalThis.PlayroomMessages.text("ui.game-components.c21f8ac4292c")+H.esc(value||globalThis.PlayroomMessages.text("ui.game-components.22c66b66eaa1"))+'">'+H.assetArt('die',{value},()=>dieArt(value))+'</button>';
-  return Object.freeze({entityRef,entityKey,validMetric,actionSelector,handLayout,tokenStrip,pieceIndicators,rotationController,button:options=>button(options,{icon:H.icon}),card,cardSlot,die,cover,checkerArt:(king,movable)=>H.assetArt('checker',{king,movable},()=>checkerArt(king,movable)),dominoFace:(a,b,rotation=0)=>H.assetArt('domino',{a,b,rotation},()=>dominoFace(a,b,rotation)),shipSilhouette:size=>H.assetArt('ship',{size},()=>shipSilhouette(size)),scoreTable:params=>H.assetArt('score-table',params,()=>scoreTable(params)),boardCells,dieArt:(value,params={})=>H.assetArt('die',{value,...params},()=>dieArt(value,params)),bubbleClass});
+  return Object.freeze({entityRef,entityKey,validMetric,actionSelector,handLayout,tokenStrip,pieceIndicators,rotationController,button:options=>button(options,{icon:H.icon}),card,cardDescriptor,renderCard,cardSlot,die,cover,checkerArt:(king,movable)=>H.assetArt('checker',{king,movable},()=>checkerArt(king,movable)),dominoFace:(a,b,rotation=0)=>H.assetArt('domino',{a,b,rotation},()=>dominoFace(a,b,rotation)),shipSilhouette:size=>H.assetArt('ship',{size},()=>shipSilhouette(size)),scoreTable:params=>H.assetArt('score-table',params,()=>scoreTable(params)),boardCells,dieArt:(value,params={})=>H.assetArt('die',{value,...params},()=>dieArt(value,params)),bubbleClass});
  }
- return Object.freeze({entityRef,entityKey,validMetric,actionSelector,handLayout,tokenStrip,pieceIndicators,rotationController,button,art,publicFrames,countBadge,shipSilhouette,checkerArt,dominoFace,dieArt,boardCells,bubbleClass,scoreTable,createHelpers,AssetResolver,defaultRenderers,pieceTypes,cardFrame,cardFace,cardBack,characterFace,scoreBadge});
+ return Object.freeze({vector:V,entityRef,entityKey,validMetric,actionSelector,handLayout,tokenStrip,pieceIndicators:V.render(pieceIndicators),rotationController,button,art,publicFrames,countBadge,shipSilhouette:V.render(shipSilhouette),checkerArt:V.render(checkerArt),dominoFace,dieArt:V.render(dieArt),boardCells,bubbleClass,scoreTable,createHelpers,AssetResolver,defaultRenderers,pieceTypes,cardFrame:V.render(cardFrame),cardFace:V.render(cardFace),cardBack:V.render(cardBack),characterFace:V.render(characterFace),scoreBadge});
 });

@@ -35,7 +35,7 @@ MAX_PACK_FILES = _compiler['MAX_PACK_FILES']
 TEXT_EXTENSIONS = _compiler['TEXT_EXTENSIONS']
 ENTRY_POINTS = _compiler['ENTRY_POINTS']
 SEMVER = _compiler['SEMVER']
-VERSION = "0.8.8"
+VERSION = "0.8.9-preview.39"
 
 
 

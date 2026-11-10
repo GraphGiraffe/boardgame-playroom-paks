@@ -1,7 +1,7 @@
 (function(root){'use strict';
  function render({spider,state:s,viewer,actions,ui,text}){
   const H=root.PlayroomViews.helpers,C=root.PlayroomShared,d=s.scene,selected=ui.selected;
-  const stacking=H.assetLayout?.('card-face'),stackStyle=stacking?`--asset-stack-vertical:${stacking.vertical};--asset-stack-closed:${stacking.faceDown}`:'';
+  const stacking=H.assetLayout?.('card-face'),stackStyle=stacking?`--asset-stack-horizontal:${stacking.horizontal};--asset-stack-vertical:${stacking.vertical};--asset-stack-closed:${stacking.faceDown}`:'';
   const iconControl=(attrs,label,icon,tooltip=true)=>`<button class="scene-button solitaire-control" ${attrs} aria-label="${H.esc(label)}" ${tooltip?`title="${H.esc(label)}" data-tooltip="${H.esc(label)}"`:''}>${H.icon(icon)}</button>`;
   const undo=actions.find(a=>a.type==='undo'),buttons=[iconControl(undo?H.actionAttr(undo):'disabled',text('actions.undo'),'undo')];
   const suits=['♥','♣','♦','♠'],emptyHomes=spider?[]:d.foundations.map((col,i)=>col.length?-1:i).filter(i=>i>=0),missingSuits=spider?[]:suits.filter(suit=>!d.foundations.some(col=>col[0]?.suit===suit));
@@ -11,19 +11,31 @@
   const candidates=suggested.filter(a=>a.type==='flip'||a.type==='move'&&a.source!=='foundation'&&(a.target!=='foundation'||homeSlots.find(slot=>slot.suit===cardById(a.card)?.suit)?.index===a.to)).concat(suggested.filter(a=>['draw','recycle'].includes(a.type)));
   const parts=String(ui.viewState?.hint||'').split(':'),n=parts[0]===String(s.move)?Number(parts[1]):-1,hint=n>=0?candidates[n%candidates.length]:null;
   const cls=(card,zone,col,index)=>hint&&(hint.type==='move'&&hint.card!=null&&hint.card===card?.id||hint.type==='flip'&&zone==='tableau'&&hint.from===col&&index===d.tableau[col]?.length-1||hint.target===zone&&hint.to===col&&index===d.tableau[col]?.length-1)?' solitaire-hint':'';
-  function face(c,zone,col,index,top){
+  function faceSpec(c,zone,col,index,top){
    const flip=actions.find(a=>a.type==='flip'&&a.from===col),target=actions.find(a=>a.type==='move'&&String(a.card)===String(selected)&&a.target===zone&&a.to===col),source=H.source(c.id,actions,selected,{inspect:!c.hidden,preview:false,drag:true,mode:'select',className:''});
    let attrs=c.hidden?(flip&&top?H.actionAttr(flip):'disabled'):target&&top?H.target(selected,target):source.attr;
    if(attrs.includes('data-drag-piece'))attrs+=' data-drag-legal="true"';
    if(!c.hidden&&!attrs.includes('data-drag-piece')&&d.dragSources?.includes(c.id)&&!(target&&top))attrs+=` data-drag-piece="${H.esc(c.id)}"`;
    if(attrs.includes('data-drag-piece'))attrs+=' data-drag-start="immediate"';
    if(!c.hidden)attrs+=` data-motion-zone="${zone}" data-motion-home="home-${H.esc(c.suit)}"`;
-   return C.card(c,attrs,'solitaire-card'+cls(c,zone,col,index));
+   return {card:c,attrs,className:'solitaire-card'+cls(c,zone,col,index)};
   }
-  function column(col,i){const step='var(--open-step)';const cards=col.map((c,index)=>{
-    return `<div class="solitaire-card-position" data-drag-stack-member="${index}" data-motion-anchor="tableau-${i}-${index}" style="top:calc(${col.slice(0,index).filter(c=>c.hidden).length}*var(--closed-step) + var(--ch)*${col.slice(0,index).filter(c=>!c.hidden).length}*${step})">${face(c,'tableau',i,index,index===col.length-1)}</div>`;}).join('');
+  function face(c,zone,col,index,top){const spec=faceSpec(c,zone,col,index,top);return C.card(spec.card,spec.attrs,spec.className);}
+  function column(col,i){
    const target=!col.length&&actions.find(a=>a.type==='move'&&String(a.card)===String(selected)&&a.target==='tableau'&&a.to===i),hintEmpty=hint?.target==='tableau'&&hint.to===i&&!col.length;
-   return `<div class="solitaire-column" data-motion-anchor="tableau-${i}" data-drag-stack data-column="${i}" data-empty="${!col.length}" style="height:calc(var(--ch) + ${col.filter(c=>c.hidden).length}*var(--closed-step) + var(--ch)*${Math.max(0,col.filter(c=>!c.hidden).length-1)}*var(--open-step))"><button class="solitaire-empty ${hintEmpty?'solitaire-hint':''}" ${target?H.target(selected,target):'disabled'} aria-label="${H.esc(text('ui.empty'))} ${i+1}"></button>${cards}</div>`;
+   const emptyAttrs=target?H.target(selected,target):'disabled',emptyLabel=H.esc(text('ui.empty'))+' '+(i+1);
+   const specs=col.map((c,index)=>faceSpec(c,'tableau',i,index,index===col.length-1));
+   const descriptors=C.cardDescriptor&&specs.map(spec=>C.cardDescriptor(spec.card,spec.attrs,spec.className));
+   const build=()=>{
+    let closed=0,open=0;
+    const cards=col.map((c,index)=>{
+     const top=`top:calc(${closed}*var(--closed-step) + var(--ch)*${open}*var(--open-step))`;if(c.hidden)closed++;else open++;
+     const spec=specs[index],card=descriptors?C.renderCard(descriptors[index]):C.card(spec.card,spec.attrs,spec.className);
+     return `<div class="solitaire-card-position" data-drag-stack-member="${index}" data-motion-anchor="tableau-${i}-${index}" style="${top}">${card}</div>`;
+    }).join('');
+    return `<div class="solitaire-column" data-motion-anchor="tableau-${i}" data-drag-stack data-column="${i}" data-empty="${!col.length}" style="height:calc(var(--ch) + ${closed}*var(--closed-step) + var(--ch)*${Math.max(0,open-1)}*var(--open-step))"><button class="solitaire-empty ${hintEmpty?'solitaire-hint':''}" ${emptyAttrs} aria-label="${emptyLabel}"></button>${cards}</div>`;
+   };
+   return ui.region&&descriptors?ui.region('tableau-'+i,[descriptors,emptyAttrs,!!hintEmpty,emptyLabel],build):build();
   }
   const stockAction=actions.find(a=>a.type==='draw'||a.type==='recycle'),stockLabel=text('ui.stock'),stockCount=spider?d.stockCount/10:d.stockCount;
   const blockedDraw=spider&&!stockAction&&d.blockedDraw;
@@ -45,7 +57,7 @@
   const hintMarkup=n>=0?`<span class="player-status-badge solitaire-hint-token">${H.esc(hintText)}</span>`:H.esc(hintText);
   const hintId='solitaire-hint-popup-'+(spider?'spider':'klondike');
   const hintControl=`<span class="solitaire-hint-anchor">${iconControl(`data-view-key="hint" data-view-value="${s.move}:${n+1}" aria-expanded="${n>=0}" ${n>=0?`aria-describedby="${hintId}"`:''}`,text('ui.hint'),'hint',false)}${n>=0?`<span class="solitaire-hint-text solitaire-hint-popup" id="${hintId}" role="status">${hintMarkup}</span>`:''}</span>`;
-  return {api:3,family:'cards',hidePlayers:true,actionPlacement:'header-landscape',fieldSizing:'scroll',actionReserve:true,className:'solitaire-scene',elements:{field:`<div class="solitaire-board" style="--columns:${spider?10:7}" ${collectAttr} data-motion-layout="cards" data-solitaire-kind="${spider?'spider':'klondike'}"><div data-scene-status-home><div class="solitaire-stats" data-scene-status="portrait">${stats}</div></div>${spider?`<div class="solitaire-orientation-note"><span class="solitaire-portrait-note">${H.esc(text('ui.orientation'))}</span></div>`:''}<div class="solitaire-content" ${spider?'':'data-card-fit="portrait" data-card-columns="7" data-card-gap="2"'} style="${stackStyle}" data-asset-stack-family="card-face" data-asset-stack-axis="${stacking?.wasteAxis||'horizontal'}">${motionBank}${spider?'':`<div class="solitaire-stocks">${stock}${waste}${homeArea}</div>`}<div class="solitaire-scroll" data-scene-scroll><div class="solitaire-columns" style="--columns:${spider?10:7}">${d.tableau.map(column).join('')}</div></div></div></div>`,actions:`<div class="solitaire-action-row"><div class="solitaire-footer-stats">${stats}</div><div class="scene-actions solitaire-controls">${buttons.join('')}${hintControl}${drawControl}</div><div class="solitaire-footer-right">${series}</div></div>`}};
+  return {api:3,family:'cards',hidePlayers:true,...(!spider?{layout:{overrides:{fieldColumns:3}}}:{}),actionPlacement:'header-landscape',fieldSizing:'scroll',actionReserve:true,className:'solitaire-scene',elements:{field:`<div class="solitaire-board" style="--columns:${spider?10:7}" ${collectAttr} data-motion-layout="cards" data-solitaire-kind="${spider?'spider':'klondike'}"><div data-scene-status-home><div class="solitaire-stats" data-scene-status="${spider?'always':'portrait'}">${stats}</div></div>${spider?`<div class="solitaire-orientation-note"><span class="solitaire-portrait-note">${H.esc(text('ui.orientation'))}</span></div>`:''}<div class="solitaire-content" ${spider?'':'data-card-fit="portrait" data-card-columns="7" data-card-gap="2"'} style="${stackStyle}" data-asset-stack-family="card-face" data-asset-stack-axis="${stacking?.wasteAxis||'horizontal'}">${motionBank}${spider?'':`<div class="solitaire-stocks"><div class="solitaire-source-piles">${stock}${waste}</div>${homeArea}</div>`}<div class="solitaire-scroll" data-scene-scroll><div class="solitaire-columns" style="--columns:${spider?10:7}">${d.tableau.map(column).join('')}</div></div>${spider?'':'<div class="solitaire-side-actions" data-scene-actions-home="landscape"></div>'}</div></div>`,actions:`<div class="solitaire-action-row" data-solitaire-actions="${spider?'spider':'klondike'}">${spider?'':`<div class="solitaire-footer-stats">${stats}</div>`}<div class="scene-actions solitaire-controls">${buttons.join('')}${hintControl}${drawControl}</div><div class="solitaire-footer-right">${series}</div></div>`}};
  }
  root.PlayroomSolitaireBoard=Object.freeze({render});
 })(globalThis);

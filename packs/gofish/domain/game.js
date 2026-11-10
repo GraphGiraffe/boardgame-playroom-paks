@@ -86,5 +86,6 @@
   };
   function result(position){const values=position.data.books.map(row=>row.length);return {winners:position.winners,
     places:values.map(value=>1+new Set(values.filter(other=>other>value)).size),metrics:[{id:'books',values}]};}
-  return Object.freeze({contractVersion:1,rounds:true,id:'gofish',minPlayers:2,maxPlayers:6,create,validate,actions,reduce,project,bot,result});
+  function localChoices(p){if(p.actor<0||p.status!=='playing'||p.audience==='public')return [];return actions(p,p.actor);}
+ return Object.freeze({contractVersion:1,rounds:true,id:'gofish',turnOrder:p=>({players:p.data.hands.flatMap((h,i)=>h.length||p.data.drawPile.length?[i]:[])}),derivedFields:{ask:['rank']},minPlayers:2,maxPlayers:6,create,validate,actions,localChoices,reduce,project,bot,result});
 });

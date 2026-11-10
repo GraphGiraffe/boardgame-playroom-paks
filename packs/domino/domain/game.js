@@ -46,5 +46,6 @@
  function score(position){const sums=position.data.hands.map(pips),winner=position.winners[0];return sums.map((_,player)=>position.status==='finished'&&player===winner?sums.reduce((a,b)=>a+b,0)-sums[player]:0);}
  function result(position){const values=position.data.hands.map(pips);return {winners:position.winners,...Ending.result(position.data.ending),
   places:Ending.places(position.data.ending,values,false),metrics:[{id:'pips',values,order:'asc'}]};}
- return Object.freeze({contractVersion:1,rounds:true,id:'domino',minPlayers:2,maxPlayers:4,create,validate,actions,reduce,project,bot,score,result,oriented,pips});
+ function localChoices(p){if(p.actor<0||p.status!=='playing'||p.audience==='public')return [];return actions(p,p.actor);}
+ return Object.freeze({contractVersion:1,rounds:true,id:'domino',turnOrder:p=>({next:Ending.next(p.data.ending,p.turn)}),minPlayers:2,maxPlayers:4,create,validate,actions,localChoices,reduce,project,bot,score,result,oriented,pips});
 });

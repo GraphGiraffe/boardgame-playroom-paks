@@ -115,3 +115,6 @@
 
 /* Reserve half a touch target at either endpoint of the grid path. */
 .domino-scene .domino-chain{box-sizing:border-box;padding-inline:8px}
+
+/* The host owns the card-table surface; the chain has no second sheet. */
+.domino-scene .domino-board{background:transparent;border:0;box-shadow:none}

@@ -1,7 +1,7 @@
 (function(root,factory){if(typeof module==='object'&&module.exports)module.exports=factory;root.PlayroomPackDefinitionFactory=factory;})(globalThis,function(ports){
  'use strict';const Ending=ports.ending;
  const colors=['red','yellow','green','blue'],reactionTypes=['declare-uno','accuse-uno'];
- const nextPlayer=(s,from,steps=1)=>{let player=from;for(let step=0;step<steps;step++){for(let n=0;n<s.playerCount;n++){player=(player+s.data.direction+s.playerCount)%s.playerCount;if(!Ending.done(s.data.ending,player))break;}}return player;};
+ const nextPlayer=(s,from,steps=1,direction=s.data.direction)=>{let player=from;for(let step=0;step<steps;step++){for(let n=0;n<s.playerCount;n++){player=(player+direction+s.playerCount)%s.playerCount;if(!Ending.done(s.data.ending,player))break;}}return player;};
  const fact=(name,actor,params={})=>({type:'uno.'+name,actor,params,visibility:{kind:'public'}});
  function cards(){let id=0,deck=[];for(const color of colors){deck.push({id:`u${id++}`,color,value:'0'});for(const value of ['1','2','3','4','5','6','7','8','9','skip','reverse','+2'])for(let n=0;n<2;n++)deck.push({id:`u${id++}`,color,value});}for(const value of ['wild','+4'])for(let n=0;n<4;n++)deck.push({id:`u${id++}`,color:'wild',value});return deck;}
  function create({playerCount,firstPlayer,preset,rng,openHands,options={}}){
@@ -105,7 +105,10 @@
    if(d.ending.mode==='winner'||s.playerCount-d.ending.groups.flat().length<=1){s.status='finished';s.winners=Ending.winners(d.ending);}else if(Ending.done(d.ending,s.turn))s.turn=nextPlayer(s,actor);}syncPending(s);
  }
  function reduce(position,actor,action){const next=JSON.parse(JSON.stringify(position)),events=[];next.revision=(position.revision??0)+1;perform(next,actor,action,events);return {position:next,events,turnEnded:action.type==='play'||action.type==='pass'};}
- function project(position,viewer){const d=JSON.parse(JSON.stringify(position.data));d.hands=d.hands.map((hand,player)=>position.openHands||player===viewer?hand:hand.map(()=>({hidden:true})));d.drawPile=d.drawPile.map(()=>({hidden:true}));d.uno.declarationOpen=d.uno.situations.map(w=>w.open&&!w.settled&&!w.called);delete d.uno.pending;delete d.uno.situations;if(viewer!==position.turn)d.drawn=d.drawn===null?null:true;return d;}
+ function project(position,viewer){const d=JSON.parse(JSON.stringify(position.data));d.hands=d.hands.map((hand,player)=>position.openHands||player===viewer?hand:hand.map(()=>({hidden:true})));d.drawPile=d.drawPile.map(()=>({hidden:true}));d.uno.declarationOpen=d.uno.situations.map(w=>w.open&&!w.settled&&!w.called);delete d.uno.pending;if(viewer!==position.turn)d.drawn=d.drawn===null?null:true;return d;}
+ function localData(p){let position=p;const viewer=p.viewer,d=JSON.parse(JSON.stringify(p.data));position={...p,data:d};d.nextPlayerByCard={};d.turnPreviewByCard={};if(position.status==='playing'&&viewer===position.turn)for(const card of position.data.hands[viewer]){if(!canPlay(position,viewer,card))continue;const active=position.playerCount-position.data.ending.groups.flat().length,finished=position.data.hands[viewer].length===1&&(position.data.ending.mode==='winner'||active<=2),steps=['skip','+2','+4'].includes(card.value)||card.value==='reverse'&&active===2?2:1;d.nextPlayerByCard[card.id]=finished?null:nextPlayer(position,viewer,steps,card.value==='reverse'?-position.data.direction:position.data.direction);if(['skip','reverse','+2','+4'].includes(card.value))d.turnPreviewByCard[card.id]={nextPlayer:d.nextPlayerByCard[card.id],affected:[nextPlayer(position,viewer)],kind:card.value};}d.uno.declarationOpen=d.uno.situations.map(w=>w.open&&!w.settled&&!w.called);return d;}
+ function localChoices(p){if(p.actor<0||p.status!=='playing')return [];return [...(p.actor===p.viewer?actions(p,p.actor):[]),...reactions(p,p.actor)];}
+ function localReaction(p,c){return reactionControl(p,p.actor,c);}
  function bot(s,actor,actions,memory,context={}){
       const d = s.data, plays = actions.filter(a => a.type === 'play');
       if (!plays.length) return actions[0];
@@ -126,5 +129,5 @@
  function botReaction(s,actor,actions,memory,settings){const u=s.data.uno;if(s.data.hands[actor].length===1&&!u.declared[actor]&&!u.calls.includes(actor)&&!declarationTiming(s,actor,settings,memory).skip)return actions.find(a=>a.type==='declare-uno');const target=memory.situations.findIndex((w,i)=>i!==actor&&w.open&&!w.settled&&!u.declared[i]);return target<0?null:actions.find(a=>a.type==='accuse-uno'&&a.target===target);}
  const score=s=>s.data.points;
  const result=s=>({winners:s.winners,...Ending.result(s.data.ending),places:Ending.places(s.data.ending,s.data.points),metrics:[{id:'points',values:s.data.points},{id:'hand-count',values:s.data.hands.map(hand=>hand.length)}]});
- return Object.freeze({contractVersion:1,id:'uno',minPlayers:2,maxPlayers:6,create,validate,actions,reactions,reactionWindows,reactionControl,reduce,project,bot,botReaction,botReactionDelay,observe,score,result});
+ return Object.freeze({contractVersion:1,id:'uno',turnOrder:p=>({players:Array.from({length:p.playerCount},(_,i)=>i).filter(i=>!Ending.done(p.data.ending,i)),direction:p.data.direction}),minPlayers:2,maxPlayers:6,create,validate,actions,localChoices,localData,localReaction,reactions,reactionWindows,reactionControl,reduce,project,bot,botReaction,botReactionDelay,observe,score,result});
 });

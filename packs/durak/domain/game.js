@@ -60,5 +60,6 @@ const d=s.data;if(d.composing&&actions.some(a=>a.type==='confirm'))return action
  }
  function result(position){const values=position.data.hands.map((_,player)=>position.winners.includes(player)?1:0);return {winners:position.winners,
   ...(position.data.ending?Ending.result(position.data.ending):{}),places:position.data.ending?Ending.places(position.data.ending,values):values.map(value=>1+new Set(values.filter(other=>other>value)).size),metrics:[{id:'wins',values},{id:'hand-count',values:position.data.hands.map(hand=>hand.length)}]};}
- return Object.freeze({contractVersion:1,id:'durak',minPlayers:2,maxPlayers:6,create,validate,actions,reduce,project,bot,result});
+ function localChoices(p){if(p.actor<0||p.status!=='playing')return [];return actions(p,p.actor);}
+ return Object.freeze({contractVersion:1,id:'durak',turnOrder:p=>({next:p.data.composing?p.data.defender:p.turn===p.data.defender?p.data.attackCursor:p.data.taking?nextAttacker(p.data,p.turn):p.data.defender}),minPlayers:2,maxPlayers:6,create,validate,actions,localChoices,reduce,project,bot,result});
 });

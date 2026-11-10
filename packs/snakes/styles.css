@@ -67,3 +67,6 @@
 /* A reserved start dock keeps cell zero reachable without clipping the board. */
 .snakes-start-slot{display:block;flex:none;width:var(--size-length-32_0,32px);height:var(--size-length-32_0,32px)}
 .snakes-start-slot .snakes-start-pawn{position:relative;inset:auto;transform:none;width:100%;height:100%}
+
+/* Keep physical depth inside the field footprint, including rounded corners. */
+.snakes-scene .snakes-board-wrap{box-shadow:none;background:transparent;border:0}
