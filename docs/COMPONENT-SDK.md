@@ -94,7 +94,7 @@ predicate; явное сохранение/выход могут сохрани�
 а не массив HTML всех сцен. Приложение заранее готовит один следующий кадр в
 свободный промежуток текущей анимации, кеширует его в области viewer/пака/скина
 и не кладёт весь раунд в DOM. Функция — локальный presentation port, не поле
-сериализуемой сцены. Максимум — 32 исторических кадра.
+сериализуемой сцены. Максимум — 64 исторических кадра.
 
 Пример производителя — `packs/mage-brawl/view.js`: он передаёт `renderFrame`, а
 для старого приложения без порта сохраняет eager fallback `publicFrames`.
@@ -260,3 +260,13 @@ Host готовит только изменившиеся строки и сох
 См. `board()` в `packs/mage-brawl/view.js`: отдельные `cell-*`, `piece-*` и слой
 подсветки. Там же показан inline fallback для host без этой возможности. API
 правил и сохранённые позиции от механизма представления не меняются.
+
+### Reusable participant choice previews
+
+A pack may supply `turnPreview(index)` to `H.playerContent` (or the optional
+`playerContent.turnPreview` field) with `positive`/`negative` tones. Targets must
+come from authorized semantic data; choosing a card is local UI state. UNO uses
+owner-only `turnPreviewByCard` metadata for skip/reverse/+2/+4, with no card IDs in
+spectator projections. Reverse marks the old next player negative and the new
+next player positive. The common host owns the pulse and finite turn-handoff
+animation; other packs can reuse the same fields without UNO-specific host code.

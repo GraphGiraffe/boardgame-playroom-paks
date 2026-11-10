@@ -62,7 +62,8 @@
     }
     return {position:next,events,turnEnded:command.type==='score'};
   }
-  function project(position){
+  function project(position){return JSON.parse(JSON.stringify(position.data));}
+  function localData(position){
     const d=position.data,upper=d.scores.map(categories.upper);
     return {...JSON.parse(JSON.stringify(d)),totals:d.scores.map(categories.total),upper,
       bonuses:upper.map(value=>value>=63?50:0),
@@ -83,5 +84,8 @@
     return {winners:position.winners,places:values.map(value=>1+new Set(values.filter(other=>other>value)).size),
       metrics:[{id:'points',values}]};
   }
-  return Object.freeze({contractVersion:1,id:'yatzy',minPlayers:2,maxPlayers:6,create,validate,actions,reduce,project,bot,result});
+  function draft(p){return p.status==='playing'&&p.actor===p.turn&&p.data.rolls>0&&p.data.rolls<3?{mode:'coalesce',select:['hold'],commit:['roll','score'],max:8,delayMs:50,toggleKey:'index'}:null;}
+  function draftProjection(p,actions){const d=JSON.parse(JSON.stringify(p.data));for(const c of actions)if(c.type==='hold')d.held[c.index]=!d.held[c.index];return {...p,data:d};}
+  function localChoices(p){if(p.actor<0||p.status!=='playing')return [];return actions(p,p.actor);}
+ return Object.freeze({contractVersion:1,id:'yatzy',minPlayers:2,maxPlayers:6,create,validate,actions,localChoices,localData,draft,draftProjection,reduce,project,bot,result});
 });

@@ -70,5 +70,6 @@
   const project=p=>JSON.parse(JSON.stringify(p.data));
   function bot(p,actor,legal,memory,context={}){if(p.data.phase!=='move')return legal[0];return legal.reduce((best,a)=>{const score=c=>{const v=destination(p.data,actor,c.dieIndex,c.delta),kind=v.distance>0?p.data.special[v.to]:undefined;return v.to+(context.depth===1?0:context.depth===3?1.5:1)*({skip:-7,less:-3,second:4,shield:3,adjust:2}[kind]||0);};return score(a)>score(best)?a:best;},legal[0]);}
   function result(p){const values=p.data.positions;return {winners:p.winners,...Ending.result(p.data.ending),places:Ending.places(p.data.ending,values),metrics:[{id:'position',values}]};}
-  return Object.freeze({contractVersion:1,id:'snakes',minPlayers:2,maxPlayers:6,create,validate,actions,reduce,project,result,bot});
+  function localChoices(p){if(p.actor<0||p.status!=='playing')return [];return actions(p,p.actor);}
+ return Object.freeze({contractVersion:1,id:'snakes',turnOrder:p=>{let from=p.turn;const consumed=new Set();for(let i=0;i<=p.playerCount;i++){const next=Ending.next(p.data.ending,from);if(next===null||!p.data.effects[next].skip||p.data.effects[next].shield||consumed.has(next))return {next};consumed.add(next);from=next;}return null;},minPlayers:2,maxPlayers:6,create,validate,actions,localChoices,reduce,project,result,bot});
 });

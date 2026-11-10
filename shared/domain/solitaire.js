@@ -95,7 +95,8 @@
   }
   function project(p){const d=copy(p.data);d.hints=hints(p);d.dragSources=d.tableau.flatMap(col=>col.filter((c,i)=>sequence(col,i)).map(c=>c.id));if(!spider)d.dragSources.push(...d.waste.slice(-1).map(c=>c.id),...d.foundations.flatMap(col=>col.slice(-1).map(c=>c.id)));delete d.history;d.canUndo=p.data.history.length>0;d.stock=d.stock.map(()=>({hidden:true}));d.tableau=d.tableau.map(col=>col.map(c=>c.open?c:{hidden:true}));return d;}
   function result(p){const d=p.data,cleared=spider?d.completed.length:d.foundations.reduce((n,c)=>n+c.length,0);return {winners:p.winners,places:[1],metrics:[...(d.config.scoring==='none'?[]:[{id:'score',values:[d.score]}]),{id:'cleared',values:[cleared]},{id:'moves',values:[d.moves]}]};}
-  return Object.freeze({contractVersion:1,id,minPlayers:1,maxPlayers:1,create,validate,actions,reduce,project,result,score:p=>[Math.max(0,p.data.score)]});
+  function localChoices(p){return p.actor===0?actions({...p,data:{...p.data,history:p.data.canUndo?[{}]:[]}},0):[];}
+  return Object.freeze({contractVersion:1,id,minPlayers:1,maxPlayers:1,create,validate,actions,localChoices,reduce,project,result,score:p=>[Math.max(0,p.data.score)]});
  }
  return Object.freeze({factory});
 });

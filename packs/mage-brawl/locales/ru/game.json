@@ -271,5 +271,9 @@
   "mage-brawl.action-help.fire.movement": "Прыжок через клетку.",
   "mage-brawl.action-help.fire.attack": "1 урон первому магу по прямой.",
   "mage-brawl.action-help.fire.ultimate": "По 1 урону в месте столкновения и вокруг крестом; может задеть вас.",
-  "mage-brawl.ui.memo": "Памятка"
+  "mage-brawl.ui.memo": "Памятка",
+  "mage-brawl.ui.round-step": "Раунд {round} · Ход {step}",
+  "mage-brawl.ui.movements": "Движения",
+  "mage-brawl.ui.attacks": "Атаки",
+  "mage-brawl.ui.no-actions": "Нет действий"
 }

@@ -21,6 +21,8 @@
     const scene=s.scene;
     actions=actions.map(action=>action.label?action:{...action,label:text(P.action(action,{actor:s.tableActor??viewer,data:{hands:scene.players.map(person=>person.hand)}}))});
     const hand=scene.players[viewer]?.hand||[],top=scene.discard,draw=actions.find(a=>a.type==='draw'),chosen=actions.filter(a=>ui.selected!=null&&a.card===ui.selected);
+    const preview=chosen.length&&!Number.isInteger(ui.presentationTurn)?scene.turnPreviewByCard?.[ui.selected]:null;
+    const nextPlayer=Object.hasOwn(scene.nextPlayerByCard||{},ui.selected)?scene.nextPlayerByCard[ui.selected]:scene.nextPlayer;
     const manual=scene.manualDeclaration,declare=actions.find(a=>a.type==='declare-uno');
     const other=actions.filter(a=>!a.card&&!['draw','declare-uno','accuse-uno'].includes(a.type));
     const drop=chosen.length?`<button class="uno-drop-target" ${H.target(ui.selected,chosen.length===1?chosen[0]:null)} data-drop-snap aria-label="${chosen.length===1?text('uno.view.drop'):text('uno.view.drop-color')}"><span>${H.esc(text('uno.view.drop-caption'))}</span></button>`:'';
@@ -33,7 +35,7 @@
     const stock=region('stock',[draw,scene.stockCount],()=>`<button class="stock-button" ${draw?H.actionAttr(draw):'disabled'} aria-label="${H.esc(text('uno.view.draw'))}" data-tooltip="${H.esc(text('uno.view.stock-help'))}">${scene.stockCount?C.card({hidden:true,assetSet:'uno-deck'}):C.cardSlot({label:text('uno.view.draw'),kind:'stock',tag:'span',attrs:''})}${H.countBadge(scene.stockCount,text('uno.view.stock-count'),{corner:true})}</button>`);
     const discard=region('discard',[top,drop,scene.discardCount],()=>`<div class="uno-discard" data-motion-table data-tooltip="${H.esc(text('uno.view.discard-help'))}">${top?card(top):C.cardSlot({label:text('uno.view.discard-help'),kind:'discard'})}${drop}<small>${H.esc(text('uno.view.discard-caption',{count:scene.discardCount}))}</small></div>`);
     const dock=H.actionGroups({start:call,primary:controls,end:H.button({icon:'help',ariaLabel:text('uno.view.card-help'),variant:'game',className:'uno-card-help',attrs:'data-command="card-help"'}),exclusive:chosen.length>1});
-    return {api:3,family:'cards',layout:{focus:'hands'},fieldSizing:'content',className:'uno-scene player-menu-overlay surface-'+surface,playerContent:H.playerContent(s,viewer,(c,attrs,ctx)=>card(c,attrs,'',ctx?.variant),{badges:i=>scene.declared[i]?[{label:'UNO',tone:'success',position:'avatar-bottom'}]:[]}),elements:{
+    return {api:3,family:'cards',layout:{focus:'hands'},fieldSizing:'content',className:'uno-scene player-menu-overlay surface-'+surface,playerContent:H.playerContent(s,viewer,(c,attrs,ctx)=>card(c,attrs,'',ctx?.variant),{next:i=>i===nextPlayer,turnPreview:i=>preview?.affected.includes(i)?'negative':preview?.nextPlayer===i?'positive':null,badges:i=>scene.declared[i]?[{label:'UNO',tone:'success',position:'avatar-bottom'}]:[]}),elements:{
       participants:'',
       field:`<div class="uno-play-area" data-drop-zone>${flow}<div class="uno-center">${stock}${discard}</div></div>`,
       actions:dock,

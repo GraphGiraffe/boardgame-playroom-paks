@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["tictactoe"] = {
   "id": "tictactoe",
-  "version": "0.3.6-preview.6",
+  "version": "0.3.6-preview.10",
   "name": "Крестики-нолики",
   "category": "board",
   "estimatedDuration": "2–5 мин",
@@ -53,6 +53,18 @@
   },
   "releases": [
     {
+      "version": "0.3.6-preview.8",
+      "changes": [
+        "Общий SDK допускает до 64 ленивых публичных кадров; одновременно готовится только текущий и следующий кадр."
+      ]
+    },
+    {
+      "version": "0.3.6-preview.7",
+      "changes": [
+        "Обновлён общий SDK поэтапной подготовки публичных кадров; правила игры сохранены."
+      ]
+    },
+    {
       "version": "0.3.6-preview.6",
       "changes": [
         "Крестики и нолики показаны общими объёмными жетонами."
@@ -76,6 +88,10 @@
         "Короткие правила: абзацы, списки, таблицы и иллюстрации игровых элементов и интерфейса."
       ]
     }
+  ],
+  "sdkFeatures": [
+    "local-input-v1",
+    "turn-order-v1"
   ]
 };
 })(globalThis);

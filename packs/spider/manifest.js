@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["spider"] = {
   "id": "spider",
-  "version": "0.2.5-preview.8",
+  "version": "0.2.5-preview.12",
   "name": "Паук",
   "category": "solitaire",
   "estimatedDuration": "10–30 мин",
@@ -164,6 +164,18 @@
   },
   "releases": [
     {
+      "version": "0.2.5-preview.10",
+      "changes": [
+        "Общий SDK допускает до 64 ленивых публичных кадров; одновременно готовится только текущий и следующий кадр."
+      ]
+    },
+    {
+      "version": "0.2.5-preview.9",
+      "changes": [
+        "Обновлён общий SDK поэтапной подготовки публичных кадров; правила игры сохранены."
+      ]
+    },
+    {
       "version": "0.2.5-preview.8",
       "changes": [
         "Исправлены отступы и обрезание элементов в адаптивной компоновке."
@@ -202,6 +214,10 @@
         "Короткие правила: абзацы, списки, таблицы и иллюстрации игровых элементов и интерфейса."
       ]
     }
+  ],
+  "sdkFeatures": [
+    "local-input-v1",
+    "turn-order-v1"
   ]
 };
 })(globalThis);

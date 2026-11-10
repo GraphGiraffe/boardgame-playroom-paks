@@ -94,5 +94,6 @@
   }
   function result(position){const values=position.data.scores;return {winners:position.winners,
     places:values.map(value=>1+new Set(values.filter(other=>other>value)).size),metrics:[{id:'pairs',values}]};}
-  return Object.freeze({contractVersion:1,id:'pexeso',minPlayers:2,maxPlayers:4,botHandlesDifficulty:true,create,validate,actions,reduce,project,observe,bot,result});
+  function localChoices(p){if(p.actor<0||p.status!=='playing')return [];return actions(p,p.actor);}
+ return Object.freeze({contractVersion:1,id:'pexeso',minPlayers:2,maxPlayers:4,botHandlesDifficulty:true,create,validate,actions,localChoices,reduce,project,observe,bot,result});
 });

@@ -66,6 +66,7 @@
     return {winners:[...position.winners], places:values.map(value => values.some(other => other > value) ? 2 : 1),
       metrics:[{id:'wins', values}]};
   }
-  return Object.freeze({contractVersion:1, id:'tictactoe', minPlayers:2, maxPlayers:2,
-    create, validate, actions, reduce, project, bot, result});
+  function localChoices(p){if(p.actor<0||p.status!=='playing')return [];return actions(p,p.actor);}
+ return Object.freeze({contractVersion:1, id:'tictactoe', minPlayers:2, maxPlayers:2,
+    create, validate, actions,localChoices, reduce, project, bot, result});
 });

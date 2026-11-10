@@ -150,3 +150,7 @@
 .uno-scene .uno-center .piece-back{width:var(--size-card)!important;min-width:var(--size-card)!important;height:var(--size-card-height)!important}
 .uno-scene .layout-field{--size-card:var(--size-hand-card,60px);--size-card-height:calc(var(--size-hand-card,60px) * 1.4)}
 .uno-scene .game-field-content{overflow:visible!important}
+
+/* Use the same round colour samples as the rulebook, centered in the hit area. */
+.uno-scene .uno-color-picker .color-choice{display:flex;align-items:center;justify-content:center;padding:0;gap:0;font-size:0}
+.uno-scene .uno-color-picker .color-choice i{width:24px;height:24px;flex:none;border-radius:50%}

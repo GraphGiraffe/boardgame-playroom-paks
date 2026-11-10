@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["ludo"] = {
   "id": "ludo",
-  "version": "0.3.7-preview.8",
+  "version": "0.3.7-preview.12",
   "name": "Лудо",
   "category": "board",
   "estimatedDuration": "20–40 мин",
@@ -257,6 +257,18 @@
   ],
   "releases": [
     {
+      "version": "0.3.7-preview.10",
+      "changes": [
+        "Общий SDK допускает до 64 ленивых публичных кадров; одновременно готовится только текущий и следующий кадр."
+      ]
+    },
+    {
+      "version": "0.3.7-preview.9",
+      "changes": [
+        "Обновлён общий SDK поэтапной подготовки публичных кадров; правила игры сохранены."
+      ]
+    },
+    {
       "version": "0.3.7-preview.8",
       "changes": [
         "Явное расположение карточек игроков и уточнённые зоны управления."
@@ -287,6 +299,10 @@
         "Принятый объёмный дизайн фишек с белой обводкой верхней поверхности."
       ]
     }
+  ],
+  "sdkFeatures": [
+    "local-input-v1",
+    "turn-order-v1"
   ]
 };
 })(globalThis);

@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["oldmaid"] = {
   "id": "oldmaid",
-  "version": "0.3.5-preview.7",
+  "version": "0.3.5-preview.11",
   "name": "Акулина",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
@@ -135,6 +135,18 @@
   ],
   "releases": [
     {
+      "version": "0.3.5-preview.9",
+      "changes": [
+        "Общий SDK допускает до 64 ленивых публичных кадров; одновременно готовится только текущий и следующий кадр."
+      ]
+    },
+    {
+      "version": "0.3.5-preview.8",
+      "changes": [
+        "Обновлён общий SDK поэтапной подготовки публичных кадров; правила игры сохранены."
+      ]
+    },
+    {
       "version": "0.3.5-preview.7",
       "changes": [
         "Обновлены общие компоненты отображения карточных мастей и жетонов."
@@ -159,6 +171,10 @@
         "Короткие правила: абзацы, списки, таблицы и иллюстрации игровых элементов и интерфейса."
       ]
     }
+  ],
+  "sdkFeatures": [
+    "local-input-v1",
+    "turn-order-v1"
   ]
 };
 })(globalThis);
