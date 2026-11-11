@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["klondike"] = {
   "id": "klondike",
-  "version": "0.2.5-preview.14",
+  "version": "0.2.5-preview.15",
   "name": "Косынка",
   "category": "solitaire",
   "estimatedDuration": "10–30 мин",
@@ -71,12 +71,12 @@
         {
           "value": "1",
           "label": "1",
-          "description": "За нажатие открывается одна карта из запаса."
+          "description": "Из запаса открывается одна карта."
         },
         {
           "value": "3",
           "label": "3",
-          "description": "Открываются до трёх карт; играть можно верхнюю."
+          "description": "До трёх карт; играют только верхнюю."
         }
       ],
       "control": "slider",
@@ -93,7 +93,7 @@
         {
           "value": "standard",
           "label": "Обычный",
-          "description": "Очки за переносы и открытия; счёт не ниже нуля.",
+          "description": "Очки за ходы; минимум — ноль.",
           "preview": {
             "kind": "symbol",
             "icon": "trophy"
@@ -151,7 +151,7 @@
         {
           "value": "history",
           "label": "История",
-          "description": "До 100 действий назад; при подсчёте очков отмена −2.",
+          "description": "До 100 отмен; каждая стоит −2 очка.",
           "preview": {
             "kind": "symbol",
             "icon": "history"
@@ -173,17 +173,17 @@
         {
           "value": "1",
           "label": "1",
-          "description": "Лимит включает первый проход; в Vegas свой лимит."
+          "description": "Включая первый проход; кроме Vegas."
         },
         {
           "value": "3",
           "label": "3",
-          "description": "Лимит включает первый проход; в Vegas свой лимит."
+          "description": "Включая первый проход; кроме Vegas."
         },
         {
           "value": "0",
           "label": "∞",
-          "description": "Неограниченные проходы запаса; в Vegas свой лимит."
+          "description": "Без лимита проходов; кроме Vegas."
         }
       ],
       "control": "slider",
@@ -191,6 +191,16 @@
       "preview": {
         "kind": "symbol",
         "icon": "refresh"
+      },
+      "inactiveWhen": {
+        "scoring": "vegas"
+      },
+      "inactivePresentation": {
+        "preview": {
+          "kind": "symbol",
+          "icon": "lock"
+        },
+        "description": "Vegas: по 1 — 1 проход, по 3 — 3."
       }
     },
     {
@@ -232,7 +242,7 @@
         {
           "value": "off",
           "label": "Выкл",
-          "description": "Переносите открытые карты в дома вручную.",
+          "description": "Карты в дома переносят вручную.",
           "preview": {
             "kind": "symbol",
             "icon": "close"
@@ -241,7 +251,7 @@
         {
           "value": "button",
           "label": "Двойное нажатие",
-          "description": "Двойное нажатие пустого поля собирает карты в дома.",
+          "description": "Двойной тап поля — сбор карт в дома.",
           "preview": {
             "kind": "symbol",
             "icon": "hand"
@@ -280,6 +290,13 @@
     ]
   },
   "releases": [
+    {
+      "version": "0.2.5-preview.15",
+      "changes": [
+        "В Vegas лимит проходов определяется добором: один при доборе по одной карте, три — по три. Карточка параметра показывает это правило и недоступна для ручной смены.",
+        "Сокращены пояснения параметров; выбранные варианты читаются компактнее."
+      ]
+    },
     {
       "version": "0.2.5-preview.14",
       "changes": [
@@ -340,7 +357,8 @@
   ],
   "sdkFeatures": [
     "local-input-v1",
-    "turn-order-v1"
+    "turn-order-v1",
+    "parameter-previews-v2"
   ]
 };
 })(globalThis);

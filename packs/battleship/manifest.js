@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["battleship"] = {
   "id": "battleship",
-  "version": "0.3.7-preview.13",
+  "version": "0.3.7-preview.14",
   "name": "Морской бой",
   "category": "board",
   "estimatedDuration": "15–30 мин",
@@ -66,7 +66,7 @@
         {
           "value": "on",
           "label": "Да",
-          "description": "Потопление объявляется, соседние клетки отмечаются.",
+          "description": "Потопление и соседние клетки отмечены.",
           "preview": {
             "kind": "symbol",
             "icon": "ship"
@@ -75,7 +75,7 @@
         {
           "value": "off",
           "label": "Нет",
-          "description": "Попадания видны, потопление не объявляется.",
+          "description": "Видны попадания, без объявления гибели.",
           "preview": {
             "kind": "symbol",
             "icon": "eye-off"
@@ -147,6 +147,12 @@
     "ship"
   ],
   "releases": [
+    {
+      "version": "0.3.7-preview.14",
+      "changes": [
+        "Сокращены пояснения параметров; выбранные варианты читаются компактнее."
+      ]
+    },
     {
       "version": "0.3.7-preview.13",
       "changes": [

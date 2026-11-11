@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["oldmaid"] = {
   "id": "oldmaid",
-  "version": "0.3.5-preview.12",
+  "version": "0.3.5-preview.13",
   "name": "Акулина",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
@@ -33,7 +33,7 @@
           "preview": {
             "count": 35
           },
-          "description": "Из колоды 36 убрана дама треф; в игре 35 карт."
+          "description": "36 без дамы треф: в игре 35 карт."
         },
         {
           "value": "52",
@@ -41,7 +41,7 @@
           "preview": {
             "count": 51
           },
-          "description": "Из колоды 52 убрана дама треф; в игре 51 карта."
+          "description": "52 без дамы треф: в игре 51 карта."
         }
       ],
       "help": "В игре 35 или 51 карта: из исходной колоды 36 или 52 карты убрана дама треф.",
@@ -67,7 +67,7 @@
         {
           "value": "next",
           "label": "У следующего",
-          "description": "Только у следующего по кругу, пропуская пустые руки.",
+          "description": "У следующего по кругу с картами.",
           "preview": {
             "kind": "symbol",
             "icon": "first"
@@ -90,7 +90,7 @@
         {
           "value": "winner",
           "label": "До победителя",
-          "description": "Первый выход с пустой рукой завершает партию.",
+          "description": "Первая пустая рука завершает партию.",
           "preview": {
             "kind": "symbol",
             "icon": "trophy"
@@ -173,6 +173,12 @@
     "mini-split-deck"
   ],
   "releases": [
+    {
+      "version": "0.3.5-preview.13",
+      "changes": [
+        "Сокращены пояснения параметров; выбранные варианты читаются компактнее."
+      ]
+    },
     {
       "version": "0.3.5-preview.12",
       "changes": [
