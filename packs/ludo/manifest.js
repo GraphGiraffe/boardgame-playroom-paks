@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["ludo"] = {
   "id": "ludo",
-  "version": "0.3.7-preview.14",
+  "version": "0.3.7-preview.15",
   "name": "Лудо",
   "category": "board",
   "estimatedDuration": "20–40 мин",
@@ -352,6 +352,12 @@
     "die"
   ],
   "releases": [
+    {
+      "version": "0.3.7-preview.15",
+      "changes": [
+        "Скругления карт и общих фигур масштабируются вместе с компонентами."
+      ]
+    },
     {
       "version": "0.3.7-preview.14",
       "changes": [

@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["pexeso"] = {
   "id": "pexeso",
-  "version": "0.3.5-preview.11",
+  "version": "0.3.5-preview.12",
   "name": "Пексесо",
   "category": "cards",
   "estimatedDuration": "5–20 мин",
@@ -106,6 +106,12 @@
     "character-face": "minimal"
   },
   "releases": [
+    {
+      "version": "0.3.5-preview.12",
+      "changes": [
+        "Скругления карт и общих фигур масштабируются вместе с компонентами."
+      ]
+    },
     {
       "version": "0.3.5-preview.9",
       "changes": [

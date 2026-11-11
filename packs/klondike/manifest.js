@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["klondike"] = {
   "id": "klondike",
-  "version": "0.2.5-preview.15",
+  "version": "0.2.5-preview.16",
   "name": "Косынка",
   "category": "solitaire",
   "estimatedDuration": "10–30 мин",
@@ -290,6 +290,12 @@
     ]
   },
   "releases": [
+    {
+      "version": "0.2.5-preview.16",
+      "changes": [
+        "Скругления карт и общих фигур масштабируются вместе с компонентами."
+      ]
+    },
     {
       "version": "0.2.5-preview.15",
       "changes": [

@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["spider"] = {
   "id": "spider",
-  "version": "0.2.5-preview.12",
+  "version": "0.2.5-preview.13",
   "name": "Паук",
   "category": "solitaire",
   "estimatedDuration": "10–30 мин",
@@ -163,6 +163,12 @@
     ]
   },
   "releases": [
+    {
+      "version": "0.2.5-preview.13",
+      "changes": [
+        "Скругления карт и общих фигур масштабируются вместе с компонентами."
+      ]
+    },
     {
       "version": "0.2.5-preview.10",
       "changes": [

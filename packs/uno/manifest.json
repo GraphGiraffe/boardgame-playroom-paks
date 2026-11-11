@@ -1,6 +1,6 @@
 {
   "id": "uno",
-  "version": "0.6.8-preview.19",
+  "version": "0.6.8-preview.20",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Подбирай цвет и значение. Освободи руку первым.",
@@ -167,6 +167,12 @@
     "uno-deck"
   ],
   "releases": [
+    {
+      "version": "0.6.8-preview.20",
+      "changes": [
+        "Скругления карт и общих фигур масштабируются вместе с компонентами."
+      ]
+    },
     {
       "version": "0.6.8-preview.19",
       "changes": [

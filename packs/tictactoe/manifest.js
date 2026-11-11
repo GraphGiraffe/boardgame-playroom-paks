@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["tictactoe"] = {
   "id": "tictactoe",
-  "version": "0.3.6-preview.10",
+  "version": "0.3.6-preview.11",
   "name": "Крестики-нолики",
   "category": "board",
   "estimatedDuration": "2–5 мин",
@@ -52,6 +52,12 @@
     ]
   },
   "releases": [
+    {
+      "version": "0.3.6-preview.11",
+      "changes": [
+        "Скругления карт и общих фигур масштабируются вместе с компонентами."
+      ]
+    },
     {
       "version": "0.3.6-preview.8",
       "changes": [
