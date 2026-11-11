@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["yatzy"] = {
   "id": "yatzy",
-  "version": "0.3.5-preview.13",
+  "version": "0.3.5-preview.14",
   "name": "Ятзи",
   "category": "dice",
   "estimatedDuration": "15–25 мин",
@@ -97,6 +97,12 @@
     ]
   },
   "releases": [
+    {
+      "version": "0.3.5-preview.14",
+      "changes": [
+        "Скругления карт и общих фигур масштабируются вместе с компонентами."
+      ]
+    },
     {
       "version": "0.3.5-preview.11",
       "changes": [

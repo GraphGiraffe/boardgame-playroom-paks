@@ -49,7 +49,7 @@ def validate_parameter_previews(manifest, label):
     if not isinstance(settings, list) or not isinstance(preset, dict):
         raise ValueError(f"Некорректная иллюстрация параметра: {label}")
     sdk = manifest.get("sdkFeatures", [])
-    if (not isinstance(sdk, list) or len(sdk) > 16 or any(not isinstance(f, str) or f not in {"local-input-v1", "turn-order-v1", "parameter-previews-v2"} for f in sdk) or len(set(sdk)) != len(sdk)):
+    if (not isinstance(sdk, list) or len(sdk) > 16 or any(not isinstance(f, str) or f not in {"local-input-v1", "turn-order-v1", "parameter-previews-v2", "parameter-illustrations-v1"} for f in sdk) or len(set(sdk)) != len(sdk)):
         raise ValueError(f"Неподдерживаемая возможность SDK: {label}")
     if any(isinstance(f, dict) and (f.get("presentation") == "mode" or "inactiveWhen" in f or "inactivePresentation" in f) for f in settings) and "parameter-previews-v2" not in sdk:
         raise ValueError(f"Требуется SDK parameter-previews-v2: {label}")
@@ -65,13 +65,21 @@ def validate_parameter_previews(manifest, label):
     def common_preview(preview, inherited=None, partial=False):
         resolved = {**(inherited or {}), **preview}
         kind = resolved.get("kind")
-        allowed = {"declaration": {"kind", "actor", "label"}, "symbol": {"kind", "icon"}}[kind]
+        allowed = {"declaration": {"kind", "actor", "label"}, "symbol": {"kind", "icon"}, "illustrations": {"kind", "ids"}}[kind]
         if not set(preview) <= allowed:
             invalid()
         if kind == "declaration":
             if ((not partial or "actor" in resolved) and resolved.get("actor") not in ("human", "bot")
                     or (not partial or "label" in resolved) and not text(resolved.get("label"), 24)):
                 invalid()
+        elif kind == "illustrations":
+            if "parameter-illustrations-v1" not in sdk:
+                invalid()
+            if not partial or "ids" in resolved:
+                ids = resolved.get("ids")
+                if (not isinstance(ids, list) or not 1 <= len(ids) <= 4
+                        or any(not isinstance(ident, str) or not re.fullmatch(r"[A-Za-z0-9._-]{1,64}", ident) for ident in ids)):
+                    invalid()
         elif kind == "symbol":
             if (not partial or "icon" in resolved) and (not isinstance(resolved.get("icon"), str) or resolved["icon"] not in symbols):
                 invalid()
@@ -86,7 +94,7 @@ def validate_parameter_previews(manifest, label):
         if "preview" in field:
             if not isinstance(parent, dict) or not isinstance(parent.get("kind"), str):
                 invalid()
-            if parent["kind"] in ("declaration", "symbol"):
+            if parent["kind"] in ("declaration", "symbol", "illustrations"):
                 common_preview(parent, partial=True)
             elif set(parent) != {"kind"} or parent["kind"] not in quantities:
                 invalid()
@@ -111,7 +119,7 @@ def validate_parameter_previews(manifest, label):
             if "preview" not in option:
                 if field.get("presentation") == "mode" and not parent:
                     invalid()
-                if parent and parent["kind"] in ("declaration", "symbol"):
+                if parent and parent["kind"] in ("declaration", "symbol", "illustrations"):
                     common_preview({}, parent)
                 continue
             if not isinstance(preview, dict):
@@ -127,7 +135,7 @@ def validate_parameter_previews(manifest, label):
                         or any(not count(n) or not 1 <= n <= (16 if kind == "fleet" else 32) for n in values)
                         or sum(values) > (100 if kind == "fleet" else 32)):
                     invalid()
-            elif kind in ("declaration", "symbol"):
+            elif kind in ("declaration", "symbol", "illustrations"):
                 common_preview(preview, parent)
             elif kind in quantities:
                 if (not set(preview) <= {"kind", "count", "countFrom"}

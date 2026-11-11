@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["oldmaid"] = {
   "id": "oldmaid",
-  "version": "0.3.5-preview.13",
+  "version": "0.3.5-preview.14",
   "name": "Акулина",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
@@ -173,6 +173,12 @@
     "mini-split-deck"
   ],
   "releases": [
+    {
+      "version": "0.3.5-preview.14",
+      "changes": [
+        "Скругления карт и общих фигур масштабируются вместе с компонентами."
+      ]
+    },
     {
       "version": "0.3.5-preview.13",
       "changes": [

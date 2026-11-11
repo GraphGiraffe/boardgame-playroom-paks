@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["mage-brawl"] = {
   "id": "mage-brawl",
-  "version": "0.2.7-preview.27",
+  "version": "0.2.7-preview.28",
   "name": "Стихийная потасовка",
   "category": "board",
   "estimatedDuration": "15–40 мин",
@@ -82,18 +82,28 @@
         {
           "value": "1",
           "label": "1",
-          "description": "Одна выбранная карта за раунд."
+          "description": "Одна выбранная карта за раунд.",
+          "preview": {
+            "ids": [
+              "setting-card-fire-attack"
+            ]
+          }
         },
         {
           "value": "2",
           "label": "2",
-          "description": "Две разные карты по очереди."
+          "description": "Две разные карты по очереди.",
+          "preview": {
+            "ids": [
+              "setting-card-fire-attack",
+              "setting-card-water-movement"
+            ]
+          }
         }
       ],
       "help": "Каждый заранее планирует указанное число ходов. Один ход - 8 фаз: 4 движения и 4 атаки. Сначала первый ход всех игроков, затем второй.",
       "preview": {
-        "kind": "symbol",
-        "icon": "play"
+        "kind": "illustrations"
       }
     },
     {
@@ -107,8 +117,10 @@
           "label": "Нет",
           "description": "Типы любые, карты — разные.",
           "preview": {
-            "kind": "symbol",
-            "icon": "refresh"
+            "ids": [
+              "setting-type-attack",
+              "setting-type-attack"
+            ]
           }
         },
         {
@@ -116,8 +128,10 @@
           "label": "Да",
           "description": "Типы двух действий не повторяются.",
           "preview": {
-            "kind": "symbol",
-            "icon": "check"
+            "ids": [
+              "setting-type-movement",
+              "setting-type-attack"
+            ]
           }
         }
       ],
@@ -126,8 +140,7 @@
         "actionsPerTurn": "2"
       },
       "preview": {
-        "kind": "symbol",
-        "icon": "check"
+        "kind": "illustrations"
       }
     },
     {
@@ -294,6 +307,13 @@
   ],
   "releases": [
     {
+      "version": "0.2.7-preview.28",
+      "changes": [
+        "Скругления карт и общих фигур масштабируются вместе с компонентами.",
+        "Параметры показывают реальные карты стихий и значки действий; требуется приложение с parameter-illustrations-v1."
+      ]
+    },
+    {
       "version": "0.2.7-preview.27",
       "changes": [
         "Сокращены пояснения параметров; выбранные варианты читаются компактнее."
@@ -440,7 +460,8 @@
   ],
   "sdkFeatures": [
     "local-input-v1",
-    "turn-order-v1"
+    "turn-order-v1",
+    "parameter-illustrations-v1"
   ]
 };
 })(globalThis);

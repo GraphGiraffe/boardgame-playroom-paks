@@ -182,8 +182,13 @@
  }
  const illustrations=id=>{
   const elements=['air','earth','water','fire'];
+  // Public parameter examples reuse the exact scene cards and action glyphs.
+  if(id==='setting-card-fire-attack')return card('fire','attack');
+  if(id==='setting-card-water-movement')return card('water','movement');
+  if(id==='setting-type-attack')return actionIcon('attack');
+  if(id==='setting-type-movement')return actionIcon('movement');
   if(id.startsWith('tile-'))return terrainArt(id.slice(5));
-  if(id==='type-control')return `<svg viewBox="0 0 240 44"><rect x="1" y="1" width="238" height="42" rx="18" fill="#e4e9da" stroke="#a6b59d"/><rect x="4" y="4" width="115" height="36" rx="15" fill="#d0dcc4"/><g transform="translate(48 8) scale(.28)">${footprints().replace(/^.*?>/,'').replace(/<\/svg>$/,'')}</g><g transform="translate(163 10) scale(1)" fill="none" stroke="currentColor" stroke-width="2">${H.icon('sword').replace(/^.*?>/,'').replace(/<\/svg>$/,'')}</g></svg>`;
+  if(id==='type-control')return `<svg viewBox="0 0 240 44"><rect x="1" y="1" width="238" height="42" rx="18" fill="var(--color-surface-panel,#e4e9da)" stroke="#a6b59d"/><rect x="4" y="4" width="115" height="36" rx="15" fill="var(--color-surface-selected,#d0dcc4)"/><g transform="translate(48 8) scale(.28)">${footprints().replace(/^.*?>/,'').replace(/<\/svg>$/,'')}</g><g transform="translate(163 10) scale(1)" fill="none" stroke="currentColor" stroke-width="2">${H.icon('sword').replace(/^.*?>/,'').replace(/<\/svg>$/,'')}</g></svg>`;
   if(id==='order')return `<svg viewBox="0 0 240 140"><title>${esc(text('book.order'))}</title>${['movement','attack'].map((a,j)=>`<text x="120" y="${j*68+13}" text-anchor="middle" font-size="12" fill="currentColor">${esc(text('book.order-'+a))}</text><g transform="translate(30 ${j*68+21})">${elements.map((e,i)=>`<g transform="translate(${i*49} 4) scale(.38)" style="color:${colors[e]}">${ink[e]}</g>${i<3?`<text x="${i*49+39}" y="30" font-size="16" fill="#8a957e">→</text>`:''}`).join('')}</g>`).join('')}</svg>`;
   const [e,a]=id.split('-');if(!elements.includes(e)||!['movement','attack','ultimate'].includes(a))return '';
   return `<svg class="mage-action-diagram" viewBox="0 0 220 110"><g transform="translate(3 5) scale(1)"><rect x="1.5" y="1.5" width="97" height="97" rx="10" fill="#fff9e9" stroke="${colors[e]}" stroke-width="3"/>${illustration(e,a)}</g><g transform="translate(115 4)" style="color:${colors[e]}">${actionArt(e,a)}</g></svg>`;

@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["battleship"] = {
   "id": "battleship",
-  "version": "0.3.7-preview.14",
+  "version": "0.3.7-preview.15",
   "name": "Морской бой",
   "category": "board",
   "estimatedDuration": "15–30 мин",
@@ -147,6 +147,12 @@
     "ship"
   ],
   "releases": [
+    {
+      "version": "0.3.7-preview.15",
+      "changes": [
+        "Скругления карт и общих фигур масштабируются вместе с компонентами."
+      ]
+    },
     {
       "version": "0.3.7-preview.14",
       "changes": [
