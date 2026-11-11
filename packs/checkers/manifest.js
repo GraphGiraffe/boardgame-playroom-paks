@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["checkers"] = {
   "id": "checkers",
-  "version": "0.5.5-preview.13",
+  "version": "0.5.5-preview.14",
   "category": "board",
   "estimatedDuration": "15–30 мин",
   "tagline": "Бери шашки и пробивайся в дамки.",
@@ -51,20 +51,41 @@
     "options": [
       {
         "value": "quick",
-        "label": "8"
+        "label": "8",
+        "preview": {
+          "ids": [
+            "setting-pieces-8"
+          ]
+        },
+        "description": "По 8 шашек у каждого игрока."
       },
       {
         "value": "classic",
-        "label": "12"
+        "label": "12",
+        "preview": {
+          "ids": [
+            "setting-pieces-12"
+          ]
+        },
+        "description": "По 12 шашек у каждого игрока."
       }
     ],
-    "help": "Начальное число шашек у каждого игрока на доске 8 × 8. Правила ходов, дамок и обязательного взятия одинаковы."
+    "help": "Начальное число шашек у каждого игрока на доске 8 × 8. Правила ходов, дамок и обязательного взятия одинаковы.",
+    "preview": {
+      "kind": "illustrations"
+    }
   },
   "skinFamilies": [
     "checker",
     "board"
   ],
   "releases": [
+    {
+      "version": "0.5.5-preview.14",
+      "changes": [
+        "Параметры игры снабжены понятными иллюстрациями из игровых компонентов и короткими пояснениями выбранных вариантов."
+      ]
+    },
     {
       "version": "0.5.5-preview.13",
       "changes": [
@@ -116,7 +137,8 @@
   ],
   "sdkFeatures": [
     "local-input-v1",
-    "turn-order-v1"
+    "turn-order-v1",
+    "parameter-illustrations-v1"
   ]
 };
 })(globalThis);

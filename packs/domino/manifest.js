@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["domino"] = {
   "id": "domino",
-  "version": "0.5.6-preview.14",
+  "version": "0.5.6-preview.15",
   "category": "board",
   "estimatedDuration": "10–15 мин",
   "tagline": "Соединяй числа и считай ходы соперников.",
@@ -47,11 +47,13 @@
       "options": [
         {
           "value": "winner",
-          "label": "До победителя"
+          "label": "До победителя",
+          "description": "Первая пустая рука завершает партию."
         },
         {
           "value": "last",
-          "label": "До последнего"
+          "label": "До последнего",
+          "description": "До последнего игрока или блокировки."
         }
       ],
       "control": "slider"
@@ -81,19 +83,40 @@
     "options": [
       {
         "value": "quick",
-        "label": "5"
+        "label": "5",
+        "preview": {
+          "ids": [
+            "setting-hand-5"
+          ]
+        },
+        "description": "По 5 костей на старте."
       },
       {
         "value": "classic",
-        "label": "7"
+        "label": "7",
+        "preview": {
+          "ids": [
+            "setting-hand-7"
+          ]
+        },
+        "description": "По 7 костей на старте."
       }
     ],
-    "help": "Число костей у каждого игрока при начальной раздаче. Набор и правила цепочки сохраняются."
+    "help": "Число костей у каждого игрока при начальной раздаче. Набор и правила цепочки сохраняются.",
+    "preview": {
+      "kind": "illustrations"
+    }
   },
   "skinFamilies": [
     "domino"
   ],
   "releases": [
+    {
+      "version": "0.5.6-preview.15",
+      "changes": [
+        "Параметры игры снабжены понятными иллюстрациями из игровых компонентов и короткими пояснениями выбранных вариантов."
+      ]
+    },
     {
       "version": "0.5.6-preview.14",
       "changes": [
@@ -151,7 +174,8 @@
   ],
   "sdkFeatures": [
     "local-input-v1",
-    "turn-order-v1"
+    "turn-order-v1",
+    "parameter-illustrations-v1"
   ]
 };
 })(globalThis);

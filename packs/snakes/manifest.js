@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["snakes"] = {
   "id": "snakes",
-  "version": "0.5.7-preview.13",
+  "version": "0.5.7-preview.14",
   "category": "board",
   "estimatedDuration": "5–15 мин",
   "tagline": "Лестницы поднимают. Змеи возвращают назад.",
@@ -54,14 +54,29 @@
       "options": [
         {
           "value": "64",
-          "label": "64"
+          "label": "64",
+          "preview": {
+            "ids": [
+              "setting-board-64"
+            ]
+          },
+          "description": "8×8 клеток; финиш — 64."
         },
         {
           "value": "100",
-          "label": "100"
+          "label": "100",
+          "preview": {
+            "ids": [
+              "setting-board-100"
+            ]
+          },
+          "description": "10×10 клеток; финиш — 100."
         }
       ],
-      "control": "slider"
+      "control": "slider",
+      "preview": {
+        "kind": "illustrations"
+      }
     },
     {
       "key": "endMode",
@@ -71,18 +86,34 @@
       "options": [
         {
           "value": "winner",
-          "label": "До победителя"
+          "label": "До победителя",
+          "preview": {
+            "icon": "trophy"
+          },
+          "description": "Первый финиш завершает партию."
         },
         {
           "value": "round",
-          "label": "Последний раунд"
+          "label": "Последний раунд",
+          "preview": {
+            "icon": "refresh"
+          },
+          "description": "Закончить круг после первого финиша."
         },
         {
           "value": "last",
-          "label": "До последнего"
+          "label": "До последнего",
+          "preview": {
+            "icon": "people"
+          },
+          "description": "Играть до последней фишки у финиша."
         }
       ],
-      "control": "slider"
+      "control": "slider",
+      "preview": {
+        "kind": "symbol",
+        "icon": "trophy"
+      }
     },
     {
       "key": "maxRounds",
@@ -92,30 +123,40 @@
       "options": [
         {
           "value": "3",
-          "label": "3"
+          "label": "3",
+          "description": "Лимит — 3 полных кругов игроков."
         },
         {
           "value": "5",
-          "label": "5"
+          "label": "5",
+          "description": "Лимит — 5 полных кругов игроков."
         },
         {
           "value": "10",
-          "label": "10"
+          "label": "10",
+          "description": "Лимит — 10 полных кругов игроков."
         },
         {
           "value": "20",
-          "label": "20"
+          "label": "20",
+          "description": "Лимит — 20 полных кругов игроков."
         },
         {
           "value": "50",
-          "label": "50"
+          "label": "50",
+          "description": "Лимит — 50 полных кругов игроков."
         },
         {
           "value": "0",
-          "label": "∞"
+          "label": "∞",
+          "description": "Без ограничения числа раундов."
         }
       ],
-      "control": "slider"
+      "control": "slider",
+      "preview": {
+        "kind": "symbol",
+        "icon": "clock"
+      }
     }
   ],
   "ruleGroups": [
@@ -143,19 +184,23 @@
         "value": "classic",
         "label": "Простой",
         "preview": {
-          "kind": "dice",
-          "count": 1
+          "kind": "illustrations",
+          "ids": [
+            "setting-mode-classic"
+          ]
         },
-        "description": "Один кубик; лестницы вперёд, змеи назад."
+        "description": "Один кубик; змеи и лестницы."
       },
       {
         "value": "plus",
         "label": "ЗиЛ+",
         "preview": {
-          "kind": "dice",
-          "count": 2
+          "kind": "illustrations",
+          "ids": [
+            "setting-mode-plus"
+          ]
         },
-        "description": "Два кубика и особые клетки с эффектами."
+        "description": "Два кубика; особые клетки и эффекты."
       }
     ],
     "help": "Простой: один кубик, змеи и лестницы. ЗиЛ+: два кубика на выбор, особые клетки и эффекты на следующий ход."
@@ -164,6 +209,12 @@
     "die"
   ],
   "releases": [
+    {
+      "version": "0.5.7-preview.14",
+      "changes": [
+        "Параметры игры снабжены понятными иллюстрациями из игровых компонентов и короткими пояснениями выбранных вариантов."
+      ]
+    },
     {
       "version": "0.5.7-preview.13",
       "changes": [
@@ -223,7 +274,8 @@
   ],
   "sdkFeatures": [
     "local-input-v1",
-    "turn-order-v1"
+    "turn-order-v1",
+    "parameter-illustrations-v1"
   ]
 };
 })(globalThis);

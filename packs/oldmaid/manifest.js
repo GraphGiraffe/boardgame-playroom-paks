@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["oldmaid"] = {
   "id": "oldmaid",
-  "version": "0.3.5-preview.15",
+  "version": "0.3.5-preview.16",
   "name": "Акулина",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
@@ -58,10 +58,11 @@
         {
           "value": "any",
           "label": "У любого",
-          "description": "Карту можно взять у любого соперника.",
+          "description": "Одну карту у любого с картами.",
           "preview": {
-            "kind": "symbol",
-            "icon": "people"
+            "ids": [
+              "setting-draw-any"
+            ]
           }
         },
         {
@@ -69,16 +70,16 @@
           "label": "У следующего",
           "description": "У следующего по кругу с картами.",
           "preview": {
-            "kind": "symbol",
-            "icon": "first"
+            "ids": [
+              "setting-draw-next"
+            ]
           }
         }
       ],
       "help": "Выберите любого соперника с картами либо только следующего по кругу. Пустые руки пропускаются.",
       "control": "slider",
       "preview": {
-        "kind": "symbol",
-        "icon": "people"
+        "kind": "illustrations"
       }
     },
     {
@@ -174,6 +175,12 @@
   ],
   "releases": [
     {
+      "version": "0.3.5-preview.16",
+      "changes": [
+        "Параметры игры снабжены понятными иллюстрациями из игровых компонентов и короткими пояснениями выбранных вариантов."
+      ]
+    },
+    {
       "version": "0.3.5-preview.15",
       "changes": [
         "Общие игровые ассеты сохраняют пропорции рамок, скруглений и толщины в игре, миниатюрах, правилах, параметрах и анимациях. Убраны вторые фиксированные рамки и тени поверх SVG."
@@ -238,7 +245,8 @@
   ],
   "sdkFeatures": [
     "local-input-v1",
-    "turn-order-v1"
+    "turn-order-v1",
+    "parameter-illustrations-v1"
   ]
 };
 })(globalThis);

@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["pexeso"] = {
   "id": "pexeso",
-  "version": "0.3.5-preview.13",
+  "version": "0.3.5-preview.14",
   "name": "Пексесо",
   "category": "cards",
   "estimatedDuration": "5–20 мин",
@@ -29,15 +29,30 @@
       "options": [
         {
           "value": "cartoon",
-          "label": "Персонажи"
+          "label": "Персонажи",
+          "description": "Пара: одинаковые фигура и цвет.",
+          "preview": {
+            "ids": [
+              "setting-deck-cartoon"
+            ]
+          }
         },
         {
           "value": "52",
-          "label": "Игральные"
+          "label": "Игральные",
+          "description": "Пара: один номинал и цвет масти.",
+          "preview": {
+            "ids": [
+              "setting-deck-playing"
+            ]
+          }
         }
       ],
       "help": "«Персонажи»: пара совпадает и по фигуре, и по цвету. «Игральные»: пара имеет одно достоинство и один цвет масти — черви с бубнами либо пики с трефами. Количество пар задаётся размером набора; джокеров в этих вариантах нет.",
-      "control": "select"
+      "control": "select",
+      "preview": {
+        "kind": "illustrations"
+      }
     }
   ],
   "engineApi": 4,
@@ -84,15 +99,30 @@
     "options": [
       {
         "value": "easy",
-        "label": "8"
+        "label": "8",
+        "description": "8 пар — 16 карт на поле.",
+        "preview": {
+          "kind": "cards",
+          "count": 16
+        }
       },
       {
         "value": "medium",
-        "label": "12"
+        "label": "12",
+        "description": "12 пар — 24 карт на поле.",
+        "preview": {
+          "kind": "cards",
+          "count": 24
+        }
       },
       {
         "value": "hard",
-        "label": "18"
+        "label": "18",
+        "description": "18 пар — 36 карт на поле.",
+        "preview": {
+          "kind": "cards",
+          "count": 36
+        }
       }
     ],
     "help": "Число пар на поле: чем их больше, тем больше карт нужно запоминать. Состав пар зависит от выбранной колоды."
@@ -106,6 +136,12 @@
     "character-face": "minimal"
   },
   "releases": [
+    {
+      "version": "0.3.5-preview.14",
+      "changes": [
+        "Параметры игры снабжены понятными иллюстрациями из игровых компонентов и короткими пояснениями выбранных вариантов."
+      ]
+    },
     {
       "version": "0.3.5-preview.13",
       "changes": [
@@ -158,7 +194,8 @@
   ],
   "sdkFeatures": [
     "local-input-v1",
-    "turn-order-v1"
+    "turn-order-v1",
+    "parameter-illustrations-v1"
   ]
 };
 })(globalThis);

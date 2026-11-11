@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["durak"] = {
   "id": "durak",
-  "version": "0.6.7-preview.17",
+  "version": "0.6.7-preview.18",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Отбивайся, подкидывай и избавляйся от карт.",
@@ -50,36 +50,38 @@
         {
           "value": "simple",
           "label": "Простой",
-          "description": "По пять карт, без подкидывания.",
+          "description": "По 5 карт; подкидывать нельзя.",
           "preview": {
-            "kind": "symbol",
-            "icon": "hand"
+            "ids": [
+              "setting-variant-simple"
+            ]
           }
         },
         {
           "value": "throwin",
           "label": "Подкидной",
-          "description": "По шесть карт; подкидывают достоинства со стола.",
+          "description": "По 6 карт; подкидывают значения со стола.",
           "preview": {
-            "kind": "symbol",
-            "icon": "cards"
+            "ids": [
+              "setting-variant-throwin"
+            ]
           }
         },
         {
           "value": "transfer",
           "label": "Переводной",
-          "description": "До первой защиты можно перевести атаку.",
+          "description": "До защиты: то же значение — перевод.",
           "preview": {
-            "kind": "symbol",
-            "icon": "shuffle"
+            "ids": [
+              "setting-variant-transfer"
+            ]
           }
         }
       ],
       "help": "Простой: по пять карт, заранее составленный заход из одной карты, пары с третьей или двух пар с пятой, без подкидывания. Подкидной: по шесть, можно подкидывать достоинства со стола. Переводной: дополнительно можно перевести атаку до первой защиты.",
       "control": "slider",
       "preview": {
-        "kind": "symbol",
-        "icon": "cards"
+        "kind": "illustrations"
       },
       "presentation": "mode"
     },
@@ -118,19 +120,21 @@
         {
           "value": "color",
           "label": "По цвету",
-          "description": "Сила джокера зависит от цвета козыря.",
+          "description": "Цвет козыря — самый сильный джокер.",
           "preview": {
-            "kind": "symbol",
-            "icon": "cards"
+            "ids": [
+              "setting-jokerMode-color"
+            ]
           }
         },
         {
           "value": "universal",
           "label": "Универсальные",
-          "description": "Бьют обычные; красный старше чёрного.",
+          "description": "Красный бьёт чёрного; оба бьют обычные.",
           "preview": {
-            "kind": "symbol",
-            "icon": "star"
+            "ids": [
+              "setting-jokerMode-universal"
+            ]
           }
         }
       ],
@@ -140,8 +144,7 @@
       "help": "Только для колоды 54. «По цвету»: джокер цвета козыря старше всех; другой бьёт некозырные карты своего цвета и сам бьётся козырем. «Универсальные»: оба бьют обычные карты, красный бьёт чёрного.",
       "control": "slider",
       "preview": {
-        "kind": "symbol",
-        "icon": "cards"
+        "kind": "illustrations"
       }
     },
     {
@@ -238,6 +241,12 @@
   ],
   "releases": [
     {
+      "version": "0.6.7-preview.18",
+      "changes": [
+        "Параметры игры снабжены понятными иллюстрациями из игровых компонентов и короткими пояснениями выбранных вариантов."
+      ]
+    },
+    {
       "version": "0.6.7-preview.17",
       "changes": [
         "Общие игровые ассеты сохраняют пропорции рамок, скруглений и толщины в игре, миниатюрах, правилах, параметрах и анимациях. Убраны вторые фиксированные рамки и тени поверх SVG."
@@ -315,7 +324,8 @@
   "sdkFeatures": [
     "local-input-v1",
     "turn-order-v1",
-    "parameter-previews-v2"
+    "parameter-previews-v2",
+    "parameter-illustrations-v1"
   ]
 };
 })(globalThis);

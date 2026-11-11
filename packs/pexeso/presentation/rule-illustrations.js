@@ -9,6 +9,8 @@
   const card=value=>(renderCard||C.card)({...value,id:'rule-example'});
   const examples={
    "pair":()=>R.scene(R.row(card({character:'star-yellow',shape:'star',color:'yellow'}),card({character:'star-yellow',shape:'star',color:'yellow'}))),
+   "setting-deck-cartoon":()=>examples.pair(),
+   "setting-deck-playing":()=>R.scene(R.row(card({rank:9,suit:'♥'}),card({rank:9,suit:'♦'}))),
    "flip":()=>R.scene(R.row(card({rank:9,suit:'♥'}),R.arrow(),R.selected(card({hidden:true})),card({hidden:true})))
   };
   return id=>examples[id]?.()||'';
