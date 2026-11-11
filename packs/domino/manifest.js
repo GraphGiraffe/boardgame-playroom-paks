@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["domino"] = {
   "id": "domino",
-  "version": "0.5.6-preview.13",
+  "version": "0.5.6-preview.14",
   "category": "board",
   "estimatedDuration": "10–15 мин",
   "tagline": "Соединяй числа и считай ходы соперников.",
@@ -94,6 +94,12 @@
     "domino"
   ],
   "releases": [
+    {
+      "version": "0.5.6-preview.14",
+      "changes": [
+        "Общие игровые ассеты сохраняют пропорции рамок, скруглений и толщины в игре, миниатюрах, правилах, параметрах и анимациях. Убраны вторые фиксированные рамки и тени поверх SVG."
+      ]
+    },
     {
       "version": "0.5.6-preview.13",
       "changes": [

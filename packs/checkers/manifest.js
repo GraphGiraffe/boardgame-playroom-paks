@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["checkers"] = {
   "id": "checkers",
-  "version": "0.5.5-preview.12",
+  "version": "0.5.5-preview.13",
   "category": "board",
   "estimatedDuration": "15–30 мин",
   "tagline": "Бери шашки и пробивайся в дамки.",
@@ -65,6 +65,12 @@
     "board"
   ],
   "releases": [
+    {
+      "version": "0.5.5-preview.13",
+      "changes": [
+        "Общие игровые ассеты сохраняют пропорции рамок, скруглений и толщины в игре, миниатюрах, правилах, параметрах и анимациях. Убраны вторые фиксированные рамки и тени поверх SVG."
+      ]
+    },
     {
       "version": "0.5.5-preview.12",
       "changes": [

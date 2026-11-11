@@ -37,3 +37,8 @@
 
 /* A selection is a screen-space ring, independent of board scale. */
 .checker-piece:is(.is-playable,.is-selected) .piece-contour,.playroom-drag-ghost.checker-piece .piece-contour{stroke-width:2px;vector-effect:non-scaling-stroke;}
+
+/* The100×100 backing and percentage inset form one scalable board. */
+.checker-board-wrap{--board-inset:3%;position:relative;display:flow-root;padding:0;border:0;border-radius:0;background:none;box-shadow:none}
+.checker-board-frame{position:absolute;inset:0;display:block;width:100%;height:100%;pointer-events:none}
+.checker-board-wrap>.checker-board{position:relative;width:94%;margin:3%;border-radius:1.8%}
