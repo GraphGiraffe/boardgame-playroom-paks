@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["yatzy"] = {
   "id": "yatzy",
-  "version": "0.3.5-preview.14",
+  "version": "0.3.5-preview.15",
   "name": "Ятзи",
   "category": "dice",
   "estimatedDuration": "15–25 мин",
@@ -97,6 +97,12 @@
     ]
   },
   "releases": [
+    {
+      "version": "0.3.5-preview.15",
+      "changes": [
+        "Общие игровые ассеты сохраняют пропорции рамок, скруглений и толщины в игре, миниатюрах, правилах, параметрах и анимациях. Убраны вторые фиксированные рамки и тени поверх SVG."
+      ]
+    },
     {
       "version": "0.3.5-preview.14",
       "changes": [

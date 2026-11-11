@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["snakes"] = {
   "id": "snakes",
-  "version": "0.5.7-preview.12",
+  "version": "0.5.7-preview.13",
   "category": "board",
   "estimatedDuration": "5–15 мин",
   "tagline": "Лестницы поднимают. Змеи возвращают назад.",
@@ -164,6 +164,12 @@
     "die"
   ],
   "releases": [
+    {
+      "version": "0.5.7-preview.13",
+      "changes": [
+        "Общие игровые ассеты сохраняют пропорции рамок, скруглений и толщины в игре, миниатюрах, правилах, параметрах и анимациях. Убраны вторые фиксированные рамки и тени поверх SVG."
+      ]
+    },
     {
       "version": "0.5.7-preview.12",
       "changes": [

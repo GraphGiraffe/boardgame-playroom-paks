@@ -222,7 +222,9 @@ function card(value,attrs='disabled',extra=''){return renderCard(cardDescriptor(
 
 function cardSlot({suit='',attrs='disabled',className='',label='',kind='empty',tag='button'}={}){
   if(!['button','span'].includes(tag))throw Error('Invalid card slot tag');
-  return `<${tag} data-size-role="card" class="shared-card-slot ${esc(className)} ${suit==='♥'||suit==='♦'?'shared-red':''}" ${attrs} data-card-slot="${esc(kind)}" aria-label="${esc(label)}">${suit?H.assetArt('card-face',{suit,suitOnly:true},cardFace):''}</${tag}>`;
+  const print=suit?V.place(H.assetArt('card-face',{suit,suitOnly:true},cardFace),{x:1.5,y:1.5,width:97,height:137}):'';
+  const surface=V.viewport({width:100,height:140,className:'piece-art card-slot-art',attrs:'data-art-role="empty-surface" aria-hidden="true" focusable="false"',content:`<rect x=".5" y=".5" width="99" height="139" rx="12.5" fill="var(--card-slot-face,#aeb2af)" stroke="var(--color-material-card-ink,#264e43)" stroke-opacity=".1"/><rect x="1.5" y="1.5" width="97" height="137" rx="11.5" fill="none" stroke="#000" stroke-opacity=".08" stroke-width="2"/>${print}`});
+  return `<${tag} data-size-role="card" class="shared-card-slot ${esc(className)} ${suit==='♥'||suit==='♦'?'shared-red':''}" ${attrs} data-card-slot="${esc(kind)}" aria-label="${esc(label)}">${surface}</${tag}>`;
  }
 const cover=content=>H.svg(`<ellipse data-cover-shadow cx="151" cy="158" rx="112" ry="14" fill="#365e4720"/><g data-cover-art>${content}</g>`);
   const die=(value,attrs='disabled',extra='')=>'<button class="shared-die '+extra+(/\bdisabled\b/.test(attrs)?'':' is-playable')+(/aria-pressed="true"/.test(attrs)?' is-selected':'')+'" '+attrs+' aria-label="'+globalThis.PlayroomMessages.text("ui.game-components.c21f8ac4292c")+H.esc(value||globalThis.PlayroomMessages.text("ui.game-components.22c66b66eaa1"))+'">'+H.assetArt('die',{value},()=>dieArt(value))+'</button>';

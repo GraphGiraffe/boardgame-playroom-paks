@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["ludo"] = {
   "id": "ludo",
-  "version": "0.3.7-preview.15",
+  "version": "0.3.7-preview.16",
   "name": "Лудо",
   "category": "board",
   "estimatedDuration": "20–40 мин",
@@ -352,6 +352,12 @@
     "die"
   ],
   "releases": [
+    {
+      "version": "0.3.7-preview.16",
+      "changes": [
+        "Общие игровые ассеты сохраняют пропорции рамок, скруглений и толщины в игре, миниатюрах, правилах, параметрах и анимациях. Убраны вторые фиксированные рамки и тени поверх SVG."
+      ]
+    },
     {
       "version": "0.3.7-preview.15",
       "changes": [

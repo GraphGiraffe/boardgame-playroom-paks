@@ -39,3 +39,6 @@
 /* A card-deck SVG owns the physical rim and print clip at every scale. */
 .shared-card:has(>.card-deck-art){overflow:visible}
 .shared-card:has(>.card-deck-art[data-card-shape="square"]){border-radius:12.5%}
+
+/* A die SVG carries its material edge at its own artboard scale. */
+.shared-die:has(>svg){box-shadow:none;overflow:visible}

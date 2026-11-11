@@ -5,7 +5,7 @@
   const translator=H.translator(source?{ru:require('./locales/ru/game.json')}:globalThis.PlayroomPackResources.locales);
   const text=(key,params={})=>translator.format({key:'domino.'+key,params});
   const face=globalThis.PlayroomShared.dominoFace;
-  const tileBack=()=>`<span class="piece-back domino-back" data-piece-ratio="${4/7}" role="img" aria-label="${H.esc(text('view.hand'))}"><span class="domino-back-surface"></span></span>`;
+  const tileBack=()=>`<span class="piece-back domino-back" data-piece-ratio="${4/7}" role="img" aria-label="${H.esc(text('view.hand'))}">${globalThis.PlayroomGameComponents.vector.viewport({width:48,height:84,className:'piece-art domino-back-surface',attrs:'data-piece-type="domino" aria-hidden="true"',content:'<rect x=".5" y="1.5" width="47" height="82" rx="7" fill="var(--color-material-domino-side,#c4c7b3)"/><rect x=".5" y=".5" width="47" height="81" rx="7" fill="var(--color-material-domino-face,#fffbed)" stroke="var(--color-material-domino-ink,#365f4c)"/><rect x="2" y="2" width="44" height="78" rx="5.5" fill="var(--color-material-domino-ink,#365f4c)"/><rect x="3" y="3" width="42" height="76" rx="4.5" fill="none" stroke="var(--color-material-domino-face,#fffbed)" stroke-opacity=".35"/>'})}</span>`;
   function tile(c,attr='disabled',cls='',paint=face){
     if(c.hidden)return tileBack();
     const upright=cls.includes('hand-card')||cls.includes('compact-piece')||cls.includes('double');

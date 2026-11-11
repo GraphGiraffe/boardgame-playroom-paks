@@ -14,9 +14,9 @@ body.reduced-motion .player-panel.is-participant-affected,.reduced-motion .playe
 
 .action-reveal{position:fixed;inset:0;z-index:55;display:block;overflow:clip;pointer-events:none;background:radial-gradient(ellipse at center,color-mix(in srgb,var(--color-surface-panel,#f4f2e8) 82%,transparent) 0%,transparent 66%);}
 .action-reveal-title{max-width:90vw;padding:var(--size-space-8_0,8px) var(--size-space-14_0,12px);border-radius:var(--size-radius-14_0,12px);background:var(--color-surface-raised,#fffaf0);color:var(--color-text-primary,#244c35);font-size:clamp(var(--size-type-16_0,16px),4vw,var(--size-type-24_0,24px));text-align:center;}
-.action-reveal-art{width:min(36vw,var(--size-length-150_0,148px),calc(70dvh - var(--size-length-67_0,68px)));transform-origin:center;filter:drop-shadow(0 8px 12px #142e3038);}
+.action-reveal-art{width:min(36vw,var(--size-length-150_0,148px),calc(70dvh - var(--size-length-67_0,68px)));transform-origin:center;filter:none;}
 .action-reveal-art.scene{display:block!important;min-height:0!important;max-height:none!important;height:auto!important;padding:0!important;margin:0!important;overflow:visible!important;aspect-ratio:auto!important;background:none!important;border:0!important;}
-.action-reveal-art.scene>*{display:block!important;width:100%!important;height:auto!important;min-width:0!important;max-width:none!important;aspect-ratio:72/103;transform:none!important;margin:0!important;}
+.action-reveal-art.scene>*{display:block!important;width:100%!important;height:auto!important;min-width:0!important;max-width:none!important;transform:none!important;margin:0!important;}
 .action-reveal-art.is-dice{display:flex;align-items:center;justify-content:center;gap:var(--size-space-8_0,8px);width:auto;max-width:90vw;}
 .action-reveal-die{display:block;width:min(14vw,var(--size-length-64_0,64px));aspect-ratio:1;}.action-reveal-die>svg{display:block;width:100%;height:auto;}.action-reveal-die.is-unused{opacity:.35;transform:scale(.82);}
 
@@ -62,9 +62,12 @@ body.reduced-motion .player-panel.is-participant-affected,.reduced-motion .playe
 /* Shared visible control edges, including secondary and icon-only actions. */
 :is(.btn,.icon-btn,.ui-button,.ui-icon-button){border:1px solid color-mix(in srgb,var(--ink,#29483e) 28%,transparent)}
 
-/* The physical card is painted by its type, including its rim and lower edge.
+/* Every complete physical SVG owns its material in every host context.
+   Parameters, rulebooks, galleries, thumbnails and motion use the same boundary.
+   Focus/selection outlines belong to interaction and remain screen readable.
+   The physical card is painted by its type, including its rim and lower edge.
    The same complete SVG travels through hands, piles, reveals and motion clones. */
-:is(.game-scene,.playroom-motion-layer,.playroom-request-layer,.action-reveal-art,.player-target-menu) :is([data-size-role="card"],.shared-card,.art-card,.piece-back):has(>.card-deck-art){background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;overflow:visible!important;isolation:isolate}
+:is([data-size-role="card"],[data-size-role="die"],[data-size-role="checker"],[data-piece-ratio],.shared-card,.shared-card-slot,.shared-die,.mini-card,.art-card,.piece-back):has(>svg:is(.card-deck-art,.card-slot-art,.shared-die-art,.checker-art,.round-token-art,.domino-print,[data-piece-type])){background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;overflow:visible!important;isolation:isolate}
 .card-deck-art{display:block;width:100%;height:100%;overflow:hidden;pointer-events:none}
 .card-deck-print .shared-face{border:0;border-radius:0;background:transparent}
 /* Print coordinates stay in artboard units; containers scale the complete card. */
@@ -108,3 +111,7 @@ body.reduced-motion .player-panel.is-participant-affected,.reduced-motion .playe
 .player-score.token-heart .counter-token,.player-score.token-crown .counter-token{stroke:color-mix(in srgb,currentColor 78%,#27352c);stroke-width:1;paint-order:fill stroke}
 .player-score.is-token-counter .counter-token.is-empty{opacity:1;fill:none;stroke:color-mix(in srgb,currentColor 60%,transparent)}
 .player-score.is-token-counter:is(.token-heart,.token-meeple) .counter-token.is-empty{fill:#fff}
+
+/* Complete art retains its own shape, even outside a scene/reveal. */
+:is(.shared-card,.art-card,.piece-back):has(>.card-deck-art){aspect-ratio:5/7}
+:is(.shared-card,.art-card,.piece-back):has(>.card-deck-art[data-card-shape="square"]){aspect-ratio:1}
