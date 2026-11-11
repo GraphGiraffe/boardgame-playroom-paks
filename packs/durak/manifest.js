@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["durak"] = {
   "id": "durak",
-  "version": "0.6.7-preview.14",
+  "version": "0.6.7-preview.15",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Отбивайся, подкидывай и избавляйся от карт.",
@@ -80,7 +80,8 @@
       "preview": {
         "kind": "symbol",
         "icon": "cards"
-      }
+      },
+      "presentation": "mode"
     },
     {
       "key": "deck",
@@ -126,7 +127,7 @@
         {
           "value": "universal",
           "label": "Универсальные",
-          "description": "Бьют обычные карты; красный старше чёрного.",
+          "description": "Бьют обычные; красный старше чёрного.",
           "preview": {
             "kind": "symbol",
             "icon": "star"
@@ -151,7 +152,7 @@
         {
           "value": "firstout",
           "label": "До победителя",
-          "description": "Первая пустая рука после конца колоды — победа.",
+          "description": "Нет колоды и карт в руке — победа.",
           "preview": {
             "kind": "symbol",
             "icon": "trophy"
@@ -160,7 +161,7 @@
         {
           "value": "lastfool",
           "label": "До последнего",
-          "description": "Продолжают до последнего участника с картами.",
+          "description": "Играют до последнего с картами.",
           "preview": {
             "kind": "symbol",
             "icon": "people"
@@ -237,6 +238,13 @@
   ],
   "releases": [
     {
+      "version": "0.6.7-preview.15",
+      "changes": [
+        "Выбор режима представлен одной крупной карточкой с наглядными вариантами.",
+        "Сокращены пояснения параметров; выбранные варианты читаются компактнее."
+      ]
+    },
+    {
       "version": "0.6.7-preview.14",
       "changes": [
         "Размеры колоды показаны картами с точным количеством; выбранные варианты игры, джокеров и завершения сопровождаются короткими пояснениями."
@@ -294,7 +302,8 @@
   ],
   "sdkFeatures": [
     "local-input-v1",
-    "turn-order-v1"
+    "turn-order-v1",
+    "parameter-previews-v2"
   ]
 };
 })(globalThis);

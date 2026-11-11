@@ -48,6 +48,11 @@ def validate_parameter_previews(manifest, label):
     preset = manifest.get("presetSetting", {})
     if not isinstance(settings, list) or not isinstance(preset, dict):
         raise ValueError(f"Некорректная иллюстрация параметра: {label}")
+    sdk = manifest.get("sdkFeatures", [])
+    if (not isinstance(sdk, list) or len(sdk) > 16 or any(not isinstance(f, str) or f not in {"local-input-v1", "turn-order-v1", "parameter-previews-v2"} for f in sdk) or len(set(sdk)) != len(sdk)):
+        raise ValueError(f"Неподдерживаемая возможность SDK: {label}")
+    if any(isinstance(f, dict) and (f.get("presentation") == "mode" or "inactiveWhen" in f or "inactivePresentation" in f) for f in settings) and "parameter-previews-v2" not in sdk:
+        raise ValueError(f"Требуется SDK parameter-previews-v2: {label}")
     fields = {f.get("key"): f for f in settings if isinstance(f, dict) and isinstance(f.get("key"), str)}
     quantities = {"cards", "dice", "health", "lives"}
     symbols = {"undo", "first", "people", "shuffle", "rules", "player", "bot", "trophy", "clock", "eye", "eye-off", "hand", "board", "ship", "cards", "dice", "check", "close", "play", "pause", "history", "stop", "grid", "teams", "shield", "sword", "refresh", "star", "pieces", "solitaire", "lock", "unlock"}
@@ -70,10 +75,12 @@ def validate_parameter_previews(manifest, label):
         elif kind == "symbol":
             if (not partial or "icon" in resolved) and (not isinstance(resolved.get("icon"), str) or resolved["icon"] not in symbols):
                 invalid()
+    if sum(isinstance(f, dict) and f.get("presentation") == "mode" for f in [preset, *settings]) > 1:
+        invalid()
     for field in [preset, *settings]:
         if not isinstance(field, dict):
             invalid()
-        if "presentation" in field and (field is not preset or field["presentation"] != "mode"):
+        if "presentation" in field and field["presentation"] != "mode":
             invalid()
         parent = field.get("preview")
         if "preview" in field:
@@ -84,8 +91,17 @@ def validate_parameter_previews(manifest, label):
             elif set(parent) != {"kind"} or parent["kind"] not in quantities:
                 invalid()
         options = field.get("options", [])
-        if not isinstance(options, list):
+        if not isinstance(options, list) or field.get("presentation") == "mode" and not options:
             invalid()
+        if "inactiveWhen" in field or "inactivePresentation" in field:
+            condition, inactive = field.get("inactiveWhen"), field.get("inactivePresentation")
+            if (not isinstance(condition, dict) or not 1 <= len(condition) <= 16
+                    or any(not isinstance(key, str) or key not in fields or not isinstance(value, str)
+                        or value not in {str(o.get("value")) for o in fields[key].get("options", []) if isinstance(o, dict)}
+                        for key, value in condition.items())
+                    or not isinstance(inactive, dict) or set(inactive) != {"preview", "description"}):
+                invalid()
+            options = [*options, inactive]
         for option in options:
             if not isinstance(option, dict):
                 invalid()
@@ -93,7 +109,7 @@ def validate_parameter_previews(manifest, label):
                 invalid()
             preview = option.get("preview")
             if "preview" not in option:
-                if field.get("presentation") == "mode":
+                if field.get("presentation") == "mode" and not parent:
                     invalid()
                 if parent and parent["kind"] in ("declaration", "symbol"):
                     common_preview({}, parent)
@@ -106,17 +122,15 @@ def validate_parameter_previews(manifest, label):
             if kind in {"fleet", "teams"}:
                 key = "pieces" if kind == "fleet" else "teamSizes"
                 values = preview.get(key)
-                if (field is not preset or field.get("presentation") != "mode" or set(preview) != {"kind", key}
+                if (field.get("presentation") != "mode" or set(preview) != {"kind", key}
                         or not isinstance(values, list) or not 1 <= len(values) <= (16 if kind == "fleet" else 8)
                         or any(not count(n) or not 1 <= n <= (16 if kind == "fleet" else 32) for n in values)
                         or sum(values) > (100 if kind == "fleet" else 32)):
                     invalid()
             elif kind in ("declaration", "symbol"):
-                if field.get("presentation") == "mode":
-                    invalid()
                 common_preview(preview, parent)
             elif kind in quantities:
-                if (field.get("presentation") == "mode" or not set(preview) <= {"kind", "count", "countFrom"}
+                if (not set(preview) <= {"kind", "count", "countFrom"}
                         or "count" in preview and "countFrom" in preview or "count" in preview and not count(preview["count"])):
                     invalid()
                 if "countFrom" in preview:
