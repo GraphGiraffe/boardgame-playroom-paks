@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["klondike"] = {
   "id": "klondike",
-  "version": "0.2.5-preview.17",
+  "version": "0.2.5-preview.18",
   "name": "Косынка",
   "category": "solitaire",
   "estimatedDuration": "10–30 мин",
@@ -151,7 +151,7 @@
         {
           "value": "history",
           "label": "История",
-          "description": "До 100 отмен; каждая стоит −2 очка.",
+          "description": "До 100 отмен; −2, если счёт включён.",
           "preview": {
             "kind": "symbol",
             "icon": "history"
@@ -290,6 +290,12 @@
     ]
   },
   "releases": [
+    {
+      "version": "0.2.5-preview.18",
+      "changes": [
+        "Пояснение истории отмен явно связывает штраф с включённым подсчётом очков."
+      ]
+    },
     {
       "version": "0.2.5-preview.17",
       "changes": [
