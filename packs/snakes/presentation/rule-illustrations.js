@@ -9,7 +9,7 @@
   const card=value=>(renderCard||C.card)({...value,id:'rule-example'});
   // Public board-size diagrams use the same square-cell geometry as the field.
   // The outline is a transparent service diagram, not a second board material.
-  const boardDiagram=side=>root.PlayroomGameComponents.vector.viewport({width:100,height:100,className:'snakes-parameter-board',attrs:`data-board-cells="${side*side}" fill="none" stroke="currentColor" stroke-width=".65" aria-hidden="true" focusable="false"`,content:Array.from({length:side*side},(_,i)=>`<rect x="${2+i%side*96/side}" y="${2+Math.floor(i/side)*96/side}" width="${96/side}" height="${96/side}"/>`).join('')});
+  const boardDiagram=side=>root.PlayroomGameComponents.vector.viewport({width:100,height:100,className:'snakes-parameter-board',attrs:`data-art-role="parameter-diagram" data-board-cells="${side*side}" fill="none" stroke="currentColor" stroke-width=".65" aria-hidden="true" focusable="false"`,content:Array.from({length:side*side},(_,i)=>`<rect x="${2+i%side*96/side}" y="${2+Math.floor(i/side)*96/side}" width="${96/side}" height="${96/side}"/>`).join('')});
   // Parameter cards contain one bounded, noninteractive SVG. Place the same
   // die artwork and special-cell symbols used by the live board inside it.
   const vector=root.PlayroomGameComponents.vector;

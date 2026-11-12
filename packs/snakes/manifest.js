@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["snakes"] = {
   "id": "snakes",
-  "version": "0.5.7-preview.14",
+  "version": "0.5.7-preview.15",
   "category": "board",
   "estimatedDuration": "5–15 мин",
   "tagline": "Лестницы поднимают. Змеи возвращают назад.",
@@ -209,6 +209,12 @@
     "die"
   ],
   "releases": [
+    {
+      "version": "0.5.7-preview.15",
+      "changes": [
+        "Исправлена разметка Пексесо, упрощён выбор чужой руки Акулины, увеличено поле ЗиЛ."
+      ]
+    },
     {
       "version": "0.5.7-preview.14",
       "changes": [

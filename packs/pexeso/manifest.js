@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["pexeso"] = {
   "id": "pexeso",
-  "version": "0.3.5-preview.14",
+  "version": "0.3.5-preview.15",
   "name": "Пексесо",
   "category": "cards",
   "estimatedDuration": "5–20 мин",
@@ -136,6 +136,12 @@
     "character-face": "minimal"
   },
   "releases": [
+    {
+      "version": "0.3.5-preview.15",
+      "changes": [
+        "Исправлена разметка Пексесо, упрощён выбор чужой руки Акулины, увеличено поле ЗиЛ."
+      ]
+    },
     {
       "version": "0.3.5-preview.14",
       "changes": [

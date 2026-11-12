@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["durak"] = {
   "id": "durak",
-  "version": "0.6.7-preview.18",
+  "version": "0.6.7-preview.19",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Отбивайся, подкидывай и избавляйся от карт.",
@@ -22,7 +22,7 @@
   "name": "Дурак",
   "sharedUi": true,
   "engineApi": 4,
-  "stateVersion": 3,
+  "stateVersion": 4,
   "viewApi": 3,
   "tags": [
     "cards",
@@ -50,7 +50,7 @@
         {
           "value": "simple",
           "label": "Простой",
-          "description": "По 5 карт; подкидывать нельзя.",
+          "description": "По 5 карт; после захода не подкидывают.",
           "preview": {
             "ids": [
               "setting-variant-simple"
@@ -70,7 +70,7 @@
         {
           "value": "transfer",
           "label": "Переводной",
-          "description": "До защиты: то же значение — перевод.",
+          "description": "То же значение — перевод до защиты.",
           "preview": {
             "ids": [
               "setting-variant-transfer"
@@ -130,7 +130,7 @@
         {
           "value": "universal",
           "label": "Универсальные",
-          "description": "Красный бьёт чёрного; оба бьют обычные.",
+          "description": "Оба бьют обычные; красный сильнее.",
           "preview": {
             "ids": [
               "setting-jokerMode-universal"
@@ -148,12 +148,12 @@
       }
     },
     {
-      "key": "endCondition",
+      "key": "endMode",
       "label": "Завершение партии",
-      "default": "lastfool",
+      "default": "last",
       "options": [
         {
-          "value": "firstout",
+          "value": "winner",
           "label": "До победителя",
           "description": "Нет колоды и карт в руке — победа.",
           "preview": {
@@ -162,7 +162,7 @@
           }
         },
         {
-          "value": "lastfool",
+          "value": "last",
           "label": "До последнего",
           "description": "Играют до последнего с картами.",
           "preview": {
@@ -217,7 +217,7 @@
     {
       "label": "Завершение",
       "fields": [
-        "endCondition"
+        "endMode"
       ],
       "end": true
     }
@@ -240,6 +240,12 @@
     "mini-split-deck"
   ],
   "releases": [
+    {
+      "version": "0.6.7-preview.19",
+      "changes": [
+        "Уточнены действия в режимах и сила джокеров Дурака; завершение использует общий endMode без второго имени."
+      ]
+    },
     {
       "version": "0.6.7-preview.18",
       "changes": [
