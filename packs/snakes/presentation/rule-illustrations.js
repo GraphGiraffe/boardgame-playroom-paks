@@ -14,8 +14,8 @@
   // die artwork and special-cell symbols used by the live board inside it.
   const vector=root.PlayroomGameComponents.vector;
   function modeDiagram(plus){
-    const values=plus?[2,5]:[3],size=plus?42:62;
-    let content=values.map((value,index)=>`<g data-parameter-die="${value}">${vector.place(C.dieArt(value,{frame:'raised'}),{x:plus?15+index*48:29,y:plus?3:14,width:size,height:size})}</g>`).join('');
+    const values=plus?[2,5]:[3],size=40;
+    let content=values.map((value,index)=>`<g data-parameter-die="${value}">${vector.place(C.dieArt(value,{frame:'raised'}),{x:plus?16+index*48:40,y:plus?3:25,width:size,height:size})}</g>`).join('');
     if(plus)content+=['adjust','skip','shield'].map((effect,index)=>{
       const svg=effectTile(effect).match(/<svg\b[\s\S]*<\/svg>/)?.[0];
       if(!svg)throw Error('SNAKES_EFFECT_ART_REQUIRED');

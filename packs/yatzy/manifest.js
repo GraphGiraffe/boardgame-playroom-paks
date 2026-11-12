@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["yatzy"] = {
   "id": "yatzy",
-  "version": "0.3.5-preview.18",
+  "version": "0.3.5-preview.19",
   "name": "Ятзи",
   "category": "dice",
   "estimatedDuration": "15–25 мин",
@@ -131,6 +131,12 @@
     ]
   },
   "releases": [
+    {
+      "version": "0.3.5-preview.19",
+      "changes": [
+        "Иллюстрации параметров сохраняют размер компонентов между вариантами; постоянная область арта центрирует изображение по обеим осям без растягивания."
+      ]
+    },
     {
       "version": "0.3.5-preview.18",
       "changes": [

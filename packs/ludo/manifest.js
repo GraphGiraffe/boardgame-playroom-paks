@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["ludo"] = {
   "id": "ludo",
-  "version": "0.3.7-preview.20",
+  "version": "0.3.7-preview.22",
   "name": "Лудо",
   "category": "board",
   "estimatedDuration": "20–40 мин",
@@ -341,6 +341,18 @@
     "die"
   ],
   "releases": [
+    {
+      "version": "0.3.7-preview.22",
+      "changes": [
+        "Иллюстрации параметров сохраняют размер компонентов между вариантами; постоянная область арта центрирует изображение по обеим осям без растягивания."
+      ]
+    },
+    {
+      "version": "0.3.7-preview.21",
+      "changes": [
+        "В обеих иллюстрациях переброса шестёрок показана обычная грань кубика с шестью точками вместо цифры."
+      ]
+    },
     {
       "version": "0.3.7-preview.20",
       "changes": [

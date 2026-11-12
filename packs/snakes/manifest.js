@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["snakes"] = {
   "id": "snakes",
-  "version": "0.5.7-preview.18",
+  "version": "0.5.7-preview.19",
   "category": "board",
   "estimatedDuration": "5–15 мин",
   "tagline": "Лестницы поднимают. Змеи возвращают назад.",
@@ -188,6 +188,12 @@
     "die"
   ],
   "releases": [
+    {
+      "version": "0.5.7-preview.19",
+      "changes": [
+        "Иллюстрации параметров сохраняют размер компонентов между вариантами; постоянная область арта центрирует изображение по обеим осям без растягивания."
+      ]
+    },
     {
       "version": "0.5.7-preview.18",
       "changes": [

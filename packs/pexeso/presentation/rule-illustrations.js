@@ -16,7 +16,7 @@
       const svg=card(value).match(/<svg\b[\s\S]*<\/svg>/)?.[0];
       if(!svg)throw Error('PEXESO_CARD_ART_REQUIRED');
       const attrs=playing?'style="color:var(--color-material-card-red,#b94f40)"':'';
-      return vector.place(svg,{x:10+index*55,y:13.5,width:45,height:63,attrs});
+      return vector.place(svg,{x:20+index*44,y:19.8,width:36,height:50.4,attrs});
     }).join('');
     return vector.viewport({width:120,height:90,className:'pexeso-parameter-deck',attrs:`data-art-role="parameter-diagram" data-pexeso-deck="${playing?'52':'cartoon'}" aria-hidden="true" focusable="false"`,content});
   }

@@ -8,10 +8,10 @@
   const t=key=>tr.format({key:'spider.book.art-label.'+key,params:{}});
   const card=value=>(renderCard||C.card)({...value,id:'rule-example'});
   const V=root.PlayroomVectorArt;
-  const piece=(markup,x,y,width=42,height=58.8)=>V.place(markup.match(/<svg\b[\s\S]*<\/svg>/)?.[0]||'',{x,y,width,height,attrs:`style="color:var(--color-material-card-${markup.includes('shared-red')?'red':'ink'},${markup.includes('shared-red')?'#b94f40':'#264e43'})"`});
-  const diagram=(id,content)=>V.viewport({width:240,height:108,attrs:`data-art-role="parameter-diagram" data-spider-setting="${id}" aria-hidden="true" focusable="false"`,content});
-  const suits=count=>diagram('suits-'+count,Array.from({length:count},(_,i)=>piece(card({rank:14,suit:['♠','♥','♣','♦'][i]}),120-count*23+i*46,24)).join(''));
-  const emptyDeal=allow=>diagram('empty-'+(allow?'allow':'forbid'),piece(card({hidden:true}),24,25)+piece(C.cardSlot({tag:'span'}),164,25)+`<path d="M78 54H150m-9-8 9 8-9 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`+(allow?'<path d="m110 83 7 7 14-16" fill="none" stroke="currentColor" stroke-width="3"/>':'<path d="m112 76 16 16m0-16-16 16" fill="none" stroke="currentColor" stroke-width="3"/>'));
+  const piece=(markup,x,y,width=36,height=50.4)=>V.place(markup.match(/<svg\b[\s\S]*<\/svg>/)?.[0]||'',{x,y,width,height,attrs:`style="color:var(--color-material-card-${markup.includes('shared-red')?'red':'ink'},${markup.includes('shared-red')?'#b94f40':'#264e43'})"`});
+  const diagram=(id,content)=>V.viewport({width:120,height:90,attrs:`data-art-role="parameter-diagram" data-spider-setting="${id}" aria-hidden="true" focusable="false"`,content});
+  const suits=count=>diagram('suits-'+count,Array.from({length:count},(_,i)=>piece(card({rank:14,suit:['♠','♥','♣','♦'][i]}),60-(36+(count-1)*22)/2+i*22,19.8)).join(''));
+  const emptyDeal=allow=>diagram('empty-'+(allow?'allow':'forbid'),piece(card({hidden:true}),4,12)+piece(C.cardSlot({tag:'span'}),80,12)+`<path d="M45 37H75m-7-6 7 6-7 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`+(allow?'<path d="m51 72 7 7 14-16" fill="none" stroke="currentColor" stroke-width="3"/>':'<path d="m53 65 14 14m0-14-14 14" fill="none" stroke="currentColor" stroke-width="3"/>'));
   const examples={
    "setting-suits-1":()=>suits(1),
    "setting-suits-2":()=>suits(2),

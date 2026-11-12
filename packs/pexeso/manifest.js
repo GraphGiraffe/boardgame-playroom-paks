@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["pexeso"] = {
   "id": "pexeso",
-  "version": "0.3.5-preview.16",
+  "version": "0.3.5-preview.17",
   "name": "Пексесо",
   "category": "cards",
   "estimatedDuration": "5–20 мин",
@@ -136,6 +136,12 @@
     "character-face": "minimal"
   },
   "releases": [
+    {
+      "version": "0.3.5-preview.17",
+      "changes": [
+        "Иллюстрации параметров сохраняют размер компонентов между вариантами; постоянная область арта центрирует изображение по обеим осям без растягивания."
+      ]
+    },
     {
       "version": "0.3.5-preview.16",
       "changes": [

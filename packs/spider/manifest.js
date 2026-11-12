@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["spider"] = {
   "id": "spider",
-  "version": "0.2.5-preview.16",
+  "version": "0.2.5-preview.17",
   "name": "Паук",
   "category": "solitaire",
   "estimatedDuration": "10–30 мин",
@@ -229,6 +229,12 @@
     ]
   },
   "releases": [
+    {
+      "version": "0.2.5-preview.17",
+      "changes": [
+        "Иллюстрации параметров сохраняют размер компонентов между вариантами; постоянная область арта центрирует изображение по обеим осям без растягивания."
+      ]
+    },
     {
       "version": "0.2.5-preview.16",
       "changes": [
