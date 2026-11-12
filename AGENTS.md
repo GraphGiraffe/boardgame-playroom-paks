@@ -1,6 +1,6 @@
 # Работа с коллекцией ХОД 0.8
 
-Текущие контракты: engineApi4, viewApi3. [Руководство автора](docs/AUTHORING.md), [архитектура](docs/ARCHITECTURE.md), [будущие расширения](https://github.com/GraphGiraffe/boardgame-playroom-utils/blob/main/docs/project/packs/NEXT-PATCHES.md). Актуальный stable проверять по release evidence в canonical utils и опубликованным артефактам; версия коллекции в исходниках или preview не доказывает публикацию.
+Текущие контракты: engineApi 4, viewApi 3. [Руководство автора](docs/AUTHORING.md), [архитектура](docs/ARCHITECTURE.md), [будущие расширения](https://github.com/GraphGiraffe/boardgame-playroom-utils/blob/main/docs/project/packs/NEXT-PATCHES.md). Актуальный stable проверять по release evidence в canonical utils и опубликованным артефактам; версия коллекции в исходниках или preview не доказывает публикацию.
 
 - Проверить root/status/ветку; сохранять чужую работу. Игра целиком в packs/<id>; manifest.json источник метаданных, manifest.js генерирует build.py.
 - Domain чистый, без DOM/имён/переводов/часов/storage. RNG явный. Presentation получает projection, renderer не пересчитывает правила.
