@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["uno"] = {
   "id": "uno",
-  "version": "0.6.8-preview.21",
+  "version": "0.6.8-preview.22",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Подбирай цвет и значение. Освободи руку первым.",
@@ -155,6 +155,12 @@
     "uno-deck"
   ],
   "releases": [
+    {
+      "version": "0.6.8-preview.22",
+      "changes": [
+        "При композиции SVG сохраняются полные атрибуты толщины, прозрачности и идентичности; стандартный контур масштабируется целиком."
+      ]
+    },
     {
       "version": "0.6.8-preview.21",
       "changes": [

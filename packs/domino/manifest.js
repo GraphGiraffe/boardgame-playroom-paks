@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["domino"] = {
   "id": "domino",
-  "version": "0.5.6-preview.15",
+  "version": "0.5.6-preview.16",
   "category": "board",
   "estimatedDuration": "10–15 мин",
   "tagline": "Соединяй числа и считай ходы соперников.",
@@ -111,6 +111,12 @@
     "domino"
   ],
   "releases": [
+    {
+      "version": "0.5.6-preview.16",
+      "changes": [
+        "При композиции SVG сохраняются полные атрибуты толщины, прозрачности и идентичности; стандартный контур масштабируется целиком."
+      ]
+    },
     {
       "version": "0.5.6-preview.15",
       "changes": [

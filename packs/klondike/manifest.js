@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["klondike"] = {
   "id": "klondike",
-  "version": "0.2.5-preview.18",
+  "version": "0.2.5-preview.19",
   "name": "Косынка",
   "category": "solitaire",
   "estimatedDuration": "10–30 мин",
@@ -290,6 +290,12 @@
     ]
   },
   "releases": [
+    {
+      "version": "0.2.5-preview.19",
+      "changes": [
+        "При композиции SVG сохраняются полные атрибуты толщины, прозрачности и идентичности; стандартный контур масштабируется целиком."
+      ]
+    },
     {
       "version": "0.2.5-preview.18",
       "changes": [

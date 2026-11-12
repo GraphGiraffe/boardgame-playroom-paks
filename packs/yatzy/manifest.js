@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["yatzy"] = {
   "id": "yatzy",
-  "version": "0.3.5-preview.16",
+  "version": "0.3.5-preview.17",
   "name": "Ятзи",
   "category": "dice",
   "estimatedDuration": "15–25 мин",
@@ -131,6 +131,12 @@
     ]
   },
   "releases": [
+    {
+      "version": "0.3.5-preview.17",
+      "changes": [
+        "При композиции SVG сохраняются полные атрибуты толщины, прозрачности и идентичности; стандартный контур масштабируется целиком."
+      ]
+    },
     {
       "version": "0.3.5-preview.16",
       "changes": [

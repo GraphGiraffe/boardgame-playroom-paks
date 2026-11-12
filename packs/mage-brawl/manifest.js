@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["mage-brawl"] = {
   "id": "mage-brawl",
-  "version": "0.2.7-preview.29",
+  "version": "0.2.7-preview.30",
   "name": "Стихийная потасовка",
   "category": "board",
   "estimatedDuration": "15–40 мин",
@@ -306,6 +306,12 @@
     }
   ],
   "releases": [
+    {
+      "version": "0.2.7-preview.30",
+      "changes": [
+        "При композиции SVG сохраняются полные атрибуты толщины, прозрачности и идентичности; стандартный контур масштабируется целиком."
+      ]
+    },
     {
       "version": "0.2.7-preview.29",
       "changes": [

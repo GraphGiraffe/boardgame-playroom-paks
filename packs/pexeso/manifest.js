@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["pexeso"] = {
   "id": "pexeso",
-  "version": "0.3.5-preview.15",
+  "version": "0.3.5-preview.16",
   "name": "Пексесо",
   "category": "cards",
   "estimatedDuration": "5–20 мин",
@@ -136,6 +136,12 @@
     "character-face": "minimal"
   },
   "releases": [
+    {
+      "version": "0.3.5-preview.16",
+      "changes": [
+        "При композиции SVG сохраняются полные атрибуты толщины, прозрачности и идентичности; стандартный контур масштабируется целиком."
+      ]
+    },
     {
       "version": "0.3.5-preview.15",
       "changes": [

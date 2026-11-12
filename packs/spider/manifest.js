@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["spider"] = {
   "id": "spider",
-  "version": "0.2.5-preview.15",
+  "version": "0.2.5-preview.16",
   "name": "Паук",
   "category": "solitaire",
   "estimatedDuration": "10–30 мин",
@@ -124,7 +124,8 @@
           "label": "Без счёта",
           "description": "Восемь серий без подсчёта очков.",
           "preview": {
-            "icon": "eye-off"
+            "kind": "symbol",
+            "icon": "close"
           }
         }
       ],
@@ -144,7 +145,8 @@
           "label": "Выкл",
           "description": "Действия нельзя отменять.",
           "preview": {
-            "icon": "lock"
+            "kind": "symbol",
+            "icon": "close"
           }
         },
         {
@@ -227,6 +229,13 @@
     ]
   },
   "releases": [
+    {
+      "version": "0.2.5-preview.16",
+      "changes": [
+        "Одинаковые настройки пасьянсов используют одинаковые значки.",
+        "При композиции SVG сохраняются полные атрибуты толщины, прозрачности и идентичности; стандартный контур масштабируется целиком."
+      ]
+    },
     {
       "version": "0.2.5-preview.15",
       "changes": [

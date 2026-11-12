@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["gofish"] = {
   "id": "gofish",
-  "version": "0.3.5-preview.15",
+  "version": "0.3.5-preview.16",
   "name": "Спроси рыбу",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
@@ -96,6 +96,12 @@
     ]
   },
   "releases": [
+    {
+      "version": "0.3.5-preview.16",
+      "changes": [
+        "При композиции SVG сохраняются полные атрибуты толщины, прозрачности и идентичности; стандартный контур масштабируется целиком."
+      ]
+    },
     {
       "version": "0.3.5-preview.15",
       "changes": [
