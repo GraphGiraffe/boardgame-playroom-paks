@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["uno"] = {
   "id": "uno",
-  "version": "0.6.8-preview.23",
+  "version": "0.6.8-preview.24",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Подбирай цвет и значение. Освободи руку первым.",
@@ -138,6 +138,12 @@
   ],
   "releases": [
     {
+      "version": "0.6.8-preview.24",
+      "changes": [
+        "Защитное окно объявления UNO задерживает обвинения, а не обычные ходы."
+      ]
+    },
+    {
       "version": "0.6.8-preview.23",
       "changes": [
         "Первый ход, места за столом и завершение используют стандартные подписи приложения; в артах первого хода — контурная 1 в кружке.",
@@ -239,7 +245,8 @@
   "sdkFeatures": [
     "local-input-v1",
     "turn-order-v1",
-    "standard-parameter-ui-v1"
+    "standard-parameter-ui-v1",
+    "concurrent-reactions-v1"
   ]
 };
 })(globalThis);

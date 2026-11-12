@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["yatzy"] = {
   "id": "yatzy",
-  "version": "0.3.5-preview.17",
+  "version": "0.3.5-preview.18",
   "name": "Ятзи",
   "category": "dice",
   "estimatedDuration": "15–25 мин",
@@ -131,6 +131,12 @@
     ]
   },
   "releases": [
+    {
+      "version": "0.3.5-preview.18",
+      "changes": [
+        "Боты берегут Шанс как гибкую тактическую позицию, учитывают верхний бонус и последний ход."
+      ]
+    },
     {
       "version": "0.3.5-preview.17",
       "changes": [

@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["ludo"] = {
   "id": "ludo",
-  "version": "0.3.7-preview.19",
+  "version": "0.3.7-preview.20",
   "name": "Лудо",
   "category": "board",
   "estimatedDuration": "20–40 мин",
@@ -342,6 +342,12 @@
   ],
   "releases": [
     {
+      "version": "0.3.7-preview.20",
+      "changes": [
+        "Перед срубанием фишка зависает над клеткой; после возврата соперников на базы занимает конечную позицию. Требуется arrival-departures-v1."
+      ]
+    },
+    {
       "version": "0.3.7-preview.19",
       "changes": [
         "Первый ход, места за столом и завершение используют стандартные подписи приложения; в артах первого хода — контурная 1 в кружке.",
@@ -433,7 +439,8 @@
     "local-input-v1",
     "turn-order-v1",
     "parameter-illustrations-v1",
-    "standard-parameter-ui-v1"
+    "standard-parameter-ui-v1",
+    "arrival-departures-v1"
   ]
 };
 })(globalThis);

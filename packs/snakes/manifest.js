@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["snakes"] = {
   "id": "snakes",
-  "version": "0.5.7-preview.17",
+  "version": "0.5.7-preview.18",
   "category": "board",
   "estimatedDuration": "5–15 мин",
   "tagline": "Лестницы поднимают. Змеи возвращают назад.",
@@ -21,7 +21,7 @@
   "styles": "styles.css",
   "name": "Змеи и лестницы",
   "engineApi": 4,
-  "stateVersion": 2,
+  "stateVersion": 3,
   "viewApi": 3,
   "tags": [
     "board",
@@ -182,12 +182,18 @@
         "description": "Два кубика; особые клетки и эффекты."
       }
     ],
-    "help": "Простой: один кубик, змеи и лестницы. ЗиЛ+: два кубика на выбор, особые клетки и эффекты на следующий ход."
+    "help": "Простой: один кубик, змеи и лестницы. ЗиЛ+: два кубика на выбор, особые клетки и эффекты на следующий ход. ЗиЛ+: остановка на занятой клетке меняет фишки местами после полного перехода по змее или лестнице."
   },
   "skinFamilies": [
     "die"
   ],
   "releases": [
+    {
+      "version": "0.5.7-preview.18",
+      "changes": [
+        "ЗиЛ+: остановка на занятой клетке обменивает фишки местами после змей и лестниц. Обмен подсвечивается; сдвинутая фишка не активирует эффекты. Новая схема состояния 3; требуется arrival-departures-v1."
+      ]
+    },
     {
       "version": "0.5.7-preview.17",
       "changes": [
@@ -274,7 +280,8 @@
     "local-input-v1",
     "turn-order-v1",
     "parameter-illustrations-v1",
-    "standard-parameter-ui-v1"
+    "standard-parameter-ui-v1",
+    "arrival-departures-v1"
   ]
 };
 })(globalThis);

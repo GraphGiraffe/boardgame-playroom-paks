@@ -18,7 +18,8 @@
       Array.isArray(d.positions)&&d.positions.length===p.playerCount&&d.positions.every(valid)&&
       Array.isArray(d.effects)&&d.effects.length===p.playerCount&&d.effects.every(e=>['adjust','less','skip','shield'].every(k=>typeof e[k]==='boolean'))&&
       JSON.stringify(d.special)===JSON.stringify(p.preset==='plus'?cells[d.finish]:{})&&Object.keys(d.special).every(cell=>!Object.hasOwn(d.links,cell))&&d.links&&Object.entries(d.links).every(([a,b])=>valid(+a)&&+a>0&&+a<d.finish&&valid(b)&&b>0&&b!==+a)&&
-      (!d.lastMove||[d.lastMove.from,d.lastMove.landing,d.lastMove.to].every(valid));
+      (!d.lastMove||[d.lastMove.from,d.lastMove.landing,d.lastMove.to].every(valid)&&
+        (d.lastMove.swaps===undefined||p.preset==='plus'&&Array.isArray(d.lastMove.swaps)&&d.lastMove.swaps.length<p.playerCount&&new Set(d.lastMove.swaps.map(s=>s.player)).size===d.lastMove.swaps.length&&d.lastMove.swaps.every(s=>Number.isInteger(s.player)&&s.player>=0&&s.player<p.playerCount&&s.player!==d.lastMove.player&&s.from===d.lastMove.to&&s.to===d.lastMove.from)));
   }
   function destination(d,actor,dieIndex,delta=0){const distance=d.dice[dieIndex]+delta,from=d.positions[actor],landing=from+distance>d.finish?2*d.finish-from-distance:from+distance;return {distance,from,landing,to:distance>0&&d.links[landing]&&!(d.links[landing]<landing&&d.effects[actor].shield)?d.links[landing]:landing};}
   function actions(p,actor){
@@ -36,8 +37,13 @@
       if(roll===0){d.lastMove={player:actor,from,landing:from,to:from,roll,finish:d.finish,trigger:command.type};fact('moved',{...d.lastMove,automatic});return;}
       let landing=from+roll;if(landing>d.finish)landing=2*d.finish-landing;
       let to=d.links[landing]||landing;if(to<landing&&protect('snake'))to=landing;
-      d.positions[actor]=to;d.lastMove={player:actor,from,landing,to,roll,finish:d.finish,trigger:command.type};
+      // Resolve the complete route before exchanging occupied endpoints. A
+      // displacement is not another move: it cannot trigger links or effects.
+      const swaps=plus&&to!==from?d.positions.flatMap((cell,player)=>player!==actor&&cell===to&&!Ending.done(d.ending,player)?[{player,from:to,to:from}]:[]):[];
+      for(const swap of swaps)d.positions[swap.player]=swap.to;
+      d.positions[actor]=to;d.lastMove={player:actor,from,landing,to,roll,finish:d.finish,trigger:command.type,...(swaps.length?{swaps}:{})};
       fact('moved',{...d.lastMove,automatic});
+      for(const swap of swaps)fact('swapped',{player:actor,target:swap.player,from,to});
       if(to===d.finish){Ending.record(d.ending,[actor],next,'finished');fact('won');return;}
       const special=d.special[to];
       if(['skip','less'].includes(special)){if(!protect(special)){e[special]=true;fact('effect',{effect:special});}}

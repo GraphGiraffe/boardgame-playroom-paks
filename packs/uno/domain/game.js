@@ -81,7 +81,7 @@
  function reactions(s,actor){if(s.data.uno.mode!=='manual'||s.status!=='playing'||Ending.done(s.data.ending,actor))return [];const u=s.data.uno;return [{type:'declare-uno',episode:u.situations[actor].episode},...Array.from({length:s.playerCount},(_,target)=>target).filter(target=>target!==actor).map(target=>({type:'accuse-uno',target,episode:u.situations[target].episode}))].map(command=>({command,visibility:'public'}));}
  function reactionWindows(s){if(s.status!=='playing'||s.data.uno.mode!=='manual')return [];return s.data.uno.situations.flatMap((w,owner)=>w.open&&!w.settled?[{id:`uno:${owner}:${w.episode}`,owner,revision:w.episode,humanMs:1000,botMs:3000,fallbackMs:10000}]:[]);}
  function reactionControl(s,actor,action){const u=s.data.uno;if(u.mode!=='manual')return null;
-  if(!reactionTypes.includes(action.type))return ['play','draw','pass'].includes(action.type)?{kind:'advance'}:null;
+  if(!reactionTypes.includes(action.type))return null;
   if(action.type==='accuse-uno'&&(!Number.isInteger(action.target)||action.target<0||action.target>=s.playerCount||action.target===actor))return null;
   const target=action.type==='accuse-uno'?action.target:actor,situation=u.situations[target],episode=situation.episode,supplied=action.episode??episode;
   if(!Number.isSafeInteger(supplied)||supplied<0||supplied>episode)return null;
