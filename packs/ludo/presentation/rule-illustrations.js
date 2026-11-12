@@ -23,7 +23,13 @@
     }
     return vector.viewport({width:120,height:80,className:'ludo-parameter-diagram',attrs:`data-art-role="parameter-diagram" data-ludo-parameter-art="${kind}-${enabled?'on':'off'}" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"`,content:art});
   }
+  function sixRerollDiagram(enabled){
+    const art=vector.place(C.dieArt(0,{frame:'raised'}),{x:7,y:12,width:44,height:44,attrs:'data-die-value="6" stroke="none"'})+vector.text('6',{x:29,y:33,size:26,weight:800,fill:'var(--die-mark,currentColor)',attrs:'data-reroll-face stroke="none"'})+'<path data-reroll-action d="M57 35H78m-6-6 6 6-6 6"/>'+vector.place(H.icon(enabled?'refresh':'close'),{x:85,y:18,width:34,height:34});
+    return vector.viewport({width:120,height:72,attrs:`data-art-role="parameter-diagram" data-ludo-six-reroll="${enabled?'on':'off'}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"`,content:art});
+  }
   const examples={
+   "setting-six-reroll-off":()=>sixRerollDiagram(false),
+   "setting-six-reroll-on":()=>sixRerollDiagram(true),
    "setting-guaranteed-exit-on":()=>setupDiagram('exit',true),
    "setting-guaranteed-exit-off":()=>setupDiagram('exit',false),
    "setting-start-pawn-on":()=>setupDiagram('start',true),

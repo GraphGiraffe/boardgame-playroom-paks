@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["durak"] = {
   "id": "durak",
-  "version": "0.6.7-preview.20",
+  "version": "0.6.7-preview.21",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Отбивайся, подкидывай и избавляйся от карт.",
@@ -120,7 +120,7 @@
         {
           "value": "color",
           "label": "По цвету",
-          "description": "Цвет козыря — самый сильный джокер.",
+          "description": "Старший джокер — цвета козыря.",
           "preview": {
             "ids": [
               "setting-jokerMode-color"
@@ -149,34 +149,16 @@
     },
     {
       "key": "endMode",
-      "label": "Завершение партии",
       "default": "last",
       "options": [
         {
-          "value": "winner",
-          "label": "До победителя",
-          "description": "Нет колоды и карт в руке — победа.",
-          "preview": {
-            "kind": "symbol",
-            "icon": "trophy"
-          }
+          "value": "winner"
         },
         {
-          "value": "last",
-          "label": "До последнего",
-          "description": "Играют до последнего с картами.",
-          "preview": {
-            "kind": "symbol",
-            "icon": "people"
-          }
+          "value": "last"
         }
       ],
-      "help": "До победителя: после окончания взятки и исчерпания колоды первый вышедший побеждает. До последнего: игра продолжается до одного оставшегося с картами.",
-      "control": "slider",
-      "preview": {
-        "kind": "symbol",
-        "icon": "trophy"
-      }
+      "control": "slider"
     }
   ],
   "legacyPresets": {
@@ -240,6 +222,13 @@
     "mini-split-deck"
   ],
   "releases": [
+    {
+      "version": "0.6.7-preview.21",
+      "changes": [
+        "Первый ход, места за столом и завершение используют стандартные подписи приложения; в артах первого хода — контурная 1 в кружке.",
+        "Стол и стулья в рассадке и Акулине — один компонент. Уточнены схемы шестёрок Лудо и унифицированы рамки режимов Дурака; убраны верхние подписи джокеров."
+      ]
+    },
     {
       "version": "0.6.7-preview.20",
       "changes": [
@@ -338,7 +327,8 @@
     "local-input-v1",
     "turn-order-v1",
     "parameter-previews-v2",
-    "parameter-illustrations-v1"
+    "parameter-illustrations-v1",
+    "standard-parameter-ui-v1"
   ]
 };
 })(globalThis);

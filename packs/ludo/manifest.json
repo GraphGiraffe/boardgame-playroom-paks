@@ -1,6 +1,6 @@
 {
   "id": "ludo",
-  "version": "0.3.7-preview.18",
+  "version": "0.3.7-preview.19",
   "name": "Лудо",
   "category": "board",
   "estimatedDuration": "20–40 мин",
@@ -85,8 +85,9 @@
           "label": "Нет",
           "description": "Шестёрки не дают переброса.",
           "preview": {
-            "kind": "symbol",
-            "icon": "close"
+            "ids": [
+              "setting-six-reroll-off"
+            ]
           }
         },
         {
@@ -94,16 +95,16 @@
           "label": "Да",
           "description": "Переброс сыгранных шестёрок.",
           "preview": {
-            "kind": "symbol",
-            "icon": "refresh"
+            "ids": [
+              "setting-six-reroll-on"
+            ]
           }
         }
       ],
       "help": "После использования доступных ходов перебрасываются только кубики с шестёрками. Остальные не перебрасываются.",
       "control": "slider",
       "preview": {
-        "kind": "symbol",
-        "icon": "refresh"
+        "kind": "illustrations"
       }
     },
     {
@@ -182,43 +183,19 @@
     },
     {
       "key": "endMode",
-      "label": "Завершение партии",
       "default": "round",
-      "help": "До победителя — сразу после финиша. Последний раунд — оставшиеся игроки завершают текущий круг от первого игрока; закончившие в этом круге делят победу. До последнего — все доводят фишки до финиша, места определяются порядком финиша. В командах Лудо финиширует вся команда.",
       "options": [
         {
-          "value": "winner",
-          "label": "До победителя",
-          "description": "Первый финиш завершает партию.",
-          "preview": {
-            "kind": "symbol",
-            "icon": "trophy"
-          }
+          "value": "winner"
         },
         {
-          "value": "round",
-          "label": "Последний раунд",
-          "description": "Остальные заканчивают текущий круг.",
-          "preview": {
-            "kind": "symbol",
-            "icon": "clock"
-          }
+          "value": "round"
         },
         {
-          "value": "last",
-          "label": "До последнего",
-          "description": "Места — в порядке финиша всех игроков.",
-          "preview": {
-            "kind": "symbol",
-            "icon": "people"
-          }
+          "value": "last"
         }
       ],
-      "control": "slider",
-      "preview": {
-        "kind": "symbol",
-        "icon": "trophy"
-      }
+      "control": "slider"
     },
     {
       "key": "maxRounds",
@@ -379,6 +356,13 @@
   ],
   "releases": [
     {
+      "version": "0.3.7-preview.19",
+      "changes": [
+        "Первый ход, места за столом и завершение используют стандартные подписи приложения; в артах первого хода — контурная 1 в кружке.",
+        "Стол и стулья в рассадке и Акулине — один компонент. Уточнены схемы шестёрок Лудо и унифицированы рамки режимов Дурака; убраны верхние подписи джокеров."
+      ]
+    },
+    {
       "version": "0.3.7-preview.18",
       "changes": [
         "При композиции SVG сохраняются полные атрибуты толщины, прозрачности и идентичности; стандартный контур масштабируется целиком."
@@ -462,6 +446,7 @@
   "sdkFeatures": [
     "local-input-v1",
     "turn-order-v1",
-    "parameter-illustrations-v1"
+    "parameter-illustrations-v1",
+    "standard-parameter-ui-v1"
   ]
 }

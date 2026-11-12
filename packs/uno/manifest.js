@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["uno"] = {
   "id": "uno",
-  "version": "0.6.8-preview.22",
+  "version": "0.6.8-preview.23",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Подбирай цвет и значение. Освободи руку первым.",
@@ -52,34 +52,16 @@
     },
     {
       "key": "endMode",
-      "label": "Завершение партии",
       "default": "winner",
-      "help": "До победителя — первая пустая рука завершает партию. До последнего — вышедших пропускают, остальные продолжают до одного игрока с картами. Действие последней карты сохраняется. Последнего круга нет: реверс и пропуски меняют очередь.",
       "options": [
         {
-          "value": "winner",
-          "label": "До победителя",
-          "description": "Первая пустая рука завершает партию.",
-          "preview": {
-            "kind": "symbol",
-            "icon": "trophy"
-          }
+          "value": "winner"
         },
         {
-          "value": "last",
-          "label": "До последнего",
-          "description": "Играют до последнего с картами.",
-          "preview": {
-            "kind": "symbol",
-            "icon": "people"
-          }
+          "value": "last"
         }
       ],
-      "control": "slider",
-      "preview": {
-        "kind": "symbol",
-        "icon": "trophy"
-      }
+      "control": "slider"
     }
   ],
   "name": "UNO",
@@ -155,6 +137,13 @@
     "uno-deck"
   ],
   "releases": [
+    {
+      "version": "0.6.8-preview.23",
+      "changes": [
+        "Первый ход, места за столом и завершение используют стандартные подписи приложения; в артах первого хода — контурная 1 в кружке.",
+        "Стол и стулья в рассадке и Акулине — один компонент. Уточнены схемы шестёрок Лудо и унифицированы рамки режимов Дурака; убраны верхние подписи джокеров."
+      ]
+    },
     {
       "version": "0.6.8-preview.22",
       "changes": [
@@ -249,7 +238,8 @@
   ],
   "sdkFeatures": [
     "local-input-v1",
-    "turn-order-v1"
+    "turn-order-v1",
+    "standard-parameter-ui-v1"
   ]
 };
 })(globalThis);

@@ -1,6 +1,6 @@
 {
   "id": "oldmaid",
-  "version": "0.3.5-preview.18",
+  "version": "0.3.5-preview.19",
   "name": "Акулина",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
@@ -80,34 +80,16 @@
     },
     {
       "key": "endMode",
-      "label": "Завершение партии",
       "default": "last",
-      "help": "«До победителя» — партия заканчивается при первом выходе с пустой рукой. «До последнего» — продолжается до одного участника с Акулиной. Более ранний выход даёт более высокое место; вышедшие одним действием делят место.",
       "options": [
         {
-          "value": "winner",
-          "label": "До победителя",
-          "description": "Первая пустая рука завершает партию.",
-          "preview": {
-            "kind": "symbol",
-            "icon": "trophy"
-          }
+          "value": "winner"
         },
         {
-          "value": "last",
-          "label": "До последнего",
-          "description": "Продолжают до участника с Акулиной.",
-          "preview": {
-            "kind": "symbol",
-            "icon": "people"
-          }
+          "value": "last"
         }
       ],
-      "control": "slider",
-      "preview": {
-        "kind": "symbol",
-        "icon": "trophy"
-      }
+      "control": "slider"
     }
   ],
   "engineApi": 4,
@@ -186,6 +168,13 @@
     "mini-split-deck"
   ],
   "releases": [
+    {
+      "version": "0.3.5-preview.19",
+      "changes": [
+        "Первый ход, места за столом и завершение используют стандартные подписи приложения; в артах первого хода — контурная 1 в кружке.",
+        "Стол и стулья в рассадке и Акулине — один компонент. Уточнены схемы шестёрок Лудо и унифицированы рамки режимов Дурака; убраны верхние подписи джокеров."
+      ]
+    },
     {
       "version": "0.3.5-preview.18",
       "changes": [
@@ -271,6 +260,7 @@
   "sdkFeatures": [
     "local-input-v1",
     "turn-order-v1",
-    "parameter-illustrations-v1"
+    "parameter-illustrations-v1",
+    "standard-parameter-ui-v1"
   ]
 }

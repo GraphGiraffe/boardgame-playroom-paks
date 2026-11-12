@@ -49,7 +49,7 @@ def validate_parameter_previews(manifest, label):
     if not isinstance(settings, list) or not isinstance(preset, dict):
         raise ValueError(f"Некорректная иллюстрация параметра: {label}")
     sdk = manifest.get("sdkFeatures", [])
-    if (not isinstance(sdk, list) or len(sdk) > 16 or any(not isinstance(f, str) or f not in {"local-input-v1", "turn-order-v1", "parameter-previews-v2", "parameter-illustrations-v1"} for f in sdk) or len(set(sdk)) != len(sdk)):
+    if (not isinstance(sdk, list) or len(sdk) > 16 or any(not isinstance(f, str) or f not in {"local-input-v1", "turn-order-v1", "parameter-previews-v2", "parameter-illustrations-v1", "standard-parameter-ui-v1"} for f in sdk) or len(set(sdk)) != len(sdk)):
         raise ValueError(f"Неподдерживаемая возможность SDK: {label}")
     if any(isinstance(f, dict) and (f.get("presentation") == "mode" or "inactiveWhen" in f or "inactivePresentation" in f) for f in settings) and "parameter-previews-v2" not in sdk:
         raise ValueError(f"Требуется SDK parameter-previews-v2: {label}")
