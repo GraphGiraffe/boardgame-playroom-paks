@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["uno"] = {
   "id": "uno",
-  "version": "0.6.8-preview.24",
+  "version": "0.6.8-preview.25",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Подбирай цвет и значение. Освободи руку первым.",
@@ -137,6 +137,12 @@
     "uno-deck"
   ],
   "releases": [
+    {
+      "version": "0.6.8-preview.25",
+      "changes": [
+        "Синхронизированы общие компоненты с исправлениями чтения индексов, перекрытия карт и обновления оформления; правила игры не менялись."
+      ]
+    },
     {
       "version": "0.6.8-preview.24",
       "changes": [

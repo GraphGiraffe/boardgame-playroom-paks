@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["tictactoe"] = {
   "id": "tictactoe",
-  "version": "0.3.6-preview.13",
+  "version": "0.3.6-preview.14",
   "name": "Крестики-нолики",
   "category": "board",
   "estimatedDuration": "2–5 мин",
@@ -52,6 +52,12 @@
     ]
   },
   "releases": [
+    {
+      "version": "0.3.6-preview.14",
+      "changes": [
+        "Синхронизированы общие компоненты с исправлениями чтения индексов, перекрытия карт и обновления оформления; правила игры не менялись."
+      ]
+    },
     {
       "version": "0.3.6-preview.13",
       "changes": [

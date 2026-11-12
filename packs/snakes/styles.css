@@ -83,3 +83,10 @@
 /* Six reserved off-board slots also receive pawns displaced back to zero. */
 .snakes-scene .snakes-entry-dock{display:grid;grid-template-columns:repeat(3,28px);grid-template-rows:repeat(2,28px);gap:2px;width:88px;height:58px}
 .snakes-scene .snakes-entry-slot{display:block;width:28px;height:28px}
+
+/* Optional adjustment stays reachable when the centered dice use the row. */
+.snakes-controls{container-type:inline-size}
+@container(max-width:400px){
+ .snakes-scene .snakes-controls>.snakes-bottom{grid-column:1/-1}
+ .snakes-scene .snakes-controls>.snakes-adjust{grid-column:1/-1;grid-row:3;justify-content:center}
+}

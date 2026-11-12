@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["mage-brawl"] = {
   "id": "mage-brawl",
-  "version": "0.2.7-preview.30",
+  "version": "0.2.7-preview.31",
   "name": "Стихийная потасовка",
   "category": "board",
   "estimatedDuration": "15–40 мин",
@@ -306,6 +306,12 @@
     }
   ],
   "releases": [
+    {
+      "version": "0.2.7-preview.31",
+      "changes": [
+        "Синхронизированы общие компоненты с исправлениями чтения индексов, перекрытия карт и обновления оформления; правила игры не менялись."
+      ]
+    },
     {
       "version": "0.2.7-preview.30",
       "changes": [

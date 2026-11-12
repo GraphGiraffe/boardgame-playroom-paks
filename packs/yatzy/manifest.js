@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["yatzy"] = {
   "id": "yatzy",
-  "version": "0.3.5-preview.19",
+  "version": "0.3.5-preview.20",
   "name": "Ятзи",
   "category": "dice",
   "estimatedDuration": "15–25 мин",
@@ -131,6 +131,12 @@
     ]
   },
   "releases": [
+    {
+      "version": "0.3.5-preview.20",
+      "changes": [
+        "Синхронизированы общие компоненты с исправлениями чтения индексов, перекрытия карт и обновления оформления; правила игры не менялись."
+      ]
+    },
     {
       "version": "0.3.5-preview.19",
       "changes": [

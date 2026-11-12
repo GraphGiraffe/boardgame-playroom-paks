@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["klondike"] = {
   "id": "klondike",
-  "version": "0.2.5-preview.19",
+  "version": "0.2.5-preview.20",
   "name": "Косынка",
   "category": "solitaire",
   "estimatedDuration": "10–30 мин",
@@ -290,6 +290,13 @@
     ]
   },
   "releases": [
+    {
+      "version": "0.2.5-preview.20",
+      "changes": [
+        "Синхронизированы общие компоненты с исправлениями чтения индексов, перекрытия карт и обновления оформления; правила игры не менялись.",
+        "Физические размеры карт и оснований согласованы; узкое поле прокручивается внутри своей области."
+      ]
+    },
     {
       "version": "0.2.5-preview.19",
       "changes": [

@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["oldmaid"] = {
   "id": "oldmaid",
-  "version": "0.3.5-preview.19",
+  "version": "0.3.5-preview.20",
   "name": "Акулина",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
@@ -156,6 +156,12 @@
     "mini-split-deck"
   ],
   "releases": [
+    {
+      "version": "0.3.5-preview.20",
+      "changes": [
+        "Синхронизированы общие компоненты с исправлениями чтения индексов, перекрытия карт и обновления оформления; правила игры не менялись."
+      ]
+    },
     {
       "version": "0.3.5-preview.19",
       "changes": [

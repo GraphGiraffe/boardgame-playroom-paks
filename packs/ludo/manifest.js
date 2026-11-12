@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["ludo"] = {
   "id": "ludo",
-  "version": "0.3.7-preview.22",
+  "version": "0.3.7-preview.23",
   "name": "Лудо",
   "category": "board",
   "estimatedDuration": "20–40 мин",
@@ -341,6 +341,12 @@
     "die"
   ],
   "releases": [
+    {
+      "version": "0.3.7-preview.23",
+      "changes": [
+        "Синхронизированы общие компоненты с исправлениями чтения индексов, перекрытия карт и обновления оформления; правила игры не менялись."
+      ]
+    },
     {
       "version": "0.3.7-preview.22",
       "changes": [
