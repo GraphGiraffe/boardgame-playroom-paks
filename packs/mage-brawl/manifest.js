@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["mage-brawl"] = {
   "id": "mage-brawl",
-  "version": "0.2.7-preview.33",
+  "version": "0.2.7-preview.34",
   "name": "Стихийная потасовка",
   "category": "board",
   "estimatedDuration": "15–40 мин",
