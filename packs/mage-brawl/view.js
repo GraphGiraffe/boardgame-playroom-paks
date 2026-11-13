@@ -8,8 +8,12 @@
  function shrinkIndicator(counter){
   if(!counter)return '';
   const label=text(counter.scheduled?'ui.shrink':'ui.shrink-count',{count:counter.filled,total:counter.capacity});
-  const corner='M64 8H92V36H78V22H64Z',capacity=counter.capacity;
-  const segments=capacity===2?[{d:'M60 8H92V92H60V78H78V22H60Z',rotation:0},{d:'M60 8H92V92H60V78H78V22H60Z',rotation:180}]:capacity===6?[{d:'M64 8H92V30H78V22H64Z',rotation:0},{d:'M78 40H92V60H78Z',rotation:0},{d:'M64 8H92V30H78V22H64Z',rotation:90},{d:'M64 8H92V30H78V22H64Z',rotation:180},{d:'M78 40H92V60H78Z',rotation:180},{d:'M64 8H92V30H78V22H64Z',rotation:270}]:[0,90,180,270].map(rotation=>({d:corner,rotation}));
+  const corner='M60 8H92V40H78V22H60Z',capacity=counter.capacity;
+  // One square ring: six identical bars, with the same perpendicular gap
+  // at every join. Stroke width stays shared with the accepted two-part art.
+  const edge=8,outer=84,thickness=14,gap=(outer-4*thickness)/3,length=(outer-gap)/2;
+  const bar=(x,y,width,height)=>({d:`M${x} ${y}h${width}v${height}h${-width}Z`,rotation:0});
+  const segments=capacity===2?[{d:'M60 8H92V92H60V78H78V22H60Z',rotation:0},{d:'M60 8H92V92H60V78H78V22H60Z',rotation:180}]:capacity===6?[bar(edge+outer-length,edge,length,thickness),bar(edge+outer-thickness,edge+thickness+gap,thickness,length),bar(edge+outer-length,edge+outer-thickness,length,thickness),bar(edge,edge+outer-thickness,length,thickness),bar(edge,edge+thickness+gap,thickness,length),bar(edge,edge,length,thickness)]:[0,90,180,270].map(rotation=>({d:corner,rotation}));
   return `<span class="mage-shrink-counter${counter.scheduled?' is-scheduled':''}" data-shrink-capacity="${counter.capacity}" data-shrink-filled="${counter.filled}" data-shrink-scheduled="${!!counter.scheduled}" role="img" aria-label="${esc(label)}" title="${esc(label)}"><svg viewBox="0 0 100 100" aria-hidden="true"><rect class="mage-shrink-center" x="36" y="36" width="28" height="28" rx="6"/>${segments.map((segment,i)=>`<path class="mage-shrink-corner${i<counter.filled?' is-filled':''}" d="${segment.d}" transform="rotate(${segment.rotation} 50 50)"/>`).join('')}</svg></span>`;
  }
  function teamReserve(shown,team,capacity){
