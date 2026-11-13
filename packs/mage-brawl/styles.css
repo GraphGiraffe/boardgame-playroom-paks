@@ -4,7 +4,7 @@
 .mage-scene .mage-cell{--mage-cell-outline:max(2px,calc((100cqi - (var(--mage-columns) - 1)*2px)/var(--mage-columns)*.05));position:relative;border:1px solid #8fa28166;border-radius:12%;background:#e9e8d6;min-width:0;min-height:0;padding:0;aspect-ratio:1;color:#82937b;opacity:1;container-type:inline-size}
 .mage-scene .tile-void{visibility:hidden}.mage-scene .tile-wall{background:#b2b9a9;color:#536756}.mage-scene .tile-base{background:#f3e8c8;color:#b08d4c}.mage-scene .tile-puddle{background:#d2e6e5;color:#6097a6}.mage-scene .tile-desert{background:#f0dfb6;color:#bc9b59}.mage-scene .tile-forest{background:#cbdebd;color:#70926c}.mage-scene .tile-air_island{background:#deebe0;color:#80a39b}.mage-scene .tile-spikes{background:#edd2bf;color:#b78067}.mage-scene .tile-falling_floor{background:#e1dac7;color:#9f9179}
 .mage-scene .mage-terrain{width:100%;height:100%;display:block}.mage-scene .mage-preview{outline:var(--mage-cell-outline) solid var(--color-interaction-selected,#d3aa45);outline-offset:calc(-1*var(--mage-cell-outline))}.mage-scene .mage-risk{border-color:#c7794d;border-style:dashed}.mage-scene .mage-acting{outline:var(--mage-cell-outline) solid #fffbed;z-index:3}
-.mage-scene .mage-token{position:absolute;inset:22%;display:grid;place-items:center;border-radius:50%;background:transparent;color:#fffbed;border:0;font-weight:800;font-size:clamp(6px,29cqi,26px);box-shadow:none;z-index:2;--round-token-fill:var(--mage-color);--round-token-side:color-mix(in srgb,var(--mage-color) 65%,black);--round-token-rim:#fffbed}
+.mage-scene .mage-token{position:absolute;inset:22%;display:grid;place-items:center;border-radius:50%;background:transparent;color:#fffbed;border:0;font-weight:800;font-size:clamp(6px,29cqi,26px);box-shadow:none;z-index:2;--round-token-fill:var(--mage-color);--round-token-side:color-mix(in srgb,var(--mage-color) 65%,black);--round-token-rim:var(--mage-team-color,#fffbed)}
 .mage-scene .mage-token>.pawn-token-art{position:absolute;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
 .mage-scene .mage-shield{position:absolute;inset:-24%;pointer-events:none}.mage-scene .mage-shield svg{width:100%;height:100%}.mage-scene .mage-revealed{position:absolute;bottom:-18%;right:-18%;width:48%;height:48%;display:grid;place-items:center;background:#fffbed;color:#294338;border-radius:50%;padding:2px}.mage-scene .mage-revealed svg{width:100%;height:100%}
 .mage-scene .mage-moving{animation:mage-step var(--sequence-duration,850ms) ease both}.mage-scene .mage-effects{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;z-index:5}.mage-scene .mage-ray{fill:none;stroke:currentColor;stroke-width:9;stroke-linecap:round;stroke-dasharray:600;animation:mage-ray var(--sequence-duration,850ms) ease both}.mage-scene .mage-impact{fill:none;stroke:currentColor;stroke-width:7;transform-box:fill-box;transform-origin:center;animation:mage-hit var(--sequence-duration,850ms) ease both}
@@ -206,3 +206,22 @@
 .mage-scene .mage-hand-with-loot>.mage-loot-hand{position:absolute;inset:0;display:grid;place-items:center}
 
 .mage-scene .mage-card-reserve{margin-bottom:12px;flex:none}
+
+/* Public match status stays inside the shared player-card status slot. */
+.mage-scene .mage-player-status{display:inline-flex;align-items:center;gap:6px;min-width:0;flex:none}
+.mage-scene .mage-shrink-counter{display:inline-flex;width:24px;height:24px;flex:none;border-radius:6px;color:var(--color-side-red,#d75245)}
+.mage-scene .mage-shrink-counter>svg{display:block;width:100%;height:100%;overflow:visible}
+.mage-scene .mage-shrink-center{fill:var(--color-surface-raised,#fffbed)}
+.mage-scene .mage-shrink-corner{fill:none;stroke:currentColor;stroke-width:4;stroke-linejoin:round}
+.mage-scene .mage-shrink-corner.is-filled{fill:currentColor}
+.mage-scene .mage-shrink-counter.is-scheduled{animation:mage-shrink-warning 1.4s ease-in-out infinite alternate}
+@keyframes mage-shrink-warning{from{filter:drop-shadow(0 0 0 transparent)}to{background:color-mix(in srgb,currentColor 30%,transparent);filter:drop-shadow(0 0 4px currentColor)}}
+.mage-scene .mage-team-lives{display:inline-flex;align-items:center;gap:4px;min-width:0}
+.mage-scene .mage-team-reserve{display:inline-flex;align-items:center;max-width:92px}
+.mage-scene .mage-team-reserve>.counter-token{flex:none;width:12px;height:15px;fill:currentColor;stroke:currentColor;stroke-width:1.5}
+.mage-scene .mage-team-reserve>.counter-token+.counter-token{margin-left:-6px}
+.mage-scene .mage-team-reserve>.counter-token.is-empty{fill:none;opacity:.55}
+.mage-scene .mage-team-reserve>b{flex:none;white-space:nowrap;font-size:11px;margin-left:3px}
+@media(prefers-reduced-motion:reduce){.mage-scene .mage-shrink-counter.is-scheduled{animation:none;background:color-mix(in srgb,currentColor 20%,transparent);box-shadow:0 0 4px currentColor}}
+
+body.reduced-motion .mage-scene .mage-shrink-counter.is-scheduled{animation:none;background:color-mix(in srgb,currentColor 20%,transparent);box-shadow:0 0 4px currentColor}
