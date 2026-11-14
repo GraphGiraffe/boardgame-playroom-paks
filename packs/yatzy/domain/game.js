@@ -62,7 +62,8 @@
     }
     return {position:next,events,turnEnded:command.type==='score'};
   }
-  function project(position){
+  function project(position){return JSON.parse(JSON.stringify(position.data));}
+  function localData(position){
     const d=position.data,upper=d.scores.map(categories.upper);
     return {...JSON.parse(JSON.stringify(d)),totals:d.scores.map(categories.total),upper,
       bonuses:upper.map(value=>value>=63?50:0),
@@ -70,18 +71,48 @@
   }
   function bot(projection,actor,commands,memory,context={}){
     const d=projection.data,depth=context.depth??2;
-    if(depth===3&&d.rolls>0){const made=commands.find(c=>c.type==='score'&&['yatzy','fullHouse','smallStraight','largeStraight'].includes(c.key)&&d.previews[c.key]>0);if(made)return made;}
     if(d.rolls===0)return commands.find(a=>a.type==='roll');
+    const row=d.scores[actor],upper=categories.upper(row),upperKeys=categories.keys.slice(0,6);
+    const futureTurns=d.roundLimit-Object.keys(row).length>1;
+    const bonusReachable=upper<63&&upper+upperKeys.reduce((sum,key,index)=>sum+(row[key]===undefined?5*(index+1):0),0)>=63;
+    // Reservation weights, not probabilities: keep flexible Chance for mixed
+    // rolls and avoid scratching an easy combination to save a weak upper score.
+    const scratchCost={pair:8,twoPairs:12,three:12,four:14,smallStraight:10,largeStraight:12,fullHouse:15,yatzy:18};
+    const utility=command=>{
+      const points=d.previews[command.key],face=upperKeys.indexOf(command.key)+1;
+      const bonus=face&&upper<63&&upper+points>=63?50:0;
+      // Short games can finish before every slot is used. On our last turn,
+      // only actual score (including the real upper bonus) still matters.
+      if(!futureTurns)return points+bonus;
+      if(command.key==='yatzy'&&points===50)return 1000;
+      if(command.key==='chance')return points-(depth===1?5:8);
+      if(face){
+        const surplus=points-3*face;
+        return points+Math.min(0,surplus)+(bonusReachable?Math.max(0,surplus):0)+bonus;
+      }
+      return points||-scratchCost[command.key];
+    };
+    const best=commands.filter(a=>a.type==='score').reduce((chosen,command)=>{
+      if(!chosen)return command;
+      const difference=utility(command)-utility(chosen);
+      return difference>0||difference===0&&categories.keys.indexOf(command.key)<categories.keys.indexOf(chosen.key)?command:chosen;
+    },null);
+    // Never blindly reroll an available made Yatzy, even on the easy level.
+    if(commands.some(c=>c.type==='score'&&c.key==='yatzy'&&d.previews.yatzy===50))return best;
+    if(depth===3&&best&&['fullHouse','smallStraight','largeStraight'].includes(best.key)&&d.previews[best.key]>0)return best;
     if(depth>1&&d.rolls<3){
       const counts=Array.from({length:7},(_,n)=>d.dice.filter(v=>v===n).length),target=counts.reduce((best,n,i)=>n>counts[best]||n===counts[best]&&i>best?i:best,1);
       if(counts[target]<5){const hold=commands.find(c=>c.type==='hold'&&d.held[c.index]!== (d.dice[c.index]===target));if(hold)return hold;return commands.find(a=>a.type==='roll');}
     }else if(d.rolls<3)return commands.find(a=>a.type==='roll');
-    return commands.filter(a=>a.type==='score').sort((a,b)=>d.previews[b.key]-d.previews[a.key])[0];
+    return best;
   }
   function result(position){
     const values=position.data.scores.map(categories.total);
     return {winners:position.winners,places:values.map(value=>1+new Set(values.filter(other=>other>value)).size),
       metrics:[{id:'points',values}]};
   }
-  return Object.freeze({contractVersion:1,id:'yatzy',minPlayers:2,maxPlayers:6,create,validate,actions,reduce,project,bot,result});
+  function draft(p){return p.status==='playing'&&p.actor===p.turn&&p.data.rolls>0&&p.data.rolls<3?{mode:'coalesce',select:['hold'],commit:['roll','score'],max:8,delayMs:50,toggleKey:'index'}:null;}
+  function draftProjection(p,actions){const d=JSON.parse(JSON.stringify(p.data));for(const c of actions)if(c.type==='hold')d.held[c.index]=!d.held[c.index];return {...p,data:d};}
+  function localChoices(p){if(p.actor<0||p.status!=='playing')return [];return actions(p,p.actor);}
+ return Object.freeze({contractVersion:1,id:'yatzy',minPlayers:2,maxPlayers:6,create,validate,actions,localChoices,localData,draft,draftProjection,reduce,project,bot,result});
 });

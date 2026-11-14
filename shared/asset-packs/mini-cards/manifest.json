@@ -2,7 +2,7 @@
   "format": "playroom-asset-pack",
   "formatVersion": 1,
   "id": "mini-cards",
-  "version": "0.1.1",
+  "version": "0.1.3-preview.1",
   "name": "Мини-карточки номиналов",
   "ratio": [
     5,

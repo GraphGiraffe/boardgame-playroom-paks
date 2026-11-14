@@ -1,7 +1,7 @@
 .solitaire-scene .layout-field,.solitaire-scene .game-field-content{min-height:0;height:100%;overflow:hidden;}
 .solitaire-board{container-type:inline-size;width:100%;height:100%;display:flex;flex-direction:column;min-height:0;color:var(--color-material-card-ink,#264e43);}
 .solitaire-stats,.solitaire-hint-text{font-size:var(--size-type-12_0,12px);height:var(--size-length-20_0,20px);line-height:var(--size-line-16_0,16px);padding:var(--size-space-2_0,2px) var(--size-space-4_0,4px);flex:none;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
-.solitaire-content{--cw:clamp(24px,calc((100cqw - 10px - (var(--columns) - 1)*4px)/var(--columns)),160px);--ch:calc(var(--cw)*1.4);--cr:clamp(6px,calc(var(--cw)*.13),12px);--open-step:var(--asset-stack-vertical,.35);--closed-step:calc(var(--ch)*var(--asset-stack-closed,.07));display:flex;flex-direction:column;min-height:0;flex:1;gap:var(--size-space-6_0,4px);padding:var(--size-space-6_0,4px) var(--size-space-2_0,2px);}
+.solitaire-content{--cw:clamp(24px,calc((100cqw - 10px - (var(--columns) - 1)*4px)/var(--columns)),160px);--ch:calc(var(--cw)*1.4);--cr:calc(var(--cw)*.125);--open-step:var(--asset-stack-vertical,.35);--closed-step:calc(var(--ch)*var(--asset-stack-closed,.07));display:flex;flex-direction:column;min-height:0;flex:1;gap:var(--size-space-6_0,4px);padding:var(--size-space-6_0,4px) var(--size-space-2_0,2px);}
 .solitaire-scroll{overflow:auto;min-height:0;flex:1;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-gutter:auto;}.solitaire-columns{display:grid;grid-template-columns:repeat(var(--columns),var(--cw));gap:var(--size-space-4_0,4px);width:max-content;min-height:100%;margin-inline:auto;padding:var(--size-space-2_0,2px);}
 .solitaire-column,.solitaire-home{position:relative;width:var(--cw);min-height:var(--ch);}.solitaire-card-position{position:absolute;left:0;width:var(--cw);height:var(--ch);}
 .solitaire-board .solitaire-card{width:var(--cw)!important;height:var(--ch)!important;min-width:0!important;min-height:0!important;padding:0!important;margin:0;aspect-ratio:5/7;border-radius:var(--cr);display:block;transform:none!important;background:var(--color-material-card-face,#fffbed);color:var(--color-material-card-ink,#264e43);box-shadow:0 1px 0 var(--color-material-card-side,#aebcae);}
@@ -27,7 +27,7 @@
 .solitaire-board .solitaire-stock{position:relative;display:block;width:var(--cw);height:var(--ch);min-width:0;min-height:0;padding:0;border:0;border-radius:var(--cr);background:none;box-shadow:none;}
 .solitaire-stock>.solitaire-card{pointer-events:none;}
 .solitaire-stock-group>small,.solitaire-waste-group>small{font-size:var(--size-type-10_0,10px);line-height:var(--size-line-12_0,12px);}
-.solitaire-waste{width:calc(var(--cw)*1.68);position:relative;}
+.solitaire-waste{width:calc(var(--cw)*(1 + max(0,var(--waste-capacity,1) - 1)*var(--asset-stack-horizontal,.34)));position:relative;}
 .solitaire-waste-card{position:absolute;width:var(--cw);height:var(--ch);}
 .solitaire-waste-count{position:absolute;right:0;left:auto;top:-4px;z-index:2;}
 .solitaire-foundation{border-style:solid;border-color:color-mix(in srgb,currentColor 18%,transparent);background:color-mix(in srgb,currentColor 5%,transparent);font-size:calc(var(--cw)*.66);line-height:1;}
@@ -86,14 +86,15 @@
 .solitaire-orientation-note{flex:none;font-size:var(--size-type-11_0,10px);line-height:var(--size-line-20_0,20px);height:var(--size-length-20_0,20px);padding:0 var(--size-space-4_0,4px);color:var(--color-text-secondary,#687761);}
 @media(orientation:landscape){.solitaire-hint-anchor>.solitaire-hint-popup{bottom:auto;top:calc(100% + 8px);}.solitaire-orientation-note{display:none;}}
 
-.solitaire-waste-card{left:calc(var(--cw)*var(--waste-index,0)*.34);top:0;}
+.solitaire-waste-card{left:calc(var(--cw)*var(--waste-index,0)*var(--asset-stack-horizontal,.34));top:0;}
 
 .solitaire-content[data-asset-stack-axis=vertical] .solitaire-waste{width:var(--cw);height:calc(var(--ch) + max(0,var(--waste-capacity,1) - 1)*var(--ch)*var(--open-step));}
 .solitaire-content[data-asset-stack-axis=vertical] .solitaire-waste-card{left:0;top:calc(var(--ch)*var(--waste-index,0)*var(--open-step));}
 
 .solitaire-foundation>.piece-art{display:block;width:100%;height:100%;pointer-events:none;}
 
-.solitaire-board .shared-card-slot{width:var(--cw);height:var(--ch);border-radius:var(--cr);}
+/* Slots share the resolved card plane, including host physical-role sizing. */
+.solitaire-board .shared-card-slot{--size-card:var(--cw);--size-card-height:var(--ch);display:block;width:var(--cw);height:var(--ch);border-radius:var(--cr);}
 
 /* Explicit main-card role, independent of the width available to the tableau. */
 .solitaire-board[data-solitaire-kind] .solitaire-content{--cw:var(--size-card,50px);--ch:calc(var(--cw)*1.4);}
@@ -104,3 +105,35 @@
 .solitaire-board .solitaire-waste-empty{box-sizing:border-box;width:var(--cw);height:var(--ch);min-width:0;min-height:0;padding:0;margin:0}
 
 .solitaire-content[data-card-fit="portrait"] :is(.solitaire-columns,.solitaire-stocks,.solitaire-foundations){gap:2px}
+
+/* The host supplies the same square field and two side zones as other tables. */
+.solitaire-source-piles{display:contents}
+.solitaire-side-actions{display:none}
+@media(orientation:landscape){
+ .solitaire-board[data-solitaire-kind="klondike"] .solitaire-content{--cw:var(--size-card,50px);--ch:calc(var(--cw)*1.4);display:grid;grid-template-columns:var(--opponent-zone-width) var(--field-zone-width) var(--self-zone-width);grid-template-rows:auto minmax(0,1fr);gap:6px;padding:0}
+ .solitaire-board[data-solitaire-kind="klondike"] .solitaire-scroll{grid-column:2;grid-row:1/3;min-width:0;height:100%}
+ .solitaire-board[data-solitaire-kind="klondike"] .solitaire-stocks{display:contents}
+ .solitaire-board[data-solitaire-kind="klondike"] .solitaire-source-piles{grid-column:1;grid-row:1;display:flex;gap:8px;align-items:flex-start;justify-content:center;min-width:0;align-self:start;margin-top:calc(var(--game-hud-heading-height,36px) + var(--game-hud-status-height,24px) + 12px)}
+ .solitaire-board[data-solitaire-kind="klondike"] .solitaire-foundations{grid-column:3;grid-row:1;display:grid;grid-template-columns:repeat(auto-fit,var(--cw));gap:4px;justify-content:center;align-self:start;margin-top:calc(var(--game-hud-heading-height,36px) + 12px)}
+ .solitaire-board[data-solitaire-kind="klondike"] .solitaire-side-actions{display:block;grid-column:3;grid-row:1;align-self:center;min-width:0;background:transparent}
+ .solitaire-side-actions .solitaire-action-row{display:block}.solitaire-side-actions .solitaire-footer-stats,.solitaire-side-actions .solitaire-footer-right{display:none}
+ .solitaire-side-actions .layout-actions{padding:0;background:transparent!important}.solitaire-side-actions .solitaire-controls{gap:4px;flex-wrap:wrap;min-height:44px}.solitaire-side-actions .solitaire-control{min-height:44px;height:44px}
+}
+
+/* The host mounts persistent metadata below the title in both orientations. */
+.solitaire-stats[data-scene-status="always"]{display:flex;flex-flow:row nowrap;height:auto;min-height:0;padding:0;gap:8px}
+@media(orientation:landscape){
+ .solitaire-action-row[data-solitaire-actions="spider"]{display:flex;width:100%;min-width:0;align-items:center;justify-content:space-between;gap:8px}
+ .solitaire-action-row[data-solitaire-actions="spider"]>.solitaire-footer-right{order:0;flex:none;height:auto;align-items:flex-start;justify-content:center}
+ .solitaire-action-row[data-solitaire-actions="spider"]>.solitaire-controls{order:1;flex:none;margin-left:auto}
+}
+@media(orientation:landscape){
+ .solitaire-board[data-solitaire-kind="klondike"] :is(.solitaire-source-piles,.solitaire-foundations){margin-top:72px}
+}
+.solitaire-stats{overflow:visible}
+@media(orientation:landscape){.solitaire-board[data-solitaire-kind="klondike"] .solitaire-side-actions{grid-row:2;align-self:start;margin-top:12px}}
+
+/* Pack-owned component appearance; screen zones stay in the engine. */
+.solitaire-counter{display:inline-flex;align-items:center;gap:3px;line-height:20px}
+.solitaire-control{width:var(--size-control);height:var(--size-control);min-width:var(--size-control);min-height:var(--size-control)}
+@media(orientation:landscape){.solitaire-footer-stats,.solitaire-footer-right{font-size:10px}}

@@ -6,7 +6,9 @@
   const V = root.PlayroomViews, H = V.helpers, C = root.PlayroomShared;
   const locales = source ? {ru:require('./locales/ru/game.json')} : root.PlayroomPackResources.locales;
   const translator = H.translator(locales), text = reference => H.esc(translator.format(reference));
-  const mark = value => value === null ? '' : `<svg class="ttt-mark" viewBox="0 0 100 100" aria-hidden="true" focusable="false">${value === 'X' ? '<path d="M23 23 77 77M77 23 23 77"/>' : '<circle cx="50" cy="50" r="32"/>'}</svg>`;
+  const mark = value => value === null ? '' : C.roundTokenArt()
+    .replace('class="round-token-art', 'style="display:block;width:84%;height:84%;--round-token-fill:var(--color-material-card-face,#fff9e6)" class="ttt-token-art round-token-art')
+    .replace('</svg>', `<g fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round">${value === 'X' ? '<path d="M30 25 70 65M70 25 30 65"/>' : '<circle cx="50" cy="45" r="24"/>'}</g></svg>`);
   function render(state, viewer, actions) {
     const scene = state.scene;
     const available = cell => cell.command && actions.find(action =>

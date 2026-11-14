@@ -42,6 +42,116 @@ def number_equals(value, expected):
 def js_trim(value):
     return value.strip("\u0009\u000a\u000b\u000c\u000d\u0020\u00a0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u2028\u2029\u202f\u205f\u3000\ufeff")
 
+def validate_parameter_previews(manifest, label):
+    """Bounded, public presentation hints; never executable rules or HTML."""
+    settings = manifest.get("settings", [])
+    preset = manifest.get("presetSetting", {})
+    if not isinstance(settings, list) or not isinstance(preset, dict):
+        raise ValueError(f"Некорректная иллюстрация параметра: {label}")
+    sdk = manifest.get("sdkFeatures", [])
+    if (not isinstance(sdk, list) or len(sdk) > 16 or any(not isinstance(f, str) or f not in {"local-input-v1", "turn-order-v1", "parameter-previews-v2", "parameter-illustrations-v1", "standard-parameter-ui-v1", "arrival-departures-v1", "concurrent-reactions-v1", "player-status-v1"} for f in sdk) or len(set(sdk)) != len(sdk)):
+        raise ValueError(f"Неподдерживаемая возможность SDK: {label}")
+    if any(isinstance(f, dict) and (f.get("presentation") == "mode" or "inactiveWhen" in f or "inactivePresentation" in f) for f in settings) and "parameter-previews-v2" not in sdk:
+        raise ValueError(f"Требуется SDK parameter-previews-v2: {label}")
+    fields = {f.get("key"): f for f in settings if isinstance(f, dict) and isinstance(f.get("key"), str)}
+    quantities = {"cards", "dice", "health", "lives"}
+    symbols = {"undo", "first", "people", "shuffle", "rules", "player", "bot", "trophy", "clock", "eye", "eye-off", "hand", "board", "ship", "cards", "dice", "check", "close", "play", "pause", "history", "stop", "grid", "teams", "shield", "sword", "refresh", "star", "pieces", "solitaire", "lock", "unlock"}
+    def invalid():
+        raise ValueError(f"Некорректная иллюстрация параметра: {label}")
+    def count(value):
+        return type(value) in (int, float) and 0 <= value <= 100 and int(value) == value
+    def text(value, maximum):
+        return isinstance(value, str) and bool(js_trim(value)) and len(value.encode("utf-16-le", "surrogatepass")) // 2 <= maximum
+    def common_preview(preview, inherited=None, partial=False):
+        resolved = {**(inherited or {}), **preview}
+        kind = resolved.get("kind")
+        allowed = {"declaration": {"kind", "actor", "label"}, "symbol": {"kind", "icon"}, "illustrations": {"kind", "ids"}}[kind]
+        if not set(preview) <= allowed:
+            invalid()
+        if kind == "declaration":
+            if ((not partial or "actor" in resolved) and resolved.get("actor") not in ("human", "bot")
+                    or (not partial or "label" in resolved) and not text(resolved.get("label"), 24)):
+                invalid()
+        elif kind == "illustrations":
+            if "parameter-illustrations-v1" not in sdk:
+                invalid()
+            if not partial or "ids" in resolved:
+                ids = resolved.get("ids")
+                if (not isinstance(ids, list) or not 1 <= len(ids) <= 4
+                        or any(not isinstance(ident, str) or not re.fullmatch(r"[A-Za-z0-9._-]{1,64}", ident) for ident in ids)):
+                    invalid()
+        elif kind == "symbol":
+            if (not partial or "icon" in resolved) and (not isinstance(resolved.get("icon"), str) or resolved["icon"] not in symbols):
+                invalid()
+    if sum(isinstance(f, dict) and f.get("presentation") == "mode" for f in [preset, *settings]) > 1:
+        invalid()
+    for field in [preset, *settings]:
+        if not isinstance(field, dict):
+            invalid()
+        if "presentation" in field and field["presentation"] != "mode":
+            invalid()
+        parent = field.get("preview")
+        if "preview" in field:
+            if not isinstance(parent, dict) or not isinstance(parent.get("kind"), str):
+                invalid()
+            if parent["kind"] in ("declaration", "symbol", "illustrations"):
+                common_preview(parent, partial=True)
+            elif set(parent) != {"kind"} or parent["kind"] not in quantities:
+                invalid()
+        options = field.get("options", [])
+        if not isinstance(options, list) or field.get("presentation") == "mode" and not options:
+            invalid()
+        if "inactiveWhen" in field or "inactivePresentation" in field:
+            condition, inactive = field.get("inactiveWhen"), field.get("inactivePresentation")
+            if (not isinstance(condition, dict) or not 1 <= len(condition) <= 16
+                    or any(not isinstance(key, str) or key not in fields or not isinstance(value, str)
+                        or value not in {str(o.get("value")) for o in fields[key].get("options", []) if isinstance(o, dict)}
+                        for key, value in condition.items())
+                    or not isinstance(inactive, dict) or set(inactive) != {"preview", "description"}):
+                invalid()
+            options = [*options, inactive]
+        for option in options:
+            if not isinstance(option, dict):
+                invalid()
+            if "description" in option and not text(option["description"], 360):
+                invalid()
+            preview = option.get("preview")
+            if "preview" not in option:
+                if field.get("presentation") == "mode" and not parent:
+                    invalid()
+                if parent and parent["kind"] in ("declaration", "symbol", "illustrations"):
+                    common_preview({}, parent)
+                continue
+            if not isinstance(preview, dict):
+                invalid()
+            kind = preview.get("kind", (parent or {}).get("kind"))
+            if not isinstance(kind, str):
+                invalid()
+            if kind in {"fleet", "teams"}:
+                key = "pieces" if kind == "fleet" else "teamSizes"
+                values = preview.get(key)
+                if (field.get("presentation") != "mode" or set(preview) != {"kind", key}
+                        or not isinstance(values, list) or not 1 <= len(values) <= (16 if kind == "fleet" else 8)
+                        or any(not count(n) or not 1 <= n <= (16 if kind == "fleet" else 32) for n in values)
+                        or sum(values) > (100 if kind == "fleet" else 32)):
+                    invalid()
+            elif kind in ("declaration", "symbol", "illustrations"):
+                common_preview(preview, parent)
+            elif kind in quantities:
+                if (not set(preview) <= {"kind", "count", "countFrom"}
+                        or "count" in preview and "countFrom" in preview or "count" in preview and not count(preview["count"])):
+                    invalid()
+                if "countFrom" in preview:
+                    source = preview["countFrom"]
+                    if not isinstance(source, dict) or set(source) != {"field", "values"} or not isinstance(source["field"], str) or source["field"] not in fields:
+                        invalid()
+                    values = source["values"]
+                    ids = {str(o.get("value")) for o in fields[source["field"]].get("options", []) if isinstance(o, dict)}
+                    if not isinstance(values, dict) or not 1 <= len(values) <= 16 or any(k not in ids or not count(n) for k, n in values.items()):
+                        invalid()
+            else:
+                invalid()
+
 def validate_manifest(manifest, label):
     if not isinstance(manifest, dict):
         raise ValueError(f"Нет manifest: {label}")
@@ -94,6 +204,7 @@ def validate_manifest(manifest, label):
             or any(not isinstance(name, str) or not re.fullmatch(r"[a-z][a-z0-9-]{0,63}", name) for name in modules)
             or len(set(modules)) != len(modules)):
         raise ValueError(f"Некорректные sharedDomain: {label}")
+    validate_parameter_previews(manifest, label)
     return manifest
 
 def validate_asset(files, name):
@@ -319,7 +430,7 @@ def build_pack(pack, shared=None):
         files["rules.js"] = "\n".join([*sources, files["rules.js"]])
         files["view.js"] = "\n".join([*sources, files["view.js"]])
     if manifest.get("sharedUi"):
-        files["view.js"] = (shared / "components/round-token.js").read_text(encoding="utf-8") + "\n" + (shared / "components/game-components.js").read_text(encoding="utf-8") + "\n" + (shared / "view-kit.js").read_text(encoding="utf-8") + "\n" + files["view.js"]
+        files["view.js"] = (shared / "components/vector-art.js").read_text(encoding="utf-8") + "\n" + (shared / "components/round-token.js").read_text(encoding="utf-8") + "\n" + (shared / "components/game-components.js").read_text(encoding="utf-8") + "\n" + (shared / "view-kit.js").read_text(encoding="utf-8") + "\n" + files["view.js"]
         files["styles.css"] = (shared / "view-kit.css").read_text(encoding="utf-8") + "\n" + files["styles.css"]
         for name in manifest.get("sharedAssets", []):
             if not re.fullmatch(r"[a-z][a-z0-9-]*\.svg", name):

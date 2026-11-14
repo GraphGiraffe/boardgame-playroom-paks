@@ -66,5 +66,6 @@
   const bot=(projection,actor,commands,memory,context={})=>{const d=projection.data,own=new Set(d.hands[actor].map(key)),random=context.random||(()=>0);let pool=commands;if((context.depth??2)>1){const pairs=commands.filter(c=>{const card=d.hands[c.target][c.cardIndex];return !card.hidden&&own.has(key(card));});if(pairs.length)pool=pairs;}return pool[Math.floor(random()*pool.length)];};
   function result(position){const values=position.data.points;return {winners:position.winners,
     ...(position.data.ending?Ending.result(position.data.ending):{}),places:position.data.ending?Ending.places({...position.data.ending,mode:'last'},values):values.map(value=>1+new Set(values.filter(other=>other>value)).size),metrics:[{id:'points',values}]};}
-  return Object.freeze({contractVersion:1,rounds:true,id:'oldmaid',minPlayers:2,maxPlayers:6,create,validate,actions,reduce,project,score,bot,result});
+  function localChoices(p){if(p.actor<0||p.status!=='playing')return [];return actions(p,p.actor);}
+ return Object.freeze({contractVersion:1,rounds:true,id:'oldmaid',turnOrder:p=>({players:p.data.hands.flatMap((h,i)=>h.length?[i]:[])}),minPlayers:2,maxPlayers:6,create,validate,actions,localChoices,reduce,project,score,bot,result});
 });

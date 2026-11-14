@@ -1,7 +1,7 @@
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;root.PlayroomDurakCards=api;})(globalThis,function(){
  'use strict';
  const color=s=>['♥','♦'].includes(s)?'red':'black';
- function spec(o={}){const variant=['simple','throwin','transfer'].includes(o.variant)?o.variant:'throwin';return {variant,size:[36,52,54].includes(Number(o.deck))?Number(o.deck):54,mode:o.jokerMode==='universal'?'universal':'color',handSize:variant==='simple'?5:6,endCondition:o.endCondition==='firstout'?'firstout':'lastfool'};}
+ function spec(o={}){const variant=['simple','throwin','transfer'].includes(o.variant)?o.variant:'throwin';return {variant,size:[36,52,54].includes(Number(o.deck))?Number(o.deck):54,mode:o.jokerMode==='universal'?'universal':'color',handSize:variant==='simple'?5:6,endMode:o.endMode==='winner'?'winner':'last'};}
  function beats(card,attack,d){const trump=d.trump.suit;if(d.jokerMode==='universal'){if(card.joker)return !attack.joker||card.color==='red'&&attack.color==='black';if(attack.joker)return false;}else if(d.deckSize===54){const tc=color(trump);if(card.joker){if(attack.joker)return card.color===tc&&attack.color!==tc;return card.color===tc||color(attack.suit)===card.color&&attack.suit!==trump;}if(attack.joker)return attack.color!==tc&&card.suit===trump;}
   return card.suit===attack.suit?card.rank>attack.rank:card.suit===trump&&attack.suit!==trump;}
  function active(d){return d.hands.flatMap((h,i)=>h.length?[i]:[]);}

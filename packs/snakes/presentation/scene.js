@@ -9,19 +9,22 @@
     const p=value.params;
     if(value.type==='snakes.won')return {message:message('events.won'),finish:true};
     if(value.type==='snakes.rolled')return {message:message('events.rolled',{dice:p.dice.join(', ')}),kind:'roll',presentation:{type:'roll'},sound:{id:'dice'}};
-    if(value.type==='snakes.moved')return {message:message('events.jump',{...p,kind:message(p.to>p.landing?'link.ladder':'link.snake')}),kind:'move',reveal:{kind:'dice',dice:[{value:p.roll}],title:message(p.automatic?'view.second':'view.selected')},presentation:{type:p.trigger,sequence:sequence(p)},sound:{id:p.to===p.landing?'move':p.to>p.landing?'climb':'fall'}};
+    if(value.type==='snakes.moved')return {message:message(p.to===p.landing?'events.roll':'events.jump',{...p,kind:message(p.to>p.landing?'link.ladder':'link.snake')}),kind:'move',reveal:{kind:'dice',dice:[{value:p.roll}],title:message(p.automatic?'view.second':'view.selected')},presentation:{type:p.trigger,sequence:sequence(p)},sound:{id:p.to===p.landing?'move':p.to>p.landing?'climb':'fall'}};
     if(value.type==='snakes.skipped')return {message:message('events.skipped'),feedback:{kind:'skip',player:value.actor}};
+    if(value.type==='snakes.swapped')return {message:message('events.swapped',p),kind:'capture',sound:{id:'capture'}};
     return {message:message('events.'+value.type.split('.')[1],{effect:message('effect.'+(p.effect||'extra'))})};
   }
   function position(n,size=10){const row=Math.floor((Math.max(1,n)-1)/size),col=row%2?size-1-(Math.max(1,n)-1)%size:(Math.max(1,n)-1)%size,step=100/size;return {x:(col+.5)*step,y:100-(row+.5)*step};}
   function sequence(move,finish=move?.finish||100){
     if(!move)return undefined;const point=n=>({anchor:'cell-'+n,label:String(n)});
-    return {trigger:move.trigger||'roll',entity:{namespace:'token',id:String(move.player)},player:move.player,counter:'position',origin:point(move.from),
+    return {trigger:move.trigger||'roll',entity:{namespace:'token',id:String(move.player)},player:move.player,counter:'position',origin:move.from===0?{anchor:`entry-${move.player}`,label:'0'}:point(move.from),
       steps:Array.from({length:move.roll},(_,i)=>{const n=move.from+i+1;return point(n>finish?2*finish-n:n);}),
-      ...(move.to!==move.landing?{jump:point(move.to)}:{})};
+      ...(move.to!==move.landing?{jump:point(move.to)}:{}),
+      ...(move.swaps?.length?{arrival:'after-departures',departures:move.swaps.map(s=>({namespace:'token',id:String(s.player)}))}:{})};
   }
   const scene=projection=>({contractVersion:1,id:'snakes-board',family:'route-board',round:{number:projection.data.ending.round,limit:projection.data.ending.maxRounds||null,starts:projection.data.ending.starts},columns:Math.sqrt(projection.data.finish),
     finish:projection.data.finish,links:projection.data.links,special:projection.data.special,effects:projection.data.effects,adjusting:projection.data.adjusting,
+    swaps:projection.data.lastMove?.swaps?.map(s=>({...s,by:projection.data.lastMove.player}))||[],
     dice:Array.isArray(projection.data.dice)?projection.data.dice:[projection.data.dice],
     moves:projection.actions.filter(command=>command.type==='move').map(command=>{const d=projection.data,from=d.positions[projection.turn],steps=d.dice[command.dieIndex]+command.delta;const route=Array.from({length:steps},(_,i)=>{const n=from+i+1;return n>d.finish?2*d.finish-n:n;});return {command,landing:route.at(-1)??from,route};}),
     players:projection.data.positions.map((value,player)=>({player,finishPlace:(projection.data.ending?.groups||[]).findIndex(group=>group.includes(player))+1,metrics:[{id:'position',kind:'pieces',value,label:metric(),resultUsage:true},{id:'wins',kind:'wins',value:projection.winners.includes(player)?1:0,label:metadata.scoreLabel,resultUsage:false}]})),
@@ -36,12 +39,18 @@
   const moves=p.events.filter(e=>e.revision===p.revision&&e.type==='snakes.moved');
   if(moves.length<2)return [];
   const positions=[...p.data.positions];
-  for(const e of [...moves].reverse())positions[e.params.player]=e.params.from;
+  for(const e of [...moves].reverse()){
+   positions[e.params.player]=e.params.from;
+   for(const swap of e.params.swaps||[])positions[swap.player]=swap.from;
+  }
   return moves.map(e=>{
    positions[e.params.player]=e.params.to;
+   for(const swap of e.params.swaps||[])positions[swap.player]=swap.to;
    const projected={...p,actions:[],data:{...p.data,positions:[...positions],lastMove:e.params}};
    return {eventId:e.id,scene:{...scene(projected),...sceneLayout(projected)}};
   });
  }
+ // Concise, separately authored player introduction; full rulebook stays intact.
+ metadata.rulebook.brief={"sections":[{"title":{"key":"snakes.brief.0.title","params":{}},"paragraphs":[{"key":"snakes.brief.0.text","params":{}}],"layout":"row","figures":[{"id":"dice","caption":{"key":"snakes.brief.0.caption","params":{}},"role":"diagram"}]},{"title":{"key":"snakes.brief.1.title","params":{}},"paragraphs":[{"key":"snakes.brief.1.text","params":{}}],"layout":"row","figures":[{"id":"links","caption":{"key":"snakes.brief.1.caption","params":{}},"role":"diagram"}]},{"title":{"key":"snakes.brief.2.title","params":{}},"paragraphs":[{"key":"snakes.brief.2.text","params":{}}]}]};
  return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}),action,event,metric,scene:p=>({...scene(p),...sceneLayout(p)}),position,sequence,eventScenes});
 });

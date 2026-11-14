@@ -130,5 +130,6 @@
     return {winners:position.winners,lastPlayers:position.winners.length===1?[1-position.winners[0]]:[],places:values.map(value=>value?1:2),metrics:[{id:'wins',values},
       {id:'hits',values:position.data.shots.map(shots=>shots.filter(shot=>shot.hit).length)}]};
   }
-  return Object.freeze({contractVersion:1,id:'battleship',minPlayers:2,maxPlayers:2,rounds:true,preparing:position=>position.data.phase==='setup',botContext:position=>({rng:position.rng}),decisionWindow:position=>position.status==='playing'&&position.data.phase==='setup'?{id:'fleet-setup',participants:[0,1],ready:[0,1].filter(i=>position.data.ready[i]),versions:{0:position.data.setupVersions?.[0]||0,1:position.data.setupVersions?.[1]||0}}:null,create,validate,actions,reduce,project,bot,result});
+  function localChoices(p){if(p.actor<0||p.status!=='playing'||p.data.phase==='setup'&&p.actor!==p.viewer)return [];return actions(p,p.actor);}
+ return Object.freeze({contractVersion:1,id:'battleship',minPlayers:2,maxPlayers:2,rounds:true,preparing:position=>position.data.phase==='setup',botContext:position=>({rng:position.rng}),decisionWindow:position=>position.status==='playing'&&position.data.phase==='setup'?{id:'fleet-setup',participants:[0,1],ready:[0,1].filter(i=>position.data.ready[i]),versions:{0:position.data.setupVersions?.[0]||0,1:position.data.setupVersions?.[1]||0}}:null,create,validate,actions,localChoices,reduce,project,bot,result});
 });

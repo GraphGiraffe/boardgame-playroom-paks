@@ -7,7 +7,9 @@ from pypdf import PdfReader,PdfWriter,Transformation,PageObject
 p=argparse.ArgumentParser();p.add_argument('source',type=Path);p.add_argument('--out',type=Path,required=True);a=p.parse_args()
 a.out.mkdir(parents=True,exist_ok=True)
 r=PdfReader(a.source)
-if len(r.pages)!=17:raise ValueError('Expected 16 rules pages and one memo sheet')
+if len(r.pages)!=16:raise ValueError('Expected 16 rules pages without memos')
+memo_source=PdfReader(a.source.parent/'Стихийная-потасовка-4-памятки-A5.pdf')
+if len(memo_source.pages)!=1:raise ValueError('Expected one separate A5 memo sheet')
 W,H=297*72/25.4,210*72/25.4
 
 def half(target,source,index):
@@ -27,7 +29,7 @@ book.add_metadata({'/Title':'Стихийная потасовка - букле�
 bpath=a.out/'Стихийная-потасовка-буклет-A4.pdf'
 with bpath.open('wb') as f:book.write(f)
 
-memo=copy.deepcopy(r.pages[16]);memo.cropbox.lower_left=(0,20)
+memo=copy.deepcopy(memo_source.pages[0]);memo.cropbox.lower_left=(0,20)
 side=PageObject.create_blank_page(width=W,height=H)
 half(side,memo,0);half(side,memo,1)
 writer=PdfWriter();writer.add_page(side)
@@ -35,6 +37,10 @@ writer.add_metadata({'/Title':'Стихийная потасовка - 8 пам�
 mpath=a.out/'Стихийная-потасовка-8-памяток-A4.pdf'
 with mpath.open('wb') as f:writer.write(f)
 (a.out/'PRINT.md').write_text('''# Печать редакции 1
+
+## Правила A5
+
+Файл «Стихийная-потасовка-правила.pdf»: 16 страниц A5 без памяток.
 
 ## Буклет
 
@@ -50,10 +56,13 @@ with mpath.open('wb') as f:writer.write(f)
 
 ## Памятки
 
+Файл «Стихийная-потасовка-4-памятки-A5.pdf»: одна страница A5,
+4 памятки. Односторонняя печать, масштаб 100%.
+
 Файл «Стихийная-потасовка-8-памяток-A4.pdf»: одна страница A4,
 альбомная ориентация, односторонняя печать, масштаб 100%,
 одна страница PDF на лист. На листе два блока A5 рядом,
 в каждом четыре одинаковые памятки. Разрезать по пунктирным линиям.
 ''')
-(a.out/'print-layout.json').write_text(json.dumps({'rulesPages':16,'bookletSides':8,'physicalSheets':4,'pagePairs':order,'memoPages':1,'memoCount':8,'orientation':'landscape','duplexFlip':'short-edge'},indent=2))
+(a.out/'print-layout.json').write_text(json.dumps({'rulesPages':16,'a5MemoPages':1,'a5MemoCount':4,'bookletSides':8,'physicalSheets':4,'pagePairs':order,'memoPages':1,'memoCount':8,'orientation':'landscape','duplexFlip':'short-edge'},indent=2))
 print(json.dumps({'booklet':str(bpath),'sides':len(book.pages),'memo':str(mpath),'memoSheets':len(writer.pages),'order':order},ensure_ascii=False))

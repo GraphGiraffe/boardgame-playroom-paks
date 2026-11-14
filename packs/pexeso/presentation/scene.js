@@ -21,5 +21,7 @@
 
  // Geometry contains only public identities from the authorized projection.
  function sceneLayout(p){const d=p.data;return {geometry:{topology:'slots:'+d.board.length},zones:[{id:'field',kind:'board'}],objects:d.board.map((_,cell)=>({ref:{namespace:'slot',id:String(cell)},zone:'field',cell})),interactions:p.actions.map(command=>({command,target:command.index!=null?{entity:{namespace:'slot',id:String(command.index)}}:{zone:'field'}}))};}
+ // Concise, separately authored player introduction; full rulebook stays intact.
+ metadata.rulebook.brief={"sections":[{"title":{"key":"pexeso.brief.0.title","params":{}},"paragraphs":[{"key":"pexeso.brief.0.text","params":{}}],"layout":"row","figures":[{"id":"flip","caption":{"key":"pexeso.brief.0.caption","params":{}},"role":"diagram"}]},{"title":{"key":"pexeso.brief.1.title","params":{}},"paragraphs":[{"key":"pexeso.brief.1.text","params":{}}],"layout":"row","figures":[{"id":"pair","caption":{"key":"pexeso.brief.1.caption","params":{}},"role":"diagram"}]},{"title":{"key":"pexeso.brief.2.title","params":{}},"paragraphs":[{"key":"pexeso.brief.2.text","params":{}}]}]};
  return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}),action,event,metric,scene:p=>({...scene(p),...sceneLayout(p)})});
 });
