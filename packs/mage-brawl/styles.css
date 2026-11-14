@@ -217,18 +217,11 @@
 .mage-scene .mage-shrink-corner{fill:none;stroke:currentColor;stroke-width:3;stroke-linejoin:round}
 .mage-scene .mage-shrink-corner.is-filled{fill:currentColor}
 .mage-scene .mage-shrink-counter.is-scheduled .mage-shrink-corner{fill:currentColor;opacity:var(--mage-warning-opacity,.4)}
-.mage-scene .mage-team-lives{display:inline-flex;align-items:center;gap:4px;min-width:0;flex:none}
-.mage-scene .mage-team-reserve{display:inline-flex;align-items:center;flex:none}
-.mage-scene .mage-team-full{display:inline-flex;align-items:center;width:calc(12px + (var(--mage-team-slots) - 1)*6px);flex:none}
-.mage-scene .mage-team-full>.counter-token+.counter-token{margin-left:-6px}
-.mage-scene .mage-team-reserve .counter-token{flex:none;width:12px;height:15px;fill:currentColor;stroke:currentColor;stroke-width:1.5}
-.mage-scene .mage-team-reserve .counter-token.is-empty{fill:none;opacity:.55}
-.mage-scene .mage-team-compact{display:none;align-items:center;gap:2px}
-.mage-scene .mage-team-compact i{font-size:11px;font-style:normal}
-.mage-scene .mage-team-score{display:grid;grid-template-columns:14px 8px 14px;text-align:center;align-items:center;flex:none;white-space:nowrap;font-size:11px}
-.mage-scene .mage-team-score b{font:inherit;font-weight:700}
-@container player-status (max-width:189px){.mage-scene .mage-team-lives.is-large .mage-team-full{display:none}.mage-scene .mage-team-lives.is-large .mage-team-compact{display:inline-flex}}
-@container player-status (max-width:149px){.mage-scene .mage-team-full{display:none}.mage-scene .mage-team-compact{display:inline-flex}}
-
+.mage-scene .mage-team-lives{display:inline-flex;align-items:center;gap:3px;flex:none;white-space:nowrap;font-size:10px;line-height:1}
+.mage-scene .mage-team-pool{display:inline-flex;align-items:center;gap:2px;flex:none}
+.mage-scene .mage-team-pool>.counter-token{width:10px;height:13px;fill:currentColor;stroke:currentColor;stroke-width:1.5;flex:none}
+.mage-scene .mage-team-pool>span{display:inline-flex;gap:1px;align-items:center}
+.mage-scene .mage-team-pool b{min-width:1ch;font:inherit;font-weight:700;text-align:center}
+.mage-scene .mage-team-separator{color:var(--color-text-secondary,#526158)}
 
 body.reduced-motion .mage-scene:has(.mage-risk,.mage-shrink-counter.is-scheduled){animation:none;--mage-warning-opacity:.65}

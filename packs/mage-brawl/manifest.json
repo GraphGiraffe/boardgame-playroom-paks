@@ -1,6 +1,6 @@
 {
   "id": "mage-brawl",
-  "version": "0.2.7-preview.37",
+  "version": "0.2.7-preview.38",
   "name": "Стихийная потасовка",
   "category": "board",
   "estimatedDuration": "15–40 мин",
@@ -23,7 +23,7 @@
   "view": "view.js",
   "styles": "styles.css",
   "engineApi": 4,
-  "stateVersion": 2,
+  "stateVersion": 3,
   "viewApi": 3,
   "tileTheme": "blue",
   "sharedUi": true,
@@ -51,6 +51,29 @@
       "players": [
         2,
         3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "teams": true
+    },
+    {
+      "id": "teams3",
+      "players": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "teams": true
+    },
+    {
+      "id": "teams4",
+      "players": [
         4,
         5,
         6,
@@ -101,7 +124,7 @@
       },
       {
         "value": "teams",
-        "label": "Командный",
+        "label": "2 команды",
         "preview": {
           "kind": "teams",
           "teamSizes": [
@@ -109,10 +132,37 @@
             2
           ]
         },
-        "description": "Синие против Красных. Побеждает оставшаяся команда."
+        "description": "Синие против Красных."
+      },
+      {
+        "value": "teams3",
+        "label": "3 команды",
+        "preview": {
+          "kind": "teams",
+          "teamSizes": [
+            2,
+            2,
+            2
+          ]
+        },
+        "description": "Побеждает последняя команда."
+      },
+      {
+        "value": "teams4",
+        "label": "4 команды",
+        "preview": {
+          "kind": "teams",
+          "teamSizes": [
+            2,
+            2,
+            2,
+            2
+          ]
+        },
+        "description": "Побеждает последняя команда."
       }
     ],
-    "help": "Игроки делятся на Синих и Красных по местам через одно. Цель — выбить всех соперников; урон союзникам включён. Запас дополнительных жизней общий. При неравных командах у обеих запас меньшей команды."
+    "help": "Команды определяются местами за столом. Цель — выбить соперников; урон союзникам включён. Жетоны возрождения общие. Меньшим командам достаётся больший запас."
   },
   "sharedDomain": [
     "tactical-grid",
@@ -275,7 +325,7 @@
           "description": "Два жетона возрождения."
         }
       ],
-      "help": "Каждый жетон позволяет возродиться после гибели. Текущая жизнь сюда не входит. Без жетонов следующая гибель окончательна. В командах запас общий, у обеих команд — по размеру меньшей команды.",
+      "help": "Каждый жетон позволяет возродиться. Без жетонов следующая гибель окончательна. В командах запас общий: меньшие команды получают больше жетонов.",
       "preview": {
         "kind": "lives"
       }
@@ -579,14 +629,84 @@
         {
           "id": "blue",
           "label": "Синие",
-          "color": "#387bbf",
-          "colorRole": "side.blue"
+          "color": "#668fad",
+          "colorRole": "team.blue"
         },
         {
           "id": "red",
           "label": "Красные",
-          "color": "#d75245",
-          "colorRole": "side.red"
+          "color": "#ce735d",
+          "colorRole": "team.red"
+        }
+      ]
+    },
+    "teams3": {
+      "seatTeams": [
+        "blue",
+        "red",
+        "cyan",
+        "blue",
+        "red",
+        "cyan",
+        "blue",
+        "red"
+      ],
+      "teams": [
+        {
+          "id": "blue",
+          "label": "Синие",
+          "color": "#668fad",
+          "colorRole": "team.blue"
+        },
+        {
+          "id": "red",
+          "label": "Красные",
+          "color": "#ce735d",
+          "colorRole": "team.red"
+        },
+        {
+          "id": "cyan",
+          "label": "Голубые",
+          "color": "#729d98",
+          "colorRole": "team.cyan"
+        }
+      ]
+    },
+    "teams4": {
+      "seatTeams": [
+        "blue",
+        "red",
+        "cyan",
+        "brown",
+        "blue",
+        "red",
+        "cyan",
+        "brown"
+      ],
+      "teams": [
+        {
+          "id": "blue",
+          "label": "Синие",
+          "color": "#668fad",
+          "colorRole": "team.blue"
+        },
+        {
+          "id": "red",
+          "label": "Красные",
+          "color": "#ce735d",
+          "colorRole": "team.red"
+        },
+        {
+          "id": "cyan",
+          "label": "Голубые",
+          "color": "#729d98",
+          "colorRole": "team.cyan"
+        },
+        {
+          "id": "brown",
+          "label": "Коричневые",
+          "color": "#aa844b",
+          "colorRole": "team.brown"
         }
       ]
     }
