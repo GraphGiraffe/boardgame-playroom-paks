@@ -94,13 +94,15 @@
 .mage-scene .mage-phase-card{position:relative;margin-bottom:16px}
 
 /* The shrinking rim remains visible above every terrain illustration. */
-.mage-scene .mage-risk::after{content:"";position:absolute;inset:0;border-radius:inherit;background:#d83c3680;pointer-events:none;animation:mage-risk-pulse 2.4s ease-in-out infinite}
-@keyframes mage-risk-pulse{0%,100%{opacity:.4}50%{opacity:.85}}
+@property --mage-warning-opacity{syntax:"<number>";inherits:true;initial-value:.4}
+.mage-scene:has(.mage-risk,.mage-shrink-counter.is-scheduled){animation:mage-warning-clock 2.4s ease-in-out infinite}
+@keyframes mage-warning-clock{0%,100%{--mage-warning-opacity:.4}50%{--mage-warning-opacity:.85}}
+.mage-scene .mage-risk::after{content:"";position:absolute;inset:0;border-radius:inherit;background:#d83c3680;pointer-events:none;opacity:var(--mage-warning-opacity,.4)}
 .mage-scene .mage-token.is-selected{outline-offset:2px!important;--color-interaction-selected:#dfb83d}
 .mage-scene .mage-preview{outline-color:color-mix(in srgb,var(--mage-selected) var(--piece-highlight-strength),transparent)}
 .mage-scene [data-score-id="kills"]::before,.result-scores[data-game="mage-brawl"] [data-score-id="kills"]::before{content:"⚔";margin-right:3px}
 
-@media(prefers-reduced-motion:reduce){.mage-scene .mage-risk::after{animation:none;opacity:.65}}
+@media(prefers-reduced-motion:reduce){.mage-scene:has(.mage-risk,.mage-shrink-counter.is-scheduled){animation:none;--mage-warning-opacity:.65}}
 
 .mage-scene .mage-cell.is-playable{outline:var(--mage-cell-outline) solid var(--piece-interaction-color);outline-offset:calc(-1*var(--mage-cell-outline))!important}
 
@@ -214,8 +216,7 @@
 .mage-scene .mage-shrink-center{fill:#fff9e9;stroke:#526158;stroke-width:3}
 .mage-scene .mage-shrink-corner{fill:none;stroke:currentColor;stroke-width:3;stroke-linejoin:round}
 .mage-scene .mage-shrink-corner.is-filled{fill:currentColor}
-.mage-scene .mage-shrink-counter.is-scheduled .mage-shrink-corner{animation:mage-shrink-warning 1.4s ease-in-out infinite alternate}
-@keyframes mage-shrink-warning{from{fill:color-mix(in srgb,currentColor 12%,transparent)}to{fill:currentColor}}
+.mage-scene .mage-shrink-counter.is-scheduled .mage-shrink-corner{fill:currentColor;opacity:var(--mage-warning-opacity,.4)}
 .mage-scene .mage-team-lives{display:inline-flex;align-items:center;gap:4px;min-width:0;flex:none}
 .mage-scene .mage-team-reserve{display:inline-flex;align-items:center;flex:none}
 .mage-scene .mage-team-full{display:inline-flex;align-items:center;width:calc(12px + (var(--mage-team-slots) - 1)*6px);flex:none}
@@ -228,6 +229,6 @@
 .mage-scene .mage-team-score b{font:inherit;font-weight:700}
 @container player-status (max-width:189px){.mage-scene .mage-team-lives.is-large .mage-team-full{display:none}.mage-scene .mage-team-lives.is-large .mage-team-compact{display:inline-flex}}
 @container player-status (max-width:149px){.mage-scene .mage-team-full{display:none}.mage-scene .mage-team-compact{display:inline-flex}}
-@media(prefers-reduced-motion:reduce){.mage-scene .mage-shrink-counter.is-scheduled .mage-shrink-corner{animation:none;fill:currentColor}}
 
-body.reduced-motion .mage-scene .mage-shrink-counter.is-scheduled .mage-shrink-corner{animation:none;fill:currentColor}
+
+body.reduced-motion .mage-scene:has(.mage-risk,.mage-shrink-counter.is-scheduled){animation:none;--mage-warning-opacity:.65}
