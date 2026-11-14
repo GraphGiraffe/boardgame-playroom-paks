@@ -8,13 +8,13 @@
  function shrinkIndicator(counter){
   if(!counter)return '';
   const label=text(counter.scheduled?'ui.shrink':'ui.shrink-count',{count:counter.filled,total:counter.capacity});
-  const corner='M60 8H92V40H78V22H60Z',capacity=counter.capacity;
-  // One square ring: six identical bars, with the same perpendicular gap
-  // at every join. Stroke width stays shared with the accepted two-part art.
-  const edge=8,outer=84,thickness=14,gap=(outer-4*thickness)/3,length=(outer-gap)/2;
-  const bar=(x,y,width,height)=>({d:`M${x} ${y}h${width}v${height}h${-width}Z`,rotation:0});
-  const segments=capacity===2?[{d:'M60 8H92V92H60V78H78V22H60Z',rotation:0},{d:'M60 8H92V92H60V78H78V22H60Z',rotation:180}]:capacity===6?[bar(edge+outer-length,edge,length,thickness),bar(edge+outer-thickness,edge+thickness+gap,thickness,length),bar(edge+outer-length,edge+outer-thickness,length,thickness),bar(edge,edge+outer-thickness,length,thickness),bar(edge,edge+thickness+gap,thickness,length),bar(edge,edge,length,thickness)]:[0,90,180,270].map(rotation=>({d:corner,rotation}));
-  return `<span class="mage-shrink-counter${counter.scheduled?' is-scheduled':''}" data-shrink-capacity="${counter.capacity}" data-shrink-filled="${counter.filled}" data-shrink-scheduled="${!!counter.scheduled}" role="img" aria-label="${esc(label)}" title="${esc(label)}"><svg viewBox="0 0 100 100" aria-hidden="true"><rect class="mage-shrink-center" x="36" y="36" width="28" height="28" rx="6"/>${segments.map((segment,i)=>`<path class="mage-shrink-corner${i<counter.filled?' is-filled':''}" d="${segment.d}" transform="rotate(${segment.rotation} 50 50)"/>`).join('')}</svg></span>`;
+  const capacity=counter.capacity,cellsPerStep=12/capacity;
+  // Clockwise from the top-right region; all capacities share the same 4×4 grid.
+  const edge=[[2,0],[3,0],[3,1],[3,2],[3,3],[2,3],[1,3],[0,3],[0,2],[0,1],[0,0],[1,0]];
+  const cell=([x,y],attrs='')=>`<rect ${attrs} x="${8+x*22}" y="${8+y*22}" width="18" height="18" rx="3"/>`;
+  const center=[[1,1],[2,1],[1,2],[2,2]].map(pos=>cell(pos,'class="mage-shrink-center"')).join('');
+  const segments=Array.from({length:capacity},(_,i)=>`<g class="mage-shrink-corner${i<counter.filled?' is-filled':''}" data-shrink-segment="${i}">${edge.slice(i*cellsPerStep,(i+1)*cellsPerStep).map(pos=>cell(pos,'data-shrink-cell')).join('')}</g>`).join('');
+  return `<span class="mage-shrink-counter${counter.scheduled?' is-scheduled':''}" data-shrink-capacity="${capacity}" data-shrink-filled="${counter.filled}" data-shrink-scheduled="${!!counter.scheduled}" role="img" aria-label="${esc(label)}" title="${esc(label)}"><svg viewBox="0 0 100 100" aria-hidden="true">${center}${segments}</svg></span>`;
  }
  function teamReserve(shown,team,capacity){
   if(!shown.teamLives)return '';
@@ -205,6 +205,15 @@
   if(id==='setting-card-water-movement')return card('water','movement');
   if(id==='setting-type-attack')return actionIcon('attack');
   if(id==='setting-type-movement')return actionIcon('movement');
+  if(id==='setting-shrink-lives'||id==='setting-shrink-players'){
+   const V=root.PlayroomGameComponents.vector,lives=id==='setting-shrink-lives',red='var(--color-side-red,#d75245)';
+   const cause=V.place(lives?C.tokenStrip({value:1,capacity:1,icon:'meeple'}):H.icon('player'),{x:5,y:23,width:24,height:26});
+   return V.viewport({width:120,height:72,attrs:`data-art-role="parameter-diagram" data-mage-shrink-preview="${lives?'lives':'players'}" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"`,content:
+    `<g data-shrink-cause>${cause}<path d="M7 49 28 23" stroke="${red}"/></g><path d="M35 36H49M43 30 49 36 43 42"/>`+
+    `<rect data-shrinking-edge x="58" y="8" width="56" height="56" rx="6" fill="${red}" fill-opacity=".08" stroke="${red}" stroke-dasharray="4 4"/>`+
+    '<g data-remaining-field><rect x="70" y="20" width="32" height="32" rx="3" fill="currentColor" fill-opacity=".1"/><path d="M86 20V52M70 36H102"/></g>'});
+  }
+
   if(id.startsWith('tile-'))return terrainArt(id.slice(5));
   if(id==='type-control')return `<svg viewBox="0 0 240 44"><rect x="1" y="1" width="238" height="42" rx="18" fill="var(--color-surface-panel,#e4e9da)" stroke="#a6b59d"/><rect x="4" y="4" width="115" height="36" rx="15" fill="var(--color-surface-selected,#d0dcc4)"/><g transform="translate(48 8) scale(.28)">${footprints().replace(/^.*?>/,'').replace(/<\/svg>$/,'')}</g><g transform="translate(163 10) scale(1)" fill="none" stroke="currentColor" stroke-width="2">${H.icon('sword').replace(/^.*?>/,'').replace(/<\/svg>$/,'')}</g></svg>`;
   if(id==='order')return `<svg viewBox="0 0 240 140"><title>${esc(text('book.order'))}</title>${['movement','attack'].map((a,j)=>`<text x="120" y="${j*68+13}" text-anchor="middle" font-size="12" fill="currentColor">${esc(text('book.order-'+a))}</text><g transform="translate(30 ${j*68+21})">${elements.map((e,i)=>`<g transform="translate(${i*49} 4) scale(.38)" style="color:${colors[e]}">${ink[e]}</g>${i<3?`<text x="${i*49+39}" y="30" font-size="16" fill="#8a957e">→</text>`:''}`).join('')}</g>`).join('')}</svg>`;
