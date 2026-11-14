@@ -2,8 +2,8 @@
 (function(r,f){if(typeof require==='function'&&!r.PlayroomPack)module.exports=f(require('../../../shared/domain/bot-policy.js'));r.MageBrawlBotsFactory=f;})(globalThis,function(B){
  const profiles={aggressor:[.85,.10,3,.4,4,.50],fighter:[.85,.35,2.4,1.2,7,.50],mind:[.60,.55,1.5,1.7,7,1],tactician:[.60,.45,1.5,1.5,7,.50],defender:[.28,.72,-.8,3,2,.75],random:[1/3,1/3,1,1,1,.25]};
  const dirs=[[-1,0],[0,1],[1,0],[0,-1]],add=(a,b)=>a.map((n,i)=>n+b[i]),distance=(a,b)=>Math.abs(a[0]-b[0])+Math.abs(a[1]-b[1]),same=(a,b)=>!!a&&!!b&&a.every((n,i)=>n===b[i]);
- function choose(projection,actor,commands,R,context={}){
-  if(!commands.length)return null;const d=projection.data,me=d.players[actor],name=me.bot.resolvedStrategy,[ap,dp,approach,safety,finishing,baseCount]=profiles[name],level=me.bot.difficulty||context.difficulty||'medium',count=baseCount*({easy:.25,medium:.65,hard:1}[level]);
+ function assess(projection,actor,commands,R,context={}){
+  if(!commands.length)return {preferred:null,ranked:[]};const d=projection.data,me=d.players[actor],name=me.bot.resolvedStrategy,[ap,dp,approach,safety,finishing,baseCount]=profiles[name],level=me.bot.difficulty||context.difficulty||'medium',count=baseCount*({easy:.25,medium:.65,hard:1}[level]);
   const rng=B.random(context.seed??1,d.window.id+':'+actor),pick=a=>a[Math.floor(rng()*a.length)],best=pairs=>{const m=Math.max(...pairs.map(p=>p[0]));return pick(pairs.filter(p=>p[0]===m))[1];};
   const allied=id=>d.config.teams&&d.players[id].team===me.team;
   const enemies=d.players.flatMap((p,i)=>i!==actor&&!allied(i)&&p.pos?[{...p,id:i}]:[]),prob=(id,e)=>{const total=4*(d.config?.copies||d.players.length+1)-me.hand.length,available=(d.config?.copies||d.players.length+1)-me.hand.filter(x=>x.element===e).length,n=Math.min(d.players[id].handCount,total);let none=1;for(let i=0;i<n;i++)none*=Math.max(0,total-available-i)/(total-i);return 1-none;};
@@ -11,13 +11,16 @@
   const immune=(p,e)=>R.terrain[R.tile(d,p.pos)]?.[1]===e,loss=p=>reserve(p)>0?2+3*count*(p.handCount>1)-.75*safety:4+5*Math.min(1,p.ultimate);
   function threats(source,target,ult){const y=Math.abs(source[0]-target[0]),x=Math.abs(source[1]-target[1]),dist=y+x,out=[];if(dist===1)out.push('air','earth');if(y===1&&x===1&&ult)out.push('air');if(y&&x)return out;const v=[Math.sign(target[0]-source[0]),Math.sign(target[1]-source[1])];for(let i=1;i<dist;i++)if(R.tile(d,add(source,v.map(x=>x*i)))==='wall')return out;out.push('fire');if(dist<=2)out.push('water');if(ult)out.push('earth');return out;}
   function danger(pos){return enemies.reduce((sum,p)=>{const n=distance(pos,p.pos);return sum+(n<=1?4:n<=2?2:p.pos[0]===pos[0]||p.pos[1]===pos[1]?1:0)+(p.ultimate&&threats(p.pos,pos,p.ultimate).length?1+Math.min(2,p.ultimate):0);},R.ring(d,pos)?2:0);}
-  if(commands[0].type==='loot')return pick(commands);
+  if(commands[0].type==='loot')return {preferred:pick(commands),ranked:[]};
   if(commands[0].type==='respawn'){
    const near=p=>enemies.length?Math.min(...enemies.map(e=>distance(p,e.pos))):0,score=c=>name==='aggressor'?-near(c.pos):name==='fighter'?-danger(c.pos)*100-near(c.pos):name==='defender'?near(c.pos):near(c.pos)-3*R.ring(d,c.pos);
    const selected=name==='random'||!enemies.length?pick(commands):commands.reduce((a,b)=>score(a)>=score(b)?a:b);
-   return B.mistake(selected,commands,{rate:me.bot.errorRate,random:rng,score,safe:()=>true,meaningful:()=>true});
+   return {preferred:B.mistake(selected,commands,{rate:me.bot.errorRate,random:rng,score,safe:()=>true,meaningful:()=>true}),ranked:[]};
   }
-  if(commands[0].type==='unready')return commands[0];
+  if(commands[0].type==='unready')return {preferred:commands[0],ranked:[]};
+  // Errors may weaken tactics, but must not target a teammate when a harmless
+  // legal alternative exists. Exact forecasts cover pushes and blast chains.
+  if(d.config.teams){const costs=commands.map(c=>[c,allyCost(d,context.forecast([c]),actor)]),minimum=Math.min(...costs.map(([,cost])=>cost));commands=costs.filter(([,cost])=>cost===minimum).map(([c])=>c);}
   const target=enemies.length?enemies.reduce((a,b)=>priority(a)<=priority(b)?a:b):null;
   function priority(p){return distance(me.pos,p.pos)+count*prob(p.id,'earth')-((d.config?.health||3)-p.health)*finishing/(d.config?.health||3)-(reserve(p)===0)-Math.min(2,p.ultimate)*(1+finishing/4)-(reserve(p)>0&&p.handCount>1?count:0);}
   function targets(c){const cells=R.geometry(d,actor,c);if(c.element==='fire'&&c.action==='ultimate'&&cells.length){const id=R.occupant(d,cells[0]);if(id>=0&&immune(d.players[id],'fire'))return [];}
@@ -45,7 +48,64 @@
    if(attacks.length&&rng()<ap)return best(attacks);if(shields.length&&risk>0&&rng()<dp)return best(shields);for(const a of [moves,attacks,shields])if(a.length)return best(a);return pick(commands);
   }
   const safe=c=>{if(d.shrink&&R.ring(d,me.pos)&&(c.action!=='movement'||c.element==='earth'))return false;if(c.action!=='movement')return !(c.action==='ultimate'&&c.element==='fire'&&damage(me,c)>=me.health&&R.geometry(d,actor,c).some(q=>same(q,me.pos)));if(c.element==='earth')return !(d.shrink&&R.ring(d,me.pos));const q=preview(c);return q&&!(R.tile(d,q)==='spikes'&&me.health===1)&&!(d.shrink&&R.ring(d,q));};
-  return B.mistake(normal(),commands,{rate:me.bot.errorRate,random:rng,score,safe,meaningful:c=>c.action==='movement'?(c.element==='earth'?shield(c)>0:!!preview(c)&&(!same(preview(c),me.pos)||pushValue(c)>0)):targets(c).length>0});
+  const meaningful=c=>c.action==='movement'?(c.element==='earth'?shield(c)>0:!!preview(c)&&(!same(preview(c),me.pos)||pushValue(c)>0)):targets(c).length>0;
+  return {preferred:B.mistake(normal(),commands,{rate:context.precise?0:me.bot.errorRate,random:rng,score,safe,meaningful}),ranked:commands.map(command=>({command,score:score(command),safe:safe(command),meaningful:meaningful(command)})).sort((a,b)=>b.score-a.score)};
+ }
+ function allyCost(before,after,actor){
+  if(!before.config.teams)return 0;
+  return before.players.reduce((sum,p,i)=>i===actor||p.team!==before.players[actor].team?sum:sum+Math.max(0,p.health-after.players[i].health)+12*(p.pos&&!after.players[i].pos?1:0)+20*Math.max(0,p.lives-after.players[i].lives),0);
+ }
+ function outcome(before,after,actor,R){
+  const me=before.players[actor],mine=after.players[actor],team=id=>id===actor||before.config.teams&&before.players[id].team===me.team;
+  let value=0;for(const [i,p] of before.players.entries()){
+   const next=after.players[i],lost=Math.max(0,p.health-next.health),death=p.pos&&!next.pos?1:0,final=Math.max(0,p.lives-next.lives);
+   value+=(team(i)?-1.5:1)*(2*lost+12*death+24*final);
+  }
+  if(before.config.teams)for(let i=0;i<before.teamLives.length;i++)value+=(i===me.team?-8:6)*(before.teamLives[i]-after.teamLives[i]);
+  const enemies=after.players.filter((p,i)=>!team(i)&&p.pos);
+  if(mine.pos){
+   const approach=profiles[me.bot.resolvedStrategy][2],distanceTo=(pos,players)=>players.length?Math.min(...players.map(p=>distance(pos,p.pos))):0;
+   value+=approach*(distanceTo(me.pos,before.players.filter((p,i)=>!team(i)&&p.pos))-distanceTo(mine.pos,enemies));
+   value-=profiles[me.bot.resolvedStrategy][3]*enemies.reduce((n,p)=>n+(distance(mine.pos,p.pos)<=1?2:distance(mine.pos,p.pos)<=2?1:0),0);
+   if(R.tile(after,mine.pos)==='spikes')value-=4;
+  }
+  value-=Math.max(0,me.ultimate-mine.ultimate)*1.5;
+  if(!after.players.some((p,i)=>!team(i)&&p.lives>0))value+=1000;
+  if(!after.players.some((p,i)=>team(i)&&p.lives>0))value-=1000;
+  return value;
+ }
+ function choose(projection,actor,commands,R,context={}){
+  const d=projection.data,me=d.players[actor];
+  if(!commands.length)return null;
+  if(commands[0].type!=='plan')return assess(projection,actor,commands,R,context).preferred;
+  const distinct=list=>{const seen=new Set();return list.filter(c=>{const key=[c.element,c.action,c.direction].join(':');if(seen.has(key))return false;seen.add(key);return true;});};
+  if(d.config.steps===2)commands=distinct(commands);
+  const forecasts=new Map(),forecast=sequence=>{const key=sequence.map(c=>[c.cardId,c.action,c.direction].join(':')).join('/');if(!forecasts.has(key))forecasts.set(key,R.forecast(d,actor,sequence));return forecasts.get(key);};
+  const first=me.draft,base=first?forecast([first]):d;
+  if(!base.players[actor].pos)return commands[0]; // The first action already ended this mage's round.
+  const current=assess({...projection,data:base},actor,commands,R,{...context,forecast:seq=>forecast(first?[first,...seq]:seq),precise:d.config.steps===2});
+  if(d.config.steps!==2||me.bot.resolvedStrategy==='random')return current.preferred;
+  const evaluate=(a,b,score)=>{const after=forecast([a,b]);return {first:a,second:b,ally:allyCost(d,after,actor),survives:!!after.players[actor].pos,value:outcome(d,after,actor,R)+.15*score};};
+  let pairs;
+  if(first)pairs=current.ranked.map(item=>evaluate(first,item.command,item.score));
+  else{
+   const budget={easy:4,medium:8,hard:12}[me.bot.difficulty||context.difficulty||'medium'],beam=[],seen=new Set();
+   const add=item=>{if(!item||seen.has(item.command)||beam.length>=budget)return;seen.add(item.command);beam.push(item);};
+   // Keep movement/attack/shield candidates, so a setup move is not discarded
+   // just because its payoff occurs on the second card.
+   for(const kind of ['move','attack','shield'])add(current.ranked.find(item=>item.safe&&(item.command.action!=='movement'?'attack':item.command.element==='earth'?'shield':'move')===kind));
+   add(current.ranked.find(item=>item.command===current.preferred));for(const item of current.ranked)if(item.safe)add(item);for(const item of current.ranked)add(item);
+   pairs=beam.flatMap(item=>{const after=forecast([item.command]);if(!after.players[actor].pos)return [{first:item.command,second:null,ally:allyCost(d,after,actor),survives:false,value:outcome(d,after,actor,R)}];
+    const next=assess({...projection,data:after},actor,distinct(R.continuations(d,actor,item.command)),R,{...context,precise:true,forecast:seq=>forecast([item.command,...seq])});
+    const candidates=[...next.ranked.filter(x=>x.safe).slice(0,3)];const preferred=next.ranked.find(x=>x.command===next.preferred);if(preferred&&!candidates.includes(preferred))candidates.push(preferred);
+    if(!candidates.length)candidates.push(...next.ranked.slice(0,1));return candidates.map(second=>evaluate(item.command,second.command,item.score+second.score));
+   });
+  }
+  if(!pairs.length)return current.preferred;
+  const minimum=Math.min(...pairs.map(p=>p.ally));pairs=pairs.filter(p=>p.ally===minimum);
+  const byCommand=new Map();for(const pair of pairs){const c=first?pair.second:pair.first,old=byCommand.get(c);if(!old||pair.value>old.value)byCommand.set(c,pair);}
+  const ranked=[...byCommand.entries()].sort((a,b)=>b[1].value-a[1].value),rng=B.random(context.seed??1,d.window.id+':'+actor+':sequence:'+!!first);
+  return B.mistake(ranked[0][0],ranked.map(([c])=>c),{rate:me.bot.errorRate,random:rng,score:c=>byCommand.get(c).value,safe:c=>byCommand.get(c).survives,meaningful:()=>true});
  }
  return Object.freeze({profiles,choose});
 });

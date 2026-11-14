@@ -44,9 +44,10 @@
  const freeBases=d=>bases(d).filter(p=>occupant(d,p)<0);
  function draw(d,p,n){while(p.hand.length<n){if(!d.deck.length){shuffle(d,d.discard);d.deck.push(...d.discard);d.discard=[];}if(!d.deck.length)break;p.hand.push(d.deck.pop());}}
  function openSpawn(d,p){const vectors=[...G.directions,...G.directions.map(v=>G.add(v,G.rotate(v,1))),...G.directions.map(v=>v.map(x=>2*x))];if(vectors.some(v=>{const t=tile(d,G.add(p.pos,v));return t&&t!=='wall';}))return;const dirs=G.directions.filter(v=>inside(d,G.add(p.pos,v.map(x=>2*x))));if(dirs.length){const v=dirs[Math.floor(random(d)*dirs.length)];for(const k of [1,2]){const q=G.add(p.pos,v.map(x=>x*k));if(!tile(d,q)||tile(d,q)==='wall')d.board[q[0]*d.size+q[1]]='ground';}}}
+ function retireStranded(d,waiting,{discard=true}={}){if(!bases(d).length)for(const i of waiting){if(discard)d.discard.push(...d.players[i].hand);Object.assign(d.players[i],{lives:0,health:0,hand:[],ultimate:0,eliminatedRound:d.round});}}
  function begin(d){
   const continuingRespawn=d.phase==='respawn',previousRespawn=d.respawn||[],waiting=living(d).filter(i=>!d.players[i].pos);
-  if(!bases(d).length)for(const i of waiting){d.discard.push(...d.players[i].hand);Object.assign(d.players[i],{lives:0,health:0,hand:[],ultimate:0,eliminatedRound:d.round});}
+  retireStranded(d,waiting);
   d.drafts={};d.window=W.create('round:'+d.round,[]);d.respawn=waiting.filter(i=>d.players[i].lives>0);d.phase=d.respawn.length&&freeBases(d).length?'respawn':'planning';
   if(d.phase==='respawn'){
    // Draw once per base-selection stage, never again after an individual choice.
@@ -106,7 +107,7 @@
  // Public effects describe actions, never private physical card identities.
  const publicPlans=plans=>Object.fromEntries(Object.entries(plans).map(([id,c])=>[id,c.steps?{steps:c.steps.map(({element,action,direction})=>({element,action,direction}))}:(({element,action,direction})=>({element,action,direction}))(c)]));
  function publicBoard(d){return {board:[...d.board],inset:d.inset,players:d.players.map(p=>({pos:p.pos&&[...p.pos],health:p.health,lives:p.lives,...(config(d).teams?{team:p.team}:{}),maxHand:p.maxHand,kills:p.kills??p.maxHand-config(d).handLimit,ultimate:p.ultimate,handCount:p.hand.length})),shrink:d.shrink,shrinkCounter:shrinkCounter(d),...(d.teamLives?{teamLives:[...d.teamLives]}:{})};}
- function resolve(d,{preview=false}={}){
+ function resolve(d,{preview=false,previewSteps=1,roundEnd=false}={}){
   const sequences=Object.fromEntries(Object.entries(d.window.plans).map(([id,c])=>[id,c.steps||[c]])),pushSources={},events=[event('revealed',{plans:publicPlans(d.window.plans),round:d.round})];let chosen={},shields={},step=0;d.frames=[];
   if(!preview)d.frames.push({phase:'start',...publicBoard(d),ready:Object.keys(sequences).map(Number)});
   if(!preview)for(const [id,sequence] of Object.entries(sequences))for(const c of sequence){const p=d.players[id],index=p.hand.findIndex(card=>card.id===c.cardId);if(index<0)throw Error('MAGE_CARD_MISSING');d.discard.push(p.hand.splice(index,1)[0]);}
@@ -195,7 +196,7 @@
    }
   }
   function hit(id,element,amount,actor,v){if(blocked(d,shields,id,element,v))return false;const total=amount+(terrain[tile(d,d.players[id].pos)]?.[0]===element?1:0);if(total>0)damage(id,total,[actor]);return true;}
-  for(step=0;step<(preview?1:config(d).steps);step++){
+  for(step=0;step<(preview?previewSteps:config(d).steps);step++){
   chosen=Object.fromEntries(Object.entries(sequences).filter(([id,seq])=>d.players[id].pos&&seq[step]).map(([id,seq])=>[id,seq[step]]));shields={};
   frame('reveal-actions');frame('reveal');
   for(const element of elements){
@@ -214,8 +215,9 @@
    }apply();if(attackers.length||element==='fire')frame('attack-'+element);
   }
   }
-  if(preview)return events;
+  if(preview&&!roundEnd)return events;
   if(d.shrink===d.round){for(const id of active(d))if(ring(d,d.players[id].pos)){fallAt[id]=[...d.players[id].pos];batch.fall(id,pushSources[id]||[]);}for(let i=0;i<d.board.length;i++)if(ring(d,[Math.floor(i/d.size),i%d.size]))d.board[i]=null;d.inset++;if(config(d).shrinkMode==='lives')d.shrinkSpent+=shrinkCapacity(d);d.shrink=null;apply();frame('shrink');}
+  if(preview){retireStranded(d,living(d).filter(i=>!d.players[i].pos),{discard:false});return events;}
   d.drafts={};d.pendingDraw=Object.keys(sequences).map(Number);
   d.round++;d.nextFirst=(d.first+1)%d.players.length;if(complete(d))finishLoot(d);else if(nextLoot(d)){d.phase='loot';d.window=W.create('loot:'+d.round,[]);}else finishRound(d);if(d.shrink===d.round)events.push(event('shrink',{round:d.round}));events.push(event('round',{round:d.round}));return events;
  }
@@ -247,12 +249,21 @@
   const playerOrder=s.data.players.map((_,i)=>i).sort((a,b)=>places[a]-places[b]||ranking[b]-ranking[a]||(s.data.players[b].damageDealt||0)-(s.data.players[a].damageDealt||0)||a-b);
   return {winners:[...s.winners],places,playerOrder,metrics:[{id:'survival',values},{id:'damage',maximumFractionDigits:1,values:s.data.players.map(p=>p.damageDealt||0)}]};
  }
- const rules={elements,terrain,inside,tile,occupant,ring,geometry,line,freeBases,shielded};
+ // Forecast only this actor's known cards against public positions. Never include
+ // another actor's concealed draft, plan, hand or future draw.
+ function forecast(data,actor,sequence){
+  const {frameSequence,frames,...publicData}=data,d=clone(publicData);d.window={...d.window,plans:{[actor]:{steps:sequence}}};d.lostLives??=0;d.shrinkSpent??=0;
+  resolve(d,{preview:true,previewSteps:sequence.length,roundEnd:sequence.length===config(d).steps});
+  const spent=new Set(sequence.map(c=>c.cardId));if(d.players[actor].pos)d.players[actor].hand=d.players[actor].hand.filter(card=>!spent.has(card.id));
+  for(const p of d.players)if(p.hand)p.handCount=p.hand.length;
+  d.frames=[];return d;
+ }
+ const rules={elements,terrain,inside,tile,occupant,ring,geometry,line,freeBases,shielded,forecast,continuations:(data,actor,first)=>plans(data,actor,first)};
  function checkpoint(before,after,actor,command){
   if(command.type==='plan')return config(after).steps!==2||after.round!==before.round||after.phase!=='planning'||!!after.window.plans[actor];
   if(command.type==='unready')return !!before.window.plans[actor];
   return true;
  }
- function bot(projection,actor,commands,memory,context){const p=clone(projection);if(p.data.planned?.pos)p.data.players[actor].pos=p.data.planned.pos;const choices=commands.filter(c=>c.type!=='unready');return Bots.choose(p,actor,choices.length?choices:commands,rules,context);}
+ function bot(projection,actor,commands,memory,context){const choices=commands.filter(c=>c.type!=='unready');return Bots.choose(projection,actor,choices.length?choices:commands,rules,context);}
  return Object.freeze({contractVersion:1,id:'mage-brawl',turnOrder:()=>null,derivedFields:{plan:['element']},minPlayers:2,maxPlayers:8,rounds:true,botHandlesDifficulty:true,storageState:data=>({...data,frames:[]}),create,validate,actions,localChoices,localData,draft,draftProjection,reduce,project,bot,result,decisionWindow,botContext:s=>({seed:s.data.seed}),geometry,rules,checkpoint});
 });

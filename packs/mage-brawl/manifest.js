@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["mage-brawl"] = {
   "id": "mage-brawl",
-  "version": "0.2.7-preview.39",
+  "version": "0.2.7-preview.40",
   "name": "Стихийная потасовка",
   "category": "board",
   "estimatedDuration": "15–40 мин",
@@ -425,6 +425,12 @@
     }
   ],
   "releases": [
+    {
+      "version": "0.2.7-preview.40",
+      "changes": [
+        "Боты прогнозируют последствия для союзников, цепочки толчков и две карты одного раунда по открытой информации."
+      ]
+    },
     {
       "version": "0.2.7-preview.39",
       "changes": [
