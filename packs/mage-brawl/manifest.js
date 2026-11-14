@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["mage-brawl"] = {
   "id": "mage-brawl",
-  "version": "0.2.7-preview.38",
+  "version": "0.2.7-preview.39",
   "name": "Стихийная потасовка",
   "category": "board",
   "estimatedDuration": "15–40 мин",
@@ -426,6 +426,12 @@
   ],
   "releases": [
     {
+      "version": "0.2.7-preview.39",
+      "changes": [
+        "Места трёх команд: Синие 1/3/5, Красные 2/4/6, Голубые 7/8; места четырёх команд: Синие 1/3, Красные 2/4, Голубые 5/7, Коричневые 6/8."
+      ]
+    },
+    {
       "version": "0.2.7-preview.31",
       "changes": [
         "Синхронизированы общие компоненты с исправлениями чтения индексов, перекрытия карт и обновления оформления; правила игры не менялись."
@@ -632,12 +638,13 @@
       "seatTeams": [
         "blue",
         "red",
-        "cyan",
+        "blue",
+        "red",
         "blue",
         "red",
         "cyan",
-        "blue",
-        "red"
+        "cyan",
+        "cyan"
       ],
       "teams": [
         {
@@ -664,10 +671,10 @@
       "seatTeams": [
         "blue",
         "red",
-        "cyan",
-        "brown",
         "blue",
         "red",
+        "cyan",
+        "brown",
         "cyan",
         "brown"
       ],

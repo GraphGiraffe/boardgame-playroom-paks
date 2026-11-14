@@ -5,6 +5,7 @@
  const terrain={puddle:['water','fire'],desert:['earth','water'],air_island:['air','earth'],forest:['fire','air']};
  const clone=x=>JSON.parse(JSON.stringify(x)),sizeFor=n=>n<=2?4:n<=4?6:n<=6?8:10;
  const config=d=>d.config;
+ const teamAtSeat=(seat,count)=>count===3?(seat<6?seat%2:2):count===4?Math.floor(seat/4)*2+seat%2:seat%2;
  function teamAllocation(sizes,extraLives){
   const uniqueSizes=[...new Set(sizes.filter(n=>n>0))].sort((a,b)=>a-b);
   const reserves=[...new Set(uniqueSizes.map(n=>n*extraLives))].sort((a,b)=>b-a);
@@ -83,7 +84,7 @@
 
   d.board=Array(playerCount).fill('base');for(const t of ['puddle','desert','air_island','forest'])d.board.push(...Array(l).fill(t));for(const t of ['falling_floor','wall','spikes'])d.board.push(...Array(2*l).fill(t));while(d.board.length<size*size)d.board.push('ground');shuffle(d,d.board);
   d.deck=shuffle(d,elements.flatMap((element,e)=>Array.from({length:copies},(_,i)=>({id:'card:'+(e*copies+i),element}))));const spawn=shuffle(d,bases(d));d.startingBases=clone(spawn);
-  for(let i=0;i<playerCount;i++){const p={pos:spawn[i],health,lives:d.config.teams?1:extraLives+1,...(d.config.teams?{team:seatIndices[i]%teamCount}:{}),maxHand:handLimit,hand:[],ultimate:0,kills:0,damageDealt:0,eliminatedRound:null,bot:B.resolve(options.players?.[i]?.botSettings,strategies,seed,i)};d.players.push(p);draw(d,p,handLimit);openSpawn(d,p);}
+  for(let i=0;i<playerCount;i++){const p={pos:spawn[i],health,lives:d.config.teams?1:extraLives+1,...(d.config.teams?{team:teamAtSeat(seatIndices[i],teamCount)}:{}),maxHand:handLimit,hand:[],ultimate:0,kills:0,damageDealt:0,eliminatedRound:null,bot:B.resolve(options.players?.[i]?.botSettings,strategies,seed,i)};d.players.push(p);draw(d,p,handLimit);openSpawn(d,p);}
   if(d.config.teams){if(d.players.some(p=>!Number.isInteger(p.team)||p.team<0||p.team>=teamCount)||new Set(d.players.map(p=>p.team)).size<2)throw Error('MAGE_OPTIONS_INVALID');d.teamLives=teamAllocation(teamSizes(d),extraLives);}
   begin(d);return {playerCount,turn:d.first,status:'playing',winners:[],data:d};
  }
