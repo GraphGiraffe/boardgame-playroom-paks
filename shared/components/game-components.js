@@ -150,6 +150,20 @@ const dots={0:[],1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,
  function cardBack({backUrl='',shape='portrait'}={}){
   return cardFrame(`<svg class="piece-art card-back-art" viewBox="0 0 70 98" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">${backUrl?`<image href="${esc(backUrl)}" width="70" height="98" preserveAspectRatio="xMidYMid meet"/>`:'<rect width="70" height="98" rx="12" fill="#fffdf3"/><rect x="5" y="5" width="60" height="88" rx="7" fill="#3d6853"/><rect x="10.5" y="10.5" width="49" height="77" rx="5" fill="none" stroke="#b7c9a9" stroke-opacity=".47"/><path d="M35 30C38 43 41 46 54 49C41 52 38 55 35 68C32 55 29 52 16 49C29 46 32 43 35 30Z" fill="#dce8c8"/>'}</svg>`,{shape});
  }
+ // Compact public hands expose a narrow, cropped part of a 24px card.
+ // Keep both symbols in one bounded foreground row, above the physical rim.
+ const compactIndexZone=Object.freeze({x:.04,y:.02,width:.60,height:.42});
+ function cardIndexInk({rank='',suit='',compact=false,inlineIndex=false}={}){
+  if(compact===true){
+   const fit='textLength="18" lengthAdjust="spacingAndGlyphs"';
+   const index=`<g data-card-index="top" data-card-index-layout="compact" transform="translate(4 4)">${V.text(rank,{x:0,y:18.5,size:30,anchor:'start',attrs:fit})}${V.text(suit,{x:21,y:18.5,size:30,anchor:'start',attrs:fit})}</g>`;
+   return V.viewport({width:70,height:98,content:index});
+  }
+  const rankAttrs=String(rank).length>1?'textLength="10" lengthAdjust="spacingAndGlyphs"':'';
+  const corner=inlineIndex?V.text(rank,{x:0,y:8.5,size:14,anchor:'start',attrs:rankAttrs})+V.text(suit,{x:14,y:8.5,size:14,anchor:'start'}):V.text(rank,{x:0,y:9,anchor:'start',attrs:rankAttrs})+V.text(suit,{x:5,y:23,size:14});
+  const origin=inlineIndex?[4,4]:[4,5],index=`<g data-card-index="top" transform="translate(${origin[0]} ${origin[1]})">${corner}</g>`,inverted=`<g data-card-index="bottom" transform="translate(${70-origin[0]} ${98-origin[1]}) rotate(180)">${corner}</g>`;
+  return V.viewport({width:70,height:98,content:index+inverted});
+ }
  function cardFace({rank='',suit='',backUrl='',hidden=false,compact=false,inlineIndex=false,suitOnly=false,crown=false,main:recipe,variant='main',...geometry}={}){
   if(hidden)return cardBack({backUrl,shape:geometry.shape});
   if(typeof recipe==='string')return cardFrame(art({main:recipe,compact,...geometry},variant));
@@ -157,11 +171,8 @@ const dots={0:[],1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,
   if(suitOnly)return V.viewport({width:70,height:70,className:'piece-art suit-only',attrs:'aria-hidden="true" focusable="false"',content:V.text(suit,{x:35,y:35,size:54})});
   // Indices share the left inset and stay in the declared overlap window.
   // Their ink is above the physical rim; only the face illustration is clipped.
-  const rankAttrs=String(rank).length>1?'textLength="10" lengthAdjust="spacingAndGlyphs"':'';
-  const corner=inlineIndex?V.text(rank,{x:0,y:8.5,size:14,anchor:'start',attrs:rankAttrs})+V.text(suit,{x:14,y:8.5,size:14,anchor:'start'}):V.text(rank,{x:0,y:9,anchor:'start',attrs:rankAttrs})+V.text(suit,{x:5,y:23,size:14});
-  const origin=inlineIndex?[4,4]:[4,5],index=`<g data-card-index="top" transform="translate(${origin[0]} ${origin[1]})">${corner}</g>`,inverted=`<g data-card-index="bottom" transform="translate(${70-origin[0]} ${98-origin[1]}) rotate(180)">${corner}</g>`;
   const crownArt=crown?'<svg x="42" y="10" width="23" height="19" viewBox="0 0 40 32" preserveAspectRatio="xMidYMid meet"><path d="m3 10 8 7L20 2l9 15 8-7-5 20H8Z" fill="var(--color-material-card-crown,#c9a44f)"/></svg>':'';
-  return cardFrame(V.viewport({width:70,height:98,className:'piece-art standard-card-print'+(inlineIndex?' inline-index-face':''),attrs:'aria-hidden="true" focusable="false"',content:mark+crownArt}),{foreground:V.viewport({width:70,height:98,content:index+inverted})});
+  return cardFrame(V.viewport({width:70,height:98,className:'piece-art standard-card-print'+(inlineIndex?' inline-index-face':''),attrs:'aria-hidden="true" focusable="false"',content:mark+crownArt}),{foreground:cardIndexInk({rank,suit,compact:compact===true,inlineIndex})});
  }
  function characterFace({character='',characterSources={},source=''}={}, {variant='minimal'}={}){
   const uri=characterSources[variant]||characterSources.minimal||source;
@@ -202,7 +213,12 @@ const dots={0:[],1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,
    }
    if(resolved.type==='card-deck'&&!params.suitOnly)markup=pieceTypes['card-deck'].frame(markup);
    if(resolved.type&&resolved.type!=='card-deck')markup=markup.replace(/^(<[^ >]+)/,`$1 data-piece-type="${resolved.type}"`);
-   if(family==='card-face'&&resolved.stacking)markup=markup.replace(/^(<svg[^>]*)(>)/,`$1 data-card-stacking="${esc(JSON.stringify(resolved.stacking))}"$2`);
+   // Authored printing recipes own their exposed ink; generic skins keep their catalogue geometry.
+   const recipeStacking=family==='card-face'&&typeof params.main==='string'?params.stacking:null;
+   const stacking=recipeStacking||(standardFace&&params.compact===true?{...resolved.stacking,
+    protectedZones:[...(resolved.stacking?.protectedZones||[]),compactIndexZone],
+    horizontal:Math.max(resolved.stacking?.horizontal||0,.65),vertical:Math.max(resolved.stacking?.vertical||0,.44),arc:Math.max(resolved.stacking?.arc||0,.65)}:resolved.stacking);
+   if(family==='card-face'&&stacking)markup=markup.replace(/^(<svg[^>]*)(>)/,`$1 data-card-stacking="${esc(JSON.stringify(stacking))}"$2`);
    return /^<svg\b/.test(markup)?V.normalize(markup):markup;
   }
  }
@@ -213,7 +229,7 @@ function cardDescriptor(value,attrs='disabled',extra=''){
   const red=!hidden&&(value.color==='red'||suit==='♥'||suit==='♦');
   const label=hidden?globalThis.PlayroomMessages.text("ui.game-components.c13a6680430c"):value.joker?globalThis.PlayroomMessages.text("ui.game-components.232b69813cbf",{p0:String(red?globalThis.PlayroomMessages.text("ui.game-components.21b4d916f326"):globalThis.PlayroomMessages.text("ui.game-components.1ca9b6b05dfc"))}):`${rank} ${suit}`;
 
-  return {tag,className:`shared-card ${hidden?'shared-card-back':''} ${red?'shared-red':''} ${extra}`,attrs:tag==='button'?attrs:'',entity:!hidden&&value.id?entityKey(entityRef('card',value.id)):null,label,family:hidden?'card-back':'card-face',params:{rank,suit,hidden,crown:!!value?.crown,backUrl:hidden?source('card-back',value?.assetSet):'',...(hidden?{assetSet:value?.assetSet,backUrls:Object.fromEntries((value?.assetSet?[value.assetSet]:['standard-deck','mini-split-deck']).map(set=>[set,source('card-back',set)]))}:{})}};
+  return {tag,className:`shared-card ${hidden?'shared-card-back':''} ${red?'shared-red':''} ${extra}`,attrs:tag==='button'?attrs:'',entity:!hidden&&value.id?entityKey(entityRef('card',value.id)):null,label,family:hidden?'card-back':'card-face',params:{rank,suit,hidden,...(!hidden&&value?.compact===true?{compact:true}:{}),crown:!!value?.crown,backUrl:hidden?source('card-back',value?.assetSet):'',...(hidden?{assetSet:value?.assetSet,backUrls:Object.fromEntries((value?.assetSet?[value.assetSet]:['standard-deck','mini-split-deck']).map(set=>[set,source('card-back',set)]))}:{})}};
  }
 function renderCard({tag,className,attrs,entity,label,family,params}){
   return `<${tag} data-size-role="card" class="${className}" ${attrs} ${entity?`data-entity="${H.esc(entity)}"`:''} aria-label="${H.esc(label)}">${H.assetArt(family,params,p=>cardFace(p))}</${tag}>`;
@@ -222,7 +238,8 @@ function card(value,attrs='disabled',extra=''){return renderCard(cardDescriptor(
 
 function cardSlot({suit='',attrs='disabled',className='',label='',kind='empty',tag='button'}={}){
   if(!['button','span'].includes(tag))throw Error('Invalid card slot tag');
-  const print=suit?V.place(H.assetArt('card-face',{suit,suitOnly:true},cardFace),{x:1.5,y:1.5,width:97,height:137}):'';
+  const placement={x:1.5,y:1.5,width:97,height:137};
+  const print=suit?V.place(H.assetArt('card-face',{suit,suitOnly:true},cardFace),{...placement,attrs:`data-asset-placement="${esc(JSON.stringify(placement))}"`}):'';
   const surface=V.viewport({width:100,height:140,className:'piece-art card-slot-art',attrs:'data-art-role="empty-surface" aria-hidden="true" focusable="false"',content:`<rect x=".5" y=".5" width="99" height="139" rx="12.5" fill="var(--card-slot-face,#aeb2af)" stroke="var(--color-material-card-ink,#264e43)" stroke-opacity=".1"/><rect x="1.5" y="1.5" width="97" height="137" rx="11.5" fill="none" stroke="#000" stroke-opacity=".08" stroke-width="2"/>${print}`});
   return `<${tag} data-size-role="card" class="shared-card-slot ${esc(className)} ${suit==='♥'||suit==='♦'?'shared-red':''}" ${attrs} data-card-slot="${esc(kind)}" aria-label="${esc(label)}">${surface}</${tag}>`;
  }
@@ -230,5 +247,5 @@ const cover=content=>H.svg(`<ellipse data-cover-shadow cx="151" cy="158" rx="112
   const die=(value,attrs='disabled',extra='')=>'<button class="shared-die '+extra+(/\bdisabled\b/.test(attrs)?'':' is-playable')+(/aria-pressed="true"/.test(attrs)?' is-selected':'')+'" '+attrs+' aria-label="'+globalThis.PlayroomMessages.text("ui.game-components.c21f8ac4292c")+H.esc(value||globalThis.PlayroomMessages.text("ui.game-components.22c66b66eaa1"))+'">'+H.assetArt('die',{value},()=>dieArt(value))+'</button>';
   return Object.freeze({entityRef,entityKey,validMetric,actionSelector,handLayout,tokenStrip,pieceIndicators,rotationController,button:options=>button(options,{icon:H.icon}),card,cardDescriptor,renderCard,cardSlot,die,cover,checkerArt:(king,movable)=>H.assetArt('checker',{king,movable},()=>checkerArt(king,movable)),dominoFace:(a,b,rotation=0)=>H.assetArt('domino',{a,b,rotation},()=>dominoFace(a,b,rotation)),shipSilhouette:size=>H.assetArt('ship',{size},()=>shipSilhouette(size)),scoreTable:params=>H.assetArt('score-table',params,()=>scoreTable(params)),boardCells,dieArt:(value,params={})=>H.assetArt('die',{value,...params},()=>dieArt(value,params)),bubbleClass});
  }
- return Object.freeze({vector:V,entityRef,entityKey,validMetric,actionSelector,handLayout,tokenStrip,pieceIndicators:V.render(pieceIndicators),rotationController,button,art,publicFrames,countBadge,shipSilhouette:V.render(shipSilhouette),checkerArt:V.render(checkerArt),dominoFace,dieArt:V.render(dieArt),boardCells,bubbleClass,scoreTable,createHelpers,AssetResolver,defaultRenderers,pieceTypes,cardFrame:V.render(cardFrame),cardFace:V.render(cardFace),cardBack:V.render(cardBack),characterFace:V.render(characterFace),scoreBadge});
+ return Object.freeze({vector:V,entityRef,entityKey,validMetric,actionSelector,handLayout,tokenStrip,pieceIndicators:V.render(pieceIndicators),rotationController,button,art,publicFrames,countBadge,shipSilhouette:V.render(shipSilhouette),checkerArt:V.render(checkerArt),dominoFace,dieArt:V.render(dieArt),boardCells,bubbleClass,scoreTable,createHelpers,AssetResolver,defaultRenderers,pieceTypes,cardFrame:V.render(cardFrame),cardIndexInk:V.render(cardIndexInk),cardFace:V.render(cardFace),cardBack:V.render(cardBack),characterFace:V.render(characterFace),scoreBadge});
 });

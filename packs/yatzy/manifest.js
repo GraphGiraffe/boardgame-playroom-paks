@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["yatzy"] = {
   "id": "yatzy",
-  "version": "0.3.5-preview.15",
+  "version": "0.3.5-preview.20",
   "name": "Ятзи",
   "category": "dice",
   "estimatedDuration": "15–25 мин",
@@ -57,22 +57,56 @@
       "options": [
         {
           "value": "3",
-          "label": "3"
+          "label": "3",
+          "description": "3 раунда; затем сравнивают очки.",
+          "preview": {
+            "kind": "illustrations",
+            "ids": [
+              "setting-rounds-3"
+            ]
+          }
         },
         {
           "value": "5",
-          "label": "5"
+          "label": "5",
+          "description": "5 раундов; затем сравнивают очки.",
+          "preview": {
+            "kind": "illustrations",
+            "ids": [
+              "setting-rounds-5"
+            ]
+          }
         },
         {
           "value": "10",
-          "label": "10"
+          "label": "10",
+          "description": "10 раундов; затем сравнивают очки.",
+          "preview": {
+            "kind": "illustrations",
+            "ids": [
+              "setting-rounds-10"
+            ]
+          }
         },
         {
           "value": "15",
-          "label": "15"
+          "label": "15",
+          "description": "Полная партия: 15 комбинаций.",
+          "preview": {
+            "kind": "illustrations",
+            "ids": [
+              "setting-rounds-15"
+            ]
+          }
         }
       ],
-      "control": "slider"
+      "control": "slider",
+      "preview": {
+        "kind": "illustrations",
+        "ids": [
+          "setting-rounds-15"
+        ]
+      }
     }
   ],
   "ruleGroups": [
@@ -97,6 +131,36 @@
     ]
   },
   "releases": [
+    {
+      "version": "0.3.5-preview.20",
+      "changes": [
+        "Синхронизированы общие компоненты с исправлениями чтения индексов, перекрытия карт и обновления оформления; правила игры не менялись."
+      ]
+    },
+    {
+      "version": "0.3.5-preview.19",
+      "changes": [
+        "Иллюстрации параметров сохраняют размер компонентов между вариантами; постоянная область арта центрирует изображение по обеим осям без растягивания."
+      ]
+    },
+    {
+      "version": "0.3.5-preview.18",
+      "changes": [
+        "Боты берегут Шанс как гибкую тактическую позицию, учитывают верхний бонус и последний ход."
+      ]
+    },
+    {
+      "version": "0.3.5-preview.17",
+      "changes": [
+        "При композиции SVG сохраняются полные атрибуты толщины, прозрачности и идентичности; стандартный контур масштабируется целиком."
+      ]
+    },
+    {
+      "version": "0.3.5-preview.16",
+      "changes": [
+        "Параметры игры снабжены понятными иллюстрациями из игровых компонентов и короткими пояснениями выбранных вариантов."
+      ]
+    },
     {
       "version": "0.3.5-preview.15",
       "changes": [
@@ -160,7 +224,8 @@
   ],
   "sdkFeatures": [
     "local-input-v1",
-    "turn-order-v1"
+    "turn-order-v1",
+    "parameter-illustrations-v1"
   ]
 };
 })(globalThis);

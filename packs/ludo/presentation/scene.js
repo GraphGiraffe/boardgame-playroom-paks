@@ -27,7 +27,7 @@
  };
  const location=(p,j,n)=>n<0?[base[p][0]+1.66+(j%2)*1.68,base[p][1]+1.66+Math.floor(j/2)*1.68]:n<52?route[(p*13+n)%52]:n<57?lane(p,n-52):finishLocation(p,j);
  const anchor=(p,j,n)=>n<0?`base-${p}-${j}`:n<52?`path-${(p*13+n)%52}`:n<57?`home-${p}-${n}`:`finish-${p}`;
- function sequence(last){if(!last)return undefined;const {owner:p,pawn:j,from,to}=last;return {trigger:'move',entry:from<0?'lift':undefined,arrival:to===57?'settle':undefined,entity:{namespace:'token',id:`${p}-${j}`},player:p,counter:'home',origin:{anchor:anchor(p,j,from)},steps:Array.from({length:from<0?1:to-from},(_,i)=>({anchor:anchor(p,j,from<0?0:from+i+1)}))};}
+ function sequence(last){if(!last)return undefined;const {owner:p,pawn:j,from,to}=last;return {trigger:'move',entry:from<0?'lift':undefined,arrival:last.captured?.length?'after-departures':to===57?'settle':undefined,...(last.captured?.length?{departures:last.captured.map(c=>({namespace:'token',id:`${c.owner}-${c.pawn}`}))}:{}),entity:{namespace:'token',id:`${p}-${j}`},player:p,counter:'home',origin:{anchor:anchor(p,j,from)},steps:Array.from({length:from<0?1:to-from},(_,i)=>({anchor:anchor(p,j,from<0?0:from+i+1)}))};}
 
  function scene(projection){const lastRoll=projection.events?.findLast(e=>e.type==='ludo.rolled');return {guaranteedExit:projection.data.guaranteedExit,sixReroll:projection.data.sixReroll,repeatSix:projection.data.phase==='roll'&&projection.data.sixReroll&&projection.data.dice.some(value=>value===6)&&lastRoll?.actor===projection.turn,contractVersion:1,id:'ludo-board',family:'route-board',
   dice:projection.data.dice.map((value,index)=>({value,used:projection.data.used[index],rollable:projection.data.rollIndices.includes(index),lastRolled:projection.data.lastRolled?.includes(index)||false})),

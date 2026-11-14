@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["durak"] = {
   "id": "durak",
-  "version": "0.6.7-preview.17",
+  "version": "0.6.7-preview.23",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Отбивайся, подкидывай и избавляйся от карт.",
@@ -22,7 +22,7 @@
   "name": "Дурак",
   "sharedUi": true,
   "engineApi": 4,
-  "stateVersion": 3,
+  "stateVersion": 4,
   "viewApi": 3,
   "tags": [
     "cards",
@@ -50,36 +50,38 @@
         {
           "value": "simple",
           "label": "Простой",
-          "description": "По пять карт, без подкидывания.",
+          "description": "По 5 карт; после захода не подкидывают.",
           "preview": {
-            "kind": "symbol",
-            "icon": "hand"
+            "ids": [
+              "setting-variant-simple"
+            ]
           }
         },
         {
           "value": "throwin",
           "label": "Подкидной",
-          "description": "По шесть карт; подкидывают достоинства со стола.",
+          "description": "По 6 карт; подкидывают значения со стола.",
           "preview": {
-            "kind": "symbol",
-            "icon": "cards"
+            "ids": [
+              "setting-variant-throwin"
+            ]
           }
         },
         {
           "value": "transfer",
           "label": "Переводной",
-          "description": "До первой защиты можно перевести атаку.",
+          "description": "То же значение — перевод до защиты.",
           "preview": {
-            "kind": "symbol",
-            "icon": "shuffle"
+            "ids": [
+              "setting-variant-transfer"
+            ]
           }
         }
       ],
       "help": "Простой: по пять карт, заранее составленный заход из одной карты, пары с третьей или двух пар с пятой, без подкидывания. Подкидной: по шесть, можно подкидывать достоинства со стола. Переводной: дополнительно можно перевести атаку до первой защиты.",
       "control": "slider",
       "preview": {
-        "kind": "symbol",
-        "icon": "cards"
+        "kind": "illustrations"
       },
       "presentation": "mode"
     },
@@ -118,19 +120,21 @@
         {
           "value": "color",
           "label": "По цвету",
-          "description": "Сила джокера зависит от цвета козыря.",
+          "description": "Старший джокер — цвета козыря.",
           "preview": {
-            "kind": "symbol",
-            "icon": "cards"
+            "ids": [
+              "setting-jokerMode-color"
+            ]
           }
         },
         {
           "value": "universal",
           "label": "Универсальные",
-          "description": "Бьют обычные; красный старше чёрного.",
+          "description": "Оба бьют обычные; красный сильнее.",
           "preview": {
-            "kind": "symbol",
-            "icon": "star"
+            "ids": [
+              "setting-jokerMode-universal"
+            ]
           }
         }
       ],
@@ -140,40 +144,21 @@
       "help": "Только для колоды 54. «По цвету»: джокер цвета козыря старше всех; другой бьёт некозырные карты своего цвета и сам бьётся козырем. «Универсальные»: оба бьют обычные карты, красный бьёт чёрного.",
       "control": "slider",
       "preview": {
-        "kind": "symbol",
-        "icon": "cards"
+        "kind": "illustrations"
       }
     },
     {
-      "key": "endCondition",
-      "label": "Завершение партии",
-      "default": "lastfool",
+      "key": "endMode",
+      "default": "last",
       "options": [
         {
-          "value": "firstout",
-          "label": "До победителя",
-          "description": "Нет колоды и карт в руке — победа.",
-          "preview": {
-            "kind": "symbol",
-            "icon": "trophy"
-          }
+          "value": "winner"
         },
         {
-          "value": "lastfool",
-          "label": "До последнего",
-          "description": "Играют до последнего с картами.",
-          "preview": {
-            "kind": "symbol",
-            "icon": "people"
-          }
+          "value": "last"
         }
       ],
-      "help": "До победителя: после окончания взятки и исчерпания колоды первый вышедший побеждает. До последнего: игра продолжается до одного оставшегося с картами.",
-      "control": "slider",
-      "preview": {
-        "kind": "symbol",
-        "icon": "trophy"
-      }
+      "control": "slider"
     }
   ],
   "legacyPresets": {
@@ -214,7 +199,7 @@
     {
       "label": "Завершение",
       "fields": [
-        "endCondition"
+        "endMode"
       ],
       "end": true
     }
@@ -237,6 +222,44 @@
     "mini-split-deck"
   ],
   "releases": [
+    {
+      "version": "0.6.7-preview.23",
+      "changes": [
+        "Синхронизированы общие компоненты с исправлениями чтения индексов, перекрытия карт и обновления оформления; правила игры не менялись."
+      ]
+    },
+    {
+      "version": "0.6.7-preview.22",
+      "changes": [
+        "Иллюстрации параметров сохраняют размер компонентов между вариантами; постоянная область арта центрирует изображение по обеим осям без растягивания."
+      ]
+    },
+    {
+      "version": "0.6.7-preview.21",
+      "changes": [
+        "Первый ход, места за столом и завершение используют стандартные подписи приложения; в артах первого хода — контурная 1 в кружке.",
+        "Стол и стулья в рассадке и Акулине — один компонент. Уточнены схемы шестёрок Лудо и унифицированы рамки режимов Дурака; убраны верхние подписи джокеров."
+      ]
+    },
+    {
+      "version": "0.6.7-preview.20",
+      "changes": [
+        "Параметры используют простые стандартные значки приложения с более толстыми линиями. Во всех композициях один общий силуэт игрока без дополнительных линий торса.",
+        "При композиции SVG сохраняются полные атрибуты толщины, прозрачности и идентичности; стандартный контур масштабируется целиком."
+      ]
+    },
+    {
+      "version": "0.6.7-preview.19",
+      "changes": [
+        "Уточнены действия в режимах и сила джокеров Дурака; завершение использует общий endMode без второго имени."
+      ]
+    },
+    {
+      "version": "0.6.7-preview.18",
+      "changes": [
+        "Параметры игры снабжены понятными иллюстрациями из игровых компонентов и короткими пояснениями выбранных вариантов."
+      ]
+    },
     {
       "version": "0.6.7-preview.17",
       "changes": [
@@ -315,7 +338,9 @@
   "sdkFeatures": [
     "local-input-v1",
     "turn-order-v1",
-    "parameter-previews-v2"
+    "parameter-previews-v2",
+    "parameter-illustrations-v1",
+    "standard-parameter-ui-v1"
   ]
 };
 })(globalThis);

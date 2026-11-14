@@ -270,3 +270,9 @@ owner-only `turnPreviewByCard` metadata for skip/reverse/+2/+4, with no card IDs
 spectator projections. Reverse marks the old next player negative and the new
 next player positive. The common host owns the pulse and finite turn-handoff
 animation; other packs can reuse the same fields without UNO-specific host code.
+
+## Occupied destination choreography
+
+Public motion sequences may declare `arrival:"after-departures"` and a bounded `departures:[EntityRef,...]` list (1–32 unique public objects, excluding the arriving entity). The arriving piece approaches and hovers over its final route anchor; the declared pieces move to their actual final scene positions; the arriving piece then settles into its final slot. This supports capture to a base and exchanges in either direction. Declare `sdkFeatures:[...,"arrival-departures-v1"]` and app 0.21.0-preview.79 or later. Every moving reference must have real before/after public geometry; an entry cell with zero dimensions is not an animation anchor. No rules or collision resolution runs in the motion player.
+
+`concurrent-reactions-v1` requires app 0.21.0-preview.79 or later: ordinary bot turns and independent reaction deadlines are scheduled together. UNO declares this capability so an older application cannot install a pack that assumes the corrected scheduler. Protected challenge/advance commands keep their own declared deadline.

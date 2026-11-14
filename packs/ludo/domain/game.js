@@ -91,9 +91,11 @@
   choices.sort((a,b)=>{for(let i=0;i<a.score.length;i++)if(a.score[i]!==b.score[i])return b.score[i]-a.score[i];return 0;});
   return choices[0]?.command||commands[0];
  }
- function result(position){const own=position.data.pawns.map(row=>row.filter(n=>n===57).length),values=position.preset==='teams'?own.map((_,player)=>own[player%2]+own[player%2+2]):own;
-  return {winners:position.winners,...Ending.result(position.data.ending),places:Ending.places(position.data.ending,values),
-   metrics:position.preset==='teams'?[{id:'team-home',values,display:'ranking'},{id:'home',values:own}]:[{id:'home',values}]};
+ function result(position){
+  const own=position.data.pawns.map(row=>row.filter(n=>n===57).length),values=position.preset==='teams'?own.map((_,player)=>own[player%2]+own[player%2+2]):own;
+  const ending=Ending.result(position.data.ending),places=Ending.places(position.data.ending,values),exit=player=>ending.exits?.find(item=>item.player===player);
+  const playerOrder=own.map((_,i)=>i).sort((a,b)=>places[a]-places[b]||(exit(a)&&exit(b)?(exit(a).round||exit(a).turn)-(exit(b).round||exit(b).turn):exit(a)?-1:exit(b)?1:0)||own[b]-own[a]||a-b);
+  return {winners:position.winners,...ending,places,playerOrder,metrics:position.preset==='teams'?[{id:'team-home',values,display:'ranking'},{id:'home',values:own}]:[{id:'home',values}]};
  }
  function localChoices(p){if(p.actor<0||p.status!=='playing')return [];return actions(p,p.actor);}
  return Object.freeze({contractVersion:1,id:'ludo',turnOrder:p=>({next:Ending.next(p.data.ending,p.turn)}),minPlayers:2,maxPlayers:4,botMistakes:(p,actor,commands)=>{const exits=commands.filter(c=>c.type==='move'&&p.data.pawns[c.owner][c.pawn]<0&&p.data.dice[c.dieIndex]===6);return exits.length?exits:commands;},create,validate,actions,localChoices,reduce,project,bot,result});

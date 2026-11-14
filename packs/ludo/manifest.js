@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["ludo"] = {
   "id": "ludo",
-  "version": "0.3.7-preview.16",
+  "version": "0.3.7-preview.24",
   "name": "Лудо",
   "category": "board",
   "estimatedDuration": "20–40 мин",
@@ -89,8 +89,9 @@
           "label": "Нет",
           "description": "Шестёрки не дают переброса.",
           "preview": {
-            "kind": "symbol",
-            "icon": "close"
+            "ids": [
+              "setting-six-reroll-off"
+            ]
           }
         },
         {
@@ -98,16 +99,16 @@
           "label": "Да",
           "description": "Переброс сыгранных шестёрок.",
           "preview": {
-            "kind": "symbol",
-            "icon": "refresh"
+            "ids": [
+              "setting-six-reroll-on"
+            ]
           }
         }
       ],
       "help": "После использования доступных ходов перебрасываются только кубики с шестёрками. Остальные не перебрасываются.",
       "control": "slider",
       "preview": {
-        "kind": "symbol",
-        "icon": "refresh"
+        "kind": "illustrations"
       }
     },
     {
@@ -120,8 +121,10 @@
           "label": "Нет",
           "description": "Для выхода с базы нужна шестёрка.",
           "preview": {
-            "kind": "symbol",
-            "icon": "close"
+            "kind": "illustrations",
+            "ids": [
+              "setting-guaranteed-exit-off"
+            ]
           }
         },
         {
@@ -129,16 +132,20 @@
           "label": "Да",
           "description": "После трёх неудач — выход любым кубиком.",
           "preview": {
-            "kind": "symbol",
-            "icon": "first"
+            "kind": "illustrations",
+            "ids": [
+              "setting-guaranteed-exit-on"
+            ]
           }
         }
       ],
       "help": "Если все незавершённые фишки на базе, после трёх неудачных наборов одну можно вывести любым кубиком.",
       "control": "slider",
       "preview": {
-        "kind": "symbol",
-        "icon": "first"
+        "kind": "illustrations",
+        "ids": [
+          "setting-guaranteed-exit-on"
+        ]
       }
     },
     {
@@ -151,8 +158,10 @@
           "label": "Нет",
           "description": "Все четыре фишки начинают на базе.",
           "preview": {
-            "kind": "symbol",
-            "icon": "close"
+            "kind": "illustrations",
+            "ids": [
+              "setting-start-pawn-off"
+            ]
           }
         },
         {
@@ -160,57 +169,37 @@
           "label": "Да",
           "description": "Одна фишка сразу на старте.",
           "preview": {
-            "kind": "symbol",
-            "icon": "pieces"
+            "kind": "illustrations",
+            "ids": [
+              "setting-start-pawn-on"
+            ]
           }
         }
       ],
       "help": "В начале партии у каждого игрока одна фишка сразу стоит на стартовой клетке; остальные остаются на базе.",
       "control": "slider",
       "preview": {
-        "kind": "symbol",
-        "icon": "pieces"
+        "kind": "illustrations",
+        "ids": [
+          "setting-start-pawn-off"
+        ]
       }
     },
     {
       "key": "endMode",
-      "label": "Завершение партии",
       "default": "round",
-      "help": "До победителя — сразу после финиша. Последний раунд — оставшиеся игроки завершают текущий круг от первого игрока; закончившие в этом круге делят победу. До последнего — все доводят фишки до финиша, места определяются порядком финиша. В командах Лудо финиширует вся команда.",
       "options": [
         {
-          "value": "winner",
-          "label": "До победителя",
-          "description": "Первый финиш завершает партию.",
-          "preview": {
-            "kind": "symbol",
-            "icon": "trophy"
-          }
+          "value": "winner"
         },
         {
-          "value": "round",
-          "label": "Последний раунд",
-          "description": "Остальные заканчивают текущий круг.",
-          "preview": {
-            "kind": "symbol",
-            "icon": "clock"
-          }
+          "value": "round"
         },
         {
-          "value": "last",
-          "label": "До последнего",
-          "description": "Места — в порядке финиша всех игроков.",
-          "preview": {
-            "kind": "symbol",
-            "icon": "people"
-          }
+          "value": "last"
         }
       ],
-      "control": "slider",
-      "preview": {
-        "kind": "symbol",
-        "icon": "trophy"
-      }
+      "control": "slider"
     },
     {
       "key": "maxRounds",
@@ -353,6 +342,49 @@
   ],
   "releases": [
     {
+      "version": "0.3.7-preview.23",
+      "changes": [
+        "Синхронизированы общие компоненты с исправлениями чтения индексов, перекрытия карт и обновления оформления; правила игры не менялись."
+      ]
+    },
+    {
+      "version": "0.3.7-preview.22",
+      "changes": [
+        "Иллюстрации параметров сохраняют размер компонентов между вариантами; постоянная область арта центрирует изображение по обеим осям без растягивания."
+      ]
+    },
+    {
+      "version": "0.3.7-preview.21",
+      "changes": [
+        "В обеих иллюстрациях переброса шестёрок показана обычная грань кубика с шестью точками вместо цифры."
+      ]
+    },
+    {
+      "version": "0.3.7-preview.20",
+      "changes": [
+        "Перед срубанием фишка зависает над клеткой; после возврата соперников на базы занимает конечную позицию. Требуется arrival-departures-v1."
+      ]
+    },
+    {
+      "version": "0.3.7-preview.19",
+      "changes": [
+        "Первый ход, места за столом и завершение используют стандартные подписи приложения; в артах первого хода — контурная 1 в кружке.",
+        "Стол и стулья в рассадке и Акулине — один компонент. Уточнены схемы шестёрок Лудо и унифицированы рамки режимов Дурака; убраны верхние подписи джокеров."
+      ]
+    },
+    {
+      "version": "0.3.7-preview.18",
+      "changes": [
+        "При композиции SVG сохраняются полные атрибуты толщины, прозрачности и идентичности; стандартный контур масштабируется целиком."
+      ]
+    },
+    {
+      "version": "0.3.7-preview.17",
+      "changes": [
+        "Параметры игры снабжены понятными иллюстрациями из игровых компонентов и короткими пояснениями выбранных вариантов."
+      ]
+    },
+    {
       "version": "0.3.7-preview.16",
       "changes": [
         "Общие игровые ассеты сохраняют пропорции рамок, скруглений и толщины в игре, миниатюрах, правилах, параметрах и анимациях. Убраны вторые фиксированные рамки и тени поверх SVG."
@@ -423,7 +455,10 @@
   ],
   "sdkFeatures": [
     "local-input-v1",
-    "turn-order-v1"
+    "turn-order-v1",
+    "parameter-illustrations-v1",
+    "standard-parameter-ui-v1",
+    "arrival-departures-v1"
   ]
 };
 })(globalThis);
