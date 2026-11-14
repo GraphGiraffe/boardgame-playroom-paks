@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["mage-brawl"] = {
   "id": "mage-brawl",
-  "version": "0.2.7-preview.40",
+  "version": "0.2.7-preview.41",
   "name": "Стихийная потасовка",
   "category": "board",
   "estimatedDuration": "15–40 мин",
@@ -425,6 +425,12 @@
     }
   ],
   "releases": [
+    {
+      "version": "0.2.7-preview.41",
+      "changes": [
+        "Смена темы обновляет рисунок жетона, сохраняя точки здоровья в общей координатной рамке."
+      ]
+    },
     {
       "version": "0.2.7-preview.40",
       "changes": [

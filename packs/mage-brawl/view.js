@@ -3,7 +3,7 @@
  const source=typeof require==='function'&&!root.PlayroomPack,P=source?require('./presentation/scene.js'):root.PlayroomPackPresentation,V=root.PlayroomViews,H=V.helpers,C=root.PlayroomShared;
  const tr=H.translator(source?{ru:require('./locales/ru/game.json')}:root.PlayroomPackResources.locales),text=(k,params={})=>tr.format(P.message(k,params)),esc=H.esc;
  // Face and health share one coordinate plane; separate CSS transforms can round differently.
- const pawnWithHealth=health=>C.roundTokenArt({profile:'pawn'}).replace('</svg>',root.PlayroomGameComponents.vector.place(C.pieceIndicators({value:health.value,capacity:health.display.capacity,label:tr.format(health.label)}),{x:25,y:60,width:50,height:16,attrs:'data-mage-token-health="true"'})+'</svg>');
+ const pawnWithHealth=health=>{const V=root.PlayroomGameComponents.vector,box={x:0,y:0,width:100,height:100};return V.viewport({width:100,height:100,attrs:'class="round-token-art medallion-art pawn-token-art" aria-hidden="true" focusable="false"',content:V.place(C.roundTokenArt({profile:'pawn'}),{...box,attrs:`data-asset-placement="${esc(JSON.stringify(box))}"`})+V.place(C.pieceIndicators({value:health.value,capacity:health.display.capacity,label:tr.format(health.label)}),{x:25,y:60,width:50,height:16,attrs:'data-mage-token-health="true"'})});};
  const teamIds=['blue','red','cyan','brown'],teamColor=team=>`var(--color-team-${teamIds[team]},${['#668fad','#ce735d','#729d98','#aa844b'][team]})`;
  function shrinkIndicator(counter){
   if(!counter)return '';
