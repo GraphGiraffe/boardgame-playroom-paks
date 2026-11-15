@@ -1,6 +1,6 @@
 {
   "id": "oldmaid",
-  "version": "0.3.5-preview.20",
+  "version": "0.3.5",
   "name": "Акулина",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
@@ -168,6 +168,12 @@
     "mini-split-deck"
   ],
   "releases": [
+    {
+      "version": "0.3.5",
+      "changes": [
+        "Стабильный выпуск: обновлены правила, интерфейс и параметры игры."
+      ]
+    },
     {
       "version": "0.3.5-preview.20",
       "changes": [
