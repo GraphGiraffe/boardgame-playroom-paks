@@ -1,6 +1,6 @@
 # Работа с коллекцией ХОД
 
-Текущие контракты: engineApi 4, viewApi 3. [Руководство автора](docs/AUTHORING.md), [архитектура](docs/ARCHITECTURE.md), [будущие расширения](https://github.com/GraphGiraffe/boardgame-playroom-utils/blob/main/docs/project/packs/NEXT-PATCHES.md). Актуальный stable проверять по release evidence в canonical utils и опубликованным артефактам; версия коллекции в исходниках или preview не доказывает публикацию.
+Текущие контракты: engineApi 4, viewApi 3. [Руководство автора](docs/AUTHORING.md), [архитектура](docs/ARCHITECTURE.md), [будущие расширения](https://github.com/GraphGiraffe/boardgame-playroom-paks/issues). Актуальный stable проверять по release evidence в canonical utils и опубликованным артефактам; версия коллекции в исходниках или preview не доказывает публикацию.
 
 - Проверить root/status/ветку; сохранять чужую работу. Игра целиком в packs/<id>; manifest.json источник метаданных, manifest.js генерирует build.py.
 - Domain чистый, без DOM/имён/переводов/часов/storage. RNG явный. Presentation получает projection, renderer не пересчитывает правила.
@@ -9,7 +9,7 @@
 - UI использует общие Source/Target/Hand/Board/Reveal/ScoreTable, fixed scene; стили ограничены паком. Переключение skin не меняет semantics.
 - Не коммитить dist, временные экспорты, секреты, личные сохранения и соседние проекты.
 
-Следовать [локальному порядку проверок и бюджету Actions/RC](https://github.com/GraphGiraffe/boardgame-playroom-utils/blob/main/docs/VALIDATION-POLICY.md). Standalone: `bash scripts/codex/check.sh` локально проверяет синтаксис/упаковку/SHA, не gameplay. Для изменённого поведения подготовить точный companion в приложении и локально выбрать нужные blocks/subblocks/case. Не дублировать совместный прогон в двух репозиториях и не запускать весь набор автоматически для stable/RC. Успешные результаты повторно использовать для тех же исходников; после правки повторять затронутые сценарии. Для публикации `checks=none` с обязательной проверкой publisher. Source tests в Actions — только выбранные и при обоснованной необходимости; новый RC нужен только после существенной правки или для приёмки. Документация не требует продуктовых тестов/Actions.
+Следовать [локальному порядку проверок и бюджету Actions/RC](https://github.com/GraphGiraffe/boardgame-playroom/blob/main/docs/TESTING.md). Standalone: `bash scripts/codex/check.sh` локально проверяет синтаксис/упаковку/SHA, не gameplay. Для изменённого поведения подготовить точный companion в приложении и локально выбрать нужные blocks/subblocks/case. Не дублировать совместный прогон в двух репозиториях и не запускать весь набор автоматически для stable/RC. Успешные результаты повторно использовать для тех же исходников; после правки повторять затронутые сценарии. Для публикации `checks=none` с обязательной проверкой publisher. Source tests в Actions — только выбранные и при обоснованной необходимости; новый RC нужен только после существенной правки или для приёмки. Документация не требует продуктовых тестов/Actions.
 
 Task branch → dev squash. Stable dev → main merge commit, fast-forward dev. Не force-push. Проверенные source SHA, release assets и live catalog — разные результаты; сообщать их отдельно.
 
@@ -19,4 +19,6 @@ Task branch → dev squash. Stable dev → main merge commit, fast-forward dev. 
 
 ## Владение средствами разработки
 
-Общие навыки, операционные инструменты, roadmap, Cloud/test/release инструкции — в [utils](https://github.com/GraphGiraffe/boardgame-playroom-utils/blob/main/docs/PROJECT.md). Здесь остаются продуктовый код, SDK/правила/ассеты, авторские контракты и собственные проверки. Operational scripts — совместимые shims; установите соседний utils либо PLAYROOM_UTILS_ROOT. Не копировать реализацию обратно.
+Операционные инструменты публикации доступны во внутреннем workspace. Здесь остаются продуктовый код, SDK/правила/ассеты, авторские контракты и собственные проверки. Operational scripts — совместимые shims; установите соседний utils либо PLAYROOM_UTILS_ROOT. Не копировать реализацию обратно.
+
+Приложение и паки распространяются через сайт; GitHub Releases в этих двух репозиториях не создавать. Тестовые сборки выполняются локально, deployment — в репозитории сайта. Существующие теги и файлы паков на сайте сохранять.
