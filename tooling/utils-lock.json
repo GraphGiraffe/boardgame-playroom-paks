@@ -1,6 +1,6 @@
 {
   "repository": "GraphGiraffe/boardgame-playroom-utils",
-  "commit": "b01590ab7ba42d93677a1aa7451721b4083c4bd2",
-  "version": "0.1.2",
+  "commit": "d946f0254d5c596281853001c57239766348d7f7",
+  "version": "0.1.6",
   "purpose": "development/publication helpers only; no runtime dependency"
 }
