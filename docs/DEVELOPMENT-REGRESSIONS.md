@@ -1,5 +1,7 @@
 # Runtime assets: ownership, packaging and review
 
+Текущая связка документации: коллекция **0.8.9**, ХОД **0.21.0**, engineApi 4 / viewApi 3. Старые номера в описании происхождения не меняют текущий контракт.
+
 Audit the prepared `*.playroom-pack.json` or final standalone HTML, not a recursive sum of repository files. Source masters, archived concepts and runtime resources have different owners. Report exact input paths/SHA256, actual UTF-8 file bytes, serialized pack bytes and decoded data-URL bytes separately. Compression estimates are not measured ZIP sizes. Large HTML does not establish a localStorage quota cause.
 
 Use `python3 -m playroom_utils audit-assets /absolute/artifact.html /absolute/game.playroom-pack.json --report-dir /absolute/new-report` from the utility checkout; no config, compiler imports, builds or network. `--strict` exits 1 for candidates inside a pack; review them before removal. Plugin MCP `audit_assets` returns the same report read-only; CLI `audit-assets --artifact PATH` can repeat that flag. The report identifies exact files, embedded JS/CSS copies, resources repeated in different files, authoring files and HTML data-URL repetition. It does not prove arbitrary code reachability or detect every encoded/dynamic resource. Cross-pack copies are allowed because packs install independently; HTML app/pack duplication is a review candidate, not an automatic deletion.
