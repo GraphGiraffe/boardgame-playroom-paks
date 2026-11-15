@@ -1,6 +1,8 @@
 # Архитектура паков ХОД
 
-Карта реализации коллекции **0.8.5** для приложения **0.19.5**: engineApi 4, viewApi 3. Каждый пак — самостоятельная игра с разделёнными правилами, публичным представлением и Web-renderer. Общий host исполняет команды, хранит историю, доставляет сеть, показывает обучение и проигрывает эффекты.
+Текущая связка документации: коллекция **0.8.10**, ХОД **0.21.0**, engineApi 4 / viewApi 3. Старые номера в описании происхождения не меняют текущий контракт.
+
+Карта реализации коллекции **0.8.10** для приложения **0.21.0**: engineApi 4, viewApi 3. Каждый пак — самостоятельная игра с разделёнными правилами, публичным представлением и Web-renderer. Общий host исполняет команды, хранит историю, доставляет сеть, показывает обучение и проигрывает эффекты.
 
 ## Файлы и владельцы
 
@@ -122,3 +124,5 @@ Shared-компоненты редактируются здесь, затем п
 `shared/domain/frame-sequence.js` provides pure `PlayroomFrameSequence.encode(frames)` / `expand(sequence)`. Include `frame-sequence` in `sharedDomain`. The format is `{format:1,base,deltas}`: the first authorized public frame followed by bounded object/indexed-array changes. Deltas represent already resolved public facts, never full authority states, private plans, physical card IDs or RNG. Limits: 256 frames, 4096 operations per delta, path depth 32, bounded input structure. Mutable input is detached; cached identities are reused only after recursive immutability is established. Expansion preserves frame ordering and produces immutable public frames with shared unchanged descendants.
 
 Mage projects `frameSequence`, not repeated `frames`; presentation expands it locally to the same phase plan. The internal rules/history retain their original resolved frames. Private route preview resolves identical physics but records only the motion facts it consumes. Shared modules are bundled after presentation factory declarations: look up their APIs when presenting, rather than capturing an uninitialized scope value at factory creation. No game ID branches are required in the application.
+
+Игровой пример команд, дополнительных жизней и сжатия: [Стихийная потасовка](MAGE-BRAWL.md). Увеличение версии manifest не изменяет исходники правил; source и архивы ранее опубликованных версий сохраняются отдельно.

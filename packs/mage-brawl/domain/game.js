@@ -20,6 +20,8 @@
  const inside=(d,p)=>G.inside(p,d.size)&&p.every(v=>v>=d.inset&&v<d.size-d.inset);
  const tile=(d,p)=>inside(d,p)?d.board[p[0]*d.size+p[1]]:null;
  const occupant=(d,p)=>d.players.findIndex(v=>G.same(v.pos,p));
+ const terrainBonus=(d,p,element)=>p.pos&&terrain[tile(d,p.pos)]?.[0]===element?1:0;
+ const attackDamage=(d,source,target,element,amount)=>amount+terrainBonus(d,source,element)+terrainBonus(d,target,element);
  const active=d=>d.players.flatMap((p,i)=>p.pos?[i]:[]),living=d=>d.players.flatMap((p,i)=>p.lives>0?[i]:[]);
  const survivors=d=>config(d).teams?[...new Set(living(d).map(i=>d.players[i].team))]:living(d);
  const complete=d=>survivors(d).length<=1;
@@ -195,7 +197,7 @@
     if(sources.length&&d.shrink&&ring(d,to))pushSources[id]=[...new Set([...(pushSources[id]||[]),...sources])];
    }
   }
-  function hit(id,element,amount,actor,v){if(blocked(d,shields,id,element,v))return false;const total=amount+(terrain[tile(d,d.players[id].pos)]?.[0]===element?1:0);if(total>0)damage(id,total,[actor]);return true;}
+  function hit(id,element,amount,actor,v){if(blocked(d,shields,id,element,v))return false;const total=attackDamage(d,d.players[actor],d.players[id],element,amount);if(total>0)damage(id,total,[actor]);return true;}
   for(step=0;step<(preview?previewSteps:config(d).steps);step++){
   chosen=Object.fromEntries(Object.entries(sequences).filter(([id,seq])=>d.players[id].pos&&seq[step]).map(([id,seq])=>[id,seq[step]]));shields={};
   frame('reveal-actions');frame('reveal');
@@ -258,7 +260,7 @@
   for(const p of d.players)if(p.hand)p.handCount=p.hand.length;
   d.frames=[];return d;
  }
- const rules={elements,terrain,inside,tile,occupant,ring,geometry,line,freeBases,shielded,forecast,continuations:(data,actor,first)=>plans(data,actor,first)};
+ const rules={elements,terrain,attackDamage,inside,tile,occupant,ring,geometry,line,freeBases,shielded,forecast,continuations:(data,actor,first)=>plans(data,actor,first)};
  function checkpoint(before,after,actor,command){
   if(command.type==='plan')return config(after).steps!==2||after.round!==before.round||after.phase!=='planning'||!!after.window.plans[actor];
   if(command.type==='unready')return !!before.window.plans[actor];
