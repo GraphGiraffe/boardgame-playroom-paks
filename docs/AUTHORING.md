@@ -56,7 +56,7 @@ python3 build.py --prepare-dev --all-games --packs-dir ../playroom-paks/packs
 node scripts/codex/test.cjs case/pack-models,case/view-contract
 ```
 
-Для новой игры добавить её в явный каталог/публикацию/проверки приложения и коллекции отдельным изменением; файл каталога не создаётся автоматически от появления папки. Найдите actual allowlists в build.py/scripts/publish-packs.py и loaders/smoke; не добавлять пустую игру. SourceModules собирает канонический shared/pack_compiler.py, manifest.js генерируется из JSON. Не редактировать generated manifest руками.
+Для новой игры добавить её в явный каталог/публикацию/проверки приложения и коллекции отдельным изменением; файл каталога не создаётся автоматически от появления папки. Проверьте явный inventory в build.py и выбранных сценариях приложения; не добавляйте пустую игру. SourceModules собирает канонический shared/pack_compiler.py, manifest.js генерируется из JSON. Не редактировать generated manifest руками.
 
 Новая логика требует соответствующих сценариев в существующем runner: варианты, deterministic seed, legal actions, privacy, result, restore/replay, bot, публичный Стол, mobile layout/gestures. Standalone syntax/build не заменяет эти проверки.
 
