@@ -1,4 +1,4 @@
-# Работа с коллекцией ХОД 0.8
+# Работа с коллекцией ХОД
 
 Текущие контракты: engineApi 4, viewApi 3. [Руководство автора](docs/AUTHORING.md), [архитектура](docs/ARCHITECTURE.md), [будущие расширения](https://github.com/GraphGiraffe/boardgame-playroom-utils/blob/main/docs/project/packs/NEXT-PATCHES.md). Актуальный stable проверять по release evidence в canonical utils и опубликованным артефактам; версия коллекции в исходниках или preview не доказывает публикацию.
 

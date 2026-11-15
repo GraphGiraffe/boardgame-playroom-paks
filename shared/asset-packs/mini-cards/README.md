@@ -1,4 +1,4 @@
-# Мини-карточки номиналов 0.1.0
+# Мини-карточки номиналов
 
 Переиспользуемый набор `playroom-asset-pack`, геометрия 5:7. Подключение: `sharedUi: true`, `sharedAssetPacks: ["mini-cards"]` в манифесте игры. Builder встраивает объявленные scripts и styles, включая offline JSON и самостоятельный HTML.
 
