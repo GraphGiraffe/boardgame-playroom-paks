@@ -64,7 +64,7 @@ node scripts/codex/test.cjs case/pack-models,case/view-contract
 
 Неизменяемая packVersion при публикации; stateVersion меняется при форме данных, engineApi — при SDK. Поставки должны сохранять точные старые версии. Asset pack dependencies также точные. Коллекция 0.7.0 не заставляет менять правила каждой игры. Канонические shared-компоненты синхронизируются в host с digest, поэтому для их изменения нужна проверка обоих builder и общих потребителей.
 
-[Процедура релиза](https://github.com/GraphGiraffe/boardgame-playroom-utils/blob/main/docs/project/app/RELEASING.md), [реестр механик](https://github.com/GraphGiraffe/boardgame-playroom/blob/main/docs/MECHANICS.md), [UI API](https://github.com/GraphGiraffe/boardgame-playroom/blob/main/docs/GAME-ELEMENTS-API.md).
+[Процедура релиза](https://github.com/GraphGiraffe/boardgame-playroom/blob/main/docs/RELEASING.md), [реестр механик](https://github.com/GraphGiraffe/boardgame-playroom/blob/main/docs/MECHANICS.md), [UI API](https://github.com/GraphGiraffe/boardgame-playroom/blob/main/docs/GAME-ELEMENTS-API.md).
 
 ## Метаданные редактора правил
 
