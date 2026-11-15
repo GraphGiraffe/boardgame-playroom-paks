@@ -213,7 +213,7 @@ remain renderer ports under the same plan clock. No private markup is kept for l
 Пример: `packs/snakes/presentation/scene.js` для автоматического второго кубика.
 Пак строит кадры из публичных фактов; host не повторяет разрешение правил.
 
-## Release 0.19 integration invariants
+## Integration invariants
 
 Await asynchronous prepare before starting effects. Concurrent cues share one group; advance only after all finite animation/audio promises and the minimum display interval finish (maximum duration, not their sum). Explicit delay cues share pause/rate/cancel. Infinite selection pulses never hold a group. Instant speech prioritizes the answer sound over the question.
 
