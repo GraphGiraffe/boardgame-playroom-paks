@@ -1,0 +1,131 @@
+{
+  "left": {
+    "playerCount": 4,
+    "turn": 0,
+    "status": "playing",
+    "winners": [],
+    "rng": 1015568748,
+    "revision": 0,
+    "data": {
+      "phase": "guessing",
+      "now": 63000,
+      "deadline": 78000,
+      "drawingStart": 3000,
+      "roundId": 1,
+      "cycle": 1,
+      "artist": 0,
+      "hostPlayer": 0,
+      "word": "кот",
+      "bank": "easy",
+      "mode": "rounds",
+      "durationSeconds": 60,
+      "rounds": 10,
+      "cycles": 2,
+      "scores": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "completed": [],
+      "stopVotes": [],
+      "stopPending": false,
+      "protests": [],
+      "protested": false,
+      "winner": -1,
+      "accepted": "",
+      "artistReward": 0,
+      "guesses": [],
+      "operations": [
+        {
+          "kind": "stroke",
+          "id": "s1",
+          "tool": "brush",
+          "color": "#123456",
+          "width": 2,
+          "points": [
+            [
+              0,
+              0
+            ],
+            [
+              65535,
+              65535
+            ]
+          ]
+        }
+      ],
+      "lengthHint": false,
+      "wrongGuessPenalty": false,
+      "fastArtistBonus": false,
+      "answerMode": "anonymous",
+      "winnerReward": 0,
+      "voteDeadline": 0
+    }
+  },
+  "right": {
+    "playerCount": 4,
+    "turn": 0,
+    "status": "playing",
+    "winners": [],
+    "rng": 17,
+    "revision": 0,
+    "data": {
+      "phase": "guessing",
+      "now": 63000,
+      "deadline": 78000,
+      "drawingStart": 3000,
+      "roundId": 1,
+      "cycle": 1,
+      "artist": 0,
+      "hostPlayer": 0,
+      "word": "кот",
+      "bank": "easy",
+      "mode": "rounds",
+      "durationSeconds": 60,
+      "rounds": 10,
+      "cycles": 2,
+      "scores": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "completed": [],
+      "stopVotes": [],
+      "stopPending": false,
+      "protests": [],
+      "protested": false,
+      "winner": -1,
+      "accepted": "",
+      "artistReward": 0,
+      "guesses": [],
+      "operations": [
+        {
+          "kind": "stroke",
+          "id": "s1",
+          "tool": "brush",
+          "color": "#123456",
+          "width": 2,
+          "points": [
+            [
+              0,
+              0
+            ],
+            [
+              65535,
+              65535
+            ]
+          ]
+        }
+      ],
+      "lengthHint": false,
+      "wrongGuessPenalty": false,
+      "fastArtistBonus": false,
+      "answerMode": "anonymous",
+      "winnerReward": 0,
+      "voteDeadline": 0
+    }
+  },
+  "viewer": -1
+}
