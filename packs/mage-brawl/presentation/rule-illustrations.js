@@ -90,5 +90,12 @@ const illustrations=id=>{
   const [e,a]=id.split('-');if(!elements.includes(e)||!['movement','attack','ultimate'].includes(a))return '';
   return `<svg class="mage-action-diagram" viewBox="0 0 220 110"><g transform="translate(3 5) scale(1)"><rect x="1.5" y="1.5" width="97" height="97" rx="10" fill="#fff9e9" stroke="${colors[e]}" stroke-width="3"/>${illustration(e,a)}</g><g transform="translate(115 4)" style="color:${colors[e]}">${actionArt(e,a)}</g></svg>`;
  };
- return Object.freeze({colors,ink,paving,stoneFloor,stakes,terrain,svg,terrainBadgeColors,terrainBonuses,terrainArt,elementArt,arrow,actionArt,illustration,card,ultimateToken,footprints,actionIcon,rotateIcon,create:()=>illustrations});
+ const graphics=()=>Object.fromEntries([
+  ...['air','earth','water','fire'].flatMap(element=>['movement','attack','ultimate'].map(action=>['card-'+element+'-'+action,card(element,action)])),
+  ...['air','earth','water','fire'].map(element=>['element-'+element,svg(ink[element])]),
+  ...['movement','attack','ultimate'].map(action=>['action-'+action,actionIcon(action)]),
+  ...Object.keys(terrain).map(tile=>['terrain-'+tile,terrainArt(tile)]),
+  ['terrain-void',terrainArt('void')],['player-pawn',C.roundTokenArt({profile:'pawn'})]
+ ]);
+ return Object.freeze({graphics,colors,ink,paving,stoneFloor,stakes,terrain,svg,terrainBadgeColors,terrainBonuses,terrainArt,elementArt,arrow,actionArt,illustration,card,ultimateToken,footprints,actionIcon,rotateIcon,create:()=>illustrations});
 });

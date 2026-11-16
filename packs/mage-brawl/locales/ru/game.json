@@ -292,5 +292,7 @@
   "mage-brawl.meta.teams4": "4 команды",
   "mage-brawl.ui.team-cyan": "Голубые",
   "mage-brawl.ui.team-brown": "Коричневые",
-  "mage-brawl.ui.team-life-pool": "{team}: {count}"
+  "mage-brawl.ui.team-life-pool": "{team}: {count}",
+  "mage-brawl.ui.direction-label": "Направление",
+  "mage-brawl.ui.element-label": "Стихия"
 }
