@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["battleship"] = {
   "id": "battleship",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "name": "Морской бой",
   "category": "board",
   "estimatedDuration": "15–30 мин",
@@ -91,6 +91,23 @@
     }
   ],
   "sounds": "sounds.js",
+  "sourceModules": {
+    "rules": [
+      "domain/geometry.js",
+      "domain/game.js",
+      "presentation/scene.js"
+    ],
+    "view": [
+      "presentation/scene.js",
+      "presentation/tutorial.js",
+      "presentation/rule-illustrations.js"
+    ],
+    "locales": {
+      "ru": [
+        "locales/ru/game.json"
+      ]
+    }
+  },
   "ruleGroups": [
     {
       "label": "Правила",
@@ -247,6 +264,7 @@
   "sdkFeatures": [
     "local-input-v1",
     "turn-order-v1"
-  ]
+  ],
+  "execution": "isolated-v1"
 };
 })(globalThis);

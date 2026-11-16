@@ -14,5 +14,14 @@
     "firstPlayer": 0,
     "rng": 1,
     "preset": "classic"
-  }
+  },
+  "origin": {
+    "operation": "adopt",
+    "previousVersion": "0.3.0",
+    "sourceManifestSHA256": "73ad4122bbaea1d990a7f3e62f15543a06e12dd7f5d52f4c104114150da9ea9a"
+  },
+  "support": [
+    "presentation/tutorial.js",
+    "sounds.js"
+  ]
 }

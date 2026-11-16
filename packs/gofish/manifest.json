@@ -1,6 +1,6 @@
 {
   "id": "gofish",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "name": "Спроси рыбу",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
@@ -197,5 +197,6 @@
   "sdkFeatures": [
     "local-input-v1",
     "turn-order-v1"
-  ]
+  ],
+  "execution": "isolated-v1"
 }

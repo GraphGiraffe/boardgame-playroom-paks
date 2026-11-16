@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["snakes"] = {
   "id": "snakes",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "category": "board",
   "estimatedDuration": "5–15 мин",
   "tagline": "Лестницы поднимают. Змеи возвращают назад.",
@@ -41,6 +41,22 @@
     }
   ],
   "sharedUi": true,
+  "sourceModules": {
+    "rules": [
+      "domain/game.js",
+      "presentation/scene.js"
+    ],
+    "view": [
+      "presentation/scene.js",
+      "presentation/tutorial.js",
+      "presentation/rule-illustrations.js"
+    ],
+    "locales": {
+      "ru": [
+        "locales/ru/game.json"
+      ]
+    }
+  },
   "sharedDomain": [
     "token-layout",
     "end-policy"
@@ -313,6 +329,7 @@
     "parameter-illustrations-v1",
     "standard-parameter-ui-v1",
     "arrival-departures-v1"
-  ]
+  ],
+  "execution": "isolated-v1"
 };
 })(globalThis);

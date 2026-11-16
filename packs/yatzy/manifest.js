@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["yatzy"] = {
   "id": "yatzy",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "name": "Ятзи",
   "category": "dice",
   "estimatedDuration": "15–25 мин",
@@ -48,6 +48,24 @@
       "teams": false
     }
   ],
+  "sourceModules": {
+    "rules": [
+      "domain/categories.js",
+      "domain/game.js",
+      "presentation/scene.js"
+    ],
+    "view": [
+      "domain/categories.js",
+      "presentation/scene.js",
+      "presentation/tutorial.js",
+      "presentation/rule-illustrations.js"
+    ],
+    "locales": {
+      "ru": [
+        "locales/ru/game.json"
+      ]
+    }
+  },
   "settings": [
     {
       "key": "maxRounds",
@@ -238,6 +256,7 @@
     "local-input-v1",
     "turn-order-v1",
     "parameter-illustrations-v1"
-  ]
+  ],
+  "execution": "isolated-v1"
 };
 })(globalThis);

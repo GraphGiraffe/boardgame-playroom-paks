@@ -1,6 +1,18 @@
 # Автору пака · API 4 / UI 3
 
-Для локальной изолированной разработки есть SDK-студия: source-only descriptors в `packs/<id>/sdk/project.json` и шаблон `sdk/templates/turn-counter`. Контракт и команды описаны в приложении: `docs/PACK-SDK-STUDIO.md`. Эти файлы не означают переноса защиты в player-приложение или полной визуальной миграции игры.
+Все актуальные паки используют `manifest.execution: "isolated-v1"`. Правила и декларативное представление поставляются как данные `files["sdk/source.json"]` внутри обычного устанавливаемого `playroom-pack`; `rules.js`, `view.js`, `styles.css` содержат фиксированные неисполняемые маркеры. Приложение исполняет гостевые модули в VM и показывает сцену общими доверенными компонентами. Полнота конкретных экранов, обучения и иллюстраций проверяется отдельно от упаковки.
+
+SDK-студия использует `sdk/project.json`: rules/presentation/helpers, необязательные types/support, начальные options. `support` сохраняет учебные определения, иллюстрации и звуковые каталоги; эти модули никогда не исполняются в host. `sourceModules` остаётся источником структуры слоёв и локалей. Инструменты находятся в соседнем canonical utils:
+
+```sh
+python3 sdk.py --app ../playroom new /tmp/my-game --id my-game --packs ../playroom-paks
+python3 sdk.py --app ../playroom adopt ../playroom-paks/packs/gofish --packs ../playroom-paks
+python3 sdk.py --app ../playroom compile /tmp/my-game --packs ../playroom-paks --output /tmp/my-game.playroom-pack.json
+```
+
+`new` записывает фактическое происхождение от шаблона; `adopt` записывает принятие существующего исходника, исходную версию и SHA manifest, увеличивает patch при смене execution и не делает это повторно. Он не утверждает, что исторические игры создавались генератором. Обе операции ведут в один read-only source loader и compiler. `compile` выполняет SDK static/type check, аудит фактического набора ресурсов и выдаёт устанавливаемый пак; существующий output не перезаписывается. `build` команды SDK остаётся исходным экспортом `playroom-sdk-source`, который устанавливать нельзя. Для коллекции: `python3 build.py --include-sdk-examples --output-dir /tmp/playroom-build`.
+
+Полный UTF-8 JSON устанавливаемого пака ограничен 4 000 000 байт, цель — 500 000; ресурсы — 2 000 000 байт / 256 файлов. В бюджет входят выбранные shared skins и их зависимости, медиа, чистые исходники, типы, локали, manuals и support-модули. Manifest asset-pack и его runtime files сохраняются в `resourceClosure`; JS/CSS providers остаются инертными исходниками. Для персонажей включаются ровно runtime SVG из manifest.items, без архивных detailed masters и повторных data-URL каталогов. Исходный архив сохраняет masters и авторские файлы. SHA исходников совпадает с Node SDK по порядку dependencies → rules → helpers → presentation → types → support; SHA установленного пакета дополнительно покрывает все bytes ресурсов.
 
 Текущая политика: поддерживается актуальная связка приложения и паков. Обновление пользователей с 0.19+ сохраняется; старые Online-комбинации не сопровождаются. После успешной установки текущих игр несовместимые сохранения удаляются, без переноса или экспорта. Ниже описаны форматы данных и внутренние контракты, а не обещание сопровождения прежних выпусков.
 

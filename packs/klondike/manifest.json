@@ -1,6 +1,6 @@
 {
   "id": "klondike",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "name": "Косынка",
   "category": "solitaire",
   "estimatedDuration": "10–30 мин",
@@ -414,5 +414,6 @@
     "local-input-v1",
     "turn-order-v1",
     "parameter-previews-v2"
-  ]
+  ],
+  "execution": "isolated-v1"
 }

@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["tictactoe"] = {
   "id": "tictactoe",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "name": "Крестики-нолики",
   "category": "board",
   "estimatedDuration": "2–5 мин",
@@ -39,6 +39,22 @@
       "teams": false
     }
   ],
+  "sourceModules": {
+    "rules": [
+      "domain/game.js",
+      "presentation/scene.js"
+    ],
+    "view": [
+      "presentation/scene.js",
+      "presentation/tutorial.js",
+      "presentation/rule-illustrations.js"
+    ],
+    "locales": {
+      "ru": [
+        "locales/ru/game.json"
+      ]
+    }
+  },
   "skinFamilies": [
     "board"
   ],
@@ -128,6 +144,7 @@
   "sdkFeatures": [
     "local-input-v1",
     "turn-order-v1"
-  ]
+  ],
+  "execution": "isolated-v1"
 };
 })(globalThis);

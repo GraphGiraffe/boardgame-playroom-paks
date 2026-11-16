@@ -1,6 +1,6 @@
 {
   "id": "spider",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "name": "Паук",
   "category": "solitaire",
   "estimatedDuration": "10–30 мин",
@@ -347,5 +347,6 @@
     "local-input-v1",
     "turn-order-v1",
     "parameter-illustrations-v1"
-  ]
+  ],
+  "execution": "isolated-v1"
 }

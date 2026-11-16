@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["durak"] = {
   "id": "durak",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Отбивайся, подкидывай и избавляйся от карт.",
@@ -182,6 +182,23 @@
     "standard-deck",
     "end-policy"
   ],
+  "sourceModules": {
+    "rules": [
+      "domain/cards.js",
+      "domain/game.js",
+      "presentation/scene.js"
+    ],
+    "view": [
+      "presentation/scene.js",
+      "presentation/tutorial.js",
+      "presentation/rule-illustrations.js"
+    ],
+    "locales": {
+      "ru": [
+        "locales/ru/game.json"
+      ]
+    }
+  },
   "ruleGroups": [
     {
       "label": "Правила",
@@ -353,6 +370,7 @@
     "parameter-previews-v2",
     "parameter-illustrations-v1",
     "standard-parameter-ui-v1"
-  ]
+  ],
+  "execution": "isolated-v1"
 };
 })(globalThis);

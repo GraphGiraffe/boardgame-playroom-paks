@@ -1,6 +1,6 @@
 {
   "id": "snakes",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "category": "board",
   "estimatedDuration": "5–15 мин",
   "tagline": "Лестницы поднимают. Змеи возвращают назад.",
@@ -325,5 +325,6 @@
     "parameter-illustrations-v1",
     "standard-parameter-ui-v1",
     "arrival-departures-v1"
-  ]
+  ],
+  "execution": "isolated-v1"
 }

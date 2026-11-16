@@ -13,5 +13,15 @@
     "firstPlayer": 0,
     "rng": 1,
     "preset": "classic"
-  }
+  },
+  "origin": {
+    "operation": "adopt",
+    "previousVersion": "0.7.0",
+    "sourceManifestSHA256": "a50c3787477c15f4be91d214a2beaa76b67896f17ecff1188398476d250432fd"
+  },
+  "support": [
+    "presentation/tutorial.js",
+    "presentation/rule-illustrations.js",
+    "sounds.js"
+  ]
 }

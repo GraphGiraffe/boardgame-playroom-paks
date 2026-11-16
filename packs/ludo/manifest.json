@@ -1,6 +1,6 @@
 {
   "id": "ludo",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "name": "Лудо",
   "category": "board",
   "estimatedDuration": "20–40 мин",
@@ -485,5 +485,6 @@
     "parameter-illustrations-v1",
     "standard-parameter-ui-v1",
     "arrival-departures-v1"
-  ]
+  ],
+  "execution": "isolated-v1"
 }

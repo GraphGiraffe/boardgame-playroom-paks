@@ -13,7 +13,7 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parent
 
-# Both repositories execute the same pinned compiler; plugins are trusted code.
+# Both repositories use the same pinned read-only compiler; isolated guest code is data.
 _compiler_path = ROOT / "shared/pack_compiler.py"
 _compiler = {"__file__": str(_compiler_path)}
 exec(compile(_compiler_path.read_text(encoding="utf-8"), str(_compiler_path), "exec"), _compiler)
@@ -66,11 +66,11 @@ def source_files(packs):
         result.update(ROOT.glob(pattern))
     # Ship runnable authoring examples in the source archive without adding
     # them to the installable game collection.
-    result.update(path for path in (ROOT / "examples").rglob("*") if path.is_file())
+    result.update(path for folder in ("examples", "sdk") for path in (ROOT / folder).rglob("*") if path.is_file() and "__pycache__" not in path.parts)
     result.update(path for path in (ROOT / "shared").rglob("*") if path.is_file() and "__pycache__" not in path.parts)
     for pack in packs:
         manifest = read_manifest(pack)
-        result.update(pack_files(pack, manifest))
+        result.update(path for path in pack.rglob("*") if path.is_file() and "__pycache__" not in path.parts)
         result.update(pack / name for name in ("manifest.json", "manifest.js"))
     for path in sorted(result):
         if path.is_symlink() or not path.is_file() or not path.resolve().is_relative_to(ROOT):
@@ -82,12 +82,15 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-dir", type=Path, default=ROOT / "dist", help="Каталог результата (по умолчанию: dist/ рядом со скриптом)")
     parser.add_argument("--include-examples", action="store_true", help="Дополнительно собрать учебные примеры из examples/")
+    parser.add_argument("--include-sdk-examples", action="store_true", help="Дополнительно собрать изолированные SDK-примеры из sdk/examples/")
     args = parser.parse_args()
     packs = sorted(path.parent for path in (ROOT / "packs").glob("*/manifest.json"))
     if not packs:
         parser.error("В packs/ не найдено manifest.json")
     if args.include_examples:
         packs += sorted(path.parent for path in (ROOT / "examples").glob("*/manifest.json"))
+    if args.include_sdk_examples:
+        packs += sorted(path.parent for path in (ROOT / "sdk/examples").glob("*/manifest.json"))
     bundles = [build_pack(pack) for pack in packs]
     output = args.output_dir.resolve()
     output.mkdir(parents=True, exist_ok=True)

@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["gofish"] = {
   "id": "gofish",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "name": "Спроси рыбу",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
@@ -74,6 +74,22 @@
   "sharedDomain": [
     "standard-deck"
   ],
+  "sourceModules": {
+    "rules": [
+      "domain/game.js",
+      "presentation/scene.js"
+    ],
+    "view": [
+      "presentation/scene.js",
+      "presentation/tutorial.js",
+      "presentation/rule-illustrations.js"
+    ],
+    "locales": {
+      "ru": [
+        "locales/ru/game.json"
+      ]
+    }
+  },
   "ruleGroups": [
     {
       "label": "Карты",
@@ -185,6 +201,7 @@
   "sdkFeatures": [
     "local-input-v1",
     "turn-order-v1"
-  ]
+  ],
+  "execution": "isolated-v1"
 };
 })(globalThis);

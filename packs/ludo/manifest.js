@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["ludo"] = {
   "id": "ludo",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "name": "Лудо",
   "category": "board",
   "estimatedDuration": "20–40 мин",
@@ -245,6 +245,24 @@
       }
     }
   ],
+  "sourceModules": {
+    "rules": [
+      "domain/board.js",
+      "domain/game.js",
+      "presentation/scene.js"
+    ],
+    "view": [
+      "domain/board.js",
+      "presentation/scene.js",
+      "presentation/tutorial.js",
+      "presentation/rule-illustrations.js"
+    ],
+    "locales": {
+      "ru": [
+        "locales/ru/game.json"
+      ]
+    }
+  },
   "teamLayouts": {
     "teams": {
       "seatTeams": [
@@ -471,6 +489,7 @@
     "parameter-illustrations-v1",
     "standard-parameter-ui-v1",
     "arrival-departures-v1"
-  ]
+  ],
+  "execution": "isolated-v1"
 };
 })(globalThis);

@@ -1,6 +1,6 @@
 {
   "id": "mage-brawl",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "name": "Стихийная потасовка",
   "category": "board",
   "estimatedDuration": "15–40 мин",
@@ -743,5 +743,6 @@
         }
       ]
     }
-  }
+  },
+  "execution": "isolated-v1"
 }
