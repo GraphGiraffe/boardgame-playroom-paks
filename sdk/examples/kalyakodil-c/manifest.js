@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["kalyakodil-c"] = {
   "id": "kalyakodil-c",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "engineApi": 4,
   "viewApi": 3,
   "stateVersion": 1,
@@ -21,7 +21,7 @@
       ]
     }
   },
-  "name": "Калякодил · Мастерская",
+  "name": "Калякодил C · Мастерская",
   "category": "party",
   "tagline": "Анонимные догадки, общий рисунок и честный протест.",
   "playModes": [
@@ -686,7 +686,7 @@
       "control": "slider"
     },
     {
-      "key": "mode",
+      "key": "roundMode",
       "label": "Порядок",
       "default": "rounds",
       "options": [

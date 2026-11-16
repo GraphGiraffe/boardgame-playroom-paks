@@ -13,7 +13,6 @@
     "rng": 1,
     "now": 0,
     "bank": "easy",
-    "mode": "rounds",
     "rounds": 10,
     "cycles": 2,
     "durationSeconds": 60,
@@ -21,7 +20,8 @@
     "lengthHint": false,
     "wrongGuessPenalty": false,
     "fastArtistBonus": false,
-    "answerMode": "anonymous"
+    "answerMode": "anonymous",
+    "roundMode": "rounds"
   },
   "support": [],
   "helpers": [],

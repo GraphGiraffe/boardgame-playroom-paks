@@ -12,7 +12,7 @@
           "durationSeconds": 30,
           "roundLimit": 10,
           "difficulty": "easy",
-          "mode": "rounds"
+          "roundMode": "rounds"
         }
       },
       "steps": [
@@ -192,7 +192,7 @@
           "durationSeconds": 30,
           "roundLimit": 10,
           "difficulty": "easy",
-          "mode": "rounds"
+          "roundMode": "rounds"
         }
       },
       "steps": [
@@ -253,7 +253,7 @@
           "durationSeconds": 30,
           "roundLimit": 10,
           "difficulty": "easy",
-          "mode": "rounds"
+          "roundMode": "rounds"
         }
       },
       "steps": [
@@ -377,7 +377,7 @@
           "durationSeconds": 30,
           "roundLimit": 10,
           "difficulty": "easy",
-          "mode": "rounds"
+          "roundMode": "rounds"
         }
       },
       "steps": [
@@ -414,7 +414,7 @@
           "durationSeconds": 30,
           "roundLimit": 10,
           "difficulty": "easy",
-          "mode": "rounds"
+          "roundMode": "rounds"
         }
       },
       "steps": [
@@ -491,7 +491,7 @@
           "durationSeconds": 30,
           "roundLimit": 10,
           "difficulty": "easy",
-          "mode": "rounds"
+          "roundMode": "rounds"
         }
       },
       "steps": [
@@ -566,7 +566,7 @@
           "durationSeconds": 30,
           "roundLimit": 10,
           "difficulty": "easy",
-          "mode": "rounds"
+          "roundMode": "rounds"
         }
       },
       "steps": [
@@ -655,7 +655,7 @@
           "durationSeconds": 30,
           "roundLimit": 10,
           "difficulty": "easy",
-          "mode": "rounds"
+          "roundMode": "rounds"
         }
       },
       "steps": [
@@ -698,7 +698,7 @@
           "durationSeconds": 30,
           "roundLimit": 10,
           "difficulty": "easy",
-          "mode": "turns"
+          "roundMode": "turns"
         }
       },
       "steps": [
@@ -782,8 +782,8 @@
           "durationSeconds": 30,
           "roundLimit": 10,
           "difficulty": "easy",
-          "mode": "turns",
-          "cycles": 2
+          "cycles": 2,
+          "roundMode": "turns"
         }
       },
       "steps": [
@@ -828,7 +828,7 @@
           "durationSeconds": 30,
           "roundLimit": 10,
           "difficulty": "easy",
-          "mode": "turns"
+          "roundMode": "turns"
         }
       },
       "steps": [
@@ -889,7 +889,7 @@
           "durationSeconds": 30,
           "roundLimit": 10,
           "difficulty": "easy",
-          "mode": "rounds"
+          "roundMode": "rounds"
         }
       },
       "steps": [
@@ -913,7 +913,7 @@
           "durationSeconds": 30,
           "roundLimit": 0,
           "difficulty": "easy",
-          "mode": "rounds"
+          "roundMode": "rounds"
         }
       },
       "steps": [
@@ -937,8 +937,8 @@
           "durationSeconds": 30,
           "roundLimit": 10,
           "difficulty": "easy",
-          "mode": "rounds",
-          "noErase": true
+          "noErase": true,
+          "roundMode": "rounds"
         }
       },
       "steps": [
@@ -1011,8 +1011,8 @@
           "durationSeconds": 30,
           "roundLimit": 10,
           "difficulty": "easy",
-          "mode": "rounds",
-          "strokeBudget": 10
+          "strokeBudget": 10,
+          "roundMode": "rounds"
         }
       },
       "steps": [
@@ -1314,8 +1314,8 @@
           "durationSeconds": 30,
           "roundLimit": 10,
           "difficulty": "easy",
-          "mode": "rounds",
-          "quickGuessBonus": true
+          "quickGuessBonus": true,
+          "roundMode": "rounds"
         }
       },
       "steps": [
@@ -1351,8 +1351,8 @@
           "durationSeconds": 30,
           "roundLimit": 10,
           "difficulty": "easy",
-          "mode": "rounds",
-          "quickGuessBonus": true
+          "quickGuessBonus": true,
+          "roundMode": "rounds"
         }
       },
       "steps": [
@@ -1388,8 +1388,8 @@
           "durationSeconds": 30,
           "roundLimit": 10,
           "difficulty": "easy",
-          "mode": "rounds",
-          "quickGuessBonus": true
+          "quickGuessBonus": true,
+          "roundMode": "rounds"
         }
       },
       "steps": [
@@ -1455,7 +1455,7 @@
           "durationSeconds": 180,
           "roundLimit": 10,
           "difficulty": "hard",
-          "mode": "rounds"
+          "roundMode": "rounds"
         }
       },
       "steps": [
@@ -1493,8 +1493,8 @@
           "durationSeconds": 30,
           "roundLimit": 10,
           "difficulty": "medium",
-          "mode": "rounds",
-          "hostPlayer": 2
+          "hostPlayer": 2,
+          "roundMode": "rounds"
         }
       },
       "steps": [

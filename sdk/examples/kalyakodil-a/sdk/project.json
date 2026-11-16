@@ -16,12 +16,12 @@
     "options": {
       "durationSeconds": 60,
       "difficulty": "easy",
-      "mode": "rounds",
       "roundLimit": 10,
       "cycles": 2,
       "noErase": false,
       "strokeBudget": 0,
-      "quickGuessBonus": false
+      "quickGuessBonus": false,
+      "roundMode": "rounds"
     }
   },
   "support": [],

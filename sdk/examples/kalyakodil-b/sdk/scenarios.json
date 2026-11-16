@@ -663,9 +663,9 @@
       "id": "stop-after-complete-cycle",
       "options": {
         "playerCount": 3,
-        "mode": "cycles",
         "cycles": 2,
-        "now": 0
+        "now": 0,
+        "roundMode": "cycles"
       },
       "steps": [
         {
@@ -1202,9 +1202,9 @@
       "id": "two-complete-cycles",
       "options": {
         "playerCount": 3,
-        "mode": "cycles",
         "cycles": 2,
-        "now": 0
+        "now": 0,
+        "roundMode": "cycles"
       },
       "steps": [
         {
@@ -1776,9 +1776,9 @@
       "id": "timeline-sequential-round-is-complete-circle",
       "options": {
         "playerCount": 2,
-        "mode": "cycles",
         "cycles": 2,
-        "now": 0
+        "now": 0,
+        "roundMode": "cycles"
       },
       "steps": [
         {

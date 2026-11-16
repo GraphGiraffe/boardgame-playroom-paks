@@ -14,7 +14,6 @@
     "rng": 1,
     "now": 0,
     "difficulty": "easy",
-    "mode": "rounds",
     "rounds": 10,
     "cycles": 2,
     "durationSeconds": 60,
@@ -22,7 +21,8 @@
     "strokeLimit": 0,
     "singleGuess": false,
     "exactBonus": false,
-    "answerMode": "anonymous"
+    "answerMode": "anonymous",
+    "roundMode": "rounds"
   },
   "support": [],
   "helpers": [],

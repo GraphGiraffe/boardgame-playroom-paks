@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["kalyakodil-a"] = {
   "id": "kalyakodil-a",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "engineApi": 4,
   "viewApi": 3,
   "stateVersion": 1,
@@ -26,7 +26,7 @@
   "maxPlayers": 12,
   "settings": [
     {
-      "key": "mode",
+      "key": "roundMode",
       "label": "Порядок",
       "default": "rounds",
       "control": "select",

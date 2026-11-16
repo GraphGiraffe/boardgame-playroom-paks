@@ -969,8 +969,8 @@
       "options": {
         "rng": 1,
         "playerCount": 2,
-        "mode": "cycles",
-        "cycles": 2
+        "cycles": 2,
+        "roundMode": "cycles"
       },
       "steps": [
         {
@@ -1018,8 +1018,8 @@
       "options": {
         "rng": 1,
         "playerCount": 3,
-        "mode": "cycles",
-        "cycles": 2
+        "cycles": 2,
+        "roundMode": "cycles"
       },
       "steps": [
         {
@@ -1068,8 +1068,8 @@
       "options": {
         "rng": 1,
         "playerCount": 4,
-        "mode": "cycles",
-        "cycles": 2
+        "cycles": 2,
+        "roundMode": "cycles"
       },
       "steps": [
         {
@@ -2090,8 +2090,8 @@
       "options": {
         "playerCount": 2,
         "durationSeconds": 30,
-        "mode": "cycles",
-        "cycles": 2
+        "cycles": 2,
+        "roundMode": "cycles"
       },
       "steps": [
         {
@@ -2182,8 +2182,8 @@
       "options": {
         "playerCount": 2,
         "durationSeconds": 30,
-        "mode": "cycles",
-        "cycles": 2
+        "cycles": 2,
+        "roundMode": "cycles"
       },
       "steps": [
         {

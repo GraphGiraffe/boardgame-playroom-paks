@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["kalyakodil-b"] = {
   "id": "kalyakodil-b",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "engineApi": 4,
   "viewApi": 3,
   "stateVersion": 1,
@@ -21,7 +21,7 @@
       ]
     }
   },
-  "name": "Калякодил · Штрихи",
+  "name": "Калякодил B · Штрихи",
   "description": "Рисуйте тайные слова, угадывайте и оспаривайте спорное принятие.",
   "players": {
     "min": 2,
@@ -49,7 +49,7 @@
       ]
     },
     {
-      "key": "mode",
+      "key": "roundMode",
       "label": "Продолжительность",
       "default": "rounds",
       "control": "select",
