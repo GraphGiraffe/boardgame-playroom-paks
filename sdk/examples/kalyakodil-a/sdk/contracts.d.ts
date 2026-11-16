@@ -9,6 +9,7 @@ export type InputField={kind:'text';maxLength:number;minLength?:number;label?:st
 export interface InputChoice extends Choice {fields:{[key:string]:InputField};label?:string}
 export type InkOperation={kind:'stroke';id:string;tool:'brush'|'eraser';color:string;width:1|2|3;points:number[][]}|{kind:'fill';id:string;color:string;x:number;y:number}|{kind:'clear';id:string};
 export interface EventDraft {type:string;actor:number|null;params:{[key:string]:JSONValue};visibility:{kind:'public'}|{kind:'players';players:number[]};publicEvent?:EventDraft}
+export interface Result {winners:number[];places:number[];metrics:{id:string;values:number[];order?:'asc'|'desc'}[]}
 /** roundEnded:true requires Definition.rounds:true and turnEnded:true. */
 export interface Transition {position:Position;events:EventDraft[];turnEnded?:boolean;roundEnded?:boolean}
 export interface Definition {
@@ -21,7 +22,8 @@ export interface Definition {
  inputs?(position:Position,actor:number):InputChoice[];
  advance?(position:Position,now:number):Transition|null;
  project(position:Position,viewer:number):{[key:string]:JSONValue};
- result(position:Position):JSONValue;
+ result(position:Position):Result;
+ score?(position:Position):number[];
  bot?(projection:Projection,actor:number,choices:Command[],memory:JSONValue,context:unknown):Command;
 }
 export interface Scene {
