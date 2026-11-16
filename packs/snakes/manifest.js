@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["snakes"] = {
   "id": "snakes",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "category": "board",
   "estimatedDuration": "5–15 мин",
   "tagline": "Лестницы поднимают. Змеи возвращают назад.",
@@ -188,6 +188,12 @@
     "die"
   ],
   "releases": [
+    {
+      "version": "0.6.1",
+      "changes": [
+        "Исправлены параметры подписи броска: отсутствующий индекс кубика больше не создаёт NaN."
+      ]
+    },
     {
       "version": "0.6.0",
       "changes": [
