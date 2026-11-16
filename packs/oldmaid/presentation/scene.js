@@ -17,7 +17,7 @@
     discard:projection.data.discard});
 
  // Geometry contains only public identities from the authorized projection.
- function sceneLayout(p){const d=p.data;return {geometry:{topology:'fixed'},zones:[{id:'field',kind:'table'},...d.hands.map((hand,owner)=>({id:'hand-'+owner,kind:'hand',owner,count:hand.length}))],objects:d.hands.flatMap((hand,owner)=>hand.flatMap((card,index)=>card&&!card.hidden&&card.id!=null?[{ref:{namespace:'card',id:String(card.id)},zone:'hand-'+owner,index}]:[])),interactions:p.actions.map(command=>({command,target:command.cardId!=null?{entity:{namespace:'card',id:String(command.cardId)}}:{zone:'field'}}))};}
+ function sceneLayout(p){const d=p.data;return {geometry:{topology:'fixed'},zones:[{id:'field',kind:'table'},...d.hands.map((hand,owner)=>({id:'hand-'+owner,kind:'hand',owner,count:hand.length}))],objects:d.hands.flatMap((hand,owner)=>hand.flatMap((card,index)=>card&&!card.hidden&&card.id!=null?[{ref:{namespace:'card',id:String(card.id)},zone:'hand-'+owner,index}]:[])),interactions:p.actions.map(command=>{return {command,kind:command.type==='draw'?'select':'activate',target:command.target!=null&&command.cardIndex!=null?{zone:'hand-'+command.target,index:command.cardIndex}:{zone:'field'}};})};}
  // Public pair facts provide an authorized arrival checkpoint before removal.
  function eventScenes(p){
   const events=p.events.filter(e=>e.revision===p.revision),pairs=events.filter(e=>e.type==='oldmaid.paired');

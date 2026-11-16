@@ -23,5 +23,12 @@
       "strokeBudget": 0,
       "quickGuessBonus": false
     }
+  },
+  "support": [],
+  "helpers": [],
+  "origin": {
+    "operation": "adopt",
+    "previousVersion": "0.1.0",
+    "sourceManifestSHA256": "09f20bb934acdaf860aa8fcca3550d73be8201ed6967fb5e7174c695ff68defe"
   }
 }

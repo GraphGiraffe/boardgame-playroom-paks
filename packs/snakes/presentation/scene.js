@@ -32,7 +32,7 @@
     sequence:sequence(projection.data.lastMove,projection.data.finish)});
 
  // Geometry contains only public identities from the authorized projection.
- function sceneLayout(p){const d=p.data;return {geometry:{topology:'fixed'},zones:[{id:'field',kind:'board'}],objects:d.positions.map((cell,owner)=>({ref:{namespace:'token',id:String(owner)},zone:'field',owner,cell})),interactions:p.actions.map(command=>({command,target:{zone:'field'}}))};}
+ function sceneLayout(p){const d=p.data;return {geometry:{topology:'fixed'},zones:[{id:'field',kind:'board'}],objects:d.positions.map((cell,owner)=>({ref:{namespace:'token',id:String(owner)},zone:'field',owner,cell})),interactions:p.actions.map(command=>{return {command,kind:command.type==='move'?'move':'activate',...(command.type==='move'?{source:{entity:{namespace:'token',id:String(p.turn)}}}:{}),target:{zone:'field'}};})};}
  // Reconstruct display checkpoints from already authorized movement facts only.
  // No legal move, RNG, collision or rule resolution runs in presentation.
  function eventScenes(p){

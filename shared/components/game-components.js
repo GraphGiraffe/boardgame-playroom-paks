@@ -15,7 +15,7 @@ function entityKey(ref){
 function validMetric(value,{requireId=false,requireLabel=false,localized=false}={}){
  const record=item=>item!==null&&typeof item==='object'&&!Array.isArray(item);
  const identifier=id=>typeof id==='string'&&/^[a-z][a-z0-9-]{0,63}$/.test(id);
- if(!record(value)||!['points','wins','pieces'].includes(value.kind)||!Number.isSafeInteger(value.value)||value.value<0)return false;
+ if(!record(value)||!['points','wins','pieces'].includes(value.kind)||!Number.isSafeInteger(value.value)||(value.kind!=='points'&&value.value<0))return false;
  if(value.id===undefined?requireId:!identifier(value.id))return false;
  if(value.label===undefined?requireLabel:!(typeof value.label==='string'||!localized&&record(value.label)&&typeof value.label.key==='string'))return false;
  const d=value.display;

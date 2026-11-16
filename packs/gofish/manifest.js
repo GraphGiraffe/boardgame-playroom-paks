@@ -200,7 +200,8 @@
   ],
   "sdkFeatures": [
     "local-input-v1",
-    "turn-order-v1"
+    "turn-order-v1",
+    "isolated-execution-v1"
   ],
   "execution": "isolated-v1"
 };

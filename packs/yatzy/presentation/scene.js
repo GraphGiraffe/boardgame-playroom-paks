@@ -33,7 +33,7 @@
   }
 
  // Geometry contains only public identities from the authorized projection.
- function sceneLayout(p){const d=p.data;return {geometry:{topology:'fixed'},zones:[{id:'field',kind:'board'}],objects:d.dice.map((_,index)=>({ref:{namespace:'die',id:String(index)},zone:'field',index})),interactions:p.actions.map(command=>({command,target:{zone:'field'}}))};}
+ function sceneLayout(p){const d=p.data;return {geometry:{topology:'fixed'},zones:[{id:'field',kind:'board'}],objects:d.dice.map((_,index)=>({ref:{namespace:'die',id:String(index)},zone:'field',index})),interactions:p.actions.map(command=>{return {command,kind:command.type==='hold'?'select':'activate',target:command.type==='hold'?{entity:{namespace:'die',id:String(command.index)}}:{zone:'field'}};})};}
  // Concise, separately authored player introduction; full rulebook stays intact.
  metadata.rulebook.brief={"sections":[{"title":{"key":"yatzy.brief.0.title","params":{}},"paragraphs":[{"key":"yatzy.brief.0.text","params":{}}],"layout":"row","figures":[{"id":"roll","caption":{"key":"yatzy.brief.0.caption","params":{}},"role":"diagram"}]},{"title":{"key":"yatzy.brief.1.title","params":{}},"paragraphs":[{"key":"yatzy.brief.1.text","params":{}}],"layout":"row","figures":[{"id":"score","caption":{"key":"yatzy.brief.1.caption","params":{}},"role":"diagram"}]},{"title":{"key":"yatzy.brief.2.title","params":{}},"paragraphs":[{"key":"yatzy.brief.2.text","params":{}}]}]};
  return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}),action,choice,event,metric,scene:p=>({...scene(p),...sceneLayout(p)})});

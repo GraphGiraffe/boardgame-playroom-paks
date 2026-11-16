@@ -417,7 +417,8 @@
   "sdkFeatures": [
     "local-input-v1",
     "turn-order-v1",
-    "parameter-previews-v2"
+    "parameter-previews-v2",
+    "isolated-execution-v1"
   ],
   "execution": "isolated-v1"
 };

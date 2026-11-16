@@ -37,7 +37,7 @@
   }
 
  // Geometry contains only public identities from the authorized projection.
- function sceneLayout(p){const d=p.data;return {geometry:{topology:'fixed'},zones:[{id:'field',kind:'board'}],objects:d.board.flatMap((owner,cell)=>owner===null?[]:[{ref:{namespace:'mark',id:String(cell)},zone:'field',cell,owner}]),interactions:p.actions.map(command=>({command,target:{zone:'field'}}))};}
+ function sceneLayout(p){const d=p.data;return {geometry:{topology:'fixed'},zones:[{id:'field',kind:'board'}],objects:d.board.flatMap((owner,cell)=>owner===null?[]:[{ref:{namespace:'mark',id:String(cell)},zone:'field',cell,owner}]),interactions:p.actions.map(command=>{return {command,kind:'activate',target:{zone:'field',cell:command.cell}};})};}
  // Concise, separately authored player introduction; full rulebook stays intact.
  metadata.rulebook.brief={"sections":[{"title":{"key":"tictactoe.brief.0.title","params":{}},"paragraphs":[{"key":"tictactoe.brief.0.text","params":{}}],"layout":"row","figures":[{"id":"place","caption":{"key":"tictactoe.brief.0.caption","params":{}},"role":"diagram"}]},{"title":{"key":"tictactoe.brief.1.title","params":{}},"paragraphs":[{"key":"tictactoe.brief.1.text","params":{}}],"layout":"row","figures":[{"id":"line","caption":{"key":"tictactoe.brief.1.caption","params":{}},"role":"diagram"}]},{"title":{"key":"tictactoe.brief.2.title","params":{}},"paragraphs":[{"key":"tictactoe.brief.2.text","params":{}}]}]};
  return Object.freeze({metadata:Object.freeze({...metadata,presets:metadata.presets.map(preset=>({...preset,description:message('modes.'+preset.id)}))}), action, event, metric, scene:p=>({...scene(p),...sceneLayout(p)})});

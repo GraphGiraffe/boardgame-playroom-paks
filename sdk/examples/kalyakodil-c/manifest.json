@@ -1,6 +1,6 @@
 {
   "id": "kalyakodil-c",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "engineApi": 4,
   "viewApi": 3,
   "stateVersion": 1,
@@ -812,5 +812,12 @@
         }
       ]
     }
+  ],
+  "execution": "isolated-v1",
+  "rules": "rules.js",
+  "view": "view.js",
+  "styles": "styles.css",
+  "sdkFeatures": [
+    "isolated-execution-v1"
   ]
 }

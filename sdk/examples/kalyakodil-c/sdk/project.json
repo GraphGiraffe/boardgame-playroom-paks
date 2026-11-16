@@ -22,5 +22,12 @@
     "wrongGuessPenalty": false,
     "fastArtistBonus": false,
     "answerMode": "anonymous"
+  },
+  "support": [],
+  "helpers": [],
+  "origin": {
+    "operation": "adopt",
+    "previousVersion": "0.1.0",
+    "sourceManifestSHA256": "b43e811ba6793c59f145145a533a1d1c1960a199f663873e4845cab13d795b4d"
   }
 }

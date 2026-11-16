@@ -328,7 +328,8 @@
     "turn-order-v1",
     "parameter-illustrations-v1",
     "standard-parameter-ui-v1",
-    "arrival-departures-v1"
+    "arrival-departures-v1",
+    "isolated-execution-v1"
   ],
   "execution": "isolated-v1"
 };

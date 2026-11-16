@@ -95,6 +95,7 @@
     ],
     "view": [
       "presentation/scene.js",
+      "presentation/rule-illustrations.js",
       "presentation/tutorial.js"
     ],
     "locales": {
@@ -647,7 +648,8 @@
     "local-input-v1",
     "turn-order-v1",
     "parameter-illustrations-v1",
-    "player-status-v1"
+    "player-status-v1",
+    "isolated-execution-v1"
   ],
   "teamLayouts": {
     "teams": {

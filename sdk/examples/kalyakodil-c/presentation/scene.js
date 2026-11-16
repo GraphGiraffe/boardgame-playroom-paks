@@ -18,8 +18,8 @@ const presentation={
  const command=(/** @type {string} */type)=>p.actions.find(c=>c.type===type)||null;
  const input=(/** @type {string} */type)=>(p.inputs||[]).find(choice=>choice.command.type===type)?.command||null;
  const drawCommand=input('draw'),guessCommand=input('guess');
- return {contractVersion:1,id:'kalyakodil-c',family:'drawing',columns:2,rows:1,
-  players:Array.from({length:p.playerCount},(_,player)=>({player,metrics:[{id:'points',kind:'number',value:scores[player],label:'Очки'}]})),
+ return {contractVersion:1,id:'kalyakodil-c',family:'drawing',columns:2,rows:1,geometry:{topology:'drawing'},zones:[{id:'field',kind:'table'},{id:'canvas',kind:'canvas'}],objects:[],interactions:[],
+  players:Array.from({length:p.playerCount},(_,player)=>({player,metrics:[{id:'points',kind:'points',value:scores[player],label:'Очки'}]})),
   cells:[/** @type {Row} */({id:'round',index:0,label:'Раунд '+roundId+' · Круг '+d.cycle}),{id:'stop',index:1,label:'Остановка '+/** @type {SceneValue[]} */(d.stopVotes).length+'/'+d.stopRequired+(d.stopPending?' · принята':''),command:command('stop')}],
   prompt:d.word?String(d.word):Number(d.wordLength)>0?'Букв: '+d.wordLength:'Угадайте рисунок',
   ...(Number(d.voteDeadline)>0||d.stopPending===true?{vote:{id:'stop-'+d.voteDeadline,title:'Завершить после раунда / круга',deadline:Number(d.voteDeadline),eligible:Array.from({length:p.playerCount},(_,i)=>i),voted:/** @type {number[]} */(d.stopVotes),required:Number(d.stopRequired),accepted:d.stopPending===true,...(command('stop')?{command:/** @type {import('../sdk/contracts').Command} */(command('stop'))}:{})}}:{}),

@@ -5,6 +5,7 @@ export interface Position {playerCount:number; turn:number; status:'playing'|'fi
 export interface Projection {contractVersion:1; game:string; viewer:number; actor:number; audience:'public'|'player'; playerCount:number; turn:number; status:'playing'|'finished'; winners:number[]; data:{[key:string]:JSONValue}; actions:Command[]; inputs?:InputChoice[]; events:JSONValue[]}
 export interface Message {key:string; params?:{[key:string]:JSONValue | Message}}
 export interface Choice {command:Command; visibility:'public'|'private'}
+export type Metric={id:string;kind:'points'|'wins'|'pieces';value:number;label:string|Message;resultUsage?:boolean;display?:{icon:'heart'|'meeple'|'crown';capacity?:number;overlap?:boolean}};
 export type InputField={kind:'text';maxLength:number;minLength?:number;label?:string}|{kind:'integer';min:number;max:number;label?:string}|{kind:'boolean';label?:string}|{kind:'enum';values:Array<string|number|boolean>;label?:string}|{kind:'ink';label?:string};
 export interface InputChoice extends Choice {fields:{[key:string]:InputField};label?:string}
 export type InkOperation={kind:'stroke';id:string;tool:'brush'|'eraser';color:string;width:1|2|3;points:number[][]}|{kind:'fill';id:string;color:string;x:number;y:number}|{kind:'clear';id:string};
@@ -28,7 +29,7 @@ export interface Definition {
 }
 export interface Scene {
  contractVersion:1; id:string; family:string;
- players:({player:number;metrics:JSONValue[]}&{[key:string]:JSONValue})[];
+ players:({player:number;metrics:Metric[]}&{[key:string]:unknown})[];
  cells?:JSONValue[]; rows?:number|JSONValue[]; columns?:number; dice?:JSONValue[];
  geometry?:JSONValue; zones?:JSONValue[]; objects?:JSONValue[]; interactions?:JSONValue[];
  canvas?:{id:string;operations:JSONValue[];enabled:boolean;command?:Command;allowedTools?:string[];clearEnabled?:boolean;strokeRemaining?:number|null;colors?:string[]};

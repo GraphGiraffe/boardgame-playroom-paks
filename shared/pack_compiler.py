@@ -51,7 +51,7 @@ def validate_parameter_previews(manifest, label):
     if not isinstance(settings, list) or not isinstance(preset, dict):
         raise ValueError(f"Некорректная иллюстрация параметра: {label}")
     sdk = manifest.get("sdkFeatures", [])
-    if (not isinstance(sdk, list) or len(sdk) > 16 or any(not isinstance(f, str) or f not in {"local-input-v1", "turn-order-v1", "parameter-previews-v2", "parameter-illustrations-v1", "standard-parameter-ui-v1", "arrival-departures-v1", "concurrent-reactions-v1", "player-status-v1"} for f in sdk) or len(set(sdk)) != len(sdk)):
+    if (not isinstance(sdk, list) or len(sdk) > 16 or any(not isinstance(f, str) or f not in {"local-input-v1", "turn-order-v1", "parameter-previews-v2", "parameter-illustrations-v1", "standard-parameter-ui-v1", "arrival-departures-v1", "concurrent-reactions-v1", "player-status-v1", "isolated-execution-v1"} for f in sdk) or len(set(sdk)) != len(sdk)):
         raise ValueError(f"Неподдерживаемая возможность SDK: {label}")
     if any(isinstance(f, dict) and (f.get("presentation") == "mode" or "inactiveWhen" in f or "inactivePresentation" in f) for f in settings) and "parameter-previews-v2" not in sdk:
         raise ValueError(f"Требуется SDK parameter-previews-v2: {label}")
@@ -159,6 +159,8 @@ def validate_manifest(manifest, label):
         raise ValueError(f"Нет manifest: {label}")
     if "execution" in manifest and manifest["execution"] != "isolated-v1":
         raise ValueError(f"Unsupported pack execution: {label}")
+    if manifest.get("execution") == "isolated-v1" and (not isinstance(manifest.get("sdkFeatures"), list) or "isolated-execution-v1" not in manifest["sdkFeatures"]):
+        raise ValueError(f"SDK isolated execution feature required: {label}")
     ident, version = manifest.get("id"), manifest.get("version")
     if not isinstance(ident, str) or not ID.fullmatch(ident) or not isinstance(version, str) or not SEMVER.fullmatch(version):
         raise ValueError(f"Некорректные ID/версия пака: {label}")
@@ -454,6 +456,22 @@ def _sdk_scripts(root, names, prefix='', suffix='.js'):
     return result
 
 
+def validate_animation(value):
+    """The SDK animation vocabulary; arbitrary config JSON is a separate port."""
+    def number(n):
+        return type(n) in (int, float) and -float('inf') < n < float('inf')
+    if not isinstance(value, dict) or not number_equals(value.get('contractVersion'), 1) or not isinstance(value.get('frames'), list) or not 1 <= len(value['frames']) <= 1000:
+        raise ValueError('SDK_ANIMATION_INVALID')
+    previous = -1
+    for frame in value['frames']:
+        if not isinstance(frame, dict) or not number(frame.get('time')) or not 0 <= frame['time'] <= 10000 or frame['time'] < previous or not isinstance(frame.get('values'), dict):
+            raise ValueError('SDK_ANIMATION_INVALID')
+        previous = frame['time']
+        for key, n in frame['values'].items():
+            if key not in {'x', 'y', 'rotation', 'scale', 'opacity'} or not number(n) or abs(n) > 10000 or key == 'opacity' and not 0 <= n <= 1 or key == 'scale' and not 0 <= n <= 20:
+                raise ValueError('SDK_ANIMATION_INVALID')
+
+
 def isolated_source_hash(payload):
     value = {key: payload[key] for key in ('manifest', 'descriptor', 'catalogs')}
     digest = hashlib.sha256(json.dumps(value, ensure_ascii=False, separators=(',', ':'), allow_nan=False).encode('utf-8'))
@@ -469,7 +487,7 @@ def isolated_source_payload(pack, shared=None):
     shared = Path(shared).resolve(strict=True) if shared else Path(__file__).resolve().parent
     manifest = validate_manifest(parse_json(local_file(pack, 'manifest.json').read_text(encoding='utf-8')), pack.name)
     descriptor = parse_json(local_file(pack, 'sdk/project.json').read_text(encoding='utf-8'))
-    if descriptor.get('contractVersion') != 1 or not isinstance(descriptor.get('presentation'), list):
+    if not number_equals(descriptor.get('contractVersion'), 1) or not isinstance(descriptor.get('presentation'), list):
         raise ValueError('SDK_DESCRIPTOR_REQUIRED')
     dependencies = []
     for name in manifest.get('sharedDomain', []):
@@ -510,7 +528,7 @@ def isolated_source_payload(pack, shared=None):
     if source_bytes > MAX_SOURCE_BYTES:
         raise ValueError('SDK_SOURCE_LIMIT')
     provenance = parse_json(local_file(pack, 'sdk/assets.json').read_text(encoding='utf-8')) if (pack / 'sdk/assets.json').exists() else {}
-    assets, providers, data_files, asset_packs = [], [], [], []
+    assets, providers, data_files, asset_packs, documentation = [], [], [], [], []
     seen = set()
     def add_resource(root, relative, name):
         if name in seen:
@@ -522,18 +540,21 @@ def isolated_source_payload(pack, shared=None):
         if suffix in {'.js', '.css'}:
             providers.append({'file': name, 'source': content.decode('utf-8'), 'role': 'asset-provider' if suffix == '.js' else 'asset-style'})
             return
-        if suffix in {'.json'}:
+        if suffix == '.json' and not (root == pack and relative.startswith('assets/')):
             # Catalog/config JSON is data, not the animation-only asset API.
             data_files.append({'file': name, 'value': parse_json(content.decode('utf-8'))})
             return
         if suffix in {'.md', '.txt'}:
+            documentation.append(name)
             return  # Authoring documentation and masters stay in the source archive.
         mime = 'audio/wav' if suffix == '.wav' else mimetypes.guess_type(file.name)[0] or 'application/octet-stream'
-        maximum = 64_000 if suffix == '.svg' else 128_000 if mime.startswith('audio/') else 512_000
-        if not (mime.startswith('image/') or mime.startswith('audio/')) or len(content) > maximum:
+        maximum = 64_000 if suffix in {'.svg', '.json'} else 128_000 if mime.startswith('audio/') else 512_000
+        if not (mime.startswith('image/') or mime.startswith('audio/') or suffix == '.json' and mime == 'application/json') or len(content) > maximum:
             raise ValueError('SDK_ASSET_SIZE_OR_FORMAT: ' + name)
         if provenance.get(relative, {}).get('sha256') not in (None, hashlib.sha256(content).hexdigest()):
             raise ValueError('SDK_ASSET_CHANGED: ' + name)
+        if suffix == '.json':
+            validate_animation(parse_json(content.decode('utf-8')))
         assets.append({'file': name, 'sha256': hashlib.sha256(content).hexdigest(), 'mime': mime,
                        'data': base64.b64encode(content).decode('ascii'), 'bytes': len(content),
                        'provenance': provenance.get(relative, {'source': 'Existing source resource: ' + relative})})
@@ -578,7 +599,7 @@ def isolated_source_payload(pack, shared=None):
     source_bytes = sum(len(row['source'].encode('utf-8')) for rows in sources.values() for row in rows)
     if source_bytes > MAX_SOURCE_BYTES:
         raise ValueError('SDK_SOURCE_LIMIT')
-    closure = {'sourceBytes': source_bytes, 'assetPacks': asset_packs, 'data': data_files,
+    closure = {'sourceBytes': source_bytes, 'assetPacks': asset_packs, 'data': data_files, 'documentation': documentation,
                'budget': {'assetBytes': sum(item['bytes'] for item in assets), 'assetCount': len(assets),
                           'maxAssetBytes': MAX_RESOURCE_BYTES, 'maxAssets': MAX_RESOURCES}}
     books = {}
@@ -595,10 +616,10 @@ def isolated_source_payload(pack, shared=None):
 
 def validate_isolated_payload(payload, manifest):
     if (not isinstance(payload, dict) or payload.get('format') != 'playroom-sdk-source'
-            or payload.get('contractVersion') != 1 or payload.get('manifest') != manifest):
+            or not number_equals(payload.get('contractVersion'), 1) or payload.get('manifest') != manifest):
         raise ValueError('SDK_ISOLATED_PAYLOAD_INVALID')
     descriptor, sources = payload.get('descriptor'), payload.get('sources')
-    if not isinstance(descriptor, dict) or descriptor.get('contractVersion') != 1 or not isinstance(sources, dict):
+    if not isinstance(descriptor, dict) or not number_equals(descriptor.get('contractVersion'), 1) or not isinstance(sources, dict):
         raise ValueError('SDK_ISOLATED_DESCRIPTOR_INVALID')
     if not {'dependencies', 'rules', 'helpers', 'presentation', 'types'} <= set(sources):
         raise ValueError('SDK_ISOLATED_SOURCES_INVALID')
@@ -641,9 +662,10 @@ def validate_isolated_payload(payload, manifest):
             raise ValueError('SDK_ASSET_DATA') from error
         if len(raw) != item['bytes'] or hashlib.sha256(raw).hexdigest() != item['sha256']:
             raise ValueError('SDK_ASSET_HASH')
-        maximum = 64_000 if name.endswith('.svg') else 128_000 if item['mime'].startswith('audio/') else 512_000
-        if len(raw) > maximum or not (item['mime'].startswith('image/') or item['mime'].startswith('audio/')):
+        maximum = 64_000 if name.endswith(('.svg', '.json')) else 128_000 if item['mime'].startswith('audio/') else 512_000
+        if len(raw) > maximum or not (item['mime'].startswith('image/') or item['mime'].startswith('audio/') or name.endswith('.json') and item['mime'] == 'application/json'):
             raise ValueError('SDK_ASSET_SIZE_OR_FORMAT')
+        if name.endswith('.json'): validate_animation(parse_json(raw.decode('utf-8')))
         total += len(raw)
     if total > MAX_RESOURCE_BYTES:
         raise ValueError('SDK_ASSET_TOTAL_LIMIT')
