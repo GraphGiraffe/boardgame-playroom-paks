@@ -49,7 +49,9 @@
       "strokeLimit": 0,
       "singleGuess": false,
       "exactBonus": false,
-      "answerMode": "anonymous"
+      "answerMode": "anonymous",
+      "stopDeadline": 0,
+      "voteSequence": 0
     },
     "revision": 0
   },
@@ -102,7 +104,9 @@
       "strokeLimit": 0,
       "singleGuess": false,
       "exactBonus": false,
-      "answerMode": "anonymous"
+      "answerMode": "anonymous",
+      "stopDeadline": 0,
+      "voteSequence": 0
     },
     "revision": 0
   }
