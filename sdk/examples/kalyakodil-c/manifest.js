@@ -49,7 +49,8 @@
       "combined",
       "table",
       "player"
-    ]
+    ],
+    "bots": false
   },
   "settings": [
     {

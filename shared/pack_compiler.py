@@ -3,6 +3,8 @@ import base64
 import hashlib
 import json
 import mimetypes
+import math
+import struct
 from pathlib import Path, PurePosixPath
 import re
 
@@ -205,6 +207,9 @@ def validate_manifest(manifest, label):
     for key, filename in {**ENTRY_POINTS, "sounds": "sounds.js"}.items():
         if key in manifest and manifest[key] != filename:
             raise ValueError(f"Неподдерживаемая точка входа {key}: {label}")
+    capabilities = manifest.get("capabilities", {})
+    if not isinstance(capabilities, dict) or ("bots" in capabilities and not isinstance(capabilities["bots"], bool)):
+        raise ValueError(f"Invalid bot capability: {label}")
     modules = manifest.get("sharedDomain", [])
     if (not isinstance(modules, list) or len(modules) > 16
             or any(not isinstance(name, str) or not re.fullmatch(r"[a-z][a-z0-9-]{0,63}", name) for name in modules)
@@ -472,12 +477,39 @@ def validate_animation(value):
                 raise ValueError('SDK_ANIMATION_INVALID')
 
 
+def _resource_identity(value):
+    """Tagged JSON with JS binary64 numbers and UTF-16 key ordering."""
+    if value is None:
+        return ['null']
+    if isinstance(value, bool):
+        return ['boolean', value]
+    if isinstance(value, (int, float)):
+        try:
+            numeric = float(value)
+        except OverflowError as error:
+            raise ValueError('SDK_JSON_INVALID') from error
+        if not math.isfinite(numeric):
+            raise ValueError('SDK_JSON_INVALID')
+        return ['number', struct.pack('>d', numeric if numeric else 0.0).hex()]
+    if isinstance(value, str):
+        return ['string', value]
+    if isinstance(value, list):
+        return ['array', [_resource_identity(item) for item in value]]
+    if isinstance(value, dict):
+        return ['object', [[key, _resource_identity(value[key])] for key in sorted(value, key=lambda key: key.encode('utf-16-be', errors='surrogatepass'))]]
+    raise ValueError('SDK_JSON_INVALID')
+
+
 def isolated_source_hash(payload):
     value = {key: payload[key] for key in ('manifest', 'descriptor', 'catalogs')}
-    digest = hashlib.sha256(json.dumps(value, ensure_ascii=False, separators=(',', ':'), allow_nan=False).encode('utf-8'))
+    digest = hashlib.sha256(json.dumps(value, ensure_ascii=False, separators=(',', ':'), allow_nan=False).encode('utf-8', errors='backslashreplace'))
     for kind in ('dependencies', 'rules', 'helpers', 'presentation', 'types', 'support'):
         for row in payload['sources'].get(kind, []):
             digest.update((row['file'] + '\0' + row['source']).encode('utf-8'))
+    identity = {'resourceClosure': payload.get('resourceClosure', {}),
+                'assets': [{key: value for key, value in row.items() if key != 'data'} for row in payload.get('assets', [])],
+                'providers': payload['sources'].get('providers', [])}
+    digest.update(('\0resources-v1\0' + json.dumps(_resource_identity(identity), ensure_ascii=False, separators=(',', ':'), allow_nan=False)).encode('utf-8', errors='backslashreplace'))
     return digest.hexdigest()
 
 

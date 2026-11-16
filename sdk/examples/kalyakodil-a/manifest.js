@@ -804,6 +804,9 @@
   "styles": "styles.css",
   "sdkFeatures": [
     "isolated-execution-v1"
-  ]
+  ],
+  "capabilities": {
+    "bots": false
+  }
 };
 })(globalThis);
