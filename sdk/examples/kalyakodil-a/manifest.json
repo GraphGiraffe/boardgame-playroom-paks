@@ -19,7 +19,7 @@
   },
   "name": "Калякодил A",
   "minPlayers": 2,
-  "maxPlayers": 10,
+  "maxPlayers": 12,
   "settings": [
     {
       "key": "mode",

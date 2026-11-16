@@ -54,7 +54,8 @@
         "strokeBudget": 0,
         "quickGuessBonus": false,
         "answerMode": "anonymous"
-      }
+      },
+      "voteDeadline": 0
     }
   },
   "right": {
@@ -111,7 +112,8 @@
         "strokeBudget": 0,
         "quickGuessBonus": false,
         "answerMode": "anonymous"
-      }
+      },
+      "voteDeadline": 0
     }
   }
 }

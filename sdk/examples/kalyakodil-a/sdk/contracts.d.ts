@@ -8,11 +8,13 @@ export interface Choice {command:Command; visibility:'public'|'private'}
 export type InputField={kind:'text';maxLength:number;minLength?:number;label?:string}|{kind:'integer';min:number;max:number;label?:string}|{kind:'boolean';label?:string}|{kind:'enum';values:Array<string|number|boolean>;label?:string}|{kind:'ink';label?:string};
 export interface InputChoice extends Choice {fields:{[key:string]:InputField};label?:string}
 export type InkOperation={kind:'stroke';id:string;tool:'brush'|'eraser';color:string;width:1|2|3;points:number[][]}|{kind:'fill';id:string;color:string;x:number;y:number}|{kind:'clear';id:string};
-export interface Transition {position:Position;events:JSONValue[];turnEnded?:boolean;roundEnded?:boolean}
+export interface EventDraft {type:string;actor:number|null;params:{[key:string]:JSONValue};visibility:{kind:'public'}|{kind:'players';players:number[]};publicEvent?:EventDraft}
+/** roundEnded:true requires Definition.rounds:true and turnEnded:true. */
+export interface Transition {position:Position;events:EventDraft[];turnEnded?:boolean;roundEnded?:boolean}
 export interface Definition {
  contractVersion:1; id:string; minPlayers:number; maxPlayers:number;
  rounds?:boolean;
- create(options:{playerCount:number;firstPlayer:number;rng:number;[key:string]:JSONValue}):Position | {position:Position;events:JSONValue[]};
+ create(options:{playerCount:number;firstPlayer:number;rng:number;[key:string]:JSONValue}):Position | {position:Position;events:EventDraft[]};
  validate(position:Position):boolean;
  actions(position:Position,actor:number):Choice[];
  reduce(position:Position,actor:number,command:Command,context:{now:number}):Transition;
@@ -31,6 +33,7 @@ export interface Scene {
  clock?:{phase:string;deadline:number;label?:string};
  chat?:{messages:{id:string;text:string;player?:number;confirmCommand?:Command}[];command?:Command;placeholder?:string};
  roundResult?:JSONValue; prompt?:string; controls?:JSONValue[];
+ vote?:{id:string;title:string;deadline:number;eligible:number[];voted:number[];required:number;accepted:boolean;command?:Command};
 }
 export interface Presentation {
  metadata?:{name?:Message|string;rules?:Array<Message|string>;rulebook?:JSONValue;[key:string]:unknown};
@@ -39,9 +42,9 @@ export interface Presentation {
  event?(event:JSONValue):JSONValue;
 }
 export interface Diagnostic {code:string;role?:'rules'|'presentation';phase?:string;resource?:string;file?:string;line?:number;column?:number;frames?:{file:string;line:number;column:number}[];hint?:string}
-export interface StudioDescriptor {contractVersion:1;rules:string[];presentation:string[];helpers?:string[];checkTypes?:boolean;options?:{[key:string]:JSONValue}}
+export interface StudioDescriptor {contractVersion:1;rules:string[];presentation:string[];helpers?:string[];types?:string[];support?:string[];checkTypes?:boolean;options?:{[key:string]:JSONValue}}
 declare global {
- const SDK:Readonly<{read<T extends object,K extends keyof T>(value:T,key:K):T[K];resource(id:string):{kind:'asset';id:string}}>;
+ const SDK:Readonly<{read<T extends object,K extends keyof T>(value:T,key:K):T[K];resource(id:string):{kind:'asset';id:string};voteThreshold(eligible:number):number}>;
  var PlayroomPackDefinition: Definition;
  var PlayroomPackPresentation: Presentation;
 }
