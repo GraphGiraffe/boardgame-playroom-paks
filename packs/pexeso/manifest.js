@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["pexeso"] = {
   "id": "pexeso",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "name": "Пексесо",
   "category": "cards",
   "estimatedDuration": "5–20 мин",
@@ -77,6 +77,22 @@
   "sharedDomain": [
     "standard-deck"
   ],
+  "sourceModules": {
+    "rules": [
+      "domain/game.js",
+      "presentation/scene.js"
+    ],
+    "view": [
+      "presentation/scene.js",
+      "presentation/tutorial.js",
+      "presentation/rule-illustrations.js"
+    ],
+    "locales": {
+      "ru": [
+        "locales/ru/game.json"
+      ]
+    }
+  },
   "sharedAssetPacks": [
     "cartoon-deck",
     "characters-minimal",
@@ -231,7 +247,9 @@
   "sdkFeatures": [
     "local-input-v1",
     "turn-order-v1",
-    "parameter-illustrations-v1"
-  ]
+    "parameter-illustrations-v1",
+    "isolated-execution-v1"
+  ],
+  "execution": "isolated-v1"
 };
 })(globalThis);

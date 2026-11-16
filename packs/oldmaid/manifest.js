@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["oldmaid"] = {
   "id": "oldmaid",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "name": "Акулина",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
@@ -122,6 +122,22 @@
     "standard-deck",
     "end-policy"
   ],
+  "sourceModules": {
+    "rules": [
+      "domain/game.js",
+      "presentation/scene.js"
+    ],
+    "view": [
+      "presentation/scene.js",
+      "presentation/tutorial.js",
+      "presentation/rule-illustrations.js"
+    ],
+    "locales": {
+      "ru": [
+        "locales/ru/game.json"
+      ]
+    }
+  },
   "ruleGroups": [
     {
       "label": "Карты и ход",
@@ -267,7 +283,9 @@
     "local-input-v1",
     "turn-order-v1",
     "parameter-illustrations-v1",
-    "standard-parameter-ui-v1"
-  ]
+    "standard-parameter-ui-v1",
+    "isolated-execution-v1"
+  ],
+  "execution": "isolated-v1"
 };
 })(globalThis);

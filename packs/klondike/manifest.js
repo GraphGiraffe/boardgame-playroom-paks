@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["klondike"] = {
   "id": "klondike",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "name": "Косынка",
   "category": "solitaire",
   "estimatedDuration": "10–30 мин",
@@ -50,6 +50,22 @@
     "standard-deck",
     "solitaire"
   ],
+  "sourceModules": {
+    "rules": [
+      "domain/game.js",
+      "presentation/scene.js"
+    ],
+    "view": [
+      "presentation/scene.js",
+      "presentation/tutorial.js",
+      "presentation/rule-illustrations.js"
+    ],
+    "locales": {
+      "ru": [
+        "locales/ru/game.json"
+      ]
+    }
+  },
   "sharedAssetPacks": [
     "mini-split-deck",
     "solitaire-board",
@@ -401,7 +417,9 @@
   "sdkFeatures": [
     "local-input-v1",
     "turn-order-v1",
-    "parameter-previews-v2"
-  ]
+    "parameter-previews-v2",
+    "isolated-execution-v1"
+  ],
+  "execution": "isolated-v1"
 };
 })(globalThis);

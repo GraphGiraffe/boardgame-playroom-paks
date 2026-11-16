@@ -1,6 +1,6 @@
 {
   "id": "domino",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "category": "board",
   "estimatedDuration": "10–15 мин",
   "tagline": "Соединяй числа и считай ходы соперников.",
@@ -213,6 +213,8 @@
     "local-input-v1",
     "turn-order-v1",
     "parameter-illustrations-v1",
-    "standard-parameter-ui-v1"
-  ]
+    "standard-parameter-ui-v1",
+    "isolated-execution-v1"
+  ],
+  "execution": "isolated-v1"
 }

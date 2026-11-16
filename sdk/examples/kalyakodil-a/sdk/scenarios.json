@@ -1,0 +1,1977 @@
+{
+  "contractVersion": 1,
+  "scenarios": [
+    {
+      "id": "phase-boundaries-and-host-only-give-up",
+      "options": {
+        "playerCount": 4,
+        "firstPlayer": 0,
+        "rng": 1,
+        "now": 0,
+        "options": {
+          "durationSeconds": 30,
+          "roundLimit": 10,
+          "difficulty": "easy",
+          "mode": "rounds"
+        }
+      },
+      "steps": [
+        {
+          "advance": 2999,
+          "expect": {
+            "data.phase": "prepare",
+            "timeline.turn": 1,
+            "timeline.round": 1
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "draw",
+            "roundId": 1,
+            "operation": {
+              "kind": "stroke",
+              "id": "early",
+              "tool": "brush",
+              "color": "#112233",
+              "width": 2,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  65535,
+                  65535
+                ]
+              ]
+            }
+          },
+          "reject": true
+        },
+        {
+          "advance": 3000,
+          "expect": {
+            "data.phase": "drawing",
+            "timeline.turn": 1,
+            "timeline.round": 1
+          }
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "draw",
+            "roundId": 1,
+            "operation": {
+              "kind": "stroke",
+              "id": "intruder",
+              "tool": "brush",
+              "color": "#112233",
+              "width": 2,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  65535,
+                  65535
+                ]
+              ]
+            }
+          },
+          "reject": true
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "draw",
+            "roundId": 1,
+            "operation": {
+              "kind": "stroke",
+              "id": "s1",
+              "tool": "brush",
+              "color": "#112233",
+              "width": 2,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  65535,
+                  65535
+                ]
+              ]
+            }
+          },
+          "expect": {
+            "timeline.turn": 1,
+            "timeline.round": 1
+          }
+        },
+        {
+          "advance": 33000,
+          "expect": {
+            "data.phase": "guessing",
+            "timeline.turn": 1,
+            "timeline.round": 1
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "draw",
+            "roundId": 1,
+            "operation": {
+              "kind": "stroke",
+              "id": "late",
+              "tool": "brush",
+              "color": "#112233",
+              "width": 2,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  65535,
+                  65535
+                ]
+              ]
+            }
+          },
+          "reject": true
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "give-up",
+            "roundId": 1
+          },
+          "reject": true
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "give-up",
+            "roundId": 1
+          },
+          "expect": {
+            "data.phase": "result",
+            "data.winner": -1,
+            "data.scores": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "timeline.turn": 1,
+            "timeline.round": 1
+          }
+        },
+        {
+          "advance": 45000,
+          "expect": {
+            "data.phase": "prepare",
+            "data.roundId": 2,
+            "timeline.turn": 2,
+            "timeline.round": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "exact-normalized-answer-and-winner-next",
+      "options": {
+        "playerCount": 4,
+        "firstPlayer": 0,
+        "rng": 1,
+        "now": 0,
+        "options": {
+          "durationSeconds": 30,
+          "roundLimit": 10,
+          "difficulty": "easy",
+          "mode": "rounds"
+        }
+      },
+      "steps": [
+        {
+          "advance": 3000,
+          "expect": {
+            "timeline.turn": 1,
+            "timeline.round": 1
+          }
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "guess",
+            "roundId": 1,
+            "text": "  МОСТ "
+          },
+          "expect": {
+            "data.phase": "result",
+            "data.scores": [
+              0,
+              1,
+              0,
+              0
+            ],
+            "timeline.turn": 1,
+            "timeline.round": 1
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "confirm",
+            "roundId": 1,
+            "guessId": "g1-0"
+          },
+          "reject": true
+        },
+        {
+          "advance": 15000,
+          "expect": {
+            "data.artist": 1,
+            "data.roundId": 2,
+            "timeline.turn": 2,
+            "timeline.round": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "manual-accept-protest-once",
+      "options": {
+        "playerCount": 4,
+        "firstPlayer": 0,
+        "rng": 1,
+        "now": 0,
+        "options": {
+          "durationSeconds": 30,
+          "roundLimit": 10,
+          "difficulty": "easy",
+          "mode": "rounds"
+        }
+      },
+      "steps": [
+        {
+          "advance": 3000
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "guess",
+            "roundId": 1,
+            "text": "переход"
+          }
+        },
+        {
+          "actor": 2,
+          "command": {
+            "type": "guess",
+            "roundId": 1,
+            "text": "река"
+          }
+        },
+        {
+          "actor": 2,
+          "command": {
+            "type": "confirm",
+            "roundId": 1,
+            "guessId": "g1-0"
+          },
+          "reject": true
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "confirm",
+            "roundId": 1,
+            "guessId": "g1-0"
+          },
+          "expect": {
+            "data.manual": true,
+            "data.scores": [
+              0,
+              1,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "protest",
+            "roundId": 1
+          },
+          "reject": true
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "protest",
+            "roundId": 1
+          },
+          "reject": true
+        },
+        {
+          "actor": 2,
+          "command": {
+            "type": "protest",
+            "roundId": 1
+          },
+          "expect": {
+            "data.protested": false,
+            "data.scores": [
+              0,
+              1,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "actor": 3,
+          "command": {
+            "type": "protest",
+            "roundId": 1
+          },
+          "expect": {
+            "data.protested": true,
+            "data.scores": [
+              -1,
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "actor": 2,
+          "command": {
+            "type": "protest",
+            "roundId": 1
+          },
+          "reject": true
+        },
+        {
+          "advance": 15000,
+          "expect": {
+            "data.roundId": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "guessing-window-still-accepts",
+      "options": {
+        "playerCount": 4,
+        "firstPlayer": 0,
+        "rng": 1,
+        "now": 0,
+        "options": {
+          "durationSeconds": 30,
+          "roundLimit": 10,
+          "difficulty": "easy",
+          "mode": "rounds"
+        }
+      },
+      "steps": [
+        {
+          "advance": 33000
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "guess",
+            "roundId": 1,
+            "text": "мост"
+          },
+          "expect": {
+            "data.phase": "result",
+            "data.scores": [
+              0,
+              1,
+              0,
+              0
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "stale-and-malformed-input",
+      "options": {
+        "playerCount": 4,
+        "firstPlayer": 0,
+        "rng": 1,
+        "now": 0,
+        "options": {
+          "durationSeconds": 30,
+          "roundLimit": 10,
+          "difficulty": "easy",
+          "mode": "rounds"
+        }
+      },
+      "steps": [
+        {
+          "advance": 3000
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "guess",
+            "roundId": 99,
+            "text": "мост"
+          },
+          "reject": true
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "guess",
+            "roundId": 1,
+            "text": "мост",
+            "extra": 1
+          },
+          "reject": true
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "guess",
+            "roundId": 1,
+            "text": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+          },
+          "reject": true
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "guess",
+            "roundId": 1,
+            "text": " "
+          },
+          "reject": true
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "guess",
+            "roundId": 1,
+            "text": "мост"
+          },
+          "reject": true
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "guess",
+            "roundId": 1,
+            "text": "неверно"
+          },
+          "expect": {
+            "data.phase": "drawing"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ordinary-stop-waits-for-round",
+      "options": {
+        "playerCount": 4,
+        "firstPlayer": 0,
+        "rng": 1,
+        "now": 0,
+        "options": {
+          "durationSeconds": 30,
+          "roundLimit": 10,
+          "difficulty": "easy",
+          "mode": "rounds"
+        }
+      },
+      "steps": [
+        {
+          "actor": 0,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "reject": true
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          }
+        },
+        {
+          "actor": 2,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopRequested": true
+          }
+        },
+        {
+          "advance": 33000,
+          "expect": {
+            "status": "playing",
+            "data.phase": "guessing"
+          }
+        },
+        {
+          "advance": 48000,
+          "expect": {
+            "status": "playing",
+            "data.phase": "result"
+          }
+        },
+        {
+          "advance": 60000,
+          "expect": {
+            "status": "finished",
+            "data.scores": [
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "twelve-player-stop-quorum-nine",
+      "options": {
+        "playerCount": 12,
+        "firstPlayer": 0,
+        "rng": 1,
+        "now": 0,
+        "options": {
+          "durationSeconds": 30,
+          "roundLimit": 10,
+          "difficulty": "easy",
+          "mode": "rounds"
+        }
+      },
+      "steps": [
+        {
+          "actor": 0,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          }
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          }
+        },
+        {
+          "actor": 2,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          }
+        },
+        {
+          "actor": 3,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          }
+        },
+        {
+          "actor": 4,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          }
+        },
+        {
+          "actor": 5,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          }
+        },
+        {
+          "actor": 6,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          }
+        },
+        {
+          "actor": 7,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          }
+        },
+        {
+          "advance": 1000,
+          "expect": {
+            "data.stopRequested": false
+          }
+        },
+        {
+          "actor": 8,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopRequested": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "two-player-stop-unanimous",
+      "options": {
+        "playerCount": 2,
+        "firstPlayer": 0,
+        "rng": 1,
+        "now": 0,
+        "options": {
+          "durationSeconds": 30,
+          "roundLimit": 10,
+          "difficulty": "easy",
+          "mode": "rounds"
+        }
+      },
+      "steps": [
+        {
+          "actor": 1,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopRequested": false
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopRequested": true
+          }
+        },
+        {
+          "advance": 60000,
+          "expect": {
+            "status": "finished"
+          }
+        }
+      ]
+    },
+    {
+      "id": "turns-stop-preserves-full-circle",
+      "options": {
+        "playerCount": 4,
+        "firstPlayer": 0,
+        "rng": 1,
+        "now": 0,
+        "options": {
+          "durationSeconds": 30,
+          "roundLimit": 10,
+          "difficulty": "easy",
+          "mode": "turns"
+        }
+      },
+      "steps": [
+        {
+          "actor": 0,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "timeline.turn": 1,
+            "timeline.round": 1
+          }
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "timeline.turn": 1,
+            "timeline.round": 1
+          }
+        },
+        {
+          "actor": 2,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "timeline.turn": 1,
+            "timeline.round": 1
+          }
+        },
+        {
+          "advance": 60000,
+          "expect": {
+            "data.roundId": 2,
+            "data.artist": 1,
+            "status": "playing",
+            "timeline.turn": 2,
+            "timeline.round": 1
+          }
+        },
+        {
+          "advance": 120000,
+          "expect": {
+            "data.roundId": 3,
+            "data.artist": 2,
+            "timeline.turn": 3,
+            "timeline.round": 1
+          }
+        },
+        {
+          "advance": 180000,
+          "expect": {
+            "data.roundId": 4,
+            "data.artist": 3,
+            "timeline.turn": 4,
+            "timeline.round": 1
+          }
+        },
+        {
+          "advance": 240000,
+          "expect": {
+            "status": "finished"
+          }
+        }
+      ]
+    },
+    {
+      "id": "two-full-circles-every-player",
+      "options": {
+        "playerCount": 2,
+        "firstPlayer": 0,
+        "rng": 1,
+        "now": 0,
+        "options": {
+          "durationSeconds": 30,
+          "roundLimit": 10,
+          "difficulty": "easy",
+          "mode": "turns",
+          "cycles": 2
+        }
+      },
+      "steps": [
+        {
+          "advance": 60000,
+          "expect": {
+            "data.roundId": 2,
+            "data.remaining": [],
+            "timeline.turn": 2,
+            "timeline.round": 1
+          }
+        },
+        {
+          "advance": 120000,
+          "expect": {
+            "data.roundId": 3,
+            "data.cycle": 2,
+            "data.remaining": [
+              1
+            ],
+            "timeline.turn": 3,
+            "timeline.round": 2
+          }
+        },
+        {
+          "advance": 240000,
+          "expect": {
+            "status": "finished",
+            "data.roundId": 4
+          }
+        }
+      ]
+    },
+    {
+      "id": "turn-protest-keeps-unplayed-members",
+      "options": {
+        "playerCount": 4,
+        "firstPlayer": 0,
+        "rng": 1,
+        "now": 0,
+        "options": {
+          "durationSeconds": 30,
+          "roundLimit": 10,
+          "difficulty": "easy",
+          "mode": "turns"
+        }
+      },
+      "steps": [
+        {
+          "advance": 3000
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "guess",
+            "roundId": 1,
+            "text": "переправа"
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "confirm",
+            "roundId": 1,
+            "guessId": "g1-0"
+          }
+        },
+        {
+          "actor": 2,
+          "command": {
+            "type": "protest",
+            "roundId": 1
+          }
+        },
+        {
+          "actor": 3,
+          "command": {
+            "type": "protest",
+            "roundId": 1
+          },
+          "expect": {
+            "data.protested": true
+          }
+        },
+        {
+          "advance": 15000,
+          "expect": {
+            "data.roundId": 2,
+            "data.cycle": 1,
+            "data.remaining.length": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "finite-ten-rounds",
+      "options": {
+        "playerCount": 4,
+        "firstPlayer": 0,
+        "rng": 1,
+        "now": 0,
+        "options": {
+          "durationSeconds": 30,
+          "roundLimit": 10,
+          "difficulty": "easy",
+          "mode": "rounds"
+        }
+      },
+      "steps": [
+        {
+          "advance": 600000,
+          "expect": {
+            "status": "finished",
+            "data.roundId": 10
+          }
+        }
+      ]
+    },
+    {
+      "id": "endless-rounds-continue",
+      "options": {
+        "playerCount": 4,
+        "firstPlayer": 0,
+        "rng": 1,
+        "now": 0,
+        "options": {
+          "durationSeconds": 30,
+          "roundLimit": 0,
+          "difficulty": "easy",
+          "mode": "rounds"
+        }
+      },
+      "steps": [
+        {
+          "advance": 660000,
+          "expect": {
+            "status": "playing",
+            "data.roundId": 12
+          }
+        }
+      ]
+    },
+    {
+      "id": "no-clear-but-eraser-allowed",
+      "options": {
+        "playerCount": 4,
+        "firstPlayer": 0,
+        "rng": 1,
+        "now": 0,
+        "options": {
+          "durationSeconds": 30,
+          "roundLimit": 10,
+          "difficulty": "easy",
+          "mode": "rounds",
+          "noErase": true
+        }
+      },
+      "steps": [
+        {
+          "advance": 3000
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "draw",
+            "roundId": 1,
+            "operation": {
+              "kind": "clear",
+              "id": "clear1"
+            }
+          },
+          "reject": true
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "draw",
+            "roundId": 1,
+            "operation": {
+              "kind": "stroke",
+              "id": "eraser1",
+              "tool": "eraser",
+              "color": "#112233",
+              "width": 2,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  65535,
+                  65535
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "draw",
+            "roundId": 1,
+            "operation": {
+              "kind": "fill",
+              "id": "fill1",
+              "color": "#123456",
+              "x": 0,
+              "y": 0
+            }
+          },
+          "expect": {
+            "data.operations.length": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "stroke-budget-ten",
+      "options": {
+        "playerCount": 4,
+        "firstPlayer": 0,
+        "rng": 1,
+        "now": 0,
+        "options": {
+          "durationSeconds": 30,
+          "roundLimit": 10,
+          "difficulty": "easy",
+          "mode": "rounds",
+          "strokeBudget": 10
+        }
+      },
+      "steps": [
+        {
+          "advance": 3000
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "draw",
+            "roundId": 1,
+            "operation": {
+              "kind": "stroke",
+              "id": "s0",
+              "tool": "brush",
+              "color": "#112233",
+              "width": 2,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  65535,
+                  65535
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "draw",
+            "roundId": 1,
+            "operation": {
+              "kind": "stroke",
+              "id": "s1",
+              "tool": "brush",
+              "color": "#112233",
+              "width": 2,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  65535,
+                  65535
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "draw",
+            "roundId": 1,
+            "operation": {
+              "kind": "stroke",
+              "id": "s2",
+              "tool": "brush",
+              "color": "#112233",
+              "width": 2,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  65535,
+                  65535
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "draw",
+            "roundId": 1,
+            "operation": {
+              "kind": "stroke",
+              "id": "s3",
+              "tool": "brush",
+              "color": "#112233",
+              "width": 2,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  65535,
+                  65535
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "draw",
+            "roundId": 1,
+            "operation": {
+              "kind": "stroke",
+              "id": "s4",
+              "tool": "brush",
+              "color": "#112233",
+              "width": 2,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  65535,
+                  65535
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "draw",
+            "roundId": 1,
+            "operation": {
+              "kind": "stroke",
+              "id": "s5",
+              "tool": "brush",
+              "color": "#112233",
+              "width": 2,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  65535,
+                  65535
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "draw",
+            "roundId": 1,
+            "operation": {
+              "kind": "stroke",
+              "id": "s6",
+              "tool": "brush",
+              "color": "#112233",
+              "width": 2,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  65535,
+                  65535
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "draw",
+            "roundId": 1,
+            "operation": {
+              "kind": "stroke",
+              "id": "s7",
+              "tool": "brush",
+              "color": "#112233",
+              "width": 2,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  65535,
+                  65535
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "draw",
+            "roundId": 1,
+            "operation": {
+              "kind": "stroke",
+              "id": "s8",
+              "tool": "brush",
+              "color": "#112233",
+              "width": 2,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  65535,
+                  65535
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "draw",
+            "roundId": 1,
+            "operation": {
+              "kind": "stroke",
+              "id": "s9",
+              "tool": "brush",
+              "color": "#112233",
+              "width": 2,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  65535,
+                  65535
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "draw",
+            "roundId": 1,
+            "operation": {
+              "kind": "stroke",
+              "id": "overflow",
+              "tool": "brush",
+              "color": "#112233",
+              "width": 2,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  65535,
+                  65535
+                ]
+              ]
+            }
+          },
+          "reject": true
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "draw",
+            "roundId": 1,
+            "operation": {
+              "kind": "fill",
+              "id": "f",
+              "color": "#112233",
+              "x": 5,
+              "y": 5
+            }
+          },
+          "expect": {
+            "data.operations.length": 11
+          }
+        }
+      ]
+    },
+    {
+      "id": "quick-answer-bonus",
+      "options": {
+        "playerCount": 4,
+        "firstPlayer": 0,
+        "rng": 1,
+        "now": 0,
+        "options": {
+          "durationSeconds": 30,
+          "roundLimit": 10,
+          "difficulty": "easy",
+          "mode": "rounds",
+          "quickGuessBonus": true
+        }
+      },
+      "steps": [
+        {
+          "advance": 3000
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "guess",
+            "roundId": 1,
+            "text": "мост"
+          },
+          "expect": {
+            "data.scores": [
+              0,
+              2,
+              0,
+              0
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "quick-bonus-expires",
+      "options": {
+        "playerCount": 4,
+        "firstPlayer": 0,
+        "rng": 1,
+        "now": 0,
+        "options": {
+          "durationSeconds": 30,
+          "roundLimit": 10,
+          "difficulty": "easy",
+          "mode": "rounds",
+          "quickGuessBonus": true
+        }
+      },
+      "steps": [
+        {
+          "advance": 13000
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "guess",
+            "roundId": 1,
+            "text": "мост"
+          },
+          "expect": {
+            "data.scores": [
+              0,
+              1,
+              0,
+              0
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "bonus-fully-revoked-by-protest",
+      "options": {
+        "playerCount": 4,
+        "firstPlayer": 0,
+        "rng": 1,
+        "now": 0,
+        "options": {
+          "durationSeconds": 30,
+          "roundLimit": 10,
+          "difficulty": "easy",
+          "mode": "rounds",
+          "quickGuessBonus": true
+        }
+      },
+      "steps": [
+        {
+          "advance": 3000
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "guess",
+            "roundId": 1,
+            "text": "переправа"
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "confirm",
+            "roundId": 1,
+            "guessId": "g1-0"
+          },
+          "expect": {
+            "data.scores": [
+              0,
+              2,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "actor": 2,
+          "command": {
+            "type": "protest",
+            "roundId": 1
+          }
+        },
+        {
+          "actor": 3,
+          "command": {
+            "type": "protest",
+            "roundId": 1
+          },
+          "expect": {
+            "data.scores": [
+              -1,
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "hard-bank-and-180-seconds",
+      "options": {
+        "playerCount": 4,
+        "firstPlayer": 0,
+        "rng": 1,
+        "now": 0,
+        "options": {
+          "durationSeconds": 180,
+          "roundLimit": 10,
+          "difficulty": "hard",
+          "mode": "rounds"
+        }
+      },
+      "steps": [
+        {
+          "advance": 3000
+        },
+        {
+          "advance": 182999,
+          "expect": {
+            "data.phase": "drawing"
+          }
+        },
+        {
+          "advance": 183000,
+          "expect": {
+            "data.phase": "guessing"
+          }
+        },
+        {
+          "advance": 198000,
+          "expect": {
+            "data.phase": "result"
+          }
+        }
+      ]
+    },
+    {
+      "id": "medium-bank-and-custom-host",
+      "options": {
+        "playerCount": 4,
+        "firstPlayer": 0,
+        "rng": 1,
+        "now": 0,
+        "options": {
+          "durationSeconds": 30,
+          "roundLimit": 10,
+          "difficulty": "medium",
+          "mode": "rounds",
+          "hostPlayer": 2
+        }
+      },
+      "steps": [
+        {
+          "advance": 33000
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "give-up",
+            "roundId": 1
+          },
+          "reject": true
+        },
+        {
+          "actor": 2,
+          "command": {
+            "type": "give-up",
+            "roundId": 1
+          },
+          "expect": {
+            "data.phase": "result"
+          }
+        }
+      ]
+    },
+    {
+      "id": "oral-award-and-protest",
+      "options": {
+        "playerCount": 4,
+        "rng": 1,
+        "firstPlayer": 0,
+        "now": 0,
+        "options": {
+          "durationSeconds": 30,
+          "answerMode": "oral"
+        }
+      },
+      "steps": [
+        {
+          "advance": 3000
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "guess",
+            "roundId": 1,
+            "text": "мост"
+          },
+          "reject": true
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "award",
+            "roundId": 1,
+            "player": 2
+          },
+          "reject": true
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "award",
+            "roundId": 1,
+            "player": 1
+          },
+          "expect": {
+            "data.phase": "result",
+            "data.accepted": "Устный ответ",
+            "data.scores": [
+              0,
+              1,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "actor": 2,
+          "command": {
+            "type": "protest",
+            "roundId": 1
+          }
+        },
+        {
+          "actor": 3,
+          "command": {
+            "type": "protest",
+            "roundId": 1
+          },
+          "expect": {
+            "data.scores": [
+              -1,
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "named-answer-normal-rules",
+      "options": {
+        "playerCount": 4,
+        "rng": 1,
+        "firstPlayer": 0,
+        "now": 0,
+        "options": {
+          "durationSeconds": 30,
+          "answerMode": "named"
+        }
+      },
+      "steps": [
+        {
+          "advance": 3000
+        },
+        {
+          "actor": 2,
+          "command": {
+            "type": "guess",
+            "roundId": 1,
+            "text": "река"
+          },
+          "expect": {
+            "data.guesses.0.actor": 2
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "confirm",
+            "roundId": 1,
+            "guessId": "g1-0"
+          },
+          "expect": {
+            "data.winner": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "quorum-boundary-3",
+      "options": {
+        "playerCount": 3,
+        "firstPlayer": 0,
+        "rng": 1,
+        "now": 0
+      },
+      "steps": [
+        {
+          "actor": 0,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopRequested": false
+          }
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopRequested": false
+          }
+        },
+        {
+          "actor": 2,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopRequested": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "quorum-boundary-6",
+      "options": {
+        "playerCount": 6,
+        "firstPlayer": 0,
+        "rng": 1,
+        "now": 0
+      },
+      "steps": [
+        {
+          "actor": 0,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopRequested": false
+          }
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopRequested": false
+          }
+        },
+        {
+          "actor": 2,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopRequested": false
+          }
+        },
+        {
+          "actor": 3,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopRequested": false
+          }
+        },
+        {
+          "actor": 4,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopRequested": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "quorum-boundary-9",
+      "options": {
+        "playerCount": 9,
+        "firstPlayer": 0,
+        "rng": 1,
+        "now": 0
+      },
+      "steps": [
+        {
+          "actor": 0,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopRequested": false
+          }
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopRequested": false
+          }
+        },
+        {
+          "actor": 2,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopRequested": false
+          }
+        },
+        {
+          "actor": 3,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopRequested": false
+          }
+        },
+        {
+          "actor": 4,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopRequested": false
+          }
+        },
+        {
+          "actor": 5,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopRequested": false
+          }
+        },
+        {
+          "actor": 6,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopRequested": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "quorum-boundary-12",
+      "options": {
+        "playerCount": 12,
+        "firstPlayer": 0,
+        "rng": 1,
+        "now": 0
+      },
+      "steps": [
+        {
+          "actor": 0,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopRequested": false
+          }
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopRequested": false
+          }
+        },
+        {
+          "actor": 2,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopRequested": false
+          }
+        },
+        {
+          "actor": 3,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopRequested": false
+          }
+        },
+        {
+          "actor": 4,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopRequested": false
+          }
+        },
+        {
+          "actor": 5,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopRequested": false
+          }
+        },
+        {
+          "actor": 6,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopRequested": false
+          }
+        },
+        {
+          "actor": 7,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopRequested": false
+          }
+        },
+        {
+          "actor": 8,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopRequested": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "stop-window-expires-without-pausing",
+      "options": {
+        "playerCount": 4,
+        "firstPlayer": 0,
+        "rng": 1,
+        "now": 0,
+        "options": {
+          "durationSeconds": 60
+        }
+      },
+      "steps": [
+        {
+          "actor": 0,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.voteDeadline": 30000
+          }
+        },
+        {
+          "advance": 3000,
+          "expect": {
+            "data.phase": "drawing"
+          }
+        },
+        {
+          "advance": 30000,
+          "expect": {
+            "data.phase": "drawing",
+            "data.deadline": 63000,
+            "data.stopVotes": [],
+            "data.voteDeadline": 0
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.voteDeadline": 60000,
+            "data.stopVotes": [
+              0
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

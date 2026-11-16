@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["mage-brawl"] = {
   "id": "mage-brawl",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "name": "Стихийная потасовка",
   "category": "board",
   "estimatedDuration": "15–40 мин",
@@ -87,6 +87,23 @@
       "teams": true
     }
   ],
+  "sourceModules": {
+    "rules": [
+      "domain/bots.js",
+      "domain/game.js",
+      "presentation/scene.js"
+    ],
+    "view": [
+      "presentation/scene.js",
+      "presentation/rule-illustrations.js",
+      "presentation/tutorial.js"
+    ],
+    "locales": {
+      "ru": [
+        "locales/ru/game.json"
+      ]
+    }
+  },
   "skinFamilies": [
     "board",
     "card-back"
@@ -631,7 +648,8 @@
     "local-input-v1",
     "turn-order-v1",
     "parameter-illustrations-v1",
-    "player-status-v1"
+    "player-status-v1",
+    "isolated-execution-v1"
   ],
   "teamLayouts": {
     "teams": {
@@ -731,6 +749,7 @@
         }
       ]
     }
-  }
+  },
+  "execution": "isolated-v1"
 };
 })(globalThis);

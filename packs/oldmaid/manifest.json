@@ -1,6 +1,6 @@
 {
   "id": "oldmaid",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "name": "Акулина",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
@@ -279,6 +279,8 @@
     "local-input-v1",
     "turn-order-v1",
     "parameter-illustrations-v1",
-    "standard-parameter-ui-v1"
-  ]
+    "standard-parameter-ui-v1",
+    "isolated-execution-v1"
+  ],
+  "execution": "isolated-v1"
 }

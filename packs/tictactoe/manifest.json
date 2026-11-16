@@ -1,6 +1,6 @@
 {
   "id": "tictactoe",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "name": "Крестики-нолики",
   "category": "board",
   "estimatedDuration": "2–5 мин",
@@ -139,6 +139,8 @@
   ],
   "sdkFeatures": [
     "local-input-v1",
-    "turn-order-v1"
-  ]
+    "turn-order-v1",
+    "isolated-execution-v1"
+  ],
+  "execution": "isolated-v1"
 }

@@ -1,6 +1,6 @@
 {
   "id": "battleship",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "name": "Морской бой",
   "category": "board",
   "estimatedDuration": "15–30 мин",
@@ -259,6 +259,8 @@
   ],
   "sdkFeatures": [
     "local-input-v1",
-    "turn-order-v1"
-  ]
+    "turn-order-v1",
+    "isolated-execution-v1"
+  ],
+  "execution": "isolated-v1"
 }

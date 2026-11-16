@@ -1,6 +1,6 @@
 {
   "id": "uno",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "category": "cards",
   "estimatedDuration": "10–20 мин",
   "tagline": "Подбирай цвет и значение. Освободи руку первым.",
@@ -276,6 +276,8 @@
     "local-input-v1",
     "turn-order-v1",
     "standard-parameter-ui-v1",
-    "concurrent-reactions-v1"
-  ]
+    "concurrent-reactions-v1",
+    "isolated-execution-v1"
+  ],
+  "execution": "isolated-v1"
 }

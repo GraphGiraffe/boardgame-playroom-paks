@@ -1,7 +1,10 @@
 """Canonical offline pack compiler. No app checkout, network or Web UI dependency."""
 import base64
+import hashlib
 import json
 import mimetypes
+import math
+import struct
 from pathlib import Path, PurePosixPath
 import re
 
@@ -50,7 +53,7 @@ def validate_parameter_previews(manifest, label):
     if not isinstance(settings, list) or not isinstance(preset, dict):
         raise ValueError(f"Некорректная иллюстрация параметра: {label}")
     sdk = manifest.get("sdkFeatures", [])
-    if (not isinstance(sdk, list) or len(sdk) > 16 or any(not isinstance(f, str) or f not in {"local-input-v1", "turn-order-v1", "parameter-previews-v2", "parameter-illustrations-v1", "standard-parameter-ui-v1", "arrival-departures-v1", "concurrent-reactions-v1", "player-status-v1"} for f in sdk) or len(set(sdk)) != len(sdk)):
+    if (not isinstance(sdk, list) or len(sdk) > 16 or any(not isinstance(f, str) or f not in {"local-input-v1", "turn-order-v1", "parameter-previews-v2", "parameter-illustrations-v1", "standard-parameter-ui-v1", "arrival-departures-v1", "concurrent-reactions-v1", "player-status-v1", "isolated-execution-v1"} for f in sdk) or len(set(sdk)) != len(sdk)):
         raise ValueError(f"Неподдерживаемая возможность SDK: {label}")
     if any(isinstance(f, dict) and (f.get("presentation") == "mode" or "inactiveWhen" in f or "inactivePresentation" in f) for f in settings) and "parameter-previews-v2" not in sdk:
         raise ValueError(f"Требуется SDK parameter-previews-v2: {label}")
@@ -156,6 +159,10 @@ def validate_parameter_previews(manifest, label):
 def validate_manifest(manifest, label):
     if not isinstance(manifest, dict):
         raise ValueError(f"Нет manifest: {label}")
+    if "execution" in manifest and manifest["execution"] != "isolated-v1":
+        raise ValueError(f"Unsupported pack execution: {label}")
+    if manifest.get("execution") == "isolated-v1" and (not isinstance(manifest.get("sdkFeatures"), list) or "isolated-execution-v1" not in manifest["sdkFeatures"]):
+        raise ValueError(f"SDK isolated execution feature required: {label}")
     ident, version = manifest.get("id"), manifest.get("version")
     if not isinstance(ident, str) or not ID.fullmatch(ident) or not isinstance(version, str) or not SEMVER.fullmatch(version):
         raise ValueError(f"Некорректные ID/версия пака: {label}")
@@ -200,6 +207,9 @@ def validate_manifest(manifest, label):
     for key, filename in {**ENTRY_POINTS, "sounds": "sounds.js"}.items():
         if key in manifest and manifest[key] != filename:
             raise ValueError(f"Неподдерживаемая точка входа {key}: {label}")
+    capabilities = manifest.get("capabilities", {})
+    if not isinstance(capabilities, dict) or ("bots" in capabilities and not isinstance(capabilities["bots"], bool)):
+        raise ValueError(f"Invalid bot capability: {label}")
     modules = manifest.get("sharedDomain", [])
     if (not isinstance(modules, list) or len(modules) > 16
             or any(not isinstance(name, str) or not re.fullmatch(r"[a-z][a-z0-9-]{0,63}", name) for name in modules)
@@ -238,6 +248,13 @@ def validate_bundle(bundle, label, raw=None):
             raise ValueError(f"Нет {filename} в паке: {label}")
     if manifest.get("sounds") and not files.get("sounds.js"):
         raise ValueError(f"Нет sounds.js в паке: {label}")
+    if manifest.get("execution") == "isolated-v1":
+        if any(files.get(name) != marker for name, marker in ISOLATED_MARKERS.items()):
+            raise ValueError("SDK_ISOLATED_ENTRYPOINT_INVALID")
+        expected = {*ISOLATED_MARKERS, 'sdk/source.json', *(['sounds.js'] if manifest.get('sounds') else [])}
+        if set(files) != expected or manifest.get('sounds') and files.get('sounds.js') != ISOLATED_SOUNDS_MARKER:
+            raise ValueError('SDK_ISOLATED_ENTRYPOINT_INVALID')
+        validate_isolated_payload(parse_json(files.get("sdk/source.json", "null")), manifest)
     css = files["styles.css"]
     if re.search(r"(?:#app\b|\.(?:table-shell|table-header|player-strip|game-layout-slot|app-game-layout|own-hand|hand-track|opponent-hands|scene-actions|piece-count|player-hand|player-panel|player-info|player-details|player-badges|mini-hand|hand-heading|hand-tools|opponent-hand|opponent-label|is-open-hand)(?![-\w]))", re.sub(r"/\*[\s\S]*?\*/", "", css)):
         raise ValueError(f"Компоновка общих элементов принадлежит приложению: {label}")
@@ -259,7 +276,11 @@ def local_file(root, name):
     path = PurePosixPath(name)
     if not path_ok(name):
         raise ValueError(f"Недопустимый путь пака: {name!r}")
-    result = root.joinpath(*path.parts)
+    result = root
+    for part in path.parts:
+        result = result / part
+        if result.is_symlink():
+            raise ValueError(f"Симлинк в пути пака: {name}")
     if result.is_symlink() or not result.is_file() or not result.resolve().is_relative_to(root.resolve()):
         raise ValueError(f"Нет локального файла пака: {name}")
     return result
@@ -269,7 +290,8 @@ def read_manifest(pack):
     if manifest["id"] != pack.name:
         raise ValueError(f"ID и имя папки различаются: {pack.name}")
     for filename in ENTRY_POINTS.values():
-        local_file(pack, filename)
+        if manifest.get("execution") != "isolated-v1":
+            local_file(pack, filename)
     if manifest.get("sounds"):
         local_file(pack, "sounds.js")
     return manifest
@@ -413,7 +435,291 @@ def bundle_source_modules(files, source, read):
     for path in set(scripts["rules"] + scripts["view"] + [p for paths in locales.values() for p in paths]):
         files.pop(path, None)
 
+# The filesystem reader is shared by SDK adopt/compile and collection builds.
+# It reads guest text as data and never imports/evaluates authored JavaScript.
+ISOLATED_MARKERS = {
+    'rules.js': '// PlayRoom isolated-v1: rules execute only in the guest VM.\n',
+    'view.js': '// PlayRoom isolated-v1: presentation uses the trusted scene renderer.\n',
+    'styles.css': '/* PlayRoom isolated-v1: styles belong to the trusted scene renderer. */\n',
+}
+ISOLATED_SOUNDS_MARKER = '// PlayRoom isolated-v1: sound metadata executes only in the guest VM.\n'
+MAX_SOURCE_BYTES = 12 * 1024 * 1024
+MAX_RESOURCE_BYTES = 2_000_000
+MAX_RESOURCES = 256
+
+
+def _sdk_scripts(root, names, prefix='', suffix='.js'):
+    if (not isinstance(names, list) or len(names) > 64
+            or any(not isinstance(n, str) or not n.endswith(suffix) for n in names) or len(set(names)) != len(names)):
+        raise ValueError('SDK_MODULES_INVALID')
+    result = []
+    for name in names:
+        file = local_file(root, name)
+        if file.stat().st_size > 4 * 1024 * 1024:
+            raise ValueError('SDK_FILE_LIMIT: ' + name)
+        result.append({'file': prefix + name, 'source': file.read_text(encoding='utf-8')})
+    return result
+
+
+def validate_animation(value):
+    """The SDK animation vocabulary; arbitrary config JSON is a separate port."""
+    def number(n):
+        return type(n) in (int, float) and -float('inf') < n < float('inf')
+    if not isinstance(value, dict) or not number_equals(value.get('contractVersion'), 1) or not isinstance(value.get('frames'), list) or not 1 <= len(value['frames']) <= 1000:
+        raise ValueError('SDK_ANIMATION_INVALID')
+    previous = -1
+    for frame in value['frames']:
+        if not isinstance(frame, dict) or not number(frame.get('time')) or not 0 <= frame['time'] <= 10000 or frame['time'] < previous or not isinstance(frame.get('values'), dict):
+            raise ValueError('SDK_ANIMATION_INVALID')
+        previous = frame['time']
+        for key, n in frame['values'].items():
+            if key not in {'x', 'y', 'rotation', 'scale', 'opacity'} or not number(n) or abs(n) > 10000 or key == 'opacity' and not 0 <= n <= 1 or key == 'scale' and not 0 <= n <= 20:
+                raise ValueError('SDK_ANIMATION_INVALID')
+
+
+def _resource_identity(value):
+    """Tagged JSON with JS binary64 numbers and UTF-16 key ordering."""
+    if value is None:
+        return ['null']
+    if isinstance(value, bool):
+        return ['boolean', value]
+    if isinstance(value, (int, float)):
+        try:
+            numeric = float(value)
+        except OverflowError as error:
+            raise ValueError('SDK_JSON_INVALID') from error
+        if not math.isfinite(numeric):
+            raise ValueError('SDK_JSON_INVALID')
+        return ['number', struct.pack('>d', numeric if numeric else 0.0).hex()]
+    if isinstance(value, str):
+        return ['string', value]
+    if isinstance(value, list):
+        return ['array', [_resource_identity(item) for item in value]]
+    if isinstance(value, dict):
+        return ['object', [[key, _resource_identity(value[key])] for key in sorted(value, key=lambda key: key.encode('utf-16-be', errors='surrogatepass'))]]
+    raise ValueError('SDK_JSON_INVALID')
+
+
+def isolated_source_hash(payload):
+    value = {key: payload[key] for key in ('manifest', 'descriptor', 'catalogs')}
+    digest = hashlib.sha256(json.dumps(value, ensure_ascii=False, separators=(',', ':'), allow_nan=False).encode('utf-8', errors='backslashreplace'))
+    for kind in ('dependencies', 'rules', 'helpers', 'presentation', 'types', 'support'):
+        for row in payload['sources'].get(kind, []):
+            digest.update((row['file'] + '\0' + row['source']).encode('utf-8'))
+    identity = {'resourceClosure': payload.get('resourceClosure', {}),
+                'assets': [{key: value for key, value in row.items() if key != 'data'} for row in payload.get('assets', [])],
+                'providers': payload['sources'].get('providers', [])}
+    digest.update(('\0resources-v1\0' + json.dumps(_resource_identity(identity), ensure_ascii=False, separators=(',', ':'), allow_nan=False)).encode('utf-8', errors='backslashreplace'))
+    return digest.hexdigest()
+
+
+def isolated_source_payload(pack, shared=None):
+    """Complete source/asset closure. Additional presentation remains inert data."""
+    pack = Path(pack).resolve(strict=True)
+    shared = Path(shared).resolve(strict=True) if shared else Path(__file__).resolve().parent
+    manifest = validate_manifest(parse_json(local_file(pack, 'manifest.json').read_text(encoding='utf-8')), pack.name)
+    descriptor = parse_json(local_file(pack, 'sdk/project.json').read_text(encoding='utf-8'))
+    if not number_equals(descriptor.get('contractVersion'), 1) or not isinstance(descriptor.get('presentation'), list):
+        raise ValueError('SDK_DESCRIPTOR_REQUIRED')
+    dependencies = []
+    for name in manifest.get('sharedDomain', []):
+        dependencies += _sdk_scripts(shared, ['domain/' + name + '.js'], 'shared/')
+    sources = {'dependencies': dependencies,
+               'rules': _sdk_scripts(pack, descriptor.get('rules')),
+               'helpers': _sdk_scripts(pack, descriptor.get('helpers', [])),
+               'presentation': _sdk_scripts(pack, descriptor.get('presentation')),
+               'types': _sdk_scripts(pack, descriptor.get('types', []), suffix='.d.ts')}
+    if (any(not row['file'].startswith('presentation/') for row in sources['presentation'])
+            or any(not row['file'].startswith('domain/') for row in sources['helpers'])):
+        raise ValueError('SDK_MODULES_INVALID')
+    catalogs = {}
+    source_modules = manifest.get('sourceModules', {})
+    for locale, names in source_modules.get('locales', {}).items():
+        if not re.fullmatch(r'[a-z]{2,3}(?:-[A-Za-z0-9]{2,8})*', locale) or not isinstance(names, list) or len(names) > 32:
+            raise ValueError('SDK_LOCALES_INVALID')
+        catalog = {}
+        for name in names:
+            value = parse_json(local_file(pack, name).read_text(encoding='utf-8'))
+            if not isinstance(value, dict) or set(value) & set(catalog) or any(not isinstance(text, str) for text in value.values()):
+                raise ValueError('SDK_LOCALES_INVALID')
+            catalog.update(value)
+        catalogs[locale] = catalog
+    loaded = {row['file'] for rows in sources.values() for row in rows}
+    support_names = descriptor.get('support')
+    if support_names is None:
+        support_names = [name for name in source_modules.get('view', []) if name not in loaded]
+        if manifest.get('sounds'):
+            support_names.append('sounds.js')
+    support = []
+    for row in _sdk_scripts(pack, support_names):
+        name = row['file']
+        role = 'tutorial' if name.endswith('/tutorial.js') else 'illustrations' if name.endswith('/rule-illustrations.js') else 'sounds' if name == 'sounds.js' else 'presentation-support'
+        support.append({**row, 'role': role})
+    sources['support'] = support
+    source_bytes = sum(len(row['source'].encode('utf-8')) for rows in sources.values() for row in rows)
+    if source_bytes > MAX_SOURCE_BYTES:
+        raise ValueError('SDK_SOURCE_LIMIT')
+    provenance = parse_json(local_file(pack, 'sdk/assets.json').read_text(encoding='utf-8')) if (pack / 'sdk/assets.json').exists() else {}
+    assets, providers, data_files, asset_packs, documentation = [], [], [], [], []
+    seen = set()
+    def add_resource(root, relative, name):
+        if name in seen:
+            return
+        seen.add(name)
+        file = local_file(root, relative)
+        content = file.read_bytes()
+        suffix = file.suffix.lower()
+        if suffix in {'.js', '.css'}:
+            providers.append({'file': name, 'source': content.decode('utf-8'), 'role': 'asset-provider' if suffix == '.js' else 'asset-style'})
+            return
+        if suffix == '.json' and not (root == pack and relative.startswith('assets/')):
+            # Catalog/config JSON is data, not the animation-only asset API.
+            data_files.append({'file': name, 'value': parse_json(content.decode('utf-8'))})
+            return
+        if suffix in {'.md', '.txt'}:
+            documentation.append(name)
+            return  # Authoring documentation and masters stay in the source archive.
+        mime = 'audio/wav' if suffix == '.wav' else mimetypes.guess_type(file.name)[0] or 'application/octet-stream'
+        maximum = 64_000 if suffix in {'.svg', '.json'} else 128_000 if mime.startswith('audio/') else 512_000
+        if not (mime.startswith('image/') or mime.startswith('audio/') or suffix == '.json' and mime == 'application/json') or len(content) > maximum:
+            raise ValueError('SDK_ASSET_SIZE_OR_FORMAT: ' + name)
+        if provenance.get(relative, {}).get('sha256') not in (None, hashlib.sha256(content).hexdigest()):
+            raise ValueError('SDK_ASSET_CHANGED: ' + name)
+        if suffix == '.json':
+            validate_animation(parse_json(content.decode('utf-8')))
+        assets.append({'file': name, 'sha256': hashlib.sha256(content).hexdigest(), 'mime': mime,
+                       'data': base64.b64encode(content).decode('ascii'), 'bytes': len(content),
+                       'provenance': provenance.get(relative, {'source': 'Existing source resource: ' + relative})})
+    for folder in ('assets', 'config'):
+        if (pack / folder).is_symlink():
+            raise ValueError('SDK_SYMLINK_DENIED')
+        if (pack / folder).exists():
+            for file in sorted((pack / folder).rglob('*')):
+                if file.is_file():
+                    name = file.relative_to(pack).as_posix()
+                    add_resource(pack, name, name)
+    for name in manifest.get('sharedAssets', []):
+        add_resource(shared, 'assets/' + name, 'assets/shared/' + name)
+    included, visiting = {}, set()
+    def include_asset_pack(name, version=None):
+        if not isinstance(name, str) or not re.fullmatch(r'[a-z][a-z0-9-]*', name):
+            raise ValueError('SDK_ASSET_PACK_INVALID')
+        if name in visiting:
+            raise ValueError('SDK_ASSET_PACK_CYCLE')
+        if name in included:
+            if version is not None and included[name] != version:
+                raise ValueError('SDK_ASSET_PACK_VERSION')
+            return
+        root = shared / 'asset-packs' / name
+        spec = parse_json(local_file(root, 'manifest.json').read_text(encoding='utf-8'))
+        if spec.get('format') != 'playroom-asset-pack' or spec.get('id') != name or spec.get('formatVersion') != 1 or not SEMVER.fullmatch(spec.get('version', '')) or version is not None and spec['version'] != version:
+            raise ValueError('SDK_ASSET_PACK_INVALID')
+        visiting.add(name)
+        for dep in spec.get('dependencies', []):
+            include_asset_pack(dep['id'], dep['version'])
+        visiting.remove(name)
+        included[name] = spec['version']
+        asset_packs.append({'manifest': spec, 'prefix': 'assets/shared-packs/' + name + '/'})
+        for filename in dict.fromkeys([*spec.get('files', []), *spec.get('scripts', []), *spec.get('styles', []), *(item['file'] for item in spec.get('items', []) if 'file' in item)]):
+            add_resource(root, filename, 'assets/shared-packs/' + name + '/' + filename)
+    for name in manifest.get('sharedAssetPacks', []):
+        include_asset_pack(name)
+    if len(assets) > MAX_RESOURCES or sum(item['bytes'] for item in assets) > MAX_RESOURCE_BYTES:
+        raise ValueError('SDK_ASSET_TOTAL_LIMIT')
+    core_source_bytes = source_bytes
+    sources['providers'] = providers
+    source_bytes = sum(len(row['source'].encode('utf-8')) for rows in sources.values() for row in rows)
+    if source_bytes > MAX_SOURCE_BYTES:
+        raise ValueError('SDK_SOURCE_LIMIT')
+    closure = {'sourceBytes': source_bytes, 'assetPacks': asset_packs, 'data': data_files, 'documentation': documentation,
+               'budget': {'assetBytes': sum(item['bytes'] for item in assets), 'assetCount': len(assets),
+                          'maxAssetBytes': MAX_RESOURCE_BYTES, 'maxAssets': MAX_RESOURCES}}
+    books = {}
+    for locale, name in source_modules.get('rulebooks', {}).items():
+        books[locale] = compile_rulebook_markdown(local_file(pack, name).read_text(encoding='utf-8'))
+    if books:
+        closure['rulebooks'] = books
+    result = {'format': 'playroom-sdk-source', 'contractVersion': 1, 'manifest': manifest,
+              'descriptor': descriptor, 'catalogs': catalogs, 'sources': sources,
+              'assets': assets, 'resourceClosure': closure, 'sourceBytes': core_source_bytes}
+    result['sourceHash'] = isolated_source_hash(result)
+    return result
+
+
+def validate_isolated_payload(payload, manifest):
+    if (not isinstance(payload, dict) or payload.get('format') != 'playroom-sdk-source'
+            or not number_equals(payload.get('contractVersion'), 1) or payload.get('manifest') != manifest):
+        raise ValueError('SDK_ISOLATED_PAYLOAD_INVALID')
+    descriptor, sources = payload.get('descriptor'), payload.get('sources')
+    if not isinstance(descriptor, dict) or not number_equals(descriptor.get('contractVersion'), 1) or not isinstance(sources, dict):
+        raise ValueError('SDK_ISOLATED_DESCRIPTOR_INVALID')
+    if not {'dependencies', 'rules', 'helpers', 'presentation', 'types'} <= set(sources):
+        raise ValueError('SDK_ISOLATED_SOURCES_INVALID')
+    if set(sources) - {'dependencies', 'rules', 'helpers', 'presentation', 'types', 'support', 'providers'}:
+        raise ValueError('SDK_ISOLATED_SOURCES_INVALID')
+    source_bytes = 0
+    for kind, rows in sources.items():
+        if not isinstance(rows, list) or len(rows) > (256 if kind == 'providers' else 64):
+            raise ValueError('SDK_MODULES_INVALID')
+        paths = set()
+        for row in rows:
+            if not isinstance(row, dict) or not path_ok(row.get('file')) or row['file'] in paths or not isinstance(row.get('source'), str):
+                raise ValueError('SDK_MODULES_INVALID')
+            paths.add(row['file'])
+            length = len(row['source'].encode('utf-8'))
+            if length > 4 * 1024 * 1024:
+                raise ValueError('SDK_FILE_LIMIT')
+            source_bytes += length
+        if kind in {'rules', 'helpers', 'presentation', 'types', 'support'} and [row['file'] for row in rows] != descriptor.get(kind, []):
+            raise ValueError('SDK_DESCRIPTOR_SOURCE_MISMATCH')
+    if source_bytes > MAX_SOURCE_BYTES:
+        raise ValueError('SDK_SOURCE_LIMIT')
+    catalogs = payload.get('catalogs')
+    if not isinstance(catalogs, dict) or any(not isinstance(catalog, dict) or any(not isinstance(value, str) for value in catalog.values()) for catalog in catalogs.values()):
+        raise ValueError('SDK_LOCALES_INVALID')
+    if payload.get('sourceHash') != isolated_source_hash(payload):
+        raise ValueError('SDK_ISOLATED_SOURCE_HASH')
+    assets = payload.get('assets', [])
+    if not isinstance(assets, list) or len(assets) > MAX_RESOURCES:
+        raise ValueError('SDK_ASSET_TOTAL_LIMIT')
+    total, names = 0, set()
+    for item in assets:
+        name = item.get('file')
+        if not path_ok(name) or name in names or not isinstance(item.get('mime'), str):
+            raise ValueError('SDK_ASSET_PATH')
+        names.add(name)
+        try:
+            raw = base64.b64decode(item['data'], validate=True)
+        except (ValueError, TypeError) as error:
+            raise ValueError('SDK_ASSET_DATA') from error
+        if len(raw) != item['bytes'] or hashlib.sha256(raw).hexdigest() != item['sha256']:
+            raise ValueError('SDK_ASSET_HASH')
+        maximum = 64_000 if name.endswith(('.svg', '.json')) else 128_000 if item['mime'].startswith('audio/') else 512_000
+        if len(raw) > maximum or not (item['mime'].startswith('image/') or item['mime'].startswith('audio/') or name.endswith('.json') and item['mime'] == 'application/json'):
+            raise ValueError('SDK_ASSET_SIZE_OR_FORMAT')
+        if name.endswith('.json'): validate_animation(parse_json(raw.decode('utf-8')))
+        total += len(raw)
+    if total > MAX_RESOURCE_BYTES:
+        raise ValueError('SDK_ASSET_TOTAL_LIMIT')
+    return payload
+
+
+def build_isolated_pack(pack, shared=None):
+    payload = isolated_source_payload(pack, shared)
+    manifest = payload['manifest']
+    files = {**ISOLATED_MARKERS, 'sdk/source.json': json_text(payload)}
+    # sounds.js is an inert structural marker. The actual cues stay guest-side.
+    if manifest.get('sounds'):
+        files['sounds.js'] = ISOLATED_SOUNDS_MARKER
+    return validate_bundle({'format': 'playroom-pack', 'formatVersion': 1, 'manifest': manifest, 'files': files}, pack.name)
+
+
 def build_pack(pack, shared=None):
+    pack = Path(pack)
+    spec = parse_json(local_file(pack, "manifest.json").read_text(encoding="utf-8"))
+    if spec.get("execution") == "isolated-v1":
+        return build_isolated_pack(pack, shared)
+
     shared = Path(shared) if shared else Path(__file__).resolve().parent
     manifest = read_manifest(pack)
     files = {}

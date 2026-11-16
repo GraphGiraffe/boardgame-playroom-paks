@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["domino"] = {
   "id": "domino",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "category": "board",
   "estimatedDuration": "10–15 мин",
   "tagline": "Соединяй числа и считай ходы соперников.",
@@ -37,6 +37,22 @@
       "teams": false
     }
   ],
+  "sourceModules": {
+    "rules": [
+      "domain/game.js",
+      "presentation/scene.js"
+    ],
+    "view": [
+      "presentation/scene.js",
+      "presentation/tutorial.js",
+      "presentation/rule-illustrations.js"
+    ],
+    "locales": {
+      "ru": [
+        "locales/ru/game.json"
+      ]
+    }
+  },
   "sharedUi": true,
   "settings": [
     {
@@ -201,7 +217,9 @@
     "local-input-v1",
     "turn-order-v1",
     "parameter-illustrations-v1",
-    "standard-parameter-ui-v1"
-  ]
+    "standard-parameter-ui-v1",
+    "isolated-execution-v1"
+  ],
+  "execution": "isolated-v1"
 };
 })(globalThis);

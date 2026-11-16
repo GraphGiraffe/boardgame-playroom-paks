@@ -1,0 +1,207 @@
+{
+  "id": "kalyakodil-b",
+  "version": "0.1.1",
+  "engineApi": 4,
+  "viewApi": 3,
+  "stateVersion": 1,
+  "sourceModules": {
+    "rules": [
+      "domain/game.js"
+    ],
+    "view": [
+      "presentation/scene.js"
+    ],
+    "locales": {
+      "ru": [
+        "locales/ru.json"
+      ]
+    }
+  },
+  "name": "Калякодил · Штрихи",
+  "description": "Рисуйте тайные слова, угадывайте и оспаривайте спорное принятие.",
+  "players": {
+    "min": 2,
+    "max": 12
+  },
+  "settings": [
+    {
+      "key": "difficulty",
+      "label": "Сложность",
+      "default": "easy",
+      "control": "select",
+      "options": [
+        {
+          "value": "easy",
+          "label": "Простые слова"
+        },
+        {
+          "value": "medium",
+          "label": "Средние слова"
+        },
+        {
+          "value": "hard",
+          "label": "Сложные слова"
+        }
+      ]
+    },
+    {
+      "key": "mode",
+      "label": "Продолжительность",
+      "default": "rounds",
+      "control": "select",
+      "options": [
+        {
+          "value": "rounds",
+          "label": "По раундам"
+        },
+        {
+          "value": "cycles",
+          "label": "Полные круги"
+        }
+      ]
+    },
+    {
+      "key": "answerMode",
+      "label": "Как отвечать",
+      "default": "anonymous",
+      "control": "select",
+      "options": [
+        {
+          "value": "anonymous",
+          "label": "Анонимно в чате"
+        },
+        {
+          "value": "named",
+          "label": "С именами в чате"
+        },
+        {
+          "value": "oral",
+          "label": "Устно"
+        }
+      ]
+    },
+    {
+      "key": "rounds",
+      "label": "Количество раундов",
+      "default": 10,
+      "control": "select",
+      "options": [
+        {
+          "value": 10,
+          "label": "10"
+        },
+        {
+          "value": 20,
+          "label": "20"
+        },
+        {
+          "value": 30,
+          "label": "30"
+        },
+        {
+          "value": 0,
+          "label": "Без ограничения"
+        }
+      ]
+    },
+    {
+      "key": "cycles",
+      "label": "Количество кругов",
+      "default": 2,
+      "control": "select",
+      "options": [
+        {
+          "value": 2,
+          "label": "2"
+        },
+        {
+          "value": 3,
+          "label": "3"
+        },
+        {
+          "value": 4,
+          "label": "4"
+        },
+        {
+          "value": 5,
+          "label": "5"
+        }
+      ]
+    },
+    {
+      "key": "durationSeconds",
+      "label": "Секунд на рисунок",
+      "default": 60,
+      "control": "slider",
+      "min": 30,
+      "max": 180,
+      "step": 1
+    },
+    {
+      "key": "strokeLimit",
+      "label": "Лимит операций холста",
+      "default": 0,
+      "control": "select",
+      "options": [
+        {
+          "value": 0,
+          "label": "Без лимита"
+        },
+        {
+          "value": 12,
+          "label": "12"
+        },
+        {
+          "value": 24,
+          "label": "24"
+        },
+        {
+          "value": 48,
+          "label": "48"
+        }
+      ]
+    },
+    {
+      "key": "singleGuess",
+      "label": "Одна попытка за раунд",
+      "default": false,
+      "control": "select",
+      "options": [
+        {
+          "value": false,
+          "label": "Выключено"
+        },
+        {
+          "value": true,
+          "label": "Включено"
+        }
+      ]
+    },
+    {
+      "key": "exactBonus",
+      "label": "Бонус за точный ответ",
+      "default": false,
+      "control": "select",
+      "options": [
+        {
+          "value": false,
+          "label": "Выключено"
+        },
+        {
+          "value": true,
+          "label": "Включено"
+        }
+      ]
+    }
+  ],
+  "execution": "isolated-v1",
+  "rules": "rules.js",
+  "view": "view.js",
+  "styles": "styles.css",
+  "sdkFeatures": [
+    "isolated-execution-v1"
+  ],
+  "capabilities": {
+    "bots": false
+  }
+}

@@ -2,7 +2,7 @@
 
 Текущая связка документации: коллекция **0.9.0**, ХОД **0.21.0**, engineApi 4 / viewApi 3. Старые номера в описании происхождения не меняют текущий контракт.
 
-Карта реализации коллекции **0.9.0** для приложения **0.21.0**: engineApi 4, viewApi 3. Каждый пак — самостоятельная игра с разделёнными правилами, публичным представлением и Web-renderer. Общий host исполняет команды, хранит историю, доставляет сеть, показывает обучение и проигрывает эффекты.
+Карта реализации коллекции **0.9.0** для приложения **0.21.0**: engineApi 4, viewApi 3. Каждый пак — самостоятельная игра с разделёнными правилами и публичным представлением в изолированной VM. Общий host исполняет команды, хранит историю, доставляет сеть, показывает обучение и проигрывает эффекты.
 
 ## Файлы и владельцы
 
@@ -10,14 +10,14 @@
 packs/<id>/
   manifest.json             метаданные, версии, правила настройки, состав сборки
   manifest.js               генерируемое представление manifest
-  rules.js                  связывает definition, presentation, locales с SDK
+  rules.js                  необязательный исходный Node-адаптер; в runtime только маркер
   domain/game.js            create/validate/actions/reduce/project/result/bot
   domain/*.js               специфичные чистые механики игры
   presentation/scene.js     публичная семантика сцены, команд, событий/кадров
   presentation/tutorial.js  каталог и условия обучения, без сохранения прогресса
   locales/ru/game.json      тексты правил, событий, подсказок и интерфейса
-  view.js                   Web-renderer и регистрация обучения
-  styles.css                стили пака в его области
+  sdk/project.json          состав чистых guest-модулей и начальные options
+  presentation/rule-illustrations.js  чистые публичные арты для closed graphic AST
   assets/                   ресурсы, если они нужны игре
 shared/
   domain/                   чистые общие правила и примитивы
@@ -36,7 +36,7 @@ shared/
 | `project` | Position + audience → разрешённые данные | Передачи полного состояния гостю ради удобства анимации |
 | Presentation | Projection/события → SceneModel/MessageRef/эффекты | Повторного исполнения правил, доступа к закрытым картам authority |
 | Tutorial | Публичная сцена + actions + UI/progress → цели/шаги | Записи в localStorage, таймеров курсора, автоматического применения команд |
-| Renderer | Подготовленная сцена + actions + UI selection → view API 3 | Вычисления победы/урона/legal moves и собственной истории |
+| Trusted renderer приложения | Закрытая сцена + actions + UI selection → DOM | Вычисления победы/урона/legal moves и собственной истории |
 | Locales | MessageRef → текст | Изменения правил в зависимости от языка |
 | Shared UI/ассеты | Семантика + skin/palette → элемент | Игровой очереди и сетевых прав |
 | Compiler | Manifest и исходные ресурсы → автономный контейнер | Исполнения партии и пользовательских данных |
@@ -51,12 +51,12 @@ flowchart LR
   T --> Host["Host: commit, история, revision"]
   Host --> Proj["domain: project для viewer"]
   Proj --> Scene["presentation: SceneModel / события"]
-  Scene --> View["view.js: разметка зон"]
+  Scene --> View["Trusted SDK renderer: закрытые компоненты"]
   Scene --> Plan["Host: очередь анимаций и звуков"]
   View --> Input
 ```
 
-`rules.js` — адаптер регистрации, а не место хранения игровых правил. В исходном Node-режиме он требует domain/shared модули; подготовленный пакет получает внедрённые compiler зависимости. `manifest.sourceModules.rules` и `.view` перечисляют нужные модули для двух точек входа; presentation может участвовать в обеих. Tutorial включается только в view. `sharedDomain` подключает общие чистые помощники.
+`manifest.execution: "isolated-v1"` направляет сборку в SDK source payload. Исходные `view.js` и `styles.css` заменены общим renderer и удалены. В поставляемом контейнере `rules.js`, `view.js`, `styles.css` — фиксированные неисполняемые маркеры. `rules.js` исходного проекта может оставаться Node-адаптером для отдельных чистых unit-тестов, а не местом хранения игровых правил. В исходном Node-режиме он требует domain/shared модули; подготовленный пакет хранит зависимости текстом в `files["sdk/source.json"]` для VM. `sdk/project.json.rules`, `.presentation`, `.helpers` и `.support` перечисляют чистые модули для VM. Tutorial и иллюстрации включаются в support realm представления. `sharedDomain` подключает общие чистые помощники.
 
 Точные сигнатуры Definition/Transition и форма visibility описаны в [SDK приложения](https://github.com/GraphGiraffe/boardgame-playroom/blob/main/docs/SDK-0.18.md). Domain возвращает факты, а не готовую разметку или переведённый текст. Host проверяет контракт и управляет revision/timeline. Не увеличивайте revision самостоятельно из renderer.
 
@@ -94,7 +94,7 @@ Shared-компоненты редактируются здесь, затем п
 
 ## Обучение
 
-`presentation/tutorial.js` задаёт постоянные `goals` и текущие `steps`; `view.js` регистрирует фабрику через `registerTutorial`. ID и revision принадлежат паку. Пользовательские отметки принадлежат приложению и переживают обновление packVersion.
+`presentation/tutorial.js` задаёт постоянные `goals` и текущие `steps`; `sdk/project.json.support` подключает чистую фабрику; VM возвращает сериализуемые цели и шаги, а renderer приложения связывает их с разрешёнными командами. ID и revision принадлежат паку. Пользовательские отметки принадлежат приложению и переживают обновление packVersion.
 
 Сценарий должен распознавать реальное действие независимо от способа ввода и не навязывать фиксированную цепочку выбора. Отдельно описывайте вторую карту, выбор цвета, повторный бросок, действия союзной фишкой, поворот/справку, возрождение. Не включайте автоматический добор или автопереключение поля как нажатие пользователя. Полный контракт и порядок добавления цели — [TUTORIALS приложения](https://github.com/GraphGiraffe/boardgame-playroom/blob/main/docs/TUTORIALS.md).
 
@@ -108,11 +108,11 @@ Shared-компоненты редактируются здесь, затем п
 
 | Изменение | Затрагивает | Основная проверка |
 |---|---|---|
-| Новая команда/механика | domain → projection → presentation → view/locales | Legal/illegal команды, детерминизм, privacy, replay |
+| Новая команда/механика | domain → projection → presentation → closed renderer/locales | Legal/illegal команды, детерминизм, privacy, replay |
 | Новая метрика | domain result + presentation metrics + locale | Значение и момент показа; стандартная панель host |
 | Новый эффект | Событие/публичная сцена; при необходимости shared host effect | Последовательность, звук, отмена, history |
 | Новая настройка правил | manifest settings + domain create/validate + правила | Default, сохранение/загрузка, допустимые значения |
-| Новая цель обучения | tutorial + locales + sourceModules.view | Альтернативный ввод, редкий этап, обновление revision |
+| Новая цель обучения | tutorial + locales + sdk/project.json.support | Альтернативный ввод, редкий этап, обновление revision |
 | Новый skin/элемент | shared assets/components + manifest | Геометрия, светлая/тёмная тема, privacy, сборка |
 
 Начните с двух реальных примеров нужного конструкта; `examples/private-counter` демонстрирует минимальную проекцию, [presentation-contracts](../examples/presentation-contracts/README.md) — компоненты/эффекты. Полные игры демонстрируют связку слоёв, но их UI-разметку не следует копировать целиком в новый пак.

@@ -24,7 +24,7 @@
       metrics:[{id:'books',kind:'points',value:projection.data.books[player].length,label:metric(),resultUsage:true}]}))});
 
  // Geometry contains only public identities from the authorized projection.
- function sceneLayout(p){const d=p.data;return {geometry:{topology:'fixed'},zones:[{id:'field',kind:'table'},...d.hands.map((hand,owner)=>({id:'hand-'+owner,kind:'hand',owner,count:hand.length}))],objects:d.hands.flatMap((hand,owner)=>ordered(hand).flatMap((card,index)=>card&&!card.hidden&&card.id!=null?[{ref:{namespace:'card',id:String(card.id)},zone:'hand-'+owner,index}]:[])),interactions:p.actions.map(command=>({command,target:command.cardId!=null?{entity:{namespace:'card',id:String(command.cardId)}}:{zone:'field'}}))};}
+ function sceneLayout(p){const d=p.data;return {geometry:{topology:'fixed'},zones:[{id:'field',kind:'table'},{id:'stock',kind:'stock',count:d.drawPile.length},...d.hands.map((hand,owner)=>({id:'hand-'+owner,kind:'hand',owner,count:hand.length}))],objects:d.hands.flatMap((hand,owner)=>ordered(hand).flatMap((card,index)=>card&&!card.hidden&&card.id!=null?[{ref:{namespace:'card',id:String(card.id)},zone:'hand-'+owner,index}]:[])),interactions:p.actions.map(command=>{const source=command.cardId!=null?{entity:{namespace:'card',id:String(command.cardId)}}:null;return {command,kind:source?'select':'activate',...(source?{source}:{}),target:source?source:command.type==='draw'?{zone:'stock'}:{zone:'field'}};})};}
  // Arrival checkpoints restore only cards disclosed by public set facts.
  // Rules already resolved the set; presentation delays its removal until reveal.
  function eventScenes(p){

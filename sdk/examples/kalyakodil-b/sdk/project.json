@@ -1,0 +1,34 @@
+{
+  "contractVersion": 1,
+  "checkTypes": true,
+  "rules": [
+    "domain/game.js"
+  ],
+  "presentation": [
+    "presentation/scene.js"
+  ],
+  "options": {
+    "playerCount": 2,
+    "firstPlayer": 0,
+    "preset": "classic",
+    "rng": 1,
+    "now": 0,
+    "difficulty": "easy",
+    "mode": "rounds",
+    "rounds": 10,
+    "cycles": 2,
+    "durationSeconds": 60,
+    "hostPlayer": 0,
+    "strokeLimit": 0,
+    "singleGuess": false,
+    "exactBonus": false,
+    "answerMode": "anonymous"
+  },
+  "support": [],
+  "helpers": [],
+  "origin": {
+    "operation": "adopt",
+    "previousVersion": "0.1.0",
+    "sourceManifestSHA256": "9d6025747a947bbd27e0bd9e32ce93df28acd9ea78b48bdac2648cce054e57d2"
+  }
+}

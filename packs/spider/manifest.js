@@ -4,7 +4,7 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["spider"] = {
   "id": "spider",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "name": "Паук",
   "category": "solitaire",
   "estimatedDuration": "10–30 мин",
@@ -51,6 +51,22 @@
     "standard-deck",
     "solitaire"
   ],
+  "sourceModules": {
+    "rules": [
+      "domain/game.js",
+      "presentation/scene.js"
+    ],
+    "view": [
+      "presentation/scene.js",
+      "presentation/tutorial.js",
+      "presentation/rule-illustrations.js"
+    ],
+    "locales": {
+      "ru": [
+        "locales/ru/game.json"
+      ]
+    }
+  },
   "sharedAssetPacks": [
     "mini-split-deck",
     "solitaire-board",
@@ -334,7 +350,9 @@
   "sdkFeatures": [
     "local-input-v1",
     "turn-order-v1",
-    "parameter-illustrations-v1"
-  ]
+    "parameter-illustrations-v1",
+    "isolated-execution-v1"
+  ],
+  "execution": "isolated-v1"
 };
 })(globalThis);
