@@ -1,6 +1,6 @@
 // @ts-check
 /** @typedef {{id:number,text:string,player:number,penalty:number}&{[key:string]:J}} Guess */
-/** @typedef {{phase:string,now:number,deadline:number,drawingStart:number,roundId:number,cycle:number,artist:number,hostPlayer:number,answerMode:string,word:string,bank:string,mode:string,durationSeconds:number,rounds:number,cycles:number,scores:number[],completed:number[],stopVotes:number[],stopPending:boolean,protests:number[],protested:boolean,winner:number,accepted:string,artistReward:number,winnerReward:number,guesses:Guess[],operations:J[],lengthHint:boolean,wrongGuessPenalty:boolean,fastArtistBonus:boolean}&{[key:string]:J}} Data */
+/** @typedef {{phase:string,now:number,deadline:number,drawingStart:number,roundId:number,cycle:number,artist:number,hostPlayer:number,answerMode:string,word:string,bank:string,mode:string,durationSeconds:number,rounds:number,cycles:number,scores:number[],completed:number[],stopVotes:number[],stopPending:boolean,voteDeadline:number,protests:number[],protested:boolean,winner:number,accepted:string,artistReward:number,winnerReward:number,guesses:Guess[],operations:J[],lengthHint:boolean,wrongGuessPenalty:boolean,fastArtistBonus:boolean}&{[key:string]:J}} Data */
 /** @typedef {import('../sdk/contracts').Position & {data:Data}} P */
 /** @typedef {import('../sdk/contracts').Position} Position */
 /** @typedef {import('../sdk/contracts').Command} Command */
@@ -15,7 +15,7 @@ const data=p=>/** @type {Data} */(p.data);
 /** @param {Position} p @returns {P} */
 const copy=p=>JSON.parse(JSON.stringify(p));
 /** @param {number} voters */
-const quorum=voters=>Math.max(1,voters-(voters<=6?1:2));
+const quorum=voters=>SDK.voteThreshold(voters);
 /** @param {string} word */
 const normal=word=>word.trim().toLowerCase().replace(/ё/g,'е').replace(/\s+/g,' ');
 /** @param {P} p @param {number} size */
@@ -42,21 +42,21 @@ function nextRound(p,at){const d=p.data;d.completed.push(d.artist);let candidate
  d.roundId++;startRound(p,at);
 }
 /** @param {{playerCount:number;firstPlayer:number;rng:number;[key:string]:J}} o @returns {P} */
-function create(o){const n=o.playerCount,first=o.firstPlayer;if(!Number.isInteger(n)||n<2||n>10||!Number.isInteger(first)||first<0||first>=n)throw Error('KALY_OPTIONS');
+function create(o){const n=o.playerCount,first=o.firstPlayer;if(!Number.isInteger(n)||n<2||n>12||!Number.isInteger(first)||first<0||first>=n)throw Error('KALY_OPTIONS');
  const duration=Number(o.durationSeconds??60),rounds=Number(o.rounds??10),cycles=Number(o.cycles??2),host=Number(o.hostPlayer??0),now=Number(o.now??0),bank=String(o.bank??'easy'),mode=String(o.mode??'rounds'),answerMode=String(o.answerMode??'anonymous');
  if(!Number.isInteger(duration)||duration<30||duration>180||![0,10,20,30].includes(rounds)||!Number.isInteger(cycles)||cycles<2||cycles>5||!Number.isInteger(host)||host<0||host>=n||!Number.isSafeInteger(now)||now<0||!Object.hasOwn(banks,bank)||!['rounds','cycles'].includes(mode)||!['anonymous','named','oral'].includes(answerMode))throw Error('KALY_OPTIONS');
  for(const key of ['lengthHint','wrongGuessPenalty','fastArtistBonus'])if(o[key]!==undefined&&typeof o[key]!=='boolean')throw Error('KALY_OPTIONS');
- const p=/** @type {P} */({playerCount:n,turn:first,status:'playing',winners:[],rng:Number(o.rng)>>>0,data:{phase:'prepare',now,deadline:now+3000,drawingStart:now+3000,roundId:1,cycle:1,artist:first,hostPlayer:host,answerMode,word:'',bank,mode,durationSeconds:duration,rounds,cycles,scores:Array(n).fill(0),completed:[],stopVotes:[],stopPending:false,protests:[],protested:false,winner:-1,accepted:'',artistReward:0,winnerReward:0,guesses:[],operations:[],lengthHint:o.lengthHint===true,wrongGuessPenalty:o.wrongGuessPenalty===true,fastArtistBonus:o.fastArtistBonus===true}});word(p);return p;
+ const p=/** @type {P} */({playerCount:n,turn:first,status:'playing',winners:[],rng:Number(o.rng)>>>0,data:{phase:'prepare',now,deadline:now+3000,drawingStart:now+3000,roundId:1,cycle:1,artist:first,hostPlayer:host,answerMode,word:'',bank,mode,durationSeconds:duration,rounds,cycles,scores:Array(n).fill(0),completed:[],stopVotes:[],stopPending:false,voteDeadline:0,protests:[],protested:false,winner:-1,accepted:'',artistReward:0,winnerReward:0,guesses:[],operations:[],lengthHint:o.lengthHint===true,wrongGuessPenalty:o.wrongGuessPenalty===true,fastArtistBonus:o.fastArtistBonus===true}});word(p);return p;
 }
 /** @param {Position} p */
 function validate(p){const d=data(p),n=p.playerCount,player=/** @param {unknown} i */i=>Number.isInteger(i)&&Number(i)>=0&&Number(i)<n;
- return Number.isInteger(n)&&n>=2&&n<=10&&player(d.artist)&&player(d.hostPlayer)&&p.turn===d.artist&&['prepare','drawing','guessing','result'].includes(d.phase)&&Number.isSafeInteger(d.now)&&d.now>=0&&Number.isSafeInteger(d.deadline)&&d.deadline>=0&&Number.isSafeInteger(d.drawingStart)&&d.drawingStart>=0&&Number.isInteger(d.roundId)&&d.roundId>0&&Number.isInteger(d.cycle)&&d.cycle>=1&&d.cycle<=d.cycles&&typeof d.word==='string'&&d.word.length>0&&Object.hasOwn(banks,d.bank)&&['rounds','cycles'].includes(d.mode)&&['anonymous','named','oral'].includes(d.answerMode)&&Number.isInteger(d.durationSeconds)&&d.durationSeconds>=30&&d.durationSeconds<=180&&[0,10,20,30].includes(d.rounds)&&Number.isInteger(d.cycles)&&d.cycles>=2&&d.cycles<=5&&Array.isArray(d.scores)&&d.scores.length===n&&d.scores.every(Number.isSafeInteger)&&[d.completed,d.stopVotes,d.protests].every(row=>Array.isArray(row)&&new Set(row).size===row.length&&row.every(player))&&[d.stopPending,d.protested,d.lengthHint,d.wrongGuessPenalty,d.fastArtistBonus].every(v=>typeof v==='boolean')&&(d.winner===-1||player(d.winner))&&typeof d.accepted==='string'&&[0,1].includes(d.artistReward)&&[0,1,2].includes(d.winnerReward)&&Array.isArray(d.guesses)&&d.guesses.length<=200&&d.guesses.every((g,i)=>g.id===i+1&&player(g.player)&&[0,1].includes(g.penalty)&&typeof g.text==='string'&&g.text.length<=80)&&Array.isArray(d.operations)&&d.operations.length<=2048&&Number.isInteger(p.rng)&&Number(p.rng)>=0&&Number(p.rng)<=4294967295;
+ return Number.isInteger(n)&&n>=2&&n<=12&&player(d.artist)&&player(d.hostPlayer)&&p.turn===d.artist&&['prepare','drawing','guessing','result'].includes(d.phase)&&Number.isSafeInteger(d.voteDeadline)&&d.voteDeadline>=0&&Number.isSafeInteger(d.now)&&d.now>=0&&Number.isSafeInteger(d.deadline)&&d.deadline>=0&&Number.isSafeInteger(d.drawingStart)&&d.drawingStart>=0&&Number.isInteger(d.roundId)&&d.roundId>0&&Number.isInteger(d.cycle)&&d.cycle>=1&&d.cycle<=d.cycles&&typeof d.word==='string'&&d.word.length>0&&Object.hasOwn(banks,d.bank)&&['rounds','cycles'].includes(d.mode)&&['anonymous','named','oral'].includes(d.answerMode)&&Number.isInteger(d.durationSeconds)&&d.durationSeconds>=30&&d.durationSeconds<=180&&[0,10,20,30].includes(d.rounds)&&Number.isInteger(d.cycles)&&d.cycles>=2&&d.cycles<=5&&Array.isArray(d.scores)&&d.scores.length===n&&d.scores.every(Number.isSafeInteger)&&[d.completed,d.stopVotes,d.protests].every(row=>Array.isArray(row)&&new Set(row).size===row.length&&row.every(player))&&[d.stopPending,d.protested,d.lengthHint,d.wrongGuessPenalty,d.fastArtistBonus].every(v=>typeof v==='boolean')&&(d.winner===-1||player(d.winner))&&typeof d.accepted==='string'&&[0,1].includes(d.artistReward)&&[0,1,2].includes(d.winnerReward)&&Array.isArray(d.guesses)&&d.guesses.length<=200&&d.guesses.every((g,i)=>g.id===i+1&&player(g.player)&&[0,1].includes(g.penalty)&&typeof g.text==='string'&&g.text.length<=80)&&Array.isArray(d.operations)&&d.operations.length<=2048&&Number.isInteger(p.rng)&&Number(p.rng)>=0&&Number(p.rng)<=4294967295;
 }
 /** @param {Position} p @param {number} actor @returns {import('../sdk/contracts').Choice[]} */
 function actions(p,actor){const d=data(p);if(p.status!=='playing'||actor<0||actor>=p.playerCount)return [];
  /** @type {import('../sdk/contracts').Choice[]} */
  const out=[];
- if(!d.stopVotes.includes(actor))out.push({command:{type:'stop',roundId:d.roundId},visibility:'public'});
+ if(!d.stopPending&&!d.stopVotes.includes(actor))out.push({command:{type:'stop',roundId:d.roundId},visibility:'public'});
  if(d.phase==='guessing'&&actor===d.hostPlayer)out.push({command:{type:'give-up',roundId:d.roundId},visibility:'public'});
  if(['drawing','guessing'].includes(d.phase)&&actor===d.artist&&d.answerMode!=='oral')for(const g of d.guesses)out.push({command:{type:'confirm',roundId:d.roundId,guessId:g.id},visibility:'private'});
  if(['drawing','guessing'].includes(d.phase)&&actor===d.artist&&d.answerMode==='oral')for(let player=0;player<p.playerCount;player++)if(player!==actor)out.push({command:{type:'award',roundId:d.roundId,player},visibility:'private'});
@@ -70,7 +70,7 @@ function inputs(p,actor){const d=data(p);if(p.status!=='playing'||actor<0||actor
 }
 /** @param {Position} position @param {number} actor @param {Command} c @param {{now:number}} context */
 function reduce(position,actor,c,context){const p=copy(position),d=p.data;d.now=context.now;if(c.roundId!==d.roundId||p.status!=='playing')throw Error('KALY_COMMAND');
- if(c.type==='stop'){if(!d.stopVotes.includes(actor))d.stopVotes.push(actor);d.stopPending=d.stopVotes.length>=quorum(p.playerCount);}
+ if(c.type==='stop'){if(!d.stopVotes.length)d.voteDeadline=context.now+30000;if(!d.stopVotes.includes(actor))d.stopVotes.push(actor);d.stopPending=d.stopVotes.length>=quorum(p.playerCount);}
  else if(c.type==='give-up'){if(actor!==d.hostPlayer||d.phase!=='guessing')throw Error('KALY_GIVE_UP');resolve(p,-1,'',d.now);}
  else if(c.type==='draw'){if(actor!==d.artist||d.phase!=='drawing'||context.now>=d.deadline)throw Error('KALY_DRAW');const op=/** @type {{[key:string]:J}} */(c.operation);if(op.kind==='clear')d.operations=[];else d.operations.push(op);}
  else if(c.type==='guess'){if(actor===d.artist||d.answerMode==='oral'||!['drawing','guessing'].includes(d.phase))throw Error('KALY_GUESS');const text=String(c.text).trim();if(!text)throw Error('KALY_EMPTY_GUESS');const exact=normal(text)===normal(d.word),penalty=!exact&&d.wrongGuessPenalty?1:0;d.guesses.push({id:d.guesses.length+1,text,player:actor,penalty});if(exact)resolve(p,actor,text,d.now);else if(d.wrongGuessPenalty)d.scores[actor]--;}
@@ -81,15 +81,15 @@ function reduce(position,actor,c,context){const p=copy(position),d=p.data;d.now=
  return {position:p,events:[{type:'kalyakodil.'+c.type,actor:null,params:{roundId:d.roundId},visibility:{kind:/** @type {const} */('public')}}],turnEnded:false};
 }
 /** @param {Position} position @param {number} now */
-function advance(position,now){const d0=data(position);if(position.status!=='playing'||!Number.isSafeInteger(now)||now<d0.deadline)return null;const p=copy(position),d=p.data;let ended=false;
+function advance(position,now){const d0=data(position);if(position.status!=='playing'||!Number.isSafeInteger(now)||(now<d0.deadline&&!(d0.voteDeadline>0&&!d0.stopPending&&now>=d0.voteDeadline)))return null;const p=copy(position),d=p.data;let ended=false;if(d.voteDeadline>0&&!d.stopPending&&now>=d.voteDeadline){d.stopVotes=[];d.voteDeadline=0;}
  for(let i=0;i<5&&p.status==='playing'&&now>=d.deadline;i++){const at=d.deadline;if(d.phase==='prepare'){d.phase='drawing';d.deadline=at+d.durationSeconds*1000;}else if(d.phase==='drawing'){d.phase='guessing';d.deadline=at+15000;}else if(d.phase==='guessing'){resolve(p,-1,'',at);}else{nextRound(p,at);ended=true;}}
  // A delayed host tick may cross a complete round; keep advancing deterministically.
  if(p.status==='playing'&&now>=d.deadline)return advance(p,now);
  d.now=now;return {position:p,events:[],turnEnded:ended,roundEnded:ended};
 }
 /** @param {Position} p @param {number} viewer @returns {{[key:string]:J}} */
-function project(p,viewer){const d=data(p),revealed=d.phase==='result'||p.status==='finished';return {answerMode:d.answerMode,phase:d.phase,deadline:d.deadline,roundId:d.roundId,cycle:d.cycle,artist:d.artist,hostPlayer:d.hostPlayer,word:revealed||viewer===d.artist?d.word:'',wordLength:d.lengthHint?d.word.length:0,scores:d.scores.map((score,player)=>revealed?score:score+d.guesses.filter(g=>g.player===player).reduce((sum,g)=>sum+g.penalty,0)),completed:[...d.completed],stopVotes:[...d.stopVotes],stopPending:d.stopPending,stopRequired:quorum(p.playerCount),protests:[...d.protests],protestRequired:quorum(p.playerCount-2),protested:d.protested,winner:revealed?d.winner:-1,accepted:revealed?d.accepted:'',guesses:d.guesses.map(g=>/** @type {J} */(d.answerMode==='named'?{id:g.id,text:g.text,player:g.player}:{id:g.id,text:g.text})),operations:d.operations};}
+function project(p,viewer){const d=data(p),revealed=d.phase==='result'||p.status==='finished';return {answerMode:d.answerMode,phase:d.phase,deadline:d.deadline,roundId:d.roundId,cycle:d.cycle,artist:d.artist,hostPlayer:d.hostPlayer,word:revealed||viewer===d.artist?d.word:'',wordLength:d.lengthHint?d.word.length:0,scores:d.scores.map((score,player)=>revealed?score:score+d.guesses.filter(g=>g.player===player).reduce((sum,g)=>sum+g.penalty,0)),completed:[...d.completed],stopVotes:[...d.stopVotes],stopPending:d.stopPending,voteDeadline:d.voteDeadline,stopRequired:quorum(p.playerCount),protests:[...d.protests],protestRequired:quorum(p.playerCount-2),protested:d.protested,winner:revealed?d.winner:-1,accepted:revealed?d.accepted:'',guesses:d.guesses.map(g=>/** @type {J} */(d.answerMode==='named'?{id:g.id,text:g.text,player:g.player}:{id:g.id,text:g.text})),operations:d.operations};}
 /** @param {Position} p */
 function result(p){const scores=data(p).scores;return {winners:p.winners,places:scores.map(score=>1+new Set(scores.filter(other=>other>score)).size),metrics:[{id:'points',values:scores}]};}
-const definition={contractVersion:/** @type {const} */(1),id:'kalyakodil-c',rounds:true,minPlayers:2,maxPlayers:10,create,validate,actions,inputs,reduce,advance,project,result};
+const definition={contractVersion:/** @type {const} */(1),id:'kalyakodil-c',rounds:true,minPlayers:2,maxPlayers:12,create,validate,actions,inputs,reduce,advance,project,result};
 globalThis.PlayroomPackDefinition=definition;

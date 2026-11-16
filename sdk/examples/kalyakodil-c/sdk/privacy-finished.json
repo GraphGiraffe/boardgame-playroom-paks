@@ -68,7 +68,8 @@
       "wrongGuessPenalty": false,
       "fastArtistBonus": false,
       "answerMode": "anonymous",
-      "winnerReward": 1
+      "winnerReward": 1,
+      "voteDeadline": 0
     }
   },
   "right": {
@@ -140,7 +141,8 @@
       "wrongGuessPenalty": false,
       "fastArtistBonus": false,
       "answerMode": "anonymous",
-      "winnerReward": 1
+      "winnerReward": 1,
+      "voteDeadline": 0
     }
   },
   "viewer": -1
