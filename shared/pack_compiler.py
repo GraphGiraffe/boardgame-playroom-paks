@@ -5,7 +5,8 @@ import mimetypes
 from pathlib import Path, PurePosixPath
 import re
 
-MAX_PACK_BYTES = 4 * 1024 * 1024
+MAX_PACK_BYTES = 4_000_000
+TARGET_PACK_BYTES = 500_000
 MAX_PACK_FILES = 128
 MAX_SAFE_INTEGER = 9007199254740991
 TEXT_EXTENSIONS = {".css", ".js", ".json", ".md", ".svg", ".txt"}
@@ -220,7 +221,7 @@ def validate_asset(files, name):
 def validate_bundle(bundle, label, raw=None):
     text = json_text(bundle) if raw is None else raw
     if len(text.encode("utf-8")) > MAX_PACK_BYTES:
-        raise ValueError(f"Пак больше 4 MiB: {label}")
+        raise ValueError(f"Пак больше 4 MB (4 000 000 байт): {label}")
     if not isinstance(bundle, dict) or bundle.get("format") != "playroom-pack" or not number_equals(bundle.get("formatVersion"), 1):
         raise ValueError(f"Некорректный формат пака: {label}")
     manifest = validate_manifest(bundle.get("manifest"), label)
