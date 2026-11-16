@@ -31,6 +31,7 @@ pack_files = _compiler['pack_files']
 bundle_source_modules = _compiler['bundle_source_modules']
 build_pack = _compiler['build_pack']
 MAX_PACK_BYTES = _compiler['MAX_PACK_BYTES']
+TARGET_PACK_BYTES = _compiler['TARGET_PACK_BYTES']
 MAX_PACK_FILES = _compiler['MAX_PACK_FILES']
 TEXT_EXTENSIONS = _compiler['TEXT_EXTENSIONS']
 ENTRY_POINTS = _compiler['ENTRY_POINTS']
@@ -97,7 +98,11 @@ def main():
         if not target.is_file() or target.read_text(encoding="utf-8") != wrapper:
             target.write_text(wrapper, encoding="utf-8")
         destination = output / f"{bundle['manifest']['id']}-{bundle['manifest']['version']}.playroom-pack.json"
-        destination.write_text(json_text(bundle), encoding="utf-8")
+        payload = json_text(bundle)
+        size = len(payload.encode("utf-8"))
+        if size > TARGET_PACK_BYTES:
+            print(f"Warning: {bundle['manifest']['id']}: {size} bytes exceeds the {TARGET_PACK_BYTES}-byte pack target")
+        destination.write_text(payload, encoding="utf-8")
         artifacts.append(destination)
     collection = output / f"playroom-paks-{VERSION}.zip"
     write_zip(collection, [(path.name, path.read_bytes()) for path in artifacts])
