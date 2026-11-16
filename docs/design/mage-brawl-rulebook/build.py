@@ -219,5 +219,5 @@ for e in E:
   (artdir/f'{e}-{a}.svg').write_text(svg(A['illustration'][e+'-'+a]))
   (artdir/f'diagram-{e}-{a}.svg').write_text(svg(A['diagrams'][e+'-'+a]))
 for t,markup in A['terrain'].items():(artdir/f'tile-{t}.svg').write_text(svg(inner(markup)))
-(OUT/'source-record.json').write_text(json.dumps({'pack':'mage-brawl','version':json.loads((PACK/'manifest.json').read_text())['version'],'sources':{str(x.relative_to(PACK)):hashlib.sha256(x.read_bytes()).hexdigest() for x in [PACK/'domain/game.js',PACK/'view.js',PACK/'locales/ru/game.json',PACK/'assets/covers/arena-v8.webp']},'pages':len(P)},ensure_ascii=False,indent=2))
+(OUT/'source-record.json').write_text(json.dumps({'pack':'mage-brawl','version':json.loads((PACK/'manifest.json').read_text())['version'],'sources':{str(x.relative_to(PACK)):hashlib.sha256(x.read_bytes()).hexdigest() for x in [PACK/'domain/game.js',PACK/'presentation/rule-illustrations.js',PACK/'locales/ru/game.json',PACK/'assets/covers/arena-v8.webp']},'pages':len(P)},ensure_ascii=False,indent=2))
 print(json.dumps({'html':str(OUT/'rulebook.html'),'pages':len(P),'vector_assets':len(list(artdir.glob('*.svg')))},ensure_ascii=False))

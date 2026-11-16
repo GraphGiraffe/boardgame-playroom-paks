@@ -53,7 +53,7 @@
 
 Presentation может объявить `metadata.rulebook.sections`: раздел с `text: MessageRef` (первая строка - заголовок), `figures:[{id,caption:MessageRef,role}]`, `layout:'grid'|'row'|'stack'|'list'` и необязательным `note:MessageRef`. Старый `metadata.rules` обязателен для текстового fallback. В локали остаётся текст, SVG и HTML туда не помещаются.
 
-В `view.js` provider `illustrations: id => markup` передаётся в `V.register`. Он возвращает готовые публичные арты пака по семантическому ID; получает только ID рисунка, без состояния партии и доступа к authority. Схемы и рисунки не пересчитывают механику. Пример - `packs/mage-brawl`; общий renderer и сетевое прохождение описаны в [RULEBOOK-LAYOUT приложения](https://github.com/GraphGiraffe/boardgame-playroom/blob/dev/docs/RULEBOOK-LAYOUT.md).
+Чистый `presentation/rule-illustrations.js`, объявленный в `sdk/project.json.support`, создаёт публичные арты по семантическому ID внутри VM. Доверенный SDK helper переводит их в закрытые vector/component записи `support.catalog.figures`; приложение показывает эти записи через общий renderer. Авторские HTML, DOM-обработчики и CSS не исполняются в host. Схемы не пересчитывают механику и не получают authority. Пример — `packs/mage-brawl`; размеры и чтение описаны в [RULEBOOK-LAYOUT приложения](https://github.com/GraphGiraffe/boardgame-playroom/blob/dev/docs/RULEBOOK-LAYOUT.md).
 
 Стихийные карточки и тайлы показывают цветную окантовку и сохранённый фон; цвет схемы соответствует стихии. Корона всегда жёлтая. Общий меч принадлежит UI приложения и используется всеми паками; не добавлять отдельные копии в каждый пак. Печатный макет и цифровой renderer разделяют исходные арты, но не физические элементы управления.
 
