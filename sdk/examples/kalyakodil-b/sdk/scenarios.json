@@ -1698,6 +1698,159 @@
           }
         }
       ]
+    },
+    {
+      "id": "timeline-keeps-ink-votes-and-phases-inside-one-turn",
+      "options": {
+        "playerCount": 3,
+        "now": 0
+      },
+      "steps": [
+        {
+          "actor": 0,
+          "command": {
+            "type": "vote-stop",
+            "roundId": 1
+          },
+          "expect": {
+            "timeline.turn": 1,
+            "timeline.round": 1,
+            "timeline.starts": [
+              0
+            ]
+          }
+        },
+        {
+          "advance": 3000,
+          "expect": {
+            "timeline.turn": 1
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "draw",
+            "roundId": 1,
+            "operation": {
+              "kind": "clear",
+              "id": "clock"
+            }
+          },
+          "expect": {
+            "timeline.turn": 1,
+            "timeline.starts": [
+              0
+            ]
+          }
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "guess",
+            "roundId": 1,
+            "text": "кот"
+          },
+          "expect": {
+            "timeline.turn": 1,
+            "timeline.round": 1
+          }
+        },
+        {
+          "advance": 15000,
+          "expect": {
+            "timeline.turn": 2,
+            "timeline.round": 2,
+            "timeline.starts": [
+              0,
+              5
+            ],
+            "timeline.roundStarts": [
+              0,
+              5
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "timeline-sequential-round-is-complete-circle",
+      "options": {
+        "playerCount": 2,
+        "mode": "cycles",
+        "cycles": 2,
+        "now": 0
+      },
+      "steps": [
+        {
+          "advance": 3000
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "draw",
+            "roundId": 1,
+            "operation": {
+              "kind": "clear",
+              "id": "one"
+            }
+          }
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "guess",
+            "roundId": 1,
+            "text": "кот"
+          }
+        },
+        {
+          "advance": 15000,
+          "expect": {
+            "timeline.turn": 2,
+            "timeline.round": 1,
+            "timeline.starts": [
+              0,
+              4
+            ]
+          }
+        },
+        {
+          "advance": 18000
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "guess",
+            "roundId": 2,
+            "text": "вариант"
+          }
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "accept",
+            "roundId": 2,
+            "guessId": "g1"
+          }
+        },
+        {
+          "advance": 30000,
+          "expect": {
+            "timeline.turn": 3,
+            "timeline.round": 2,
+            "timeline.starts": [
+              0,
+              4,
+              8
+            ],
+            "timeline.roundStarts": [
+              0,
+              8
+            ],
+            "data.cycle": 2
+          }
+        }
+      ]
     }
   ]
 }
