@@ -1,0 +1,16 @@
+{
+  "id": "__PACK_ID__",
+  "version": "0.1.0",
+  "engineApi": 4,
+  "viewApi": 3,
+  "stateVersion": 1,
+  "sourceModules": {
+    "rules": [
+      "domain/game.js"
+    ],
+    "view": [
+      "presentation/scene.js"
+    ],
+    "locales": {}
+  }
+}

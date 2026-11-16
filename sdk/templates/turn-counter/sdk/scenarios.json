@@ -1,0 +1,74 @@
+{
+  "contractVersion": 1,
+  "scenarios": [
+    {
+      "id": "reach-six",
+      "options": {
+        "playerCount": 2,
+        "firstPlayer": 0
+      },
+      "steps": [
+        {
+          "actor": 0,
+          "command": {
+            "type": "increment"
+          },
+          "expect": {
+            "data.count": 1
+          }
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "increment"
+          },
+          "expect": {
+            "data.count": 2
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "increment"
+          },
+          "expect": {
+            "data.count": 3
+          }
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "increment"
+          },
+          "expect": {
+            "data.count": 4
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "increment"
+          },
+          "expect": {
+            "data.count": 5
+          }
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "increment"
+          },
+          "expect": {
+            "data.count": 6
+          }
+        }
+      ],
+      "expect": {
+        "status": "finished",
+        "winners": [
+          1
+        ]
+      }
+    }
+  ]
+}

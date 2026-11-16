@@ -1,0 +1,20 @@
+{
+  "contractVersion": 1,
+  "rules": [
+    "domain/board.js",
+    "domain/game.js",
+    "rules.js"
+  ],
+  "presentation": [
+    "presentation/scene.js"
+  ],
+  "helpers": [
+    "domain/board.js"
+  ],
+  "options": {
+    "playerCount": 2,
+    "firstPlayer": 0,
+    "rng": 1,
+    "preset": "classic"
+  }
+}
