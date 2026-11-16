@@ -528,10 +528,12 @@ def isolated_source_payload(pack, shared=None):
             return
         if suffix in {'.md', '.txt'}:
             return  # Authoring documentation and masters stay in the source archive.
-        mime = mimetypes.guess_type(file.name)[0] or 'application/octet-stream'
+        mime = 'audio/wav' if suffix == '.wav' else mimetypes.guess_type(file.name)[0] or 'application/octet-stream'
         maximum = 64_000 if suffix == '.svg' else 128_000 if mime.startswith('audio/') else 512_000
         if not (mime.startswith('image/') or mime.startswith('audio/')) or len(content) > maximum:
             raise ValueError('SDK_ASSET_SIZE_OR_FORMAT: ' + name)
+        if provenance.get(relative, {}).get('sha256') not in (None, hashlib.sha256(content).hexdigest()):
+            raise ValueError('SDK_ASSET_CHANGED: ' + name)
         assets.append({'file': name, 'sha256': hashlib.sha256(content).hexdigest(), 'mime': mime,
                        'data': base64.b64encode(content).decode('ascii'), 'bytes': len(content),
                        'provenance': provenance.get(relative, {'source': 'Existing source resource: ' + relative})})
