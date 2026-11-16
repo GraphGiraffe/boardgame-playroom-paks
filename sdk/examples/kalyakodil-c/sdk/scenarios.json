@@ -1996,6 +1996,217 @@
           }
         }
       ]
+    },
+    {
+      "id": "timeline-round-mode-only-result-to-artist-ends-turn",
+      "options": {
+        "playerCount": 2,
+        "durationSeconds": 30
+      },
+      "steps": [
+        {
+          "advance": 3000,
+          "expect": {
+            "timeline.turn": 1,
+            "timeline.round": 1
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "draw",
+            "roundId": 1,
+            "operation": {
+              "kind": "stroke",
+              "id": "timeline",
+              "tool": "brush",
+              "color": "#000000",
+              "width": 1,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  65535,
+                  65535
+                ]
+              ]
+            }
+          },
+          "expect": {
+            "timeline.turn": 1,
+            "timeline.round": 1
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "timeline.turn": 1,
+            "timeline.round": 1
+          }
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "guess",
+            "roundId": 1,
+            "text": "неверно"
+          },
+          "expect": {
+            "timeline.turn": 1,
+            "timeline.round": 1
+          }
+        },
+        {
+          "advance": 33000,
+          "expect": {
+            "timeline.turn": 1,
+            "timeline.round": 1
+          }
+        },
+        {
+          "advance": 48000,
+          "expect": {
+            "timeline.turn": 1,
+            "timeline.round": 1
+          }
+        },
+        {
+          "advance": 60000,
+          "expect": {
+            "timeline.turn": 2,
+            "timeline.round": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "timeline-cycle-mode-round-ends-only-after-full-circle",
+      "options": {
+        "playerCount": 2,
+        "durationSeconds": 30,
+        "mode": "cycles",
+        "cycles": 2
+      },
+      "steps": [
+        {
+          "advance": 3000,
+          "expect": {
+            "timeline.turn": 1,
+            "timeline.round": 1
+          }
+        },
+        {
+          "advance": 48000,
+          "expect": {
+            "timeline.turn": 1,
+            "timeline.round": 1
+          }
+        },
+        {
+          "advance": 60000,
+          "expect": {
+            "timeline.turn": 2,
+            "timeline.round": 1
+          }
+        },
+        {
+          "advance": 63000,
+          "expect": {
+            "timeline.turn": 2,
+            "timeline.round": 1
+          }
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "draw",
+            "roundId": 2,
+            "operation": {
+              "kind": "stroke",
+              "id": "timeline",
+              "tool": "brush",
+              "color": "#000000",
+              "width": 1,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  65535,
+                  65535
+                ]
+              ]
+            }
+          },
+          "expect": {
+            "timeline.turn": 2,
+            "timeline.round": 1
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "stop",
+            "roundId": 2
+          },
+          "expect": {
+            "timeline.turn": 2,
+            "timeline.round": 1
+          }
+        },
+        {
+          "advance": 108000,
+          "expect": {
+            "timeline.turn": 2,
+            "timeline.round": 1
+          }
+        },
+        {
+          "advance": 120000,
+          "expect": {
+            "timeline.turn": 3,
+            "timeline.round": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "late-clock-preserves-each-artist-and-full-cycle-timeline",
+      "options": {
+        "playerCount": 2,
+        "durationSeconds": 30,
+        "mode": "cycles",
+        "cycles": 2
+      },
+      "steps": [
+        {
+          "advance": 180000,
+          "expect": {
+            "data.roundId": 4,
+            "data.cycle": 2,
+            "data.phase": "prepare",
+            "timeline.turn": 4,
+            "timeline.round": 2,
+            "timeline.starts": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "timeline.roundStarts": [
+              0,
+              2
+            ]
+          }
+        }
+      ]
     }
   ]
 }

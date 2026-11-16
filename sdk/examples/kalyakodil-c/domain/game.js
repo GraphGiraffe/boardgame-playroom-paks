@@ -80,12 +80,11 @@ function reduce(position,actor,c,context){const p=copy(position),d=p.data;d.now=
  else throw Error('KALY_COMMAND');
  return {position:p,events:[{type:'kalyakodil.'+c.type,actor:null,params:{roundId:d.roundId},visibility:{kind:/** @type {const} */('public')}}],turnEnded:false};
 }
-/** @param {Position} position @param {number} now */
-function advance(position,now){const d0=data(position);if(position.status!=='playing'||!Number.isSafeInteger(now)||(now<d0.deadline&&!(d0.voteDeadline>0&&!d0.stopPending&&now>=d0.voteDeadline)))return null;const p=copy(position),d=p.data;let ended=false;if(d.voteDeadline>0&&!d.stopPending&&now>=d.voteDeadline){d.stopVotes=[];d.voteDeadline=0;}
- for(let i=0;i<5&&p.status==='playing'&&now>=d.deadline;i++){const at=d.deadline;if(d.phase==='prepare'){d.phase='drawing';d.deadline=at+d.durationSeconds*1000;}else if(d.phase==='drawing'){d.phase='guessing';d.deadline=at+15000;}else if(d.phase==='guessing'){resolve(p,-1,'',at);}else{nextRound(p,at);ended=true;}}
- // A delayed host tick may cross a complete round; keep advancing deterministically.
- if(p.status==='playing'&&now>=d.deadline)return advance(p,now);
- d.now=now;return {position:p,events:[],turnEnded:ended,roundEnded:ended};
+/** @param {Position} position @param {number} now @returns {import('../sdk/contracts').Transition|null} */
+function advance(position,now){const d0=data(position);if(position.status!=='playing'||!Number.isSafeInteger(now)||(now<d0.deadline&&!(d0.voteDeadline>0&&!d0.stopPending&&now>=d0.voteDeadline)))return null;const p=copy(position),d=p.data;let ended=false,roundEnded=false;if(d.voteDeadline>0&&!d.stopPending&&now>=d.voteDeadline){d.stopVotes=[];d.voteDeadline=0;}
+ for(let i=0;i<5&&p.status==='playing'&&now>=d.deadline;i++){const at=d.deadline;if(d.phase==='prepare'){d.phase='drawing';d.deadline=at+d.durationSeconds*1000;}else if(d.phase==='drawing'){d.phase='guessing';d.deadline=at+15000;}else if(d.phase==='guessing'){resolve(p,-1,'',at);}else{const cycle=d.cycle;nextRound(p,at);ended=true;roundEnded=d.mode==='rounds'||d.cycle!==cycle||d.completed.length===p.playerCount;break;}}
+ // The host repeats advance; retain one checkpoint per artist boundary.
+ d.now=now;return {position:p,events:[],turnEnded:ended,roundEnded};
 }
 /** @param {Position} p */
 function score(p){const d=data(p),revealed=d.phase==='result'||p.status==='finished';return d.scores.map((value,player)=>revealed?value:value+d.guesses.filter(g=>g.player===player).reduce((sum,g)=>sum+g.penalty,0));}
