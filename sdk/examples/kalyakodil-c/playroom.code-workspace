@@ -1,0 +1,93 @@
+{
+  "folders": [
+    {
+      "name": "pack",
+      "path": "."
+    }
+  ],
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "PlayRoom: Inspect pack",
+        "type": "process",
+        "command": "node",
+        "args": [
+          "../../../../../../playroom/sdk/cli.cjs",
+          "inspect",
+          "${workspaceFolder:pack}",
+          "--shared",
+          "../../../shared"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder:pack}"
+        },
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated"
+        }
+      },
+      {
+        "label": "PlayRoom: Check contracts and assets",
+        "type": "process",
+        "command": "node",
+        "args": [
+          "../../../../../../playroom/sdk/cli.cjs",
+          "check",
+          "${workspaceFolder:pack}",
+          "--shared",
+          "../../../shared"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder:pack}"
+        },
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated"
+        }
+      },
+      {
+        "label": "PlayRoom: Verify rules",
+        "type": "process",
+        "command": "node",
+        "args": [
+          "../../../../../../playroom/sdk/cli.cjs",
+          "verify",
+          "${workspaceFolder:pack}",
+          "--shared",
+          "../../../shared"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder:pack}"
+        },
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated"
+        }
+      },
+      {
+        "label": "PlayRoom: Open web studio",
+        "type": "process",
+        "command": "node",
+        "args": [
+          "../../../../../../playroom/sdk/cli.cjs",
+          "serve",
+          "${workspaceFolder:pack}",
+          "--shared",
+          "../../../shared"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder:pack}"
+        },
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated"
+        }
+      }
+    ]
+  }
+}

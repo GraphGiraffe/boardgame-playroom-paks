@@ -1,0 +1,119 @@
+{
+  "viewer": -1,
+  "left": {
+    "playerCount": 4,
+    "turn": 0,
+    "status": "playing",
+    "winners": [],
+    "rng": 1015568748,
+    "revision": 0,
+    "data": {
+      "phase": "drawing",
+      "deadline": 33000,
+      "drawingStart": 3000,
+      "roundId": 1,
+      "cycle": 1,
+      "artist": 0,
+      "remaining": [
+        1,
+        2,
+        3
+      ],
+      "answer": "мост",
+      "operations": [],
+      "guesses": [
+        {
+          "id": "g1-0",
+          "text": "река",
+          "actor": 1
+        }
+      ],
+      "scores": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "winner": -1,
+      "accepted": "",
+      "manual": false,
+      "award": 0,
+      "protests": [],
+      "protested": false,
+      "stopVotes": [],
+      "stopRequested": false,
+      "settings": {
+        "mode": "rounds",
+        "difficulty": "easy",
+        "durationSeconds": 30,
+        "roundLimit": 10,
+        "cycles": 2,
+        "hostPlayer": 0,
+        "stopQuorum": 3,
+        "noErase": false,
+        "strokeBudget": 0,
+        "quickGuessBonus": false,
+        "answerMode": "anonymous"
+      },
+      "voteDeadline": 0
+    }
+  },
+  "right": {
+    "playerCount": 4,
+    "turn": 0,
+    "status": "playing",
+    "winners": [],
+    "rng": 1015568748,
+    "revision": 0,
+    "data": {
+      "phase": "drawing",
+      "deadline": 33000,
+      "drawingStart": 3000,
+      "roundId": 1,
+      "cycle": 1,
+      "artist": 0,
+      "remaining": [
+        1,
+        2,
+        3
+      ],
+      "answer": "чайник",
+      "operations": [],
+      "guesses": [
+        {
+          "id": "g1-0",
+          "text": "река",
+          "actor": 2
+        }
+      ],
+      "scores": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "winner": -1,
+      "accepted": "",
+      "manual": false,
+      "award": 0,
+      "protests": [],
+      "protested": false,
+      "stopVotes": [],
+      "stopRequested": false,
+      "settings": {
+        "mode": "rounds",
+        "difficulty": "easy",
+        "durationSeconds": 30,
+        "roundLimit": 10,
+        "cycles": 2,
+        "hostPlayer": 0,
+        "stopQuorum": 3,
+        "noErase": false,
+        "strokeBudget": 0,
+        "quickGuessBonus": false,
+        "answerMode": "anonymous"
+      },
+      "voteDeadline": 0
+    }
+  }
+}
