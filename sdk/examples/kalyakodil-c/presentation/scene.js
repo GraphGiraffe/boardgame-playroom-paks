@@ -18,16 +18,15 @@ const presentation={
  const command=(/** @type {string} */type)=>p.actions.find(c=>c.type===type)||null;
  const input=(/** @type {string} */type)=>(p.inputs||[]).find(choice=>choice.command.type===type)?.command||null;
  const drawCommand=input('draw'),guessCommand=input('guess');
- return {contractVersion:1,id:'kalyakodil-c',family:'drawing',columns:2,rows:1,geometry:{topology:'drawing'},zones:[{id:'field',kind:'table'},{id:'canvas',kind:'canvas'}],objects:[],interactions:[],
+ return {contractVersion:1,id:'kalyakodil-c',family:'drawing',menuActions:p.actions.filter(c=>c.type==='stop').map(command=>({command,label:'Предложить завершение'})),geometry:{topology:'drawing'},zones:[{id:'field',kind:'table'},{id:'canvas',kind:'canvas'}],objects:[],interactions:[],
   players:Array.from({length:p.playerCount},(_,player)=>({player,metrics:[{id:'points',kind:'points',value:scores[player],label:'Очки'}]})),
-  cells:[/** @type {Row} */({id:'round',index:0,label:'Раунд '+roundId+' · Круг '+d.cycle}),{id:'stop',index:1,label:'Остановка '+/** @type {SceneValue[]} */(d.stopVotes).length+'/'+d.stopRequired+(d.stopPending?' · принята':''),command:command('stop')}],
   prompt:d.word?String(d.word):Number(d.wordLength)>0?'Букв: '+d.wordLength:'Угадайте рисунок',
-  ...(Number(d.voteDeadline)>0||d.stopPending===true?{vote:{id:'stop-'+d.voteDeadline,title:'Завершить после раунда / круга',deadline:Number(d.voteDeadline),eligible:Array.from({length:p.playerCount},(_,i)=>i),voted:/** @type {number[]} */(d.stopVotes),required:Number(d.stopRequired),accepted:d.stopPending===true,...(command('stop')?{command:/** @type {import('../sdk/contracts').Command} */(command('stop'))}:{})}}:{}),
+  ...(Number(d.voteDeadline)>0||d.stopPending===true?{vote:{against:/** @type {number[]} */(d.stopAgainst||[]),...(p.actions.find(c=>c.type==='vote-no')?{againstCommand:p.actions.find(c=>c.type==='vote-no')}:{}) ,id:'stop-'+d.voteDeadline,title:'Завершить после раунда / круга',deadline:Number(d.voteDeadline),startedAt:Math.max(0,Number(d.voteDeadline)-30000),eligible:Array.from({length:p.playerCount},(_,i)=>i),voted:/** @type {number[]} */(d.stopVotes),required:Number(d.stopRequired),accepted:d.stopPending===true,...(command('stop')?{command:/** @type {import('../sdk/contracts').Command} */(command('stop'))}:{})}}:{}),
   canvas:{id:'drawing-'+roundId,operations:/** @type {SceneValue[]} */(SDK.read(d,'operations')),enabled:!!drawCommand,...(drawCommand?{command:drawCommand}:{})},
-  clock:{phase,deadline:Number(SDK.read(d,'deadline')),label:phase==='prepare'?'Подумайте':phase==='drawing'?'Рисование':phase==='guessing'?'Последние догадки':'Просмотр и протест'},
+  clock:{phase,deadline:Number(SDK.read(d,'deadline')),startedAt:Number(d.phaseStartedAt),player:artist,label:phase==='prepare'?'Подумайте':phase==='drawing'?'Рисование':phase==='guessing'?'Последние догадки':'Просмотр и протест'},
   chat:{messages:guesses.map(g=>({id:String(g.id),text:String(g.text),...(g.player===undefined?{}:{player:Number(g.player)}),...(p.actions.some(c=>c.type==='confirm'&&c.guessId===g.id)?{confirmCommand:p.actions.find(c=>c.type==='confirm'&&c.guessId===g.id)}:{})})),...(guessCommand?{command:guessCommand}:{}),placeholder:'Введите слово'},
   roundResult:phase==='result'||!active?{answer:d.word,accepted:d.accepted,winner:d.winner,artist,protests:d.protests,required:d.protestRequired}:null,
-  controls:p.actions.filter(c=>c.type!=='confirm').map(c=>({command:c,label:c.type==='award'?'Угадал игрок №'+(Number(c.player)+1):c.type==='stop'?(Number(d.voteDeadline)>0?'Поддержать завершение':'Предложить завершение'):c.type==='protest'?'Протест':'Сдаёмся'}))
+  controls:p.actions.filter(c=>c.type!=='confirm'&&c.type!=='stop'&&c.type!=='vote-no').map(c=>({command:c,label:c.type==='award'?'Угадал игрок №'+(Number(c.player)+1):c.type==='stop'?(Number(d.voteDeadline)>0?'Поддержать завершение':'Предложить завершение'):c.type==='protest'?'Протест':'Сдаёмся'}))
  };
  }
 };

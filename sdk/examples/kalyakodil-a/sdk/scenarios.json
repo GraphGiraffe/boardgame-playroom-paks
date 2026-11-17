@@ -1972,6 +1972,98 @@
           }
         }
       ]
+    },
+    {
+      "id": "explicit-against-and-ballot-change",
+      "options": {
+        "playerCount": 4,
+        "firstPlayer": 0,
+        "rng": 1,
+        "now": 0,
+        "options": {
+          "durationSeconds": 30,
+          "roundLimit": 10,
+          "difficulty": "easy",
+          "roundMode": "rounds"
+        }
+      },
+      "steps": [
+        {
+          "actor": 1,
+          "command": {
+            "type": "vote-no",
+            "roundId": 1
+          },
+          "reject": true
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          }
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "vote-no",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopAgainst": [
+              1
+            ],
+            "data.stopVotes": [
+              0
+            ]
+          }
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopAgainst": [],
+            "data.stopVotes": [
+              0,
+              1
+            ]
+          }
+        },
+        {
+          "actor": 2,
+          "command": {
+            "type": "vote-no",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopAgainst": [
+              2
+            ],
+            "data.stopRequested": false
+          }
+        },
+        {
+          "actor": 3,
+          "command": {
+            "type": "stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopRequested": true
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "vote-no",
+            "roundId": 1
+          },
+          "reject": true
+        }
+      ]
     }
   ]
 }

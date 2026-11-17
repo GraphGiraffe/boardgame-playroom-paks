@@ -1851,6 +1851,91 @@
           }
         }
       ]
+    },
+    {
+      "id": "explicit-against-and-ballot-change",
+      "options": {
+        "playerCount": 4,
+        "now": 0,
+        "rounds": 0
+      },
+      "steps": [
+        {
+          "actor": 1,
+          "command": {
+            "type": "vote-no",
+            "roundId": 1
+          },
+          "reject": true
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "vote-stop",
+            "roundId": 1
+          }
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "vote-no",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopAgainst": [
+              1
+            ],
+            "data.votes": [
+              0
+            ]
+          }
+        },
+        {
+          "actor": 1,
+          "command": {
+            "type": "vote-stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopAgainst": [],
+            "data.votes": [
+              0,
+              1
+            ]
+          }
+        },
+        {
+          "actor": 2,
+          "command": {
+            "type": "vote-no",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopAgainst": [
+              2
+            ],
+            "data.stopRequested": false
+          }
+        },
+        {
+          "actor": 3,
+          "command": {
+            "type": "vote-stop",
+            "roundId": 1
+          },
+          "expect": {
+            "data.stopRequested": true
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "vote-no",
+            "roundId": 1
+          },
+          "reject": true
+        }
+      ]
     }
   ]
 }
