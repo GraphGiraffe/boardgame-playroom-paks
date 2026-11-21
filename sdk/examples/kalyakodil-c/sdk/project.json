@@ -12,16 +12,18 @@
     "firstPlayer": 0,
     "rng": 1,
     "now": 0,
-    "bank": "easy",
-    "rounds": 10,
-    "cycles": 2,
-    "durationSeconds": 60,
     "hostPlayer": 0,
-    "lengthHint": false,
-    "wrongGuessPenalty": false,
-    "fastArtistBonus": false,
-    "answerMode": "anonymous",
-    "roundMode": "rounds"
+    "options": {
+      "bank": "easy",
+      "durationSeconds": 60,
+      "roundMode": "rounds",
+      "rounds": 10,
+      "cycles": 2,
+      "lengthHint": false,
+      "wrongGuessPenalty": false,
+      "fastArtistBonus": false,
+      "answerMode": "anonymous"
+    }
   },
   "support": [],
   "helpers": [],

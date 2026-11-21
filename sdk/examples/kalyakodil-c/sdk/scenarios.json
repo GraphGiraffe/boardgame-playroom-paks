@@ -455,7 +455,15 @@
           "command": {
             "type": "guess",
             "roundId": 1,
-            "text": "ёлка"
+            "text": "Похожий ответ"
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "confirm",
+            "roundId": 1,
+            "guessId": 1
           }
         },
         {
@@ -555,7 +563,15 @@
           "command": {
             "type": "guess",
             "roundId": 1,
-            "text": "ёлка"
+            "text": "Похожий ответ"
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "confirm",
+            "roundId": 1,
+            "guessId": 1
           }
         },
         {
@@ -1080,7 +1096,15 @@
           "command": {
             "type": "guess",
             "roundId": 1,
-            "text": "ёлка"
+            "text": "Похожий ответ"
+          }
+        },
+        {
+          "actor": 0,
+          "command": {
+            "type": "confirm",
+            "roundId": 1,
+            "guessId": 1
           }
         },
         {

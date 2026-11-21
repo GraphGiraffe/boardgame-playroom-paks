@@ -87,6 +87,134 @@
           "reveal": "always",
           "panel": "dedicated"
         }
+      },
+      {
+        "label": "PlayRoom: Diagnose SDK",
+        "type": "process",
+        "command": "node",
+        "args": [
+          "../../../../../../playroom/sdk/cli.cjs",
+          "doctor",
+          "${workspaceFolder:pack}",
+          "--shared",
+          "../../../../../../playroom-paks/shared"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder:pack}"
+        },
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated"
+        }
+      },
+      {
+        "label": "PlayRoom: Check viewer privacy",
+        "type": "process",
+        "command": "node",
+        "args": [
+          "../../../../../../playroom/sdk/cli.cjs",
+          "privacy",
+          ".",
+          "--shared",
+          "../../../../../../playroom-paks/shared",
+          "--fixture",
+          "${input:privacyPair}"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder:pack}"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "PlayRoom: Compile installable pack",
+        "type": "process",
+        "command": "python3",
+        "args": [
+          "../../../../../../boardgame-playroom-utils/sdk.py",
+          "--app",
+          "../../../../../../playroom",
+          "compile",
+          ".",
+          "--packs",
+          "../../../../../../playroom-paks",
+          "--output",
+          "${input:packOutput}"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder:pack}"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "PlayRoom: Create pack",
+        "type": "process",
+        "command": "python3",
+        "args": [
+          "../../../../../../boardgame-playroom-utils/sdk.py",
+          "--app",
+          "../../../../../../playroom",
+          "new",
+          "${input:newDirectory}",
+          "--packs",
+          "../../../../../../playroom-paks",
+          "--id",
+          "${input:newId}"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder:pack}"
+        },
+        "problemMatcher": []
+      }
+    ],
+    "inputs": [
+      {
+        "id": "privacyPair",
+        "type": "promptString",
+        "description": "Viewer-equivalent positions JSON file"
+      },
+      {
+        "id": "packOutput",
+        "type": "promptString",
+        "description": "New .playroom-pack.json output path"
+      },
+      {
+        "id": "newDirectory",
+        "type": "promptString",
+        "description": "Directory for the new pack (outside this project)"
+      },
+      {
+        "id": "newId",
+        "type": "promptString",
+        "description": "New pack ID"
+      }
+    ]
+  },
+  "settings": {
+    "json.schemas": [
+      {
+        "fileMatch": [
+          "/manifest.json"
+        ],
+        "url": "./../../../../../../playroom-paks/sdk/schemas/manifest.schema.json"
+      },
+      {
+        "fileMatch": [
+          "/settings.json"
+        ],
+        "url": "./../../../../../../playroom-paks/sdk/schemas/settings.schema.json"
+      },
+      {
+        "fileMatch": [
+          "/lang/*.json"
+        ],
+        "url": "./../../../../../../playroom-paks/sdk/schemas/locale.schema.json"
+      },
+      {
+        "fileMatch": [
+          "/sdk/project.json"
+        ],
+        "url": "./../../../../../../playroom-paks/sdk/schemas/project.schema.json"
       }
     ]
   }

@@ -13,16 +13,18 @@
     "preset": "classic",
     "rng": 1,
     "now": 0,
-    "difficulty": "easy",
-    "rounds": 10,
-    "cycles": 2,
-    "durationSeconds": 60,
     "hostPlayer": 0,
-    "strokeLimit": 0,
-    "singleGuess": false,
-    "exactBonus": false,
-    "answerMode": "anonymous",
-    "roundMode": "rounds"
+    "options": {
+      "difficulty": "easy",
+      "roundMode": "rounds",
+      "answerMode": "anonymous",
+      "rounds": 10,
+      "cycles": 2,
+      "durationSeconds": 60,
+      "strokeLimit": 0,
+      "singleGuess": false,
+      "exactBonus": false
+    }
   },
   "support": [],
   "helpers": [],

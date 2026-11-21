@@ -1936,6 +1936,71 @@
           "reject": true
         }
       ]
+    },
+    {
+      "id": "public-guess-anonymous",
+      "options": {
+        "playerCount": 12,
+        "firstPlayer": 0,
+        "rng": 1,
+        "now": 0,
+        "answerMode": "anonymous"
+      },
+      "steps": [
+        {
+          "advance": 3000
+        },
+        {
+          "actor": 11,
+          "command": {
+            "type": "guess",
+            "roundId": 1,
+            "text": "облако"
+          },
+          "expectPublic": {
+            "data.guesses": [
+              {
+                "id": "g1",
+                "text": "облако"
+              }
+            ],
+            "data.answer": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "public-guess-named",
+      "options": {
+        "playerCount": 12,
+        "firstPlayer": 0,
+        "rng": 1,
+        "now": 0,
+        "answerMode": "named"
+      },
+      "steps": [
+        {
+          "advance": 3000
+        },
+        {
+          "actor": 11,
+          "command": {
+            "type": "guess",
+            "roundId": 1,
+            "text": "облако"
+          },
+          "expectPublic": {
+            "data.guesses": [
+              {
+                "id": "g1",
+                "text": "облако",
+                "player": 11
+              }
+            ],
+            "data.answer": ""
+          }
+        }
+      ]
     }
   ]
 }

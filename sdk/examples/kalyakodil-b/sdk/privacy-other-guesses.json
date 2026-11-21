@@ -1,5 +1,5 @@
 {
-  "viewer": 2,
+  "viewer": -1,
   "left": {
     "playerCount": 3,
     "turn": 0,
@@ -89,8 +89,8 @@
       "guesses": [
         {
           "id": "g1",
-          "actor": 1,
-          "text": "пингвин"
+          "actor": 2,
+          "text": "медведь"
         }
       ],
       "ink": [],
