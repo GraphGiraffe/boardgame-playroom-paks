@@ -1,0 +1,222 @@
+{
+  "fields": [
+    {
+      "key": "preset",
+      "label": {
+        "key": "durak.book.text.43"
+      },
+      "options": [
+        {
+          "value": "classic",
+          "label": {
+            "key": "durak.meta.classic"
+          }
+        }
+      ],
+      "kind": "preset",
+      "valueType": "string",
+      "control": "select",
+      "default": "classic"
+    },
+    {
+      "key": "variant",
+      "label": {
+        "key": "durak.book.text.43"
+      },
+      "default": "throwin",
+      "options": [
+        {
+          "value": "simple",
+          "label": {
+            "key": "durak.book.text.6"
+          },
+          "description": {
+            "key": "settings.variant.options.simple.description"
+          },
+          "preview": {
+            "ids": [
+              "setting-variant-simple"
+            ]
+          }
+        },
+        {
+          "value": "throwin",
+          "label": {
+            "key": "settings.variant.options.throwin.label"
+          },
+          "description": {
+            "key": "settings.variant.options.throwin.description"
+          },
+          "preview": {
+            "ids": [
+              "setting-variant-throwin"
+            ]
+          }
+        },
+        {
+          "value": "transfer",
+          "label": {
+            "key": "settings.variant.options.transfer.label"
+          },
+          "description": {
+            "key": "settings.variant.options.transfer.description"
+          },
+          "preview": {
+            "ids": [
+              "setting-variant-transfer"
+            ]
+          }
+        }
+      ],
+      "help": {
+        "key": "settings.variant.help"
+      },
+      "control": "slider",
+      "preview": {
+        "kind": "illustrations"
+      },
+      "presentation": "mode",
+      "kind": "option",
+      "valueType": "string"
+    },
+    {
+      "key": "deck",
+      "label": {
+        "key": "settings.deck.label"
+      },
+      "default": "54",
+      "options": [
+        {
+          "value": "36",
+          "label": {
+            "key": "settings.deck.options.36.label"
+          },
+          "description": {
+            "key": "settings.deck.options.36.description"
+          }
+        },
+        {
+          "value": "52",
+          "label": {
+            "key": "settings.deck.options.52.label"
+          },
+          "description": {
+            "key": "settings.deck.options.52.description"
+          }
+        },
+        {
+          "value": "54",
+          "label": {
+            "key": "settings.deck.options.54.label"
+          },
+          "description": {
+            "key": "settings.deck.options.54.description"
+          }
+        }
+      ],
+      "help": {
+        "key": "settings.deck.help"
+      },
+      "control": "select",
+      "preview": {
+        "kind": "cards"
+      },
+      "kind": "option",
+      "valueType": "string"
+    },
+    {
+      "key": "jokerMode",
+      "label": {
+        "key": "settings.jokerMode.label"
+      },
+      "default": "color",
+      "options": [
+        {
+          "value": "color",
+          "label": {
+            "key": "durak.book.text.45"
+          },
+          "description": {
+            "key": "settings.jokerMode.options.color.description"
+          },
+          "preview": {
+            "ids": [
+              "setting-jokerMode-color"
+            ]
+          }
+        },
+        {
+          "value": "universal",
+          "label": {
+            "key": "durak.book.text.47"
+          },
+          "description": {
+            "key": "settings.jokerMode.options.universal.description"
+          },
+          "preview": {
+            "ids": [
+              "setting-jokerMode-universal"
+            ]
+          }
+        }
+      ],
+      "visibleWhen": {
+        "deck": "54"
+      },
+      "help": {
+        "key": "settings.jokerMode.help"
+      },
+      "control": "slider",
+      "preview": {
+        "kind": "illustrations"
+      },
+      "kind": "option",
+      "valueType": "string"
+    },
+    {
+      "key": "endMode",
+      "default": "last",
+      "options": [
+        {
+          "value": "winner"
+        },
+        {
+          "value": "last"
+        }
+      ],
+      "control": "slider",
+      "kind": "standard",
+      "valueType": "string"
+    }
+  ],
+  "groups": [
+    {
+      "label": {
+        "key": "settings.groups.variant.label"
+      },
+      "fields": [
+        "variant"
+      ],
+      "placement": "main"
+    },
+    {
+      "label": {
+        "key": "settings.groups.deck-jokerMode.label"
+      },
+      "fields": [
+        "deck",
+        "jokerMode"
+      ],
+      "placement": "main"
+    },
+    {
+      "label": {
+        "key": "settings.groups.endMode.label"
+      },
+      "fields": [
+        "endMode"
+      ],
+      "placement": "end"
+    }
+  ]
+}

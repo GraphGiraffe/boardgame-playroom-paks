@@ -1,0 +1,187 @@
+{
+  "fields": [
+    {
+      "key": "preset",
+      "label": {
+        "key": "snakes.book.text.2"
+      },
+      "control": "slider",
+      "options": [
+        {
+          "value": "classic",
+          "label": {
+            "key": "snakes.presets.classic"
+          },
+          "preview": {
+            "kind": "illustrations",
+            "ids": [
+              "setting-mode-classic"
+            ]
+          },
+          "description": {
+            "key": "settings.preset.options.classic.description"
+          }
+        },
+        {
+          "value": "plus",
+          "label": {
+            "key": "snakes.presets.plus"
+          },
+          "preview": {
+            "kind": "illustrations",
+            "ids": [
+              "setting-mode-plus"
+            ]
+          },
+          "description": {
+            "key": "settings.preset.options.plus.description"
+          }
+        }
+      ],
+      "help": {
+        "key": "settings.preset.help"
+      },
+      "kind": "preset",
+      "valueType": "string",
+      "default": "classic"
+    },
+    {
+      "key": "boardSize",
+      "label": {
+        "key": "settings.boardSize.label"
+      },
+      "default": "100",
+      "help": {
+        "key": "settings.boardSize.help"
+      },
+      "options": [
+        {
+          "value": "64",
+          "preview": {
+            "ids": [
+              "setting-board-64"
+            ]
+          },
+          "description": {
+            "key": "settings.boardSize.options.64.description"
+          }
+        },
+        {
+          "value": "100",
+          "preview": {
+            "ids": [
+              "setting-board-100"
+            ]
+          },
+          "description": {
+            "key": "settings.boardSize.options.100.description"
+          }
+        }
+      ],
+      "control": "slider",
+      "preview": {
+        "kind": "illustrations"
+      },
+      "kind": "option",
+      "valueType": "string"
+    },
+    {
+      "key": "endMode",
+      "default": "round",
+      "options": [
+        {
+          "value": "winner"
+        },
+        {
+          "value": "round"
+        },
+        {
+          "value": "last"
+        }
+      ],
+      "control": "slider",
+      "kind": "standard",
+      "valueType": "string"
+    },
+    {
+      "key": "maxRounds",
+      "label": {
+        "key": "settings.maxRounds.label"
+      },
+      "default": "0",
+      "help": {
+        "key": "settings.maxRounds.help"
+      },
+      "options": [
+        {
+          "value": "3",
+          "description": {
+            "key": "settings.maxRounds.options.3.description"
+          }
+        },
+        {
+          "value": "5",
+          "description": {
+            "key": "settings.maxRounds.options.5.description"
+          }
+        },
+        {
+          "value": "10",
+          "description": {
+            "key": "settings.maxRounds.options.10.description"
+          }
+        },
+        {
+          "value": "20",
+          "description": {
+            "key": "settings.maxRounds.options.20.description"
+          }
+        },
+        {
+          "value": "50",
+          "description": {
+            "key": "settings.maxRounds.options.50.description"
+          }
+        },
+        {
+          "value": "0",
+          "label": {
+            "common": "infinity"
+          },
+          "description": {
+            "key": "settings.maxRounds.options.0.description"
+          }
+        }
+      ],
+      "control": "slider",
+      "preview": {
+        "kind": "symbol",
+        "icon": "clock"
+      },
+      "kind": "option",
+      "valueType": "string"
+    }
+  ],
+  "groups": [
+    {
+      "label": {
+        "key": "settings.groups.preset-boardSize.label"
+      },
+      "fields": [
+        "preset",
+        "boardSize"
+      ],
+      "placement": "main"
+    },
+    {
+      "label": {
+        "key": "settings.groups.endMode-maxRounds.label"
+      },
+      "fields": [
+        "endMode",
+        "maxRounds"
+      ],
+      "placement": "end"
+    }
+  ]
+}

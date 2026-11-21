@@ -1,0 +1,102 @@
+{
+  "fields": [
+    {
+      "key": "preset",
+      "label": {
+        "key": "settings.preset.label"
+      },
+      "options": [
+        {
+          "value": "classic",
+          "label": {
+            "key": "yatzy.meta.classic"
+          }
+        }
+      ],
+      "kind": "preset",
+      "valueType": "string",
+      "control": "select",
+      "default": "classic"
+    },
+    {
+      "key": "maxRounds",
+      "label": {
+        "key": "settings.maxRounds.label"
+      },
+      "default": "15",
+      "help": {
+        "key": "settings.maxRounds.help"
+      },
+      "options": [
+        {
+          "value": "3",
+          "description": {
+            "key": "settings.maxRounds.options.3.description"
+          },
+          "preview": {
+            "kind": "illustrations",
+            "ids": [
+              "setting-rounds-3"
+            ]
+          }
+        },
+        {
+          "value": "5",
+          "description": {
+            "key": "settings.maxRounds.options.5.description"
+          },
+          "preview": {
+            "kind": "illustrations",
+            "ids": [
+              "setting-rounds-5"
+            ]
+          }
+        },
+        {
+          "value": "10",
+          "description": {
+            "key": "settings.maxRounds.options.10.description"
+          },
+          "preview": {
+            "kind": "illustrations",
+            "ids": [
+              "setting-rounds-10"
+            ]
+          }
+        },
+        {
+          "value": "15",
+          "description": {
+            "key": "settings.maxRounds.options.15.description"
+          },
+          "preview": {
+            "kind": "illustrations",
+            "ids": [
+              "setting-rounds-15"
+            ]
+          }
+        }
+      ],
+      "control": "slider",
+      "preview": {
+        "kind": "illustrations",
+        "ids": [
+          "setting-rounds-15"
+        ]
+      },
+      "kind": "option",
+      "valueType": "string"
+    }
+  ],
+  "groups": [
+    {
+      "label": {
+        "key": "settings.groups.maxRounds.label"
+      },
+      "fields": [
+        "maxRounds"
+      ],
+      "placement": "end"
+    }
+  ]
+}

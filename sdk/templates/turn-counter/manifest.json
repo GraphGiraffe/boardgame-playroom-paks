@@ -11,6 +11,38 @@
     "view": [
       "presentation/scene.js"
     ],
-    "locales": {}
-  }
+    "locales": {
+      "ru": [
+        "lang/ru.json"
+      ],
+      "en": [
+        "lang/en.json"
+      ]
+    }
+  },
+  "name": {
+    "key": "meta.name"
+  },
+  "execution": "isolated-v1",
+  "sdkFeatures": [
+    "isolated-execution-v1"
+  ],
+  "rules": "rules.js",
+  "view": "view.js",
+  "styles": "styles.css",
+  "tagline": {
+    "key": "meta.description"
+  },
+  "releases": [
+    {
+      "version": "0.1.0",
+      "changes": [
+        {
+          "key": "release.current"
+        }
+      ]
+    }
+  ],
+  "defaultLanguage": "ru",
+  "settings": "settings.json"
 }

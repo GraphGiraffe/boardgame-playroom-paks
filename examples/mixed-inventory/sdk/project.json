@@ -1,0 +1,13 @@
+{
+  "contractVersion": 1,
+  "checkTypes": true,
+  "rules": ["domain/game.js"],
+  "presentation": [
+    "shared/presentation/asset.js",
+    "shared/presentation/card-face-asset.js",
+    "shared/presentation/tile-asset.js",
+    "shared/presentation/token-asset.js",
+    "presentation/scene.js"
+  ],
+  "options": {"playerCount": 2, "firstPlayer": 0, "preset": "classic", "rng": 1}
+}

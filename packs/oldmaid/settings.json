@@ -1,0 +1,140 @@
+{
+  "fields": [
+    {
+      "key": "preset",
+      "label": {
+        "key": "oldmaid.book.text.18"
+      },
+      "options": [
+        {
+          "value": "classic",
+          "label": {
+            "key": "oldmaid.meta.classic"
+          }
+        }
+      ],
+      "kind": "preset",
+      "valueType": "string",
+      "control": "select",
+      "default": "classic"
+    },
+    {
+      "key": "deck",
+      "label": {
+        "key": "settings.deck.label"
+      },
+      "default": "36",
+      "options": [
+        {
+          "value": "36",
+          "preview": {
+            "count": 35
+          },
+          "description": {
+            "key": "settings.deck.options.36.description"
+          }
+        },
+        {
+          "value": "52",
+          "preview": {
+            "count": 51
+          },
+          "description": {
+            "key": "settings.deck.options.52.description"
+          }
+        }
+      ],
+      "help": {
+        "key": "settings.deck.help"
+      },
+      "control": "select",
+      "preview": {
+        "kind": "cards"
+      },
+      "kind": "option",
+      "valueType": "string"
+    },
+    {
+      "key": "drawFrom",
+      "label": {
+        "key": "settings.drawFrom.label"
+      },
+      "default": "any",
+      "options": [
+        {
+          "value": "any",
+          "label": {
+            "key": "settings.drawFrom.options.any.label"
+          },
+          "description": {
+            "key": "settings.drawFrom.options.any.description"
+          },
+          "preview": {
+            "ids": [
+              "setting-draw-any"
+            ]
+          }
+        },
+        {
+          "value": "next",
+          "label": {
+            "key": "settings.drawFrom.options.next.label"
+          },
+          "description": {
+            "key": "settings.drawFrom.options.next.description"
+          },
+          "preview": {
+            "ids": [
+              "setting-draw-next"
+            ]
+          }
+        }
+      ],
+      "help": {
+        "key": "settings.drawFrom.help"
+      },
+      "control": "slider",
+      "preview": {
+        "kind": "illustrations"
+      },
+      "kind": "option",
+      "valueType": "string"
+    },
+    {
+      "key": "endMode",
+      "default": "last",
+      "options": [
+        {
+          "value": "winner"
+        },
+        {
+          "value": "last"
+        }
+      ],
+      "control": "slider",
+      "kind": "standard",
+      "valueType": "string"
+    }
+  ],
+  "groups": [
+    {
+      "label": {
+        "key": "settings.groups.deck-drawFrom.label"
+      },
+      "fields": [
+        "deck",
+        "drawFrom"
+      ],
+      "placement": "main"
+    },
+    {
+      "label": {
+        "key": "settings.groups.endMode.label"
+      },
+      "fields": [
+        "endMode"
+      ],
+      "placement": "end"
+    }
+  ]
+}

@@ -1,4 +1,9 @@
-(function(root,factory){if(typeof module==='object'&&module.exports)module.exports=factory;root.PlayroomPackDefinitionFactory=factory;})(globalThis,function(ports){
+(function(root,factory){
+ const visibility=root.PlayroomPackDomain?.tileVisibility||(typeof require==='function'?require('../../../shared/domain/tile-visibility.js'):null);
+ const connection=root.PlayroomPackDomain?.tileConnection||(typeof require==='function'?require('../../../shared/domain/tile-connection.js'):null);
+ const create=ports=>factory(ports,visibility,connection);
+ if(typeof module==='object'&&module.exports)module.exports=create;root.PlayroomPackDefinitionFactory=create;
+})(globalThis,function(ports,visibility,connection){
  'use strict';const Ending=ports.ending;const pips=hand=>hand.reduce((sum,tile)=>sum+tile.a+tile.b,0);
  const fact=(name,actor,params={})=>({type:'domino.'+name,actor,params,visibility:{kind:'public'}});
  function create({playerCount,firstPlayer,preset,rng,openHands,options={}}){
@@ -26,7 +31,7 @@
   if(!commands.length)commands.push({type:d.stock.length?'draw':'pass'});
   return commands.map(command=>({command,visibility:'private'}));
  }
- function oriented(tile,side,chain){const out={...tile};if(chain.length){const join=side==='left'?chain[0].a:chain.at(-1).b;if((side==='left'?out.b:out.a)!==join)[out.a,out.b]=[out.b,out.a];}return out;}
+ function oriented(tile,side,chain){return connection.oriented(tile,side,connection.endpoint(chain,side));}
  function reduce(position,actor,action){const next=JSON.parse(JSON.stringify(position)),d=next.data,events=[];
   if(action.type==='draw'){d.hands[actor].push(d.stock.pop());events.push(fact('drawn',actor));return {position:next,events,roundEnded:action.type!=='draw'&&((next.turn-d.ending.first+position.playerCount)%position.playerCount)<=((actor-d.ending.first+position.playerCount)%position.playerCount),turnEnded:action.type!=='draw'};}
   if(action.type==='pass'){d.passes++;events.push(fact('passed',actor));}
@@ -41,9 +46,16 @@
    next.status='finished';next.winners=d.ending.groups.length?Ending.winners(d.ending):winners.length===1?winners:[];events.push(fact('fish',next.winners[0]??null,{best}));}
   return {position:next,events,roundEnded:action.type!=='draw'&&((next.turn-d.ending.first+position.playerCount)%position.playerCount)<=((actor-d.ending.first+position.playerCount)%position.playerCount),turnEnded:action.type!=='draw'};
  }
- function project(position,viewer){const d=JSON.parse(JSON.stringify(position.data));d.points=score(position);d.hands=d.hands.map((hand,player)=>position.openHands||player===viewer?hand:hand.map(()=>({hidden:true})));d.stock=d.stock.map(()=>({hidden:true}));return d;}
+ function project(position,viewer){
+  const {hands,stock,...table}=position.data;
+  return {...table,points:score(position),hands:hands.map((hand,player)=>position.openHands||player===viewer?hand:visibility.concealed(hand.length)),stock:visibility.concealed(stock.length)};
+ }
  function bot(projection,actor,commands,memory,context={}){return commands.slice().sort((a,b)=>{const left=projection.data.hands[actor].find(tile=>tile.id===a.card),right=projection.data.hands[actor].find(tile=>tile.id===b.card);const hand=projection.data.hands[actor],value=t=>!t?0:(context.depth===1?1:t.a+t.b)+(context.depth===3?hand.filter(o=>o.a===t.a||o.b===t.a||o.a===t.b||o.b===t.b).length+(t.a===t.b?3:0):0);return value(right)-value(left);})[0];}
- function score(position){const sums=position.data.hands.map(pips),winner=position.winners[0];return sums.map((_,player)=>position.status==='finished'&&player===winner?sums.reduce((a,b)=>a+b,0)-sums[player]:0);}
+ function score(position){
+  const points=Array(position.playerCount).fill(0),winner=position.winners[0];
+  if(position.status==='finished'&&winner!==undefined)points[winner]=position.data.hands.reduce((sum,hand,player)=>player===winner?sum:sum+pips(hand),0);
+  return points;
+ }
  function result(position){const values=position.data.hands.map(pips);return {winners:position.winners,...Ending.result(position.data.ending),
   places:Ending.places(position.data.ending,values,false),metrics:[{id:'pips',values,order:'asc'}]};}
  function localChoices(p){if(p.actor<0||p.status!=='playing'||p.audience==='public')return [];return actions(p,p.actor);}

@@ -4,11 +4,14 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["pexeso"] = {
   "id": "pexeso",
-  "version": "0.4.1",
-  "name": "Пексесо",
+  "version": "0.4.7-preview.1",
+  "name": {
+    "key": "pexeso.meta.name"
+  },
   "category": "cards",
-  "estimatedDuration": "5–20 мин",
-  "tagline": "Запомни карты и открой больше пар.",
+  "tagline": {
+    "key": "manifest.tagline"
+  },
   "capabilities": {
     "hands": false,
     "surfaces": [
@@ -21,40 +24,122 @@
   "view": "view.js",
   "styles": "styles.css",
   "sharedUi": true,
-  "settings": [
-    {
-      "key": "deck",
-      "label": "Колода",
-      "default": "cartoon",
-      "options": [
-        {
-          "value": "cartoon",
-          "label": "Персонажи",
-          "description": "Пара: одинаковые фигура и цвет.",
-          "preview": {
-            "ids": [
-              "setting-deck-cartoon"
-            ]
-          }
+  "settings": {
+    "fields": [
+      {
+        "key": "preset",
+        "label": {
+          "key": "settings.preset.label"
         },
-        {
-          "value": "52",
-          "label": "Игральные",
-          "description": "Пара: один номинал и цвет масти.",
-          "preview": {
-            "ids": [
-              "setting-deck-playing"
-            ]
+        "control": "slider",
+        "options": [
+          {
+            "value": "easy",
+            "label": {
+              "key": "pexeso.presets.easy"
+            },
+            "description": {
+              "key": "settings.preset.options.easy.description"
+            },
+            "preview": {
+              "kind": "cards",
+              "count": 16
+            }
+          },
+          {
+            "value": "medium",
+            "label": {
+              "key": "pexeso.presets.medium"
+            },
+            "description": {
+              "key": "settings.preset.options.medium.description"
+            },
+            "preview": {
+              "kind": "cards",
+              "count": 24
+            }
+          },
+          {
+            "value": "hard",
+            "label": {
+              "key": "pexeso.presets.hard"
+            },
+            "description": {
+              "key": "settings.preset.options.hard.description"
+            },
+            "preview": {
+              "kind": "cards",
+              "count": 36
+            }
           }
-        }
-      ],
-      "help": "«Персонажи»: пара совпадает и по фигуре, и по цвету. «Игральные»: пара имеет одно достоинство и один цвет масти — черви с бубнами либо пики с трефами. Количество пар задаётся размером набора; джокеров в этих вариантах нет.",
-      "control": "select",
-      "preview": {
-        "kind": "illustrations"
+        ],
+        "help": {
+          "key": "settings.preset.help"
+        },
+        "default": "easy",
+        "kind": "preset",
+        "valueType": "string"
+      },
+      {
+        "key": "deck",
+        "label": {
+          "key": "pexeso.book.text.2"
+        },
+        "default": "cartoon",
+        "options": [
+          {
+            "value": "cartoon",
+            "label": {
+              "key": "pexeso.book.text.4"
+            },
+            "description": {
+              "key": "settings.deck.options.cartoon.description"
+            },
+            "preview": {
+              "ids": [
+                "setting-deck-cartoon"
+              ]
+            }
+          },
+          {
+            "value": "52",
+            "label": {
+              "key": "settings.deck.options.52.label"
+            },
+            "description": {
+              "key": "settings.deck.options.52.description"
+            },
+            "preview": {
+              "ids": [
+                "setting-deck-playing"
+              ]
+            }
+          }
+        ],
+        "help": {
+          "key": "settings.deck.help"
+        },
+        "control": "select",
+        "preview": {
+          "kind": "illustrations"
+        },
+        "kind": "option",
+        "valueType": "string"
       }
-    }
-  ],
+    ],
+    "groups": [
+      {
+        "label": {
+          "key": "settings.groups.preset-deck.label"
+        },
+        "fields": [
+          "preset",
+          "deck"
+        ],
+        "placement": "main"
+      }
+    ]
+  },
   "engineApi": 4,
   "stateVersion": 3,
   "viewApi": 3,
@@ -75,7 +160,8 @@
     }
   ],
   "sharedDomain": [
-    "standard-deck"
+    "standard-deck",
+    "tile-visibility"
   ],
   "sourceModules": {
     "rules": [
@@ -89,7 +175,7 @@
     ],
     "locales": {
       "ru": [
-        "locales/ru/game.json"
+        "lang/ru.json"
       ]
     }
   },
@@ -100,49 +186,6 @@
     "standard-deck",
     "mini-split-deck"
   ],
-  "ruleGroups": [
-    {
-      "label": "Поле и карты",
-      "fields": [
-        "preset",
-        "deck"
-      ]
-    }
-  ],
-  "presetSetting": {
-    "label": "Количество пар",
-    "control": "slider",
-    "options": [
-      {
-        "value": "easy",
-        "label": "8",
-        "description": "8 пар — 16 карт на поле.",
-        "preview": {
-          "kind": "cards",
-          "count": 16
-        }
-      },
-      {
-        "value": "medium",
-        "label": "12",
-        "description": "12 пар — 24 карт на поле.",
-        "preview": {
-          "kind": "cards",
-          "count": 24
-        }
-      },
-      {
-        "value": "hard",
-        "label": "18",
-        "description": "18 пар — 36 карт на поле.",
-        "preview": {
-          "kind": "cards",
-          "count": 36
-        }
-      }
-    ],
-    "help": "Число пар на поле: чем их больше, тем больше карт нужно запоминать. Состав пар зависит от выбранной колоды."
-  },
   "skinFamilies": [
     "card-face",
     "character-face",
@@ -151,105 +194,18 @@
   "defaultSkins": {
     "character-face": "minimal"
   },
-  "releases": [
-    {
-      "version": "0.4.0",
-      "changes": [
-        "Стабильный выпуск: обновлены правила, интерфейс и параметры игры."
-      ]
-    },
-    {
-      "version": "0.3.5",
-      "changes": [
-        "Стабильный выпуск: обновлены правила, интерфейс и параметры игры."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.18",
-      "changes": [
-        "Синхронизированы общие компоненты с исправлениями чтения индексов, перекрытия карт и обновления оформления; правила игры не менялись."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.17",
-      "changes": [
-        "Иллюстрации параметров сохраняют размер компонентов между вариантами; постоянная область арта центрирует изображение по обеим осям без растягивания."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.16",
-      "changes": [
-        "При композиции SVG сохраняются полные атрибуты толщины, прозрачности и идентичности; стандартный контур масштабируется целиком."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.15",
-      "changes": [
-        "Исправлена разметка Пексесо, упрощён выбор чужой руки Акулины, увеличено поле ЗиЛ."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.14",
-      "changes": [
-        "Параметры игры снабжены понятными иллюстрациями из игровых компонентов и короткими пояснениями выбранных вариантов."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.13",
-      "changes": [
-        "Общие игровые ассеты сохраняют пропорции рамок, скруглений и толщины в игре, миниатюрах, правилах, параметрах и анимациях. Убраны вторые фиксированные рамки и тени поверх SVG."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.12",
-      "changes": [
-        "Скругления карт и общих фигур масштабируются вместе с компонентами."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.9",
-      "changes": [
-        "Общий SDK допускает до 64 ленивых публичных кадров; одновременно готовится только текущий и следующий кадр."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.8",
-      "changes": [
-        "Обновлён общий SDK поэтапной подготовки публичных кадров; правила игры сохранены."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.7",
-      "changes": [
-        "Обновлены общие компоненты отображения карточных мастей и жетонов."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.6",
-      "changes": [
-        "Угловые номиналы поверх рамки, единое выравнивание индексов и узкая «10» с прежним шрифтом.",
-        "Уточнены безопасные области номиналов и мастей при перекрытии карт."
-      ]
-    },
-    {
-      "version": "0.3.4",
-      "changes": [
-        "Обновлён общий компонент пустого карточного слота; правила игры не изменены."
-      ]
-    },
-    {
-      "version": "0.3.3",
-      "changes": [
-        "Короткие правила: абзацы, списки, таблицы и иллюстрации игровых элементов и интерфейса."
-      ]
-    }
-  ],
+  "releases": [],
   "sdkFeatures": [
     "local-input-v1",
     "turn-order-v1",
     "parameter-illustrations-v1",
     "isolated-execution-v1"
   ],
-  "execution": "isolated-v1"
+  "execution": "isolated-v1",
+  "defaultLanguage": "ru",
+  "estimatedDurationMin": [
+    5,
+    20
+  ]
 };
 })(globalThis);

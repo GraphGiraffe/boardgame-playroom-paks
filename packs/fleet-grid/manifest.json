@@ -1,0 +1,236 @@
+{
+  "id": "fleet-grid",
+  "version": "0.4.6-preview.2",
+  "name": {
+    "key": "battleship.meta.name"
+  },
+  "category": "board",
+  "tagline": {
+    "key": "manifest.tagline"
+  },
+  "capabilities": {
+    "hands": false,
+    "quietActions": [
+      "auto",
+      "orient",
+      "place",
+      "move",
+      "remove",
+      "ready"
+    ],
+    "surfaces": [
+      "combined",
+      "table",
+      "player"
+    ],
+    "viewStateScope": "match",
+    "presentation": {
+      "minimumVisibleMs": {
+        "default": 750,
+        "phases": {
+          "setup": 0
+        }
+      }
+    }
+  },
+  "rules": "rules.js",
+  "view": "view.js",
+  "styles": "styles.css",
+  "sharedUi": true,
+  "sharedAssets": [
+    "ship.svg"
+  ],
+  "engineApi": 4,
+  "stateVersion": 4,
+  "viewApi": 3,
+  "tileTheme": "blue",
+  "tags": [
+    "board"
+  ],
+  "playModes": [
+    {
+      "id": "individual",
+      "players": [
+        2
+      ],
+      "teams": false
+    }
+  ],
+  "settings": "settings.json",
+  "sounds": "sounds.js",
+  "sourceModules": {
+    "rules": [
+      "domain/geometry.js",
+      "domain/game.js",
+      "presentation/scene.js"
+    ],
+    "view": [
+      "presentation/scene.js",
+      "presentation/tutorial.js",
+      "presentation/rule-illustrations.js"
+    ],
+    "locales": {
+      "ru": [
+        "lang/ru.json"
+      ],
+      "en": [
+        "lang/en.json"
+      ]
+    }
+  },
+  "skinFamilies": [
+    "ship"
+  ],
+  "releases": [
+    {
+      "version": "0.4.2",
+      "changes": [
+        {
+          "key": "manifest.releases.0.changes.0"
+        }
+      ]
+    },
+    {
+      "version": "0.4.0",
+      "changes": [
+        {
+          "key": "manifest.releases.1.changes.0"
+        }
+      ]
+    },
+    {
+      "version": "0.3.7",
+      "changes": [
+        {
+          "key": "manifest.releases.1.changes.0"
+        }
+      ]
+    },
+    {
+      "version": "0.3.7-preview.18",
+      "changes": [
+        {
+          "key": "manifest.releases.3.changes.0"
+        }
+      ]
+    },
+    {
+      "version": "0.3.7-preview.17",
+      "changes": [
+        {
+          "key": "manifest.releases.4.changes.0"
+        }
+      ]
+    },
+    {
+      "version": "0.3.7-preview.16",
+      "changes": [
+        {
+          "key": "manifest.releases.5.changes.0"
+        }
+      ]
+    },
+    {
+      "version": "0.3.7-preview.15",
+      "changes": [
+        {
+          "key": "manifest.releases.6.changes.0"
+        }
+      ]
+    },
+    {
+      "version": "0.3.7-preview.14",
+      "changes": [
+        {
+          "key": "manifest.releases.7.changes.0"
+        }
+      ]
+    },
+    {
+      "version": "0.3.7-preview.13",
+      "changes": [
+        {
+          "key": "manifest.releases.8.changes.0"
+        }
+      ]
+    },
+    {
+      "version": "0.3.7-preview.10",
+      "changes": [
+        {
+          "key": "manifest.releases.9.changes.0"
+        }
+      ]
+    },
+    {
+      "version": "0.3.7-preview.9",
+      "changes": [
+        {
+          "key": "manifest.releases.10.changes.0"
+        }
+      ]
+    },
+    {
+      "version": "0.3.7-preview.8",
+      "changes": [
+        {
+          "key": "manifest.releases.11.changes.0"
+        }
+      ]
+    },
+    {
+      "version": "0.3.7-preview.7",
+      "changes": [
+        {
+          "key": "manifest.releases.12.changes.0"
+        }
+      ]
+    },
+    {
+      "version": "0.3.7-preview.6",
+      "changes": [
+        {
+          "key": "manifest.releases.13.changes.0"
+        }
+      ]
+    },
+    {
+      "version": "0.3.7-preview.5",
+      "changes": [
+        {
+          "key": "manifest.releases.14.changes.0"
+        }
+      ]
+    },
+    {
+      "version": "0.3.6",
+      "changes": [
+        {
+          "key": "manifest.releases.15.changes.0"
+        }
+      ]
+    },
+    {
+      "version": "0.3.5",
+      "changes": [
+        {
+          "key": "manifest.releases.16.changes.0"
+        }
+      ]
+    }
+  ],
+  "sdkFeatures": [
+    "local-input-v1",
+    "turn-order-v1",
+    "isolated-execution-v1"
+  ],
+  "execution": "isolated-v1",
+  "defaultLanguage": "ru",
+  "estimatedDurationMin": [
+    15,
+    30
+  ],
+  "replaces": [
+    "battleship"
+  ]
+}

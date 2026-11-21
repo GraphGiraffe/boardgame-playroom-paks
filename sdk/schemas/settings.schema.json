@@ -1,0 +1,129 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PlayRoom SDK match settings",
+  "type": "object",
+  "required": ["fields", "groups"],
+  "additionalProperties": false,
+  "properties": {
+    "fields": {
+      "type": "array",
+      "maxItems": 64,
+      "items": { "$ref": "#/definitions/field" }
+    },
+    "groups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["fields", "placement"],
+        "additionalProperties": false,
+        "properties": {
+          "label": { "$ref": "#/definitions/text" },
+          "fields": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": { "type": "string", "minLength": 1 },
+            "description": "Keys declared in fields. Each setting can belong to at most one group."
+          },
+          "placement": { "enum": ["main", "end"], "default": "main" }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "text": {
+      "description": "Use a pack locale key for authored text or a shared application label.",
+      "oneOf": [
+        { "type": "string" },
+        {
+          "type": "object",
+          "required": ["key"],
+          "additionalProperties": false,
+          "properties": { "key": { "type": "string", "minLength": 1 }, "params": { "type": "object" } }
+        },
+        {
+          "type": "object",
+          "required": ["common"],
+          "additionalProperties": false,
+          "properties": { "common": { "type": "string", "minLength": 1, "examples": ["yes", "no", "classic"] } }
+        }
+      ]
+    },
+    "option": {
+      "type": "object",
+      "required": ["value"],
+      "properties": {
+        "value": { "type": ["string", "number", "boolean"], "description": "Stable data passed to the game rules." },
+        "label": { "$ref": "#/definitions/text" },
+        "shortLabel": { "$ref": "#/definitions/text" },
+        "description": { "anyOf": [{ "$ref": "#/definitions/text" }, { "type": "null" }] },
+        "preview": { "type": "object" }
+      }
+    },
+    "field": {
+      "type": "object",
+      "required": ["key", "kind", "valueType", "control", "default"],
+      "properties": {
+        "key": { "type": "string", "minLength": 1 },
+        "kind": { "enum": ["preset", "option", "standard"], "default": "option" },
+        "label": { "$ref": "#/definitions/text" },
+        "help": { "$ref": "#/definitions/text" },
+        "description": { "$ref": "#/definitions/text" },
+        "valueType": { "enum": ["string", "integer", "number", "boolean"] },
+        "control": { "enum": ["select", "slider"], "default": "select" },
+        "default": { "type": ["string", "number", "boolean"], "description": "Must be one of the declared values." },
+        "options": { "type": "array", "minItems": 1, "maxItems": 256, "items": { "$ref": "#/definitions/option" } },
+        "range": {
+          "type": "object",
+          "required": ["min", "max", "step"],
+          "additionalProperties": false,
+          "properties": {
+            "min": { "type": "integer" },
+            "max": { "type": "integer" },
+            "step": { "type": "integer", "minimum": 1, "default": 1 }
+          }
+        },
+        "unit": { "enum": ["s", "min", "h"] },
+        "presentation": { "enum": ["compact", "mode"] },
+        "preview": { "type": "object" },
+        "visibleWhen": { "type": "object" },
+        "inactiveWhen": { "type": "object" },
+        "inactivePresentation": { "type": "object" },
+        "optionDefaults": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": { "description": { "anyOf": [{ "$ref": "#/definitions/text" }, { "type": "null" }] } }
+        }
+      },
+      "oneOf": [
+        { "required": ["options"] },
+        { "required": ["range"] }
+      ],
+      "allOf": [
+        {
+          "if": { "required": ["range"] },
+          "then": { "properties": { "valueType": { "const": "integer" } } }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "preset" } } },
+          "then": { "properties": { "key": { "const": "preset" }, "valueType": { "const": "string" } } }
+        },
+        {
+          "if": { "properties": { "valueType": { "const": "string" } } },
+          "then": { "properties": { "default": { "type": "string" }, "options": { "items": { "properties": { "value": { "type": "string" } } } } } }
+        },
+        {
+          "if": { "properties": { "valueType": { "const": "integer" } } },
+          "then": { "properties": { "default": { "type": "integer" }, "options": { "items": { "properties": { "value": { "type": "integer" } } } } } }
+        },
+        {
+          "if": { "properties": { "valueType": { "const": "number" } } },
+          "then": { "properties": { "default": { "type": "number" }, "options": { "items": { "properties": { "value": { "type": "number" } } } } } }
+        },
+        {
+          "if": { "properties": { "valueType": { "const": "boolean" } } },
+          "then": { "properties": { "default": { "type": "boolean" }, "options": { "items": { "properties": { "value": { "type": "boolean" } } } } } }
+        }
+      ]
+    }
+  }
+}

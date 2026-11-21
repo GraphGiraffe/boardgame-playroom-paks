@@ -1,0 +1,13 @@
+{
+  "mau.meta.name": "101",
+  "mau.speech.mau": "Mau!",
+  "mau.actions.declare-mau": "Mau!",
+  "mau.view.discard-help": "Play a matching suit or rank. Special cards change the turn.",
+  "mau.tutorial.card": "Select a playable card in your hand.",
+  "mau.tutorial.draw": "Draw from the stock.",
+  "mau.tutorial.suit": "Choose the suit for the next player.",
+  "mau.tutorial.mau": "One card left. Call “Mau!”.",
+  "mau.tutorial.next": "Review the score and start the next deal.",
+  "release.card-art": "Redesigned card faces and cover. Played cards use the selected deck in the enlarged view.",
+  "mau.tutorial.table": "Place the selected card on the discard pile."
+}

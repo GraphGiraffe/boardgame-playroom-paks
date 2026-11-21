@@ -26,70 +26,129 @@
  function completeBatch(position,actor){const d=position.data;d.phase='roll';d.die=null;d.guarantee=false;
   const repeat=d.sixReroll?d.dice.flatMap((value,index)=>value===6?[index]:[]):[];d.rollIndices=repeat;
   if(!repeat.length||Ending.done(d.ending,actor)){
+   d.ending={...d.ending,starts:d.ending.starts.slice()};
    const turn=Ending.advance(d.ending,actor,{revision:(position.revision??0)+1});if(turn===null){position.status='finished';position.winners=Ending.winners(d.ending);if(!position.winners.length){const counts=d.pawns.map(row=>row.filter(n=>n===57).length),totals=position.preset==='teams'?counts.map((n,p)=>n+counts[(p+2)%4]):counts;position.winners=totals.flatMap((n,p)=>n===Math.max(...totals)?[p]:[]);}}else position.turn=turn;
    d.rollIndices=Array.from({length:d.diceCount},(_,index)=>index);
   }
  }
- function reduce(position,actor,action){const next=JSON.parse(JSON.stringify(position)),d=next.data,events=[];
+ function reduce(position,actor,action){
+  // The runtime owns an immutable position. Detach only the rule data that
+  // this transition can write, keeping its timeline and other facts shared.
+  const old=position.data,d={...old,used:old.used.slice()};
+  const next={...position,data:d},events=[];
   if(action.type==='roll'){
-   d.lastRolled=d.rollIndices.slice();d.used.fill(true);for(const index of d.rollIndices){d.dice[index]=ports.rollDie(6,next);d.used[index]=false;}
-   d.die=d.dice[d.rollIndices[0]];d.lastRoll=d.die;d.phase='move';d.last=null;
-   if(B.stranded(next,actor)&&!d.rollIndices.some(index=>d.dice[index]===6)){d.failed[actor]=Math.min(3,d.failed[actor]+1);d.guarantee=d.guaranteedExit&&d.failed[actor]>=3;}
-   else{d.failed[actor]=0;d.guarantee=false;}
-   events.push(fact('rolled',actor,{dice:d.rollIndices.map(index=>d.dice[index])}));
-   if(!B.moves(next,actor).length){events.push(fact('skipped',actor));completeBatch(next,actor);}
+   d.dice=old.dice.slice();d.used.fill(true);
+   // Batch indices are replaced on turn advance. The roll event and the
+   // exit rule use the same results in that batch's original order.
+   d.lastRolled=old.rollIndices;
+   const dice=[];
+   let rolledSix=false;
+   for(const index of old.rollIndices){
+    const value=ports.rollDie(6,next);
+    d.dice[index]=value;d.used[index]=false;
+    dice.push(value);rolledSix||=value===6;
+   }
+   d.die=dice[0];d.lastRoll=d.die;d.phase='move';d.last=null;
+   const failed=!rolledSix&&B.stranded(next,actor)?Math.min(3,old.failed[actor]+1):0;
+   if(failed!==old.failed[actor]){d.failed=old.failed.slice();d.failed[actor]=failed;}
+   d.guarantee=d.guaranteedExit&&failed===3;
+   events.push(fact('rolled',actor,{dice}));
+   if(!B.hasMove(next,actor)){events.push(fact('skipped',actor));completeBatch(next,actor);}
   }else{
    const die=d.dice[action.dieIndex],{from,to,captured}=B.destination(next,action),guaranteed=from<0&&die!==6&&d.guarantee;
+   d.pawns=old.pawns.slice();
+   d.pawns[action.owner]=old.pawns[action.owner].slice();
    d.used[action.dieIndex]=true;d.pawns[action.owner][action.pawn]=to;d.last={owner:action.owner,pawn:action.pawn,from,to,die,captured};
-   if(from<0){d.guarantee=false;d.failed[actor]=0;}
-   for(const capture of captured){d.pawns[capture.owner][capture.pawn]=-1;events.push(fact('captured',actor,{owner:action.owner,target:capture.owner}));}
+   if(from<0){d.guarantee=false;if(old.failed[actor]){d.failed=old.failed.slice();d.failed[actor]=0;}}
+   for(const capture of captured){
+    if(d.pawns[capture.owner]===old.pawns[capture.owner])d.pawns[capture.owner]=old.pawns[capture.owner].slice();
+    d.pawns[capture.owner][capture.pawn]=-1;events.push(fact('captured',actor,{owner:action.owner,target:capture.owner}));
+   }
    events.push(fact('moved',actor,{owner:action.owner,pawn:action.pawn,from,to}));
    const members=next.preset==='teams'?[B.team(action.owner),B.team(action.owner)+2]:[action.owner];
-   if(members.every(player=>B.home(d.pawns[player]))&&Ending.record(d.ending,members,next,'finished')){
+   // Only a pawn arriving home can add a finish group. Round advancement
+   // detaches the round-start list separately when it can write to it.
+   const ending=old.ending;
+   const won=to===57&&members.every(player=>B.home(d.pawns[player]))&&!members.some(player=>Ending.done(ending,player));
+   if(won){
+    d.ending={...ending,groups:ending.groups.slice(),exits:ending.exits?.slice()};
+    Ending.record(d.ending,members,next,'finished');
     events.push(fact('won',actor,{members}));d.used.fill(true);completeBatch(next,actor);
-   }else{if(guaranteed)d.used.fill(true);if(guaranteed||!B.moves(next,actor).length)completeBatch(next,actor);}
+   }else{if(guaranteed)d.used.fill(true);if(guaranteed||!B.hasMove(next,actor))completeBatch(next,actor);}
   }
   return {position:next,events,turnEnded:next.turn!==actor||next.status==='finished'};
  }
- const project=position=>JSON.parse(JSON.stringify(position.data));
- // Probability that at least one subset of the next dice reaches a distance.
- // Public dice count only; never inspect future rolls or mutate RNG.
- const reachByDice=new Map();
- function reachProbabilities(count){
-  if(reachByDice.has(count))return reachByDice.get(count);
-  const hits=Array(count*6+1).fill(0),total=6**count;
-  const roll=(dice)=>{if(dice.length<count){for(let n=1;n<=6;n++)roll([...dice,n]);return;}
-   let sums=new Set([0]);for(const die of dice)sums=new Set([...sums,...[...sums].map(n=>n+die)]);
-   for(const n of sums)hits[n]++;
-  };roll([]);const result=hits.map(n=>n/total);reachByDice.set(count,result);return result;
- }
+ // Ludo's data is public. The model projection detaches it at the guest boundary.
+ const project=position=>position.data;
+ // For N six-sided dice and each distance d, count the ordered outcomes
+ // with at least one subset summing to d. Fresh bot guests reuse these counts.
+ const reachCounts=[
+  null,
+  [6,1,1,1,1,1,1],
+  [36,11,12,13,14,15,16,6,5,4,3,2,1],
+  [216,91,104,116,131,145,162,105,97,85,73,57,41,21,15,10,6,3,1]
+ ];
  function bot(projection,actor,commands,memory,context={}){
-  const d=projection.data,depth=context.depth??2,reach=reachProbabilities(d.diceCount);
-  const risk=(owner,progress,captured=[])=>{
+  if(commands.length===1||commands[0]?.type!=='move')return commands[0];
+  const d=projection.data,depth=context.depth??2,reach=depth>1?reachCounts[d.diceCount]:null;
+  const owner=commands[0].owner,row=d.pawns[owner];
+  // All six exits score equally, ahead of any move on the track.
+  const exit=commands.find(command=>command.type==='move'&&row[command.pawn]<0&&d.dice[command.dieIndex]===6);
+  if(exit)return exit;
+
+  const captureCount=B.captureCounter(projection,owner),candidates=[],scoredDice=[];
+  let mostCaptures=-1,safest=false;
+  // Keep only moves tied on captures and safety before evaluating threats.
+  for(const command of commands){
+   if(command.type!=='move')continue;
+   const from=row[command.pawn],die=d.dice[command.dieIndex],step=1<<die;
+   // Equal rolls and stacked pawns can give the same score. Keep the first
+   // exact command in the rules' order without scoring its equivalents.
+   if(scoredDice[from+1]&step)continue;
+   scoredDice[from+1]|=step;
+   const to=B.destinationProgress(projection,command);
+   const safe=B.isSafe(owner,to),captures=safe?0:captureCount(to);
+   if(captures<mostCaptures||captures===mostCaptures&&safest&&!safe)continue;
+   if(captures>mostCaptures||safe&&!safest){
+    candidates.length=0;mostCaptures=captures;safest=safe;
+   }
+   candidates.push({command,from,to,die});
+  }
+  if(candidates.length===1)return candidates[0].command;
+  const risks=[];
+  let opponents;
+  const risk=progress=>{
    if(progress<0||progress>=52||B.isSafe(owner,progress))return 0;
+   if(risks[progress]!==undefined)return risks[progress];
+   if(!opponents){
+    // A bot decision reuses the same position at every candidate square.
+    // Leave out the base and home lanes and resolve track coordinates once.
+    opponents=Array.from({length:d.pawns.length},()=>[]);
+    B.visitOpponents(projection,owner,(cell,enemy,_pawn,from)=>opponents[enemy].push({cell,remaining:52-from}));
+   }
    const cell=B.globalCell(owner,progress);let survives=1;
-   for(let enemy=0;enemy<d.pawns.length;enemy++){
-    if(enemy===owner||projection.preset==='teams'&&B.team(enemy)===B.team(owner))continue;
+   for(const pawns of opponents){
     // Opposing pawns share dice: use the strongest threat, not independent rolls.
     let danger=0;
-    for(let pawn=0;pawn<4;pawn++){
-     const from=d.pawns[enemy][pawn];if(from<0||from>=52||captured.some(c=>c.owner===enemy&&c.pawn===pawn))continue;
-     const distance=(cell-B.globalCell(enemy,from)+52)%52;
-     if(distance>0&&from+distance<52)danger=Math.max(danger,reach[distance]||0);
+    for(const pawn of pawns){
+     // Captured pawns already occupy the destination and have distance zero.
+     const distance=(cell-pawn.cell+52)%52;
+     if(distance>0&&distance<pawn.remaining)danger=Math.max(danger,reach[distance]||0);
     }
-    survives*=1-danger;
+    survives*=1-danger/reach[0];
    }
-   return 1-survives;
+   return risks[progress]=1-survives;
   };
-  const score=command=>{
-   const {from,to,captured}=B.destination(projection,command),after=risk(command.owner,to,captured);
-   return [from<0&&d.dice[command.dieIndex]===6?1:0,captured.length,
-    B.isSafe(command.owner,to)?1:0,depth>1?risk(command.owner,from)-after:0,depth>2?-after:0,
-    to===57?1:0,from<0?1:0,-from,d.dice[command.dieIndex]];
+  const score=({from,to,die})=>{
+   const after=reach?risk(to):0;
+   return [reach?risk(from)-after:0,depth>2?-after:0,to===57?1:0,from<0?1:0,-from,die];
   };
-  const choices=commands.filter(c=>c.type==='move').map(command=>({command,score:score(command)}));
-  choices.sort((a,b)=>{for(let i=0;i<a.score.length;i++)if(a.score[i]!==b.score[i])return b.score[i]-a.score[i];return 0;});
-  return choices[0]?.command||commands[0];
+  let best=commands[0],bestScore;
+  for(const candidate of candidates){
+   const value=score(candidate),difference=bestScore?value.findIndex((part,index)=>part!==bestScore[index]):-1;
+   if(!bestScore||difference>=0&&value[difference]>bestScore[difference]){best=candidate.command;bestScore=value;}
+  }
+  return best;
  }
  function result(position){
   const own=position.data.pawns.map(row=>row.filter(n=>n===57).length),values=position.preset==='teams'?own.map((_,player)=>own[player%2]+own[player%2+2]):own;

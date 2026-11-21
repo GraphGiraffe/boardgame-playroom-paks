@@ -1,0 +1,85 @@
+{
+  "fields": [
+    {
+      "key": "preset",
+      "label": {
+        "key": "settings.preset.label"
+      },
+      "control": "slider",
+      "options": [
+        {
+          "value": "quick",
+          "label": {
+            "key": "domino.presets.quick"
+          },
+          "preview": {
+            "ids": [
+              "setting-hand-5"
+            ]
+          },
+          "description": {
+            "key": "settings.preset.options.quick.description"
+          }
+        },
+        {
+          "value": "classic",
+          "label": {
+            "key": "domino.presets.classic"
+          },
+          "preview": {
+            "ids": [
+              "setting-hand-7"
+            ]
+          },
+          "description": {
+            "key": "settings.preset.options.classic.description"
+          }
+        }
+      ],
+      "help": {
+        "key": "settings.preset.help"
+      },
+      "preview": {
+        "kind": "illustrations"
+      },
+      "kind": "preset",
+      "valueType": "string",
+      "default": "classic"
+    },
+    {
+      "key": "endMode",
+      "default": "winner",
+      "options": [
+        {
+          "value": "winner"
+        },
+        {
+          "value": "last"
+        }
+      ],
+      "control": "slider",
+      "kind": "standard",
+      "valueType": "string"
+    }
+  ],
+  "groups": [
+    {
+      "label": {
+        "key": "settings.groups.preset.label"
+      },
+      "fields": [
+        "preset"
+      ],
+      "placement": "main"
+    },
+    {
+      "label": {
+        "key": "settings.groups.endMode.label"
+      },
+      "fields": [
+        "endMode"
+      ],
+      "placement": "end"
+    }
+  ]
+}

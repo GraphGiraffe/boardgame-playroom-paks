@@ -1,0 +1,57 @@
+{
+  "fields": [
+    {
+      "key": "preset",
+      "label": {
+        "key": "preset.label"
+      },
+      "control": "select",
+      "options": [
+        {
+          "value": "classic",
+          "label": {
+            "common": "classic"
+          }
+        }
+      ],
+      "kind": "preset",
+      "valueType": "string",
+      "default": "classic"
+    },
+    {
+      "key": "target",
+      "label": {
+        "key": "settings.target.label"
+      },
+      "help": {
+        "key": "settings.target.help"
+      },
+      "default": 6,
+      "control": "slider",
+      "options": [
+        {
+          "value": 3
+        },
+        {
+          "value": 6
+        },
+        {
+          "value": 9
+        }
+      ],
+      "kind": "option",
+      "valueType": "integer"
+    }
+  ],
+  "groups": [
+    {
+      "label": {
+        "key": "groups.end.label"
+      },
+      "fields": [
+        "target"
+      ],
+      "placement": "end"
+    }
+  ]
+}

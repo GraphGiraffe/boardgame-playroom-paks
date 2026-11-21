@@ -1,0 +1,120 @@
+{
+  "fields": [
+    {
+      "key": "preset",
+      "label": {
+        "key": "settings.preset.label"
+      },
+      "control": "slider",
+      "options": [
+        {
+          "value": "russian",
+          "label": {
+            "key": "battleship.meta.russian"
+          },
+          "preview": {
+            "kind": "fleet",
+            "pieces": [
+              4,
+              3,
+              3,
+              2,
+              2,
+              2,
+              1,
+              1,
+              1,
+              1
+            ]
+          },
+          "description": {
+            "key": "settings.preset.options.russian.description"
+          }
+        },
+        {
+          "value": "classic",
+          "label": {
+            "common": "classic"
+          },
+          "preview": {
+            "kind": "fleet",
+            "pieces": [
+              5,
+              4,
+              3,
+              3,
+              2
+            ]
+          },
+          "description": {
+            "key": "settings.preset.options.classic.description"
+          }
+        }
+      ],
+      "help": {
+        "key": "settings.preset.help"
+      },
+      "presentation": "mode",
+      "kind": "preset",
+      "valueType": "string",
+      "default": "classic"
+    },
+    {
+      "key": "announceSinking",
+      "label": {
+        "key": "battleship.book.text.19"
+      },
+      "default": "on",
+      "options": [
+        {
+          "value": "on",
+          "label": {
+            "common": "yes"
+          },
+          "description": {
+            "key": "settings.announceSinking.options.on.description"
+          },
+          "preview": {
+            "kind": "symbol",
+            "icon": "ship"
+          }
+        },
+        {
+          "value": "off",
+          "label": {
+            "common": "none"
+          },
+          "description": {
+            "key": "settings.announceSinking.options.off.description"
+          },
+          "preview": {
+            "kind": "symbol",
+            "icon": "eye-off"
+          }
+        }
+      ],
+      "help": {
+        "key": "settings.announceSinking.help"
+      },
+      "control": "slider",
+      "preview": {
+        "kind": "symbol",
+        "icon": "ship"
+      },
+      "kind": "option",
+      "valueType": "string"
+    }
+  ],
+  "groups": [
+    {
+      "label": {
+        "key": "settings.groups.preset-announceSinking.label"
+      },
+      "fields": [
+        "preset",
+        "announceSinking"
+      ],
+      "placement": "main"
+    }
+  ]
+}

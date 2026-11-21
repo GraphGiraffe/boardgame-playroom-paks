@@ -4,11 +4,14 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["mage-brawl"] = {
   "id": "mage-brawl",
-  "version": "0.3.1",
-  "name": "Стихийная потасовка",
+  "version": "0.3.7",
+  "name": {
+    "key": "mage-brawl.meta.name"
+  },
   "category": "board",
-  "estimatedDuration": "15–40 мин",
-  "tagline": "Выберите стихию. Раскройте планы одновременно.",
+  "tagline": {
+    "key": "manifest.tagline"
+  },
   "capabilities": {
     "hands": true,
     "surfaces": [
@@ -100,7 +103,7 @@
     ],
     "locales": {
       "ru": [
-        "locales/ru/game.json"
+        "lang/ru.json"
       ]
     }
   },
@@ -108,67 +111,6 @@
     "board",
     "card-back"
   ],
-  "presetSetting": {
-    "label": "Режим",
-    "control": "slider",
-    "presentation": "mode",
-    "options": [
-      {
-        "value": "classic",
-        "label": "Классика",
-        "preview": {
-          "kind": "teams",
-          "teamSizes": [
-            1,
-            1,
-            1,
-            1
-          ]
-        },
-        "description": "Каждый за себя. Последний маг побеждает."
-      },
-      {
-        "value": "teams",
-        "label": "2 команды",
-        "preview": {
-          "kind": "teams",
-          "teamSizes": [
-            2,
-            2
-          ]
-        },
-        "description": "Синие против Красных."
-      },
-      {
-        "value": "teams3",
-        "label": "3 команды",
-        "preview": {
-          "kind": "teams",
-          "teamSizes": [
-            2,
-            2,
-            2
-          ]
-        },
-        "description": "Побеждает последняя команда."
-      },
-      {
-        "value": "teams4",
-        "label": "4 команды",
-        "preview": {
-          "kind": "teams",
-          "teamSizes": [
-            2,
-            2,
-            2,
-            2
-          ]
-        },
-        "description": "Побеждает последняя команда."
-      }
-    ],
-    "help": "Команды определяются местами за столом. Цель — выбить соперников; урон союзникам включён. Жетоны возрождения общие. Меньшим командам достаётся больший запас."
-  },
   "sharedDomain": [
     "tactical-grid",
     "decision-window",
@@ -177,473 +119,412 @@
     "frame-sequence"
   ],
   "sounds": "sounds.js",
-  "settings": [
-    {
-      "key": "actionsPerTurn",
-      "label": "Ходов за раунд",
-      "default": "2",
-      "control": "slider",
-      "options": [
-        {
-          "value": "1",
-          "label": "1",
-          "description": "Одна выбранная карта за раунд.",
-          "preview": {
-            "ids": [
-              "setting-card-fire-attack"
-            ]
-          }
+  "settings": {
+    "fields": [
+      {
+        "key": "preset",
+        "label": {
+          "key": "settings.preset.label"
         },
-        {
-          "value": "2",
-          "label": "2",
-          "description": "Две разные карты по очереди.",
-          "preview": {
-            "ids": [
-              "setting-card-fire-attack",
-              "setting-card-water-movement"
-            ]
+        "control": "slider",
+        "presentation": "mode",
+        "options": [
+          {
+            "description": {
+              "key": "settings.preset.options.classic.description"
+            },
+            "value": "classic",
+            "label": {
+              "key": "mage-brawl.meta.classic"
+            },
+            "preview": {
+              "kind": "teams",
+              "teamSizes": [
+                1,
+                1,
+                1,
+                1
+              ]
+            }
+          },
+          {
+            "description": {
+              "key": "settings.preset.options.teams.description"
+            },
+            "value": "teams",
+            "label": {
+              "key": "mage-brawl.meta.teams2"
+            },
+            "preview": {
+              "kind": "teams",
+              "teamSizes": [
+                2,
+                2
+              ]
+            }
+          },
+          {
+            "value": "teams3",
+            "label": {
+              "key": "mage-brawl.meta.teams3"
+            },
+            "preview": {
+              "kind": "teams",
+              "teamSizes": [
+                2,
+                2,
+                2
+              ]
+            }
+          },
+          {
+            "value": "teams4",
+            "label": {
+              "key": "mage-brawl.meta.teams4"
+            },
+            "preview": {
+              "kind": "teams",
+              "teamSizes": [
+                2,
+                2,
+                2,
+                2
+              ]
+            }
+          }
+        ],
+        "help": {
+          "key": "settings.preset.help"
+        },
+        "default": "classic",
+        "kind": "preset",
+        "valueType": "string",
+        "optionDefaults": {
+          "description": {
+            "key": "settings.preset.optionDefaults.description"
           }
         }
-      ],
-      "help": "Каждый заранее планирует указанное число ходов. Один ход - 8 фаз: 4 движения и 4 атаки. Сначала первый ход всех игроков, затем второй.",
-      "preview": {
-        "kind": "illustrations"
-      }
-    },
-    {
-      "key": "differentActionTypes",
-      "label": "Разные типы действий",
-      "default": "1",
-      "control": "slider",
-      "options": [
-        {
-          "value": "0",
-          "label": "Нет",
-          "description": "Типы любые, карты — разные.",
-          "preview": {
-            "ids": [
-              "setting-type-attack",
-              "setting-type-attack"
-            ]
-          }
-        },
-        {
-          "value": "1",
-          "label": "Да",
-          "description": "Типы двух действий не повторяются.",
-          "preview": {
-            "ids": [
-              "setting-type-movement",
-              "setting-type-attack"
-            ]
-          }
-        }
-      ],
-      "help": "При двух ходах типы должны различаться. Движение, обычная атака и ультимейт считаются тремя разными типами. Стихию повторять можно, но карты должны быть разными.",
-      "visibleWhen": {
-        "actionsPerTurn": "2"
       },
-      "preview": {
-        "kind": "illustrations"
-      }
-    },
-    {
-      "key": "health",
-      "label": "Здоровье",
-      "default": "mode",
-      "control": "slider",
-      "options": [
-        {
-          "value": "mode",
-          "label": "Авто (3 / 4)",
-          "preview": {
-            "countFrom": {
-              "field": "actionsPerTurn",
-              "values": {
-                "1": 3,
-                "2": 4
+      {
+        "key": "actionsPerTurn",
+        "label": {
+          "key": "settings.actionsPerTurn.label"
+        },
+        "default": "2",
+        "control": "slider",
+        "options": [
+          {
+            "value": "1",
+            "description": {
+              "key": "settings.actionsPerTurn.options.1.description"
+            },
+            "preview": {
+              "ids": [
+                "setting-card-fire-attack"
+              ]
+            }
+          },
+          {
+            "value": "2",
+            "description": {
+              "key": "settings.actionsPerTurn.options.2.description"
+            },
+            "preview": {
+              "ids": [
+                "setting-card-fire-attack",
+                "setting-card-water-movement"
+              ]
+            }
+          }
+        ],
+        "help": {
+          "key": "settings.actionsPerTurn.help"
+        },
+        "preview": {
+          "kind": "illustrations"
+        },
+        "kind": "option",
+        "valueType": "string"
+      },
+      {
+        "key": "differentActionTypes",
+        "label": {
+          "key": "settings.differentActionTypes.label"
+        },
+        "default": "1",
+        "control": "slider",
+        "options": [
+          {
+            "value": "0",
+            "label": {
+              "common": "none"
+            },
+            "description": {
+              "key": "settings.differentActionTypes.options.0.description"
+            },
+            "preview": {
+              "ids": [
+                "setting-type-attack",
+                "setting-type-attack"
+              ]
+            }
+          },
+          {
+            "value": "1",
+            "label": {
+              "common": "yes"
+            },
+            "description": {
+              "key": "settings.differentActionTypes.options.1.description"
+            },
+            "preview": {
+              "ids": [
+                "setting-type-movement",
+                "setting-type-attack"
+              ]
+            }
+          }
+        ],
+        "help": {
+          "key": "settings.differentActionTypes.help"
+        },
+        "visibleWhen": {
+          "actionsPerTurn": "2"
+        },
+        "preview": {
+          "kind": "illustrations"
+        },
+        "kind": "option",
+        "valueType": "string"
+      },
+      {
+        "key": "health",
+        "label": {
+          "key": "mage-brawl.ui.health"
+        },
+        "default": "mode",
+        "control": "slider",
+        "options": [
+          {
+            "value": "mode",
+            "label": {
+              "key": "settings.health.options.mode.label"
+            },
+            "preview": {
+              "countFrom": {
+                "field": "actionsPerTurn",
+                "values": {
+                  "1": 3,
+                  "2": 4
+                }
               }
             }
           },
-          "description": "Здоровье на старте и при возрождении."
-        },
-        {
-          "value": "1",
-          "label": "1",
-          "description": "Здоровье на старте и при возрождении."
-        },
-        {
-          "value": "2",
-          "label": "2",
-          "description": "Здоровье на старте и при возрождении."
-        },
-        {
-          "value": "3",
-          "label": "3",
-          "description": "Здоровье на старте и при возрождении."
-        },
-        {
-          "value": "4",
-          "label": "4",
-          "description": "Здоровье на старте и при возрождении."
-        },
-        {
-          "value": "5",
-          "label": "5",
-          "description": "Здоровье на старте и при возрождении."
-        },
-        {
-          "value": "6",
-          "label": "6",
-          "description": "Здоровье на старте и при возрождении."
-        }
-      ],
-      "help": "Авто: 3 при одном ходе, 4 при двух. Явное значение независимо от числа действий. Это также максимум лечения и здоровье при возрождении.",
-      "preview": {
-        "kind": "health"
-      }
-    },
-    {
-      "key": "extraLives",
-      "label": "Дополнительные жизни",
-      "default": "1",
-      "control": "slider",
-      "options": [
-        {
-          "value": "0",
-          "label": "0",
-          "description": "Без возрождений.",
-          "preview": {
-            "kind": "symbol",
-            "icon": "close"
+          {
+            "value": "1"
+          },
+          {
+            "value": "2"
+          },
+          {
+            "value": "3"
+          },
+          {
+            "value": "4"
+          },
+          {
+            "value": "5"
+          },
+          {
+            "value": "6"
           }
+        ],
+        "help": {
+          "key": "settings.health.help"
         },
-        {
-          "value": "1",
-          "label": "1",
-          "description": "Жетон для возрождения."
+        "preview": {
+          "kind": "health"
         },
-        {
-          "value": "2",
-          "label": "2",
-          "description": "Два жетона возрождения."
+        "kind": "option",
+        "valueType": "string",
+        "optionDefaults": {
+          "description": {
+            "key": "settings.health.optionDefaults.description"
+          }
         }
-      ],
-      "help": "Каждый жетон позволяет возродиться. Без жетонов следующая гибель окончательна. В командах запас общий: меньшие команды получают больше жетонов.",
-      "preview": {
-        "kind": "lives"
-      }
-    },
-    {
-      "key": "handLimit",
-      "label": "Стартовый лимит руки",
-      "default": "mode",
-      "control": "slider",
-      "options": [
-        {
-          "value": "mode",
-          "label": "Авто (3 / 4)",
-          "preview": {
-            "countFrom": {
-              "field": "actionsPerTurn",
-              "values": {
-                "1": 3,
-                "2": 4
+      },
+      {
+        "key": "extraLives",
+        "label": {
+          "key": "mage-brawl.ui.reserve-life"
+        },
+        "default": "1",
+        "control": "slider",
+        "options": [
+          {
+            "value": "0",
+            "description": {
+              "key": "settings.extraLives.options.0.description"
+            },
+            "preview": {
+              "kind": "symbol",
+              "icon": "close"
+            }
+          },
+          {
+            "value": "1",
+            "description": {
+              "key": "settings.extraLives.options.1.description"
+            }
+          },
+          {
+            "value": "2",
+            "description": {
+              "key": "settings.extraLives.options.2.description"
+            }
+          }
+        ],
+        "help": {
+          "key": "settings.extraLives.help"
+        },
+        "preview": {
+          "kind": "lives"
+        },
+        "kind": "option",
+        "valueType": "string"
+      },
+      {
+        "key": "handLimit",
+        "label": {
+          "key": "settings.handLimit.label"
+        },
+        "default": "mode",
+        "control": "slider",
+        "options": [
+          {
+            "value": "mode",
+            "label": {
+              "key": "settings.health.options.mode.label"
+            },
+            "preview": {
+              "countFrom": {
+                "field": "actionsPerTurn",
+                "values": {
+                  "1": 3,
+                  "2": 4
+                }
               }
             }
           },
-          "description": "Карты на старте и при возрождении."
-        },
-        {
-          "value": "2",
-          "label": "2",
-          "description": "Карты на старте и при возрождении."
-        },
-        {
-          "value": "3",
-          "label": "3",
-          "description": "Карты на старте и при возрождении."
-        },
-        {
-          "value": "4",
-          "label": "4",
-          "description": "Карты на старте и при возрождении."
-        },
-        {
-          "value": "5",
-          "label": "5",
-          "description": "Карты на старте и при возрождении."
-        },
-        {
-          "value": "6",
-          "label": "6",
-          "description": "Карты на старте и при возрождении."
-        },
-        {
-          "value": "7",
-          "label": "7",
-          "description": "Карты на старте и при возрождении."
-        },
-        {
-          "value": "8",
-          "label": "8",
-          "description": "Карты на старте и при возрождении."
-        }
-      ],
-      "help": "Авто: 3 карты при одном ходе или 4 при двух. Это начальный размер руки и основа добора при возрождении. Каждая полученная за убийство карта увеличивает личный лимит на 1; полученная от жертвы карта остаётся сверх обычной замены сыгранных карт.",
-      "preview": {
-        "kind": "cards"
-      }
-    },
-    {
-      "key": "shrinkMode",
-      "label": "Сжатие поля",
-      "default": "lives",
-      "control": "slider",
-      "options": [
-        {
-          "value": "lives",
-          "label": "По жизням",
-          "description": "Сужается при потере жизней.",
-          "preview": {
-            "ids": [
-              "setting-shrink-lives"
-            ]
+          {
+            "value": "2"
+          },
+          {
+            "value": "3"
+          },
+          {
+            "value": "4"
+          },
+          {
+            "value": "5"
+          },
+          {
+            "value": "6"
+          },
+          {
+            "value": "7"
+          },
+          {
+            "value": "8"
           }
+        ],
+        "help": {
+          "key": "settings.handLimit.help"
         },
-        {
-          "value": "players",
-          "label": "По игрокам",
-          "description": "Сужается при выбывании игроков.",
-          "preview": {
-            "ids": [
-              "setting-shrink-players"
-            ]
+        "preview": {
+          "kind": "cards"
+        },
+        "kind": "option",
+        "valueType": "string",
+        "optionDefaults": {
+          "description": {
+            "key": "settings.handLimit.optionDefaults.description"
           }
         }
-      ],
-      "help": "По потерянным жизням: край исчезает после двух, четырёх или шести потерь при нуле, одной или двух дополнительных жизнях. При нечётном числе участников первый порог вдвое меньше. По игрокам: сжатие при переходах 7→6, 5→4, 3→2 оставшихся магов. Минимальный размер — 4×4. Предупреждение действует весь следующий раунд. За раунд исчезает один край; лишние потери переносятся дальше.",
-      "preview": {
-        "kind": "illustrations"
+      },
+      {
+        "key": "shrinkMode",
+        "label": {
+          "key": "settings.shrinkMode.label"
+        },
+        "default": "lives",
+        "control": "slider",
+        "options": [
+          {
+            "value": "lives",
+            "label": {
+              "key": "settings.shrinkMode.options.lives.label"
+            },
+            "description": {
+              "key": "settings.shrinkMode.options.lives.description"
+            },
+            "preview": {
+              "ids": [
+                "setting-shrink-lives"
+              ]
+            }
+          },
+          {
+            "value": "players",
+            "label": {
+              "key": "settings.shrinkMode.options.players.label"
+            },
+            "description": {
+              "key": "settings.shrinkMode.options.players.description"
+            },
+            "preview": {
+              "ids": [
+                "setting-shrink-players"
+              ]
+            }
+          }
+        ],
+        "help": {
+          "key": "settings.shrinkMode.help"
+        },
+        "preview": {
+          "kind": "illustrations"
+        },
+        "kind": "option",
+        "valueType": "string"
       }
-    }
-  ],
-  "ruleGroups": [
-    {
-      "label": "Правила",
-      "fields": [
-        "actionsPerTurn",
-        "differentActionTypes",
-        "handLimit",
-        "health",
-        "lives"
-      ]
-    }
-  ],
-  "releases": [
-    {
-      "version": "0.3.0",
-      "changes": [
-        "Стабильный выпуск: обновлены правила, интерфейс и параметры игры.",
-        "Стихийные клетки усиливают исходящие атаки и входящий урон своей стихии; боты учитывают оба эффекта."
-      ]
-    },
-    {
-      "version": "0.2.8",
-      "changes": [
-        "Стабильный выпуск: обновлены правила, интерфейс и параметры игры.",
-        "Стихийные клетки усиливают исходящие атаки и входящий урон своей стихии; боты учитывают оба эффекта."
-      ]
-    },
-    {
-      "version": "0.2.7-preview.41",
-      "changes": [
-        "Смена темы обновляет рисунок жетона, сохраняя точки здоровья в общей координатной рамке."
-      ]
-    },
-    {
-      "version": "0.2.7-preview.40",
-      "changes": [
-        "Боты прогнозируют последствия для союзников, цепочки толчков и две карты одного раунда по открытой информации."
-      ]
-    },
-    {
-      "version": "0.2.7-preview.39",
-      "changes": [
-        "Места трёх команд: Синие 1/3/5, Красные 2/4/6, Голубые 7/8; места четырёх команд: Синие 1/3, Красные 2/4, Голубые 5/7, Коричневые 6/8."
-      ]
-    },
-    {
-      "version": "0.2.7-preview.31",
-      "changes": [
-        "Синхронизированы общие компоненты с исправлениями чтения индексов, перекрытия карт и обновления оформления; правила игры не менялись."
-      ]
-    },
-    {
-      "version": "0.2.7-preview.30",
-      "changes": [
-        "При композиции SVG сохраняются полные атрибуты толщины, прозрачности и идентичности; стандартный контур масштабируется целиком."
-      ]
-    },
-    {
-      "version": "0.2.7-preview.29",
-      "changes": [
-        "Общие игровые ассеты сохраняют пропорции рамок, скруглений и толщины в игре, миниатюрах, правилах, параметрах и анимациях. Убраны вторые фиксированные рамки и тени поверх SVG."
-      ]
-    },
-    {
-      "version": "0.2.7-preview.28",
-      "changes": [
-        "Скругления карт и общих фигур масштабируются вместе с компонентами.",
-        "Параметры показывают реальные карты стихий и значки действий; требуется приложение с parameter-illustrations-v1."
-      ]
-    },
-    {
-      "version": "0.2.7-preview.27",
-      "changes": [
-        "Сокращены пояснения параметров; выбранные варианты читаются компактнее."
-      ]
-    },
-    {
-      "version": "0.2.7-preview.26",
-      "changes": [
-        "Здоровье, жизни и размер руки показаны сердцами, фишками и картами; автоматические значения следуют выбранному числу ходов.",
-        "Добавлены короткие пояснения выбранных параметров."
-      ]
-    },
-    {
-      "version": "0.2.7-preview.23",
-      "changes": [
-        "Общие публичные кадры передаются как база и изменения; клиент восстанавливает тот же порядок фаз и эффектов.",
-        "Частный предпросмотр маршрута не строит неиспользуемые полные кадры; правила и приватность сохранены."
-      ]
-    },
-    {
-      "version": "0.2.7-preview.22",
-      "changes": [
-        "При возрождении и выборе добычи место руки сохраняется с первого открытия сцены; после выбора базы карты возвращаются в зону игрока без обрезания."
-      ]
-    },
-    {
-      "version": "0.2.7-preview.21",
-      "changes": [
-        "В обзоре хода имя выбывшего игрока остаётся в общей строке имён, прочерк занимает центр места карточки."
-      ]
-    },
-    {
-      "version": "0.2.7-preview.20",
-      "changes": [
-        "Обзор хода показывает карточки вместе в постоянном порядке игроков. Размер учитывает ширину и высоту поля, под карточкой показаны тип действия, направление и стихия."
-      ]
-    },
-    {
-      "version": "0.2.7-preview.19",
-      "changes": [
-        "После потери руки не создаётся пустой блок действий: убран лишний зазор, вызывавший прокрутку пустой зоны.",
-        "Карты сводки раунда имеют размер фазовых карт; используются перенос и реальная прокрутка поля при необходимости."
-      ]
-    },
-    {
-      "version": "0.2.7-preview.18",
-      "changes": [
-        "Перед ходами I и II показаны все выбранные карты: движения и атаки сгруппированы по стихиям. Общий экран 1500ms, фазовый 750ms.",
-        "Общий SDK допускает до 64 ленивых публичных кадров; одновременно готовится только текущий и следующий кадр."
-      ]
-    },
-    {
-      "version": "0.2.7-preview.17",
-      "changes": [
-        "Ориентация карты и указатель направления меняются сразу при повороте, без плавного доворота."
-      ]
-    },
-    {
-      "version": "0.2.7-preview.16",
-      "changes": [
-        "Одинаковый жетон первого действия на карте и в переключателе типа, в верхнем левом углу.",
-        "События публичного раунда не запускают дополнительный общий звук перед авторским раскрытием и эффектами; обычный сигнал возрождения сохранён."
-      ]
-    },
-    {
-      "version": "0.2.7-preview.15",
-      "changes": [
-        "Убрана повторная подсказка порядка действий и стихий под рукой; информация остаётся в памятке.",
-        "Checkpoint сохраняет игровое состояние без вычислимых кадров анимации; история заново строит их из принятых команд."
-      ]
-    },
-    {
-      "version": "0.2.7-preview.14",
-      "changes": [
-        "Арена разделена на независимые клетки и слои через общий порт фрагментов SDK. Поворот карты сохраняет неизменившиеся клетки и фишки."
-      ]
-    },
-    {
-      "version": "0.2.7-preview.13",
-      "changes": [
-        "Граница сохранения соответствует подтверждению всего плана игрока. Локальные выборы и первая карта не требуют записи в хранилище.",
-        "Восстановлены цветные схемы памятки; карточки используют актуальное состояние под управлением общего проигрывателя."
-      ]
-    },
-    {
-      "version": "0.2.7-preview.12",
-      "changes": [
-        "Кадры раунда готовятся по одному во время предыдущей анимации; весь раунд больше не строится при подтверждении или изменении готовности."
-      ]
-    },
-    {
-      "version": "0.2.7-preview.11",
-      "changes": [
-        "Жёлтый бейдж ульты расположен у нижнего края аватара, как статусы в Дураке; множитель показывает несколько зарядов."
-      ]
-    },
-    {
-      "version": "0.2.7-preview.10",
-      "changes": [
-        "Имя расположено над счётчиками справа от аватара. После числа карт показаны жизни и здоровье; убийства остаются в результатах.",
-        "Ультимейт показан короной в центре аватара, несколько зарядов — множителем ×2, ×3 и далее."
-      ]
-    },
-    {
-      "version": "0.2.7-preview.9",
-      "changes": [
-        "В горизонтальной компоновке кнопки поворота размещены по краям переключателя типов; освобождено место для памятки.",
-        "Справка открывает компактную памятку: порядок фаз и таблицу всех стихий, движений, атак и ультимейтов."
-      ]
-    },
-    {
-      "version": "0.2.7-preview.8",
-      "changes": [
-        "Центрирование точек на верхней грани фишек."
-      ]
-    },
-    {
-      "version": "0.2.7-preview.7",
-      "changes": [
-        "Подсказка порядка действий помещается в общей зоне игрока."
-      ]
-    },
-    {
-      "version": "0.2.7-preview.6",
-      "changes": [
-        "Одно сохраняемое поле воспроизведения вместо скрытых копий всех фаз; точки поля и участники обновляются между фазами.",
-        "Кеширование неизменившихся публичных кадров при выборе карт; больше места карточкам оппонентов в альбомной раскладке."
-      ]
-    },
-    {
-      "version": "0.2.6",
-      "changes": [
-        "Обновлён общий компонент пустого карточного слота; правила игры не изменены."
-      ]
-    },
-    {
-      "version": "0.2.5",
-      "changes": [
-        "Короткие правила: абзацы, списки, таблицы и иллюстрации игровых элементов и интерфейса.",
-        "Принятый объёмный дизайн фишек с белой обводкой верхней поверхности.",
-        "Обновлены цветные схемы, квадратные рамки тайлов и выделения атак; подготовлена печатная брошюра редакции 1."
-      ]
-    }
-  ],
+    ],
+    "groups": [
+      {
+        "label": {
+          "key": "settings.groups.actionsPerTurn-differentActionTypes-handLimit-health-extraLives.label"
+        },
+        "fields": [
+          "actionsPerTurn",
+          "differentActionTypes",
+          "handLimit",
+          "health",
+          "extraLives"
+        ],
+        "placement": "main"
+      },
+      {
+        "label": {
+          "key": "mage-brawl.ui.arena"
+        },
+        "fields": [
+          "shrinkMode"
+        ],
+        "placement": "main"
+      }
+    ]
+  },
+  "releases": [],
   "sdkFeatures": [
     "local-input-v1",
     "turn-order-v1",
@@ -666,13 +547,17 @@
       "teams": [
         {
           "id": "blue",
-          "label": "Синие",
+          "label": {
+            "key": "mage-brawl.ui.team-blue"
+          },
           "color": "#668fad",
           "colorRole": "team.blue"
         },
         {
           "id": "red",
-          "label": "Красные",
+          "label": {
+            "key": "mage-brawl.ui.team-red"
+          },
           "color": "#ce735d",
           "colorRole": "team.red"
         }
@@ -693,19 +578,25 @@
       "teams": [
         {
           "id": "blue",
-          "label": "Синие",
+          "label": {
+            "key": "mage-brawl.ui.team-blue"
+          },
           "color": "#668fad",
           "colorRole": "team.blue"
         },
         {
           "id": "red",
-          "label": "Красные",
+          "label": {
+            "key": "mage-brawl.ui.team-red"
+          },
           "color": "#ce735d",
           "colorRole": "team.red"
         },
         {
           "id": "cyan",
-          "label": "Голубые",
+          "label": {
+            "key": "mage-brawl.ui.team-cyan"
+          },
           "color": "#729d98",
           "colorRole": "team.cyan"
         }
@@ -725,31 +616,44 @@
       "teams": [
         {
           "id": "blue",
-          "label": "Синие",
+          "label": {
+            "key": "mage-brawl.ui.team-blue"
+          },
           "color": "#668fad",
           "colorRole": "team.blue"
         },
         {
           "id": "red",
-          "label": "Красные",
+          "label": {
+            "key": "mage-brawl.ui.team-red"
+          },
           "color": "#ce735d",
           "colorRole": "team.red"
         },
         {
           "id": "cyan",
-          "label": "Голубые",
+          "label": {
+            "key": "mage-brawl.ui.team-cyan"
+          },
           "color": "#729d98",
           "colorRole": "team.cyan"
         },
         {
           "id": "brown",
-          "label": "Коричневые",
+          "label": {
+            "key": "mage-brawl.ui.team-brown"
+          },
           "color": "#aa844b",
           "colorRole": "team.brown"
         }
       ]
     }
   },
-  "execution": "isolated-v1"
+  "execution": "isolated-v1",
+  "defaultLanguage": "ru",
+  "estimatedDurationMin": [
+    15,
+    40
+  ]
 };
 })(globalThis);

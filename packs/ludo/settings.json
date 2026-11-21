@@ -1,0 +1,345 @@
+{
+  "fields": [
+    {
+      "key": "preset",
+      "label": {
+        "key": "ludo.book.text.24"
+      },
+      "control": "slider",
+      "options": [
+        {
+          "value": "classic",
+          "label": {
+            "key": "ludo.presets.classic"
+          },
+          "preview": {
+            "kind": "teams",
+            "teamSizes": [
+              1,
+              1,
+              1,
+              1
+            ]
+          },
+          "description": {
+            "key": "settings.preset.options.classic.description"
+          }
+        },
+        {
+          "value": "teams",
+          "label": {
+            "key": "ludo.presets.teams"
+          },
+          "preview": {
+            "kind": "teams",
+            "teamSizes": [
+              2,
+              2
+            ]
+          },
+          "description": {
+            "key": "settings.preset.options.teams.description"
+          }
+        }
+      ],
+      "help": {
+        "key": "settings.preset.help"
+      },
+      "presentation": "mode",
+      "kind": "preset",
+      "valueType": "string",
+      "default": "classic"
+    },
+    {
+      "key": "diceCount",
+      "label": {
+        "key": "settings.diceCount.label"
+      },
+      "default": "2",
+      "options": [
+        {
+          "value": "1",
+          "description": {
+            "key": "settings.diceCount.options.1.description"
+          }
+        },
+        {
+          "value": "2",
+          "description": {
+            "key": "settings.diceCount.options.2.description"
+          }
+        },
+        {
+          "value": "3",
+          "description": {
+            "key": "settings.diceCount.options.3.description"
+          }
+        }
+      ],
+      "help": {
+        "key": "settings.diceCount.help"
+      },
+      "control": "slider",
+      "preview": {
+        "kind": "dice"
+      },
+      "kind": "option",
+      "valueType": "string"
+    },
+    {
+      "key": "sixReroll",
+      "label": {
+        "key": "settings.sixReroll.label"
+      },
+      "default": "on",
+      "options": [
+        {
+          "value": "off",
+          "label": {
+            "common": "none"
+          },
+          "description": {
+            "key": "settings.sixReroll.options.off.description"
+          },
+          "preview": {
+            "ids": [
+              "setting-six-reroll-off"
+            ]
+          }
+        },
+        {
+          "value": "on",
+          "label": {
+            "common": "yes"
+          },
+          "description": {
+            "key": "settings.sixReroll.options.on.description"
+          },
+          "preview": {
+            "ids": [
+              "setting-six-reroll-on"
+            ]
+          }
+        }
+      ],
+      "help": {
+        "key": "settings.sixReroll.help"
+      },
+      "control": "slider",
+      "preview": {
+        "kind": "illustrations"
+      },
+      "kind": "option",
+      "valueType": "string"
+    },
+    {
+      "key": "guaranteedExit",
+      "label": {
+        "key": "settings.guaranteedExit.label"
+      },
+      "default": "on",
+      "options": [
+        {
+          "value": "off",
+          "label": {
+            "common": "none"
+          },
+          "description": {
+            "key": "settings.guaranteedExit.options.off.description"
+          },
+          "preview": {
+            "kind": "illustrations",
+            "ids": [
+              "setting-guaranteed-exit-off"
+            ]
+          }
+        },
+        {
+          "value": "on",
+          "label": {
+            "common": "yes"
+          },
+          "description": {
+            "key": "settings.guaranteedExit.options.on.description"
+          },
+          "preview": {
+            "kind": "illustrations",
+            "ids": [
+              "setting-guaranteed-exit-on"
+            ]
+          }
+        }
+      ],
+      "help": {
+        "key": "settings.guaranteedExit.help"
+      },
+      "control": "slider",
+      "preview": {
+        "kind": "illustrations",
+        "ids": [
+          "setting-guaranteed-exit-on"
+        ]
+      },
+      "kind": "option",
+      "valueType": "string"
+    },
+    {
+      "key": "startPawn",
+      "label": {
+        "key": "settings.startPawn.label"
+      },
+      "default": "off",
+      "options": [
+        {
+          "value": "off",
+          "label": {
+            "common": "none"
+          },
+          "description": {
+            "key": "settings.startPawn.options.off.description"
+          },
+          "preview": {
+            "kind": "illustrations",
+            "ids": [
+              "setting-start-pawn-off"
+            ]
+          }
+        },
+        {
+          "value": "on",
+          "label": {
+            "common": "yes"
+          },
+          "description": {
+            "key": "settings.startPawn.options.on.description"
+          },
+          "preview": {
+            "kind": "illustrations",
+            "ids": [
+              "setting-start-pawn-on"
+            ]
+          }
+        }
+      ],
+      "help": {
+        "key": "settings.startPawn.help"
+      },
+      "control": "slider",
+      "preview": {
+        "kind": "illustrations",
+        "ids": [
+          "setting-start-pawn-off"
+        ]
+      },
+      "kind": "option",
+      "valueType": "string"
+    },
+    {
+      "key": "endMode",
+      "default": "round",
+      "options": [
+        {
+          "value": "winner"
+        },
+        {
+          "value": "round"
+        },
+        {
+          "value": "last"
+        }
+      ],
+      "control": "slider",
+      "kind": "standard",
+      "valueType": "string"
+    },
+    {
+      "key": "maxRounds",
+      "label": {
+        "key": "settings.maxRounds.label"
+      },
+      "default": "0",
+      "help": {
+        "key": "settings.maxRounds.help"
+      },
+      "options": [
+        {
+          "value": "3"
+        },
+        {
+          "value": "5"
+        },
+        {
+          "value": "10"
+        },
+        {
+          "value": "20"
+        },
+        {
+          "value": "50"
+        },
+        {
+          "value": "0",
+          "label": {
+            "common": "infinity"
+          },
+          "description": {
+            "key": "settings.maxRounds.options.0.description"
+          }
+        }
+      ],
+      "control": "slider",
+      "preview": {
+        "kind": "symbol",
+        "icon": "clock"
+      },
+      "kind": "option",
+      "valueType": "string",
+      "optionDefaults": {
+        "description": {
+          "key": "settings.maxRounds.optionDefaults.description"
+        }
+      }
+    }
+  ],
+  "groups": [
+    {
+      "label": {
+        "key": "ludo.book.text.24"
+      },
+      "fields": [
+        "preset"
+      ],
+      "placement": "main"
+    },
+    {
+      "label": {
+        "key": "settings.groups.diceCount-sixReroll.label"
+      },
+      "fields": [
+        "diceCount",
+        "sixReroll"
+      ],
+      "placement": "main"
+    },
+    {
+      "label": {
+        "key": "settings.groups.guaranteedExit-startPawn.label"
+      },
+      "fields": [
+        "guaranteedExit",
+        "startPawn"
+      ],
+      "placement": "main"
+    },
+    {
+      "label": {
+        "key": "settings.groups.endMode-maxRounds.label"
+      },
+      "fields": [
+        "endMode",
+        "maxRounds"
+      ],
+      "placement": "end"
+    }
+  ]
+}

@@ -5,7 +5,10 @@
       "id": "reach-six",
       "options": {
         "playerCount": 2,
-        "firstPlayer": 0
+        "firstPlayer": 0,
+        "options": {
+          "target": 6
+        }
       },
       "steps": [
         {

@@ -1,0 +1,103 @@
+{
+  "id": "one-oh-one",
+  "version": "1.0.1",
+  "category": "cards",
+  "tagline": {
+    "key": "manifest.tagline"
+  },
+  "capabilities": {
+    "hands": true,
+    "surfaces": [
+      "combined",
+      "table",
+      "player"
+    ]
+  },
+  "rules": "rules.js",
+  "view": "view.js",
+  "sharedUi": true,
+  "styles": "styles.css",
+  "settings": "settings.json",
+  "name": {
+    "key": "mau.meta.name"
+  },
+  "engineApi": 4,
+  "stateVersion": 1,
+  "sounds": "sounds.js",
+  "viewApi": 3,
+  "tags": [
+    "cards",
+    "shedding"
+  ],
+  "playModes": [
+    {
+      "id": "individual",
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "teams": false
+    }
+  ],
+  "sourceModules": {
+    "rules": [
+      "domain/game.js",
+      "presentation/scene.js"
+    ],
+    "view": [
+      "presentation/scene.js"
+    ],
+    "locales": {
+      "ru": [
+        "lang/ru.json"
+      ],
+      "en": [
+        "lang/en.json"
+      ]
+    }
+  },
+  "skinFamilies": [
+    "card-back"
+  ],
+  "releases": [
+    {
+      "version": "1.0.1",
+      "changes": [
+        {
+          "key": "release.card-art"
+        }
+      ]
+    },
+    {
+      "version": "1.0.0",
+      "changes": [
+        {
+          "key": "release.first"
+        }
+      ]
+    }
+  ],
+  "sdkFeatures": [
+    "local-input-v1",
+    "turn-order-v1",
+    "standard-parameter-ui-v1",
+    "concurrent-reactions-v1",
+    "isolated-execution-v1"
+  ],
+  "execution": "isolated-v1",
+  "defaultLanguage": "ru",
+  "estimatedDurationMin": [
+    10,
+    20
+  ],
+  "replaces": [
+    "uno"
+  ],
+  "sharedAssetPacks": [
+    "standard-deck",
+    "mini-split-deck"
+  ]
+}

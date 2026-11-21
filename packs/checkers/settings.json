@@ -1,0 +1,61 @@
+{
+  "fields": [
+    {
+      "key": "preset",
+      "label": {
+        "key": "settings.preset.label"
+      },
+      "control": "slider",
+      "options": [
+        {
+          "value": "quick",
+          "label": {
+            "key": "checkers.presets.quick"
+          },
+          "preview": {
+            "ids": [
+              "setting-pieces-8"
+            ]
+          },
+          "description": {
+            "key": "settings.preset.options.quick.description"
+          }
+        },
+        {
+          "value": "classic",
+          "label": {
+            "key": "checkers.presets.classic"
+          },
+          "preview": {
+            "ids": [
+              "setting-pieces-12"
+            ]
+          },
+          "description": {
+            "key": "settings.preset.options.classic.description"
+          }
+        }
+      ],
+      "help": {
+        "key": "settings.preset.help"
+      },
+      "preview": {
+        "kind": "illustrations"
+      },
+      "kind": "preset",
+      "valueType": "string",
+      "default": "classic"
+    }
+  ],
+  "groups": [
+    {
+      "label": {
+        "key": "settings.groups.preset.label"
+      },
+      "fields": [
+        "preset"
+      ],
+      "placement": "main"
+    }
+  ]
+}

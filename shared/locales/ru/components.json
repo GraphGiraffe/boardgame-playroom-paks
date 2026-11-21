@@ -10,5 +10,9 @@
   "ui.game-components.130b874a5c04": "К",
   "ui.game-components.7614b90a1064": "Т",
   "ui.game-components.2f0a8ec85914": "Дж",
-  "ui.game-components.737f7561bd7f": "Количество"
+  "ui.game-components.737f7561bd7f": "Количество",
+  "ui.game-components.suit.hearts": "черви",
+  "ui.game-components.suit.diamonds": "бубны",
+  "ui.game-components.suit.clubs": "трефы",
+  "ui.game-components.suit.spades": "пики"
 }

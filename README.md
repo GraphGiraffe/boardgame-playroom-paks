@@ -17,3 +17,7 @@
 [Карта ресурсов](docs/README.md) · [Руководство автора](docs/AUTHORING.md) · [архитектура](docs/ARCHITECTURE.md) · [компоненты](docs/COMPONENT-SDK.md) · [CONTRIBUTING](CONTRIBUTING.md).
 
 Лицензии различаются для кода, материалов и отдельных игр; см. [LICENSING](LICENSING.md), [LICENSE](LICENSE).
+
+### Обновление переименованных паков
+
+Каталог предлагает «101» (`one-oh-one`) взамен `uno`, «Морской бой» (Fleet Grid, `fleet-grid`) взамен `battleship`, «Покер на костях» (Dice Poker, `dice-poker`) взамен `yatzy`. Поле `replaces` в манифесте связывает установки. Сохранённая партия по-прежнему открывается со своим ID и версией. Новую игру начинают с обновлённым паком.

@@ -12,7 +12,8 @@ body.reduced-motion .game-speech,.reduced-motion .game-speech{animation:none!imp
 body.reduced-motion .player-panel.is-participant-affected,.reduced-motion .player-panel.is-participant-affected{animation:none!important;background:var(--color-material-bubble-error,#f4c9c0)!important;box-shadow:inset 0 0 0 2px #b64d43!important;}
 @media(prefers-reduced-motion:reduce){.player-panel.is-participant-affected{animation:none!important;background:var(--color-material-bubble-error,#f4c9c0)!important;box-shadow:inset 0 0 0 2px #b64d43!important;}}
 
-.action-reveal{position:fixed;inset:0;z-index:55;display:block;overflow:clip;pointer-events:none;background:radial-gradient(ellipse at center,color-mix(in srgb,var(--color-surface-panel,#f4f2e8) 82%,transparent) 0%,transparent 66%);}
+/* The field anchors the highlight; a played card travels across its edge from the hand. */
+.action-reveal{position:fixed;inset:0;z-index:55;display:block;overflow:visible;pointer-events:none;background:radial-gradient(ellipse at center,color-mix(in srgb,var(--color-surface-panel,#f4f2e8) 82%,transparent) 0%,transparent 66%);}
 .action-reveal-title{max-width:90vw;padding:var(--size-space-8_0,8px) var(--size-space-14_0,12px);border-radius:var(--size-radius-14_0,12px);background:var(--color-surface-raised,#fffaf0);color:var(--color-text-primary,#244c35);font-size:clamp(var(--size-type-16_0,16px),4vw,var(--size-type-24_0,24px));text-align:center;}
 .action-reveal-art{width:min(36vw,var(--size-length-150_0,148px),calc(70dvh - var(--size-length-67_0,68px)));transform-origin:center;filter:none;}
 .action-reveal-art.scene{display:block!important;min-height:0!important;max-height:none!important;height:auto!important;padding:0!important;margin:0!important;overflow:visible!important;aspect-ratio:auto!important;background:none!important;border:0!important;}
@@ -115,3 +116,15 @@ body.reduced-motion .player-panel.is-participant-affected,.reduced-motion .playe
 /* Complete art retains its own shape, even outside a scene/reveal. */
 :is(.shared-card,.art-card,.piece-back):has(>.card-deck-art){aspect-ratio:5/7}
 :is(.shared-card,.art-card,.piece-back):has(>.card-deck-art[data-card-shape="square"]){aspect-ratio:1}
+
+/* Original raised ruled board, expressed as a shared component rather than a game ID. */
+.sdk-scene .sdk-mark-grid{--mark-face:var(--color-surface-panel,#fff9e6);--mark-rule:color-mix(in srgb,var(--color-border-strong,#c9bb93) 75%,var(--mark-face));display:grid;grid-template-rows:repeat(var(--mark-rows),minmax(0,1fr));gap:0;width:calc(100% - 8px);height:calc(100% - 8px);max-width:none;aspect-ratio:var(--mark-aspect);margin:0 auto 8px;padding:3%;box-sizing:border-box;background:var(--mark-face);border:0;border-radius:var(--size-radius-16_0,16px);box-shadow:0 6px 0 color-mix(in srgb,var(--mark-face) 78%,#000),0 8px 8px #00000014}
+.sdk-scene .sdk-mark-grid .sdk-mark-cell{display:grid;place-items:center;min-width:0;min-height:0;padding:0;aspect-ratio:1;border:0;border-radius:0;background:transparent;box-shadow:none;color:var(--color-side-green,#4b7762);overflow:clip;font-size:inherit}
+.sdk-scene .sdk-mark-grid .sdk-mark-cell:not(.is-last-column){border-right:2px solid var(--mark-rule)}
+.sdk-scene .sdk-mark-grid .sdk-mark-cell:not(.is-last-row){border-bottom:2px solid var(--mark-rule)}
+.sdk-scene .sdk-mark-grid .sdk-mark-cell.is-cross{color:var(--color-side-red,#be6955)}
+.sdk-scene .sdk-mark-grid .sdk-mark-cell:disabled{opacity:1}
+.sdk-scene .sdk-mark-grid .sdk-mark-cell:not(:disabled):hover{background:color-mix(in srgb,var(--color-interaction-selected,#d3aa45) 12%,transparent)}
+.sdk-scene .sdk-mark-grid .sdk-mark-cell:focus-visible{outline-offset:-4px}
+.sdk-scene .sdk-mark-grid .sdk-mark-cell>span{display:grid;place-items:center;width:100%;height:100%;min-width:0;min-height:0;overflow:clip}
+.sdk-scene.sdk-mark-scene{height:100%;min-height:0}

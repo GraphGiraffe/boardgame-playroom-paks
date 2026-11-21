@@ -1,0 +1,69 @@
+{
+  "fields": [
+    {
+      "key": "preset",
+      "label": {
+        "key": "settings.preset.label"
+      },
+      "options": [
+        {
+          "value": "classic",
+          "label": {
+            "key": "gofish.meta.classic"
+          }
+        }
+      ],
+      "kind": "preset",
+      "valueType": "string",
+      "control": "select",
+      "default": "classic"
+    },
+    {
+      "key": "deck",
+      "label": {
+        "key": "gofish.book.text.20"
+      },
+      "default": "52",
+      "options": [
+        {
+          "value": "36",
+          "label": {
+            "key": "gofish.book.text.22"
+          },
+          "description": {
+            "key": "settings.deck.options.36.description"
+          }
+        },
+        {
+          "value": "52",
+          "label": {
+            "key": "gofish.book.text.24"
+          },
+          "description": {
+            "key": "settings.deck.options.52.description"
+          }
+        }
+      ],
+      "help": {
+        "key": "settings.deck.help"
+      },
+      "control": "select",
+      "preview": {
+        "kind": "cards"
+      },
+      "kind": "option",
+      "valueType": "string"
+    }
+  ],
+  "groups": [
+    {
+      "label": {
+        "key": "settings.groups.deck.label"
+      },
+      "fields": [
+        "deck"
+      ],
+      "placement": "main"
+    }
+  ]
+}

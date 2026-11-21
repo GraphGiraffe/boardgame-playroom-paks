@@ -1,0 +1,7 @@
+{
+  "assets/cover.webp": {
+    "license": "Existing PlayRoom artwork; see repository LICENSING.md",
+    "source": "Existing cover from checkers 0.6.0; published pack SHA256 9115f09d088df69b8c0503781f1df0dc4fc65f8eb497976eda372f412d4b564b; source master in Git da58f6c",
+    "sha256": "9954a1152dd2181fcb7d841425388cba9ec611ebcd66aa6d306c7f7b66fca894"
+  }
+}

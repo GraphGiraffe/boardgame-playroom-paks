@@ -4,11 +4,14 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["spider"] = {
   "id": "spider",
-  "version": "0.3.1",
-  "name": "Паук",
+  "version": "0.3.5",
+  "name": {
+    "key": "spider.meta.name"
+  },
   "category": "solitaire",
-  "estimatedDuration": "10–30 мин",
-  "tagline": "Собери восемь серий от короля до туза.",
+  "tagline": {
+    "key": "manifest.tagline"
+  },
   "capabilities": {
     "hands": false,
     "surfaces": [
@@ -63,7 +66,7 @@
     ],
     "locales": {
       "ru": [
-        "locales/ru/game.json"
+        "lang/ru.json"
       ]
     }
   },
@@ -79,280 +82,256 @@
   "defaultSkins": {
     "card-face": "compact-index"
   },
-  "settings": [
-    {
-      "key": "suits",
-      "label": "Мастей",
-      "default": "1",
-      "options": [
-        {
-          "value": "1",
-          "label": "1",
-          "description": "Одна масть; всего 104 карты.",
-          "preview": {
-            "ids": [
-              "setting-suits-1"
-            ]
-          }
-        },
-        {
-          "value": "2",
-          "label": "2",
-          "description": "Две масти; всего 104 карты.",
-          "preview": {
-            "ids": [
-              "setting-suits-2"
-            ]
-          }
-        },
-        {
-          "value": "4",
-          "label": "4",
-          "description": "Четыре масти; всего 104 карты.",
-          "preview": {
-            "ids": [
-              "setting-suits-4"
-            ]
-          }
-        }
-      ],
-      "control": "slider",
-      "help": "Всегда 104 карты: одна, две или четыре масти.",
-      "preview": {
-        "kind": "illustrations"
-      }
-    },
-    {
-      "key": "scoring",
-      "label": "Счёт",
-      "default": "standard",
-      "options": [
-        {
-          "value": "standard",
-          "label": "Обычный",
-          "description": "500 очков; ход −1, серия +100.",
-          "preview": {
-            "icon": "trophy"
-          }
-        },
-        {
-          "value": "none",
-          "label": "Без счёта",
-          "description": "Восемь серий без подсчёта очков.",
-          "preview": {
-            "kind": "symbol",
-            "icon": "close"
-          }
-        }
-      ],
-      "control": "slider",
-      "help": "Обычный: старт с 500 очками, каждое действие стоит 1 очко, снятая полная одномастная серия даёт 100. При отмене восстанавливается счёт до отменяемого действия и снимается 1 очко. Счёт не опускается ниже 0. «Без счёта» скрывает очки, но цель собрать восемь серий сохраняется.",
-      "preview": {
-        "kind": "symbol"
-      }
-    },
-    {
-      "key": "undo",
-      "label": "Отмена",
-      "default": "last",
-      "options": [
-        {
-          "value": "off",
-          "label": "Выкл",
-          "description": "Действия нельзя отменять.",
-          "preview": {
-            "kind": "symbol",
-            "icon": "close"
-          }
-        },
-        {
-          "value": "last",
-          "label": "Последнее",
-          "description": "Можно отменить одно действие.",
-          "preview": {
-            "icon": "undo"
-          }
-        },
-        {
-          "value": "history",
-          "label": "История",
-          "description": "Можно отменить до 100 действий.",
-          "preview": {
-            "icon": "history"
-          }
-        }
-      ],
-      "control": "slider",
-      "help": "«Последнее» — одно действие, включая раздачу из запаса и снятие серии. «История» — до 100 действий. «Выкл» — без отмены. После восстановления прежнего состояния применяется штраф отмены, если счёт включён.",
-      "preview": {
-        "kind": "symbol"
-      }
-    },
-    {
-      "key": "emptyDeal",
-      "label": "Пустые столбцы",
-      "default": "forbid",
-      "options": [
-        {
-          "value": "forbid",
-          "label": "Запретить добор",
-          "description": "Перед добором заполните столбцы.",
-          "preview": {
-            "ids": [
-              "setting-empty-forbid"
-            ]
-          },
-          "shortLabel": "Запрещён"
-        },
-        {
-          "value": "allow",
-          "label": "Разрешить добор",
-          "description": "Можно добирать в пустые столбцы.",
-          "preview": {
-            "ids": [
-              "setting-empty-allow"
-            ]
-          },
-          "shortLabel": "Разрешён"
-        }
-      ],
-      "control": "slider",
-      "help": "По умолчанию перед раздачей ряда каждый столбец должен содержать карту.",
-      "preview": {
-        "kind": "illustrations"
-      }
-    }
-  ],
-  "ruleGroups": [
-    {
-      "label": "Правила",
-      "fields": [
-        "preset",
-        "suits",
-        "scoring",
-        "undo",
-        "emptyDeal"
-      ]
-    }
-  ],
-  "presetSetting": {
-    "label": "Режим",
-    "options": [
+  "settings": {
+    "fields": [
       {
-        "value": "classic",
-        "label": "Классический"
+        "key": "preset",
+        "label": {
+          "key": "spider.book.text.17"
+        },
+        "options": [
+          {
+            "value": "classic",
+            "label": {
+              "common": "classic"
+            }
+          }
+        ],
+        "control": "select",
+        "default": "classic",
+        "kind": "preset",
+        "valueType": "string"
+      },
+      {
+        "key": "suits",
+        "label": {
+          "key": "settings.suits.label"
+        },
+        "default": "1",
+        "options": [
+          {
+            "value": "1",
+            "description": {
+              "key": "settings.suits.options.1.description"
+            },
+            "preview": {
+              "ids": [
+                "setting-suits-1"
+              ]
+            }
+          },
+          {
+            "value": "2",
+            "description": {
+              "key": "settings.suits.options.2.description"
+            },
+            "preview": {
+              "ids": [
+                "setting-suits-2"
+              ]
+            }
+          },
+          {
+            "value": "4",
+            "description": {
+              "key": "settings.suits.options.4.description"
+            },
+            "preview": {
+              "ids": [
+                "setting-suits-4"
+              ]
+            }
+          }
+        ],
+        "control": "slider",
+        "help": {
+          "key": "settings.suits.help"
+        },
+        "preview": {
+          "kind": "illustrations"
+        },
+        "kind": "option",
+        "valueType": "string"
+      },
+      {
+        "key": "scoring",
+        "label": {
+          "key": "settings.scoring.label"
+        },
+        "default": "standard",
+        "options": [
+          {
+            "value": "standard",
+            "label": {
+              "key": "settings.scoring.options.standard.label"
+            },
+            "description": {
+              "key": "settings.scoring.options.standard.description"
+            },
+            "preview": {
+              "icon": "trophy"
+            }
+          },
+          {
+            "value": "none",
+            "label": {
+              "key": "settings.scoring.options.none.label"
+            },
+            "description": {
+              "key": "settings.scoring.options.none.description"
+            },
+            "preview": {
+              "kind": "symbol",
+              "icon": "close"
+            }
+          }
+        ],
+        "control": "slider",
+        "help": {
+          "key": "settings.scoring.help"
+        },
+        "preview": {
+          "kind": "symbol"
+        },
+        "kind": "option",
+        "valueType": "string"
+      },
+      {
+        "key": "undo",
+        "label": {
+          "key": "settings.undo.label"
+        },
+        "default": "last",
+        "options": [
+          {
+            "value": "off",
+            "label": {
+              "common": "off"
+            },
+            "description": {
+              "key": "settings.undo.options.off.description"
+            },
+            "preview": {
+              "kind": "symbol",
+              "icon": "close"
+            }
+          },
+          {
+            "value": "last",
+            "label": {
+              "key": "spider.book.text.19"
+            },
+            "description": {
+              "key": "settings.undo.options.last.description"
+            },
+            "preview": {
+              "icon": "undo"
+            }
+          },
+          {
+            "value": "history",
+            "label": {
+              "key": "spider.book.text.21"
+            },
+            "description": {
+              "key": "settings.undo.options.history.description"
+            },
+            "preview": {
+              "icon": "history"
+            }
+          }
+        ],
+        "control": "slider",
+        "help": {
+          "key": "settings.undo.help"
+        },
+        "preview": {
+          "kind": "symbol"
+        },
+        "kind": "option",
+        "valueType": "string"
+      },
+      {
+        "key": "emptyDeal",
+        "label": {
+          "key": "settings.emptyDeal.label"
+        },
+        "default": "forbid",
+        "options": [
+          {
+            "value": "forbid",
+            "label": {
+              "key": "settings.emptyDeal.options.forbid.label"
+            },
+            "description": {
+              "key": "settings.emptyDeal.options.forbid.description"
+            },
+            "preview": {
+              "ids": [
+                "setting-empty-forbid"
+              ]
+            },
+            "shortLabel": {
+              "key": "settings.emptyDeal.options.forbid.shortLabel"
+            }
+          },
+          {
+            "value": "allow",
+            "label": {
+              "key": "settings.emptyDeal.options.allow.label"
+            },
+            "description": {
+              "key": "settings.emptyDeal.options.allow.description"
+            },
+            "preview": {
+              "ids": [
+                "setting-empty-allow"
+              ]
+            },
+            "shortLabel": {
+              "key": "settings.emptyDeal.options.allow.shortLabel"
+            }
+          }
+        ],
+        "control": "slider",
+        "help": {
+          "key": "settings.emptyDeal.help"
+        },
+        "preview": {
+          "kind": "illustrations"
+        },
+        "kind": "option",
+        "valueType": "string"
+      }
+    ],
+    "groups": [
+      {
+        "label": {
+          "key": "settings.groups.preset-suits-scoring-undo-emptyDeal.label"
+        },
+        "fields": [
+          "preset",
+          "suits",
+          "scoring",
+          "undo",
+          "emptyDeal"
+        ],
+        "placement": "main"
       }
     ]
   },
-  "releases": [
-    {
-      "version": "0.3.0",
-      "changes": [
-        "Стабильный выпуск: обновлены правила, интерфейс и параметры игры."
-      ]
-    },
-    {
-      "version": "0.2.5",
-      "changes": [
-        "Стабильный выпуск: обновлены правила, интерфейс и параметры игры."
-      ]
-    },
-    {
-      "version": "0.2.5-preview.18",
-      "changes": [
-        "Синхронизированы общие компоненты с исправлениями чтения индексов, перекрытия карт и обновления оформления; правила игры не менялись.",
-        "Физические размеры карт и оснований согласованы; узкое поле прокручивается внутри своей области."
-      ]
-    },
-    {
-      "version": "0.2.5-preview.17",
-      "changes": [
-        "Иллюстрации параметров сохраняют размер компонентов между вариантами; постоянная область арта центрирует изображение по обеим осям без растягивания."
-      ]
-    },
-    {
-      "version": "0.2.5-preview.16",
-      "changes": [
-        "Одинаковые настройки пасьянсов используют одинаковые значки.",
-        "При композиции SVG сохраняются полные атрибуты толщины, прозрачности и идентичности; стандартный контур масштабируется целиком."
-      ]
-    },
-    {
-      "version": "0.2.5-preview.15",
-      "changes": [
-        "Параметры игры снабжены понятными иллюстрациями из игровых компонентов и короткими пояснениями выбранных вариантов."
-      ]
-    },
-    {
-      "version": "0.2.5-preview.14",
-      "changes": [
-        "Общие игровые ассеты сохраняют пропорции рамок, скруглений и толщины в игре, миниатюрах, правилах, параметрах и анимациях. Убраны вторые фиксированные рамки и тени поверх SVG."
-      ]
-    },
-    {
-      "version": "0.2.5-preview.13",
-      "changes": [
-        "Скругления карт и общих фигур масштабируются вместе с компонентами."
-      ]
-    },
-    {
-      "version": "0.2.5-preview.10",
-      "changes": [
-        "Общий SDK допускает до 64 ленивых публичных кадров; одновременно готовится только текущий и следующий кадр."
-      ]
-    },
-    {
-      "version": "0.2.5-preview.9",
-      "changes": [
-        "Обновлён общий SDK поэтапной подготовки публичных кадров; правила игры сохранены."
-      ]
-    },
-    {
-      "version": "0.2.5-preview.8",
-      "changes": [
-        "Исправлены отступы и обрезание элементов в адаптивной компоновке."
-      ]
-    },
-    {
-      "version": "0.2.5-preview.7",
-      "changes": [
-        "Уточнены размещение счётчиков и системные зоны."
-      ]
-    },
-    {
-      "version": "0.2.5-preview.6",
-      "changes": [
-        "Счётчики расположены справа от действий в горизонтальном режиме."
-      ]
-    },
-    {
-      "version": "0.2.5-preview.5",
-      "changes": [
-        "Угловые номиналы поверх рамки, единое выравнивание индексов и узкая «10» с прежним шрифтом.",
-        "Уточнены безопасные области номиналов и мастей при перекрытии карт.",
-        "Перекрытие стопок учитывает выбранный скин; смена оформления обновляет шаг раскладки.",
-        "Отмена последнего действия восстанавливает и добор карт, включая открытие карт и снятие серий."
-      ]
-    },
-    {
-      "version": "0.2.4",
-      "changes": [
-        "Обновлён общий компонент пустого карточного слота; правила игры не изменены."
-      ]
-    },
-    {
-      "version": "0.2.3",
-      "changes": [
-        "Короткие правила: абзацы, списки, таблицы и иллюстрации игровых элементов и интерфейса."
-      ]
-    }
-  ],
+  "releases": [],
   "sdkFeatures": [
     "local-input-v1",
     "turn-order-v1",
     "parameter-illustrations-v1",
     "isolated-execution-v1"
   ],
-  "execution": "isolated-v1"
+  "execution": "isolated-v1",
+  "defaultLanguage": "ru",
+  "estimatedDurationMin": [
+    10,
+    30
+  ]
 };
 })(globalThis);

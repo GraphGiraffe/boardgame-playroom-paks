@@ -4,11 +4,14 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["klondike"] = {
   "id": "klondike",
-  "version": "0.3.1",
-  "name": "Косынка",
+  "version": "0.3.5",
+  "name": {
+    "key": "klondike.meta.name"
+  },
   "category": "solitaire",
-  "estimatedDuration": "10–30 мин",
-  "tagline": "Разбери семь столбцов и собери четыре масти.",
+  "tagline": {
+    "key": "manifest.tagline"
+  },
   "capabilities": {
     "hands": false,
     "surfaces": [
@@ -62,7 +65,7 @@
     ],
     "locales": {
       "ru": [
-        "locales/ru/game.json"
+        "lang/ru.json"
       ]
     }
   },
@@ -78,348 +81,344 @@
   "defaultSkins": {
     "card-face": "compact-index"
   },
-  "settings": [
-    {
-      "key": "draw",
-      "label": "Добор",
-      "default": "3",
-      "options": [
-        {
-          "value": "1",
-          "label": "1",
-          "description": "Из запаса открывается одна карта."
+  "settings": {
+    "fields": [
+      {
+        "key": "preset",
+        "label": {
+          "key": "settings.preset.label"
         },
-        {
-          "value": "3",
-          "label": "3",
-          "description": "До трёх карт; играют только верхнюю."
-        }
-      ],
-      "control": "slider",
-      "help": "Открывайте из запаса одну карту или до трёх за нажатие. В обоих случаях играть можно только верхнюю карту сброса.",
-      "preview": {
-        "kind": "cards"
-      }
-    },
-    {
-      "key": "scoring",
-      "label": "Счёт",
-      "default": "standard",
-      "options": [
-        {
-          "value": "standard",
-          "label": "Обычный",
-          "description": "Очки за ходы; минимум — ноль.",
-          "preview": {
-            "kind": "symbol",
-            "icon": "trophy"
+        "options": [
+          {
+            "value": "classic",
+            "label": {
+              "common": "classic"
+            }
           }
-        },
-        {
-          "value": "none",
-          "label": "Без счёта",
-          "description": "Очки не подсчитываются.",
-          "preview": {
-            "kind": "symbol",
-            "icon": "close"
-          }
-        },
-        {
-          "value": "vegas",
-          "label": "Vegas",
-          "description": "Старт −52; в дом +5, обратно −5.",
-          "preview": {
-            "kind": "symbol",
-            "icon": "cards"
-          }
-        }
-      ],
-      "control": "slider",
-      "help": "Обычный: старт с 0; карта в дом +10, из сброса в столбец +5, открытие закрытой карты +5, из дома обратно −15. Перезапуск запаса: −100 при доборе по одной; при доборе по три — −20 начиная с четвёртого прохода. Счёт не опускается ниже 0. Vegas: старт −52, в дом +5, обратно −5. «Без счёта» убирает подсчёт очков.",
-      "preview": {
-        "kind": "symbol",
-        "icon": "trophy"
-      }
-    },
-    {
-      "key": "undo",
-      "label": "Отмена",
-      "default": "last",
-      "options": [
-        {
-          "value": "off",
-          "label": "Выкл",
-          "description": "Отмена действий недоступна.",
-          "preview": {
-            "kind": "symbol",
-            "icon": "close"
-          }
-        },
-        {
-          "value": "last",
-          "label": "Последнее",
-          "description": "Можно отменить одно последнее действие.",
-          "preview": {
-            "kind": "symbol",
-            "icon": "undo"
-          }
-        },
-        {
-          "value": "history",
-          "label": "История",
-          "description": "До 100 отмен; −2, если счёт включён.",
-          "preview": {
-            "kind": "symbol",
-            "icon": "history"
-          }
-        }
-      ],
-      "control": "slider",
-      "help": "«Последнее» позволяет отменить только одно последнее действие; «История» — до 100 сохранённых действий; «Выкл» запрещает отмену. Возвращается прежнее состояние, затем снимается 2 очка, если счёт включён. Автооткрытие и автосбор отменяются вместе с действием.",
-      "preview": {
-        "kind": "symbol",
-        "icon": "undo"
-      }
-    },
-    {
-      "key": "maxPasses",
-      "label": "Проходов колоды",
-      "default": "0",
-      "options": [
-        {
-          "value": "1",
-          "label": "1",
-          "description": "Включая первый проход; кроме Vegas."
-        },
-        {
-          "value": "3",
-          "label": "3",
-          "description": "Включая первый проход; кроме Vegas."
-        },
-        {
-          "value": "0",
-          "label": "∞",
-          "description": "Без лимита проходов; кроме Vegas."
-        }
-      ],
-      "control": "slider",
-      "help": "Первый просмотр запаса уже считается проходом. После исчерпания лимита сброс больше нельзя перевернуть в запас. ∞ — без ограничения. В режиме Vegas этот выбор заменяется правилом: один проход при доборе по одной и три при доборе по три.",
-      "preview": {
-        "kind": "symbol",
-        "icon": "refresh"
+        ],
+        "control": "select",
+        "default": "classic",
+        "kind": "preset",
+        "valueType": "string"
       },
-      "inactiveWhen": {
-        "scoring": "vegas"
+      {
+        "key": "draw",
+        "label": {
+          "key": "settings.draw.label"
+        },
+        "default": "3",
+        "options": [
+          {
+            "value": "1",
+            "description": {
+              "key": "settings.draw.options.1.description"
+            }
+          },
+          {
+            "value": "3",
+            "description": {
+              "key": "settings.draw.options.3.description"
+            }
+          }
+        ],
+        "control": "slider",
+        "help": {
+          "key": "settings.draw.help"
+        },
+        "preview": {
+          "kind": "cards"
+        },
+        "kind": "option",
+        "valueType": "string"
       },
-      "inactivePresentation": {
+      {
+        "key": "scoring",
+        "label": {
+          "key": "settings.scoring.label"
+        },
+        "default": "standard",
+        "options": [
+          {
+            "value": "standard",
+            "label": {
+              "key": "settings.scoring.options.standard.label"
+            },
+            "description": {
+              "key": "settings.scoring.options.standard.description"
+            },
+            "preview": {
+              "kind": "symbol",
+              "icon": "trophy"
+            }
+          },
+          {
+            "value": "none",
+            "label": {
+              "key": "settings.scoring.options.none.label"
+            },
+            "description": {
+              "key": "settings.scoring.options.none.description"
+            },
+            "preview": {
+              "kind": "symbol",
+              "icon": "close"
+            }
+          },
+          {
+            "value": "vegas",
+            "label": {
+              "key": "settings.scoring.options.vegas.label"
+            },
+            "description": {
+              "key": "settings.scoring.options.vegas.description"
+            },
+            "preview": {
+              "kind": "symbol",
+              "icon": "cards"
+            }
+          }
+        ],
+        "control": "slider",
+        "help": {
+          "key": "settings.scoring.help"
+        },
         "preview": {
           "kind": "symbol",
-          "icon": "lock"
+          "icon": "trophy"
         },
-        "description": "Vegas: по 1 — 1 проход, по 3 — 3."
-      }
-    },
-    {
-      "key": "autoFlip",
-      "label": "Открытие карт",
-      "default": "auto",
-      "options": [
-        {
-          "value": "manual",
-          "label": "Вручную",
-          "description": "Открывайте карты вручную.",
-          "preview": {
-            "kind": "symbol",
-            "icon": "hand"
-          }
-        },
-        {
-          "value": "auto",
-          "label": "Авто",
-          "description": "Освободившаяся карта открывается сама.",
-          "preview": {
-            "kind": "symbol",
-            "icon": "bot"
-          }
-        }
-      ],
-      "control": "slider",
-      "help": "Автооткрытие является частью того же действия и отменяется вместе с ним.",
-      "preview": {
-        "kind": "symbol",
-        "icon": "hand"
-      }
-    },
-    {
-      "key": "autoCollect",
-      "label": "Автосбор",
-      "default": "button",
-      "options": [
-        {
-          "value": "off",
-          "label": "Выкл",
-          "description": "Карты в дома переносят вручную.",
-          "preview": {
-            "kind": "symbol",
-            "icon": "close"
-          }
-        },
-        {
-          "value": "button",
-          "label": "Двойное нажатие",
-          "description": "Двойной тап поля — сбор карт в дома.",
-          "preview": {
-            "kind": "symbol",
-            "icon": "hand"
-          }
-        }
-      ],
-      "control": "slider",
-      "help": "Дважды нажмите на пустое поле: доступные открытые карты последовательно перемещаются в дома. Запас не раздаётся; закрытые карты открываются только при включённом автооткрытии.",
-      "preview": {
-        "kind": "symbol",
-        "icon": "hand"
-      }
-    }
-  ],
-  "ruleGroups": [
-    {
-      "label": "Правила",
-      "fields": [
-        "preset",
-        "draw",
-        "scoring",
-        "undo",
-        "maxPasses",
-        "autoFlip",
-        "autoCollect"
-      ]
-    }
-  ],
-  "presetSetting": {
-    "label": "Режим",
-    "options": [
+        "kind": "option",
+        "valueType": "string"
+      },
       {
-        "value": "classic",
-        "label": "Классический"
+        "key": "undo",
+        "label": {
+          "key": "settings.undo.label"
+        },
+        "default": "last",
+        "options": [
+          {
+            "value": "off",
+            "label": {
+              "common": "off"
+            },
+            "description": {
+              "key": "settings.undo.options.off.description"
+            },
+            "preview": {
+              "kind": "symbol",
+              "icon": "close"
+            }
+          },
+          {
+            "value": "last",
+            "label": {
+              "key": "settings.undo.options.last.label"
+            },
+            "description": {
+              "key": "settings.undo.options.last.description"
+            },
+            "preview": {
+              "kind": "symbol",
+              "icon": "undo"
+            }
+          },
+          {
+            "value": "history",
+            "label": {
+              "key": "settings.undo.options.history.label"
+            },
+            "description": {
+              "key": "settings.undo.options.history.description"
+            },
+            "preview": {
+              "kind": "symbol",
+              "icon": "history"
+            }
+          }
+        ],
+        "control": "slider",
+        "help": {
+          "key": "settings.undo.help"
+        },
+        "preview": {
+          "kind": "symbol",
+          "icon": "undo"
+        },
+        "kind": "option",
+        "valueType": "string"
+      },
+      {
+        "key": "maxPasses",
+        "label": {
+          "key": "settings.maxPasses.label"
+        },
+        "default": "0",
+        "options": [
+          {
+            "value": "1"
+          },
+          {
+            "value": "3"
+          },
+          {
+            "description": {
+              "key": "settings.maxPasses.options.0.description"
+            },
+            "value": "0",
+            "label": {
+              "common": "infinity"
+            }
+          }
+        ],
+        "control": "slider",
+        "help": {
+          "key": "settings.maxPasses.help"
+        },
+        "preview": {
+          "kind": "symbol",
+          "icon": "refresh"
+        },
+        "inactiveWhen": {
+          "scoring": "vegas"
+        },
+        "inactivePresentation": {
+          "preview": {
+            "kind": "symbol",
+            "icon": "lock"
+          },
+          "description": {
+            "key": "settings.maxPasses.inactivePresentation.description"
+          }
+        },
+        "kind": "option",
+        "valueType": "string",
+        "optionDefaults": {
+          "description": {
+            "key": "settings.maxPasses.optionDefaults.description"
+          }
+        }
+      },
+      {
+        "key": "autoFlip",
+        "label": {
+          "key": "settings.autoFlip.label"
+        },
+        "default": "auto",
+        "options": [
+          {
+            "value": "manual",
+            "label": {
+              "common": "manual"
+            },
+            "description": {
+              "key": "settings.autoFlip.options.manual.description"
+            },
+            "preview": {
+              "kind": "symbol",
+              "icon": "hand"
+            }
+          },
+          {
+            "value": "auto",
+            "label": {
+              "common": "auto"
+            },
+            "description": {
+              "key": "settings.autoFlip.options.auto.description"
+            },
+            "preview": {
+              "kind": "symbol",
+              "icon": "bot"
+            }
+          }
+        ],
+        "control": "slider",
+        "help": {
+          "key": "settings.autoFlip.help"
+        },
+        "preview": {
+          "kind": "symbol",
+          "icon": "hand"
+        },
+        "kind": "option",
+        "valueType": "string"
+      },
+      {
+        "key": "autoCollect",
+        "label": {
+          "key": "settings.autoCollect.label"
+        },
+        "default": "button",
+        "options": [
+          {
+            "value": "off",
+            "label": {
+              "common": "off"
+            },
+            "description": {
+              "key": "settings.autoCollect.options.off.description"
+            },
+            "preview": {
+              "kind": "symbol",
+              "icon": "close"
+            }
+          },
+          {
+            "value": "button",
+            "label": {
+              "key": "settings.autoCollect.options.button.label"
+            },
+            "description": {
+              "key": "settings.autoCollect.options.button.description"
+            },
+            "preview": {
+              "kind": "symbol",
+              "icon": "hand"
+            }
+          }
+        ],
+        "control": "slider",
+        "help": {
+          "key": "settings.autoCollect.help"
+        },
+        "preview": {
+          "kind": "symbol",
+          "icon": "hand"
+        },
+        "kind": "option",
+        "valueType": "string"
+      }
+    ],
+    "groups": [
+      {
+        "label": {
+          "key": "settings.groups.preset-draw-scoring-undo-maxPasses-autoFlip-autoCollect.label"
+        },
+        "fields": [
+          "preset",
+          "draw",
+          "scoring",
+          "undo",
+          "maxPasses",
+          "autoFlip",
+          "autoCollect"
+        ],
+        "placement": "main"
       }
     ]
   },
-  "releases": [
-    {
-      "version": "0.3.0",
-      "changes": [
-        "Стабильный выпуск: обновлены правила, интерфейс и параметры игры."
-      ]
-    },
-    {
-      "version": "0.2.5",
-      "changes": [
-        "Стабильный выпуск: обновлены правила, интерфейс и параметры игры."
-      ]
-    },
-    {
-      "version": "0.2.5-preview.20",
-      "changes": [
-        "Синхронизированы общие компоненты с исправлениями чтения индексов, перекрытия карт и обновления оформления; правила игры не менялись.",
-        "Физические размеры карт и оснований согласованы; узкое поле прокручивается внутри своей области."
-      ]
-    },
-    {
-      "version": "0.2.5-preview.19",
-      "changes": [
-        "При композиции SVG сохраняются полные атрибуты толщины, прозрачности и идентичности; стандартный контур масштабируется целиком."
-      ]
-    },
-    {
-      "version": "0.2.5-preview.18",
-      "changes": [
-        "Пояснение истории отмен явно связывает штраф с включённым подсчётом очков."
-      ]
-    },
-    {
-      "version": "0.2.5-preview.17",
-      "changes": [
-        "Общие игровые ассеты сохраняют пропорции рамок, скруглений и толщины в игре, миниатюрах, правилах, параметрах и анимациях. Убраны вторые фиксированные рамки и тени поверх SVG."
-      ]
-    },
-    {
-      "version": "0.2.5-preview.16",
-      "changes": [
-        "Скругления карт и общих фигур масштабируются вместе с компонентами."
-      ]
-    },
-    {
-      "version": "0.2.5-preview.15",
-      "changes": [
-        "В Vegas лимит проходов определяется добором: один при доборе по одной карте, три — по три. Карточка параметра показывает это правило и недоступна для ручной смены.",
-        "Сокращены пояснения параметров; выбранные варианты читаются компактнее."
-      ]
-    },
-    {
-      "version": "0.2.5-preview.14",
-      "changes": [
-        "Добор одной или трёх карт показан наглядно; выбранные варианты счёта, отмены и автоматических действий сопровождаются короткими пояснениями."
-      ]
-    },
-    {
-      "version": "0.2.5-preview.11",
-      "changes": [
-        "Общий SDK допускает до 64 ленивых публичных кадров; одновременно готовится только текущий и следующий кадр."
-      ]
-    },
-    {
-      "version": "0.2.5-preview.10",
-      "changes": [
-        "Обновлён общий SDK поэтапной подготовки публичных кадров; правила игры сохранены."
-      ]
-    },
-    {
-      "version": "0.2.5-preview.9",
-      "changes": [
-        "Исправлены отступы и обрезание элементов в адаптивной компоновке."
-      ]
-    },
-    {
-      "version": "0.2.5-preview.8",
-      "changes": [
-        "Уточнены размещение счётчиков и системные зоны."
-      ]
-    },
-    {
-      "version": "0.2.5-preview.7",
-      "changes": [
-        "Горизонтальные зоны: колода слева, столбцы по центру, дома и действия справа."
-      ]
-    },
-    {
-      "version": "0.2.5-preview.6",
-      "changes": [
-        "Угловые номиналы поверх рамки, единое выравнивание индексов и узкая «10» с прежним шрифтом.",
-        "Уточнены безопасные области номиналов и мастей при перекрытии карт.",
-        "Перекрытие стопок учитывает выбранный скин; смена оформления обновляет шаг раскладки.",
-        "В альбомном режиме дома, колода, сброс и действия вынесены вправо; колонки используют всю высоту центральной области."
-      ]
-    },
-    {
-      "version": "0.2.4",
-      "changes": [
-        "Обновлён общий компонент пустого карточного слота; правила игры не изменены."
-      ]
-    },
-    {
-      "version": "0.2.3",
-      "changes": [
-        "Короткие правила: абзацы, списки, таблицы и иллюстрации игровых элементов и интерфейса."
-      ]
-    }
-  ],
+  "releases": [],
   "sdkFeatures": [
     "local-input-v1",
     "turn-order-v1",
     "parameter-previews-v2",
     "isolated-execution-v1"
   ],
-  "execution": "isolated-v1"
+  "execution": "isolated-v1",
+  "defaultLanguage": "ru",
+  "estimatedDurationMin": [
+    10,
+    30
+  ]
 };
 })(globalThis);

@@ -6,6 +6,8 @@
     "rules.js"
   ],
   "presentation": [
+    "shared/presentation/asset.js",
+    "shared/presentation/token-asset.js",
     "presentation/scene.js"
   ],
   "helpers": [

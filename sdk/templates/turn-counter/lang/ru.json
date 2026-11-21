@@ -1,0 +1,13 @@
+{
+  "meta.name": "Счётчик __PACK_ID__",
+  "meta.description": "Минимальный пример самостоятельного пака.",
+  "preset.label": "Режим",
+  "preset.classic": "Классический",
+  "settings.target.label": "Цель партии",
+  "settings.target.help": "Побеждает игрок, первым достигший выбранной цели.",
+  "groups.end.label": "Завершение",
+  "rules.goal": "По очереди увеличивайте счётчик. Побеждает достигший выбранной цели.",
+  "actions.increment": "+1",
+  "events.incremented": "Счётчик увеличен",
+  "release.current": "Начальная версия примера."
+}

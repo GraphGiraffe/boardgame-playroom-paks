@@ -1,0 +1,23 @@
+{
+  "fields": [
+    {
+      "key": "preset",
+      "label": {
+        "key": "settings.preset.label"
+      },
+      "options": [
+        {
+          "value": "classic",
+          "label": {
+            "key": "tictactoe.meta.classic"
+          }
+        }
+      ],
+      "kind": "preset",
+      "valueType": "string",
+      "control": "select",
+      "default": "classic"
+    }
+  ],
+  "groups": []
+}

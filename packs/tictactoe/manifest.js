@@ -4,11 +4,14 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["tictactoe"] = {
   "id": "tictactoe",
-  "version": "0.4.1",
-  "name": "Крестики-нолики",
+  "version": "0.4.4-preview.1",
+  "name": {
+    "key": "tictactoe.meta.name"
+  },
   "category": "board",
-  "estimatedDuration": "2–5 мин",
-  "tagline": "Займи три клетки в линию раньше соперника.",
+  "tagline": {
+    "key": "manifest.tagline"
+  },
   "capabilities": {
     "hands": false,
     "surfaces": [
@@ -51,101 +54,47 @@
     ],
     "locales": {
       "ru": [
-        "locales/ru/game.json"
+        "lang/ru.json"
       ]
     }
   },
   "skinFamilies": [
     "board"
   ],
-  "presetSetting": {
-    "label": "Режим",
-    "options": [
-      {
-        "value": "classic",
-        "label": "Классика"
-      }
-    ]
-  },
-  "releases": [
-    {
-      "version": "0.4.0",
-      "changes": [
-        "Стабильный выпуск: обновлены правила, интерфейс и параметры игры."
-      ]
-    },
-    {
-      "version": "0.3.6",
-      "changes": [
-        "Стабильный выпуск: обновлены правила, интерфейс и параметры игры."
-      ]
-    },
-    {
-      "version": "0.3.6-preview.14",
-      "changes": [
-        "Синхронизированы общие компоненты с исправлениями чтения индексов, перекрытия карт и обновления оформления; правила игры не менялись."
-      ]
-    },
-    {
-      "version": "0.3.6-preview.13",
-      "changes": [
-        "При композиции SVG сохраняются полные атрибуты толщины, прозрачности и идентичности; стандартный контур масштабируется целиком."
-      ]
-    },
-    {
-      "version": "0.3.6-preview.12",
-      "changes": [
-        "Общие игровые ассеты сохраняют пропорции рамок, скруглений и толщины в игре, миниатюрах, правилах, параметрах и анимациях. Убраны вторые фиксированные рамки и тени поверх SVG."
-      ]
-    },
-    {
-      "version": "0.3.6-preview.11",
-      "changes": [
-        "Скругления карт и общих фигур масштабируются вместе с компонентами."
-      ]
-    },
-    {
-      "version": "0.3.6-preview.8",
-      "changes": [
-        "Общий SDK допускает до 64 ленивых публичных кадров; одновременно готовится только текущий и следующий кадр."
-      ]
-    },
-    {
-      "version": "0.3.6-preview.7",
-      "changes": [
-        "Обновлён общий SDK поэтапной подготовки публичных кадров; правила игры сохранены."
-      ]
-    },
-    {
-      "version": "0.3.6-preview.6",
-      "changes": [
-        "Крестики и нолики показаны общими объёмными жетонами."
-      ]
-    },
-    {
-      "version": "0.3.6-preview.5",
-      "changes": [
-        "Обновлён общий каталог оформления и сведения о версии пака. Правила и игровой процесс не изменены."
-      ]
-    },
-    {
-      "version": "0.3.5",
-      "changes": [
-        "Обновлён общий компонент пустого карточного слота; правила игры не изменены."
-      ]
-    },
-    {
-      "version": "0.3.4",
-      "changes": [
-        "Короткие правила: абзацы, списки, таблицы и иллюстрации игровых элементов и интерфейса."
-      ]
-    }
-  ],
+  "releases": [],
   "sdkFeatures": [
     "local-input-v1",
     "turn-order-v1",
     "isolated-execution-v1"
   ],
-  "execution": "isolated-v1"
+  "execution": "isolated-v1",
+  "defaultLanguage": "ru",
+  "estimatedDurationMin": [
+    2,
+    5
+  ],
+  "settings": {
+    "fields": [
+      {
+        "key": "preset",
+        "label": {
+          "key": "settings.preset.label"
+        },
+        "options": [
+          {
+            "value": "classic",
+            "label": {
+              "key": "tictactoe.meta.classic"
+            }
+          }
+        ],
+        "control": "select",
+        "default": "classic",
+        "kind": "preset",
+        "valueType": "string"
+      }
+    ],
+    "groups": []
+  }
 };
 })(globalThis);

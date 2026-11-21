@@ -1,0 +1,7 @@
+{
+  "assets/cover.webp": {
+    "license": "Existing PlayRoom artwork; see repository LICENSING.md",
+    "source": "Existing cover from yatzy 0.4.0; published pack SHA256 962b6fe9b9d436702cc0cddf250e45967accd0026433f1a12c5d38fd0bbf2e06; source master in Git da58f6c",
+    "sha256": "c9bc4d7afaf5c56f12224d3cbace5ef482618de38361c302b809ed8a21fa5695"
+  }
+}

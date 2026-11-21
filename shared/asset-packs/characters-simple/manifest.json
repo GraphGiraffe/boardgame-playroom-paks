@@ -2,7 +2,7 @@
   "format": "playroom-asset-pack",
   "formatVersion": 1,
   "id": "characters-simple",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "name": "Простые фигуры",
   "canvas": [
     256,
@@ -416,11 +416,5 @@
       "file": "runtime/hexagon-purple.svg",
       "sha256": "03d8ed68a2ca1eaf07215da08897487faacbeeb96a9ee4733dfa296cbdee70b9"
     }
-  ],
-  "files": [
-    "renderer.js"
-  ],
-  "scripts": [
-    "renderer.js"
   ]
 }

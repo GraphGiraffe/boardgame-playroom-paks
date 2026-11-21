@@ -6,6 +6,71 @@
 
 Текущие isolated-паки передают закрытые SceneModel/graphic записи. Примеры HTML helper и локальных renderer-портов ниже описывают доверенные компоненты приложения; они не разрешают исполнять авторский DOM/CSS код в host.
 
+## Авторские классы ассетов
+
+В `sdk/project.json` добавьте модули в порядке выполнения. Для кубиков
+это `shared/presentation/asset.js`, `shared/presentation/die-asset.js`,
+затем файл сцены пака. Для карточного оформления и крупного показа подключите
+`shared/presentation/card-face-asset.js` после `asset.js`. Для игровых
+переносов добавьте следом `shared/presentation/card-asset.js`.
+Сборка включает перечисленные модули. Наборы рисунков и звуков выбираются
+в манифесте.
+
+`Asset` собирает ссылку на экземпляр, место в зоне и привязку разрешённой
+команды. `CardFaceAsset` оформляет разрешённую карту и формирует крупный показ.
+`CardAsset` наследует эти операции и добавляет перемещение и передачу.
+`DieAsset` добавляет удержание, привязку к общей анимации
+броска и крупный показ группы. Выпавшие значения и маску зачтённых кубиков
+передаёт игра. Движок исполняет разрешённые команды и эффекты.
+
+Наследник может переопределить только `print`. Например, в классе кубика
+можно задать доступную подпись для нестандартного значения:
+
+```js
+class NumberDie extends PlayroomDieAsset {
+  print(value, options) {
+    return {
+      ...super.print(value, options),
+      label: {key: 'dice.face', params: {value}},
+    };
+  }
+}
+```
+
+Класс применяет `print` к разрешённым данным для стола и крупного показа.
+Для нестандартной грани можно добавить `face: SDK.resource('assets/star.svg')`
+и локализованную `label`. Значение без `face` оформляется стандартным
+способом, а заданная `label` используется и в доступном описании результата.
+`reveal` принимает выпавшие значения и маску участия в комбинации.
+У карточного профиля `print` вызывается
+только для открытой карты. «Дурак» наследует полный профиль и переопределяет
+локализованный номинал и подсказку. «Стихийная потасовка» наследует
+`CardFaceAsset` для квадратных карточек со своими рисунками и использует
+разрешённую руку из проекции. «Покер на костях» использует стандартный
+профиль кубика.
+
+Для изображения на грани добавьте `die-faces-v1` в `sdkFeatures` манифеста
+и верните из `print` ссылку на включённое изображение. Например:
+
+```js
+class SymbolDie extends PlayroomDieAsset {
+  print(value, options = {}) {
+    const usual = super.print(value, options);
+    const name = options.held ? 'dot' : 'diamond';
+    return value === null ? usual : {
+      ...usual,
+      face: SDK.resource('assets/die-' + name + '.svg'),
+      label: {key: 'dice.symbol.' + name},
+    };
+  }
+}
+```
+
+Хост использует стандартную рамку, позу и анимацию броска и показывает тот
+же рисунок в крупном ходе. `label` служит доступной подписью. `value` остаётся
+числом из разрешённой проекции, поэтому изменение рисунка при удержании
+сохраняет значение. Без изображения движок рисует обычные точки или число.
+
 ## Идентичность и приватность
 
 Ссылки эффектов имеют вид `{namespace: 'card', id: 'deck:17'}`.
@@ -41,7 +106,7 @@ function hand(cards, selectedId, H) {
 }
 ```
 
-Полный производитель/потребитель: `packs/uno/presentation/scene.js` и
+Полный производитель/потребитель: `packs/one-oh-one/presentation/scene.js` и
 общий renderer приложения `platform/web/sdk-scene.js`. Закрытые передачи: `packs/gofish/presentation/scene.js`.
 `examples/private-counter` остаётся отдельным минимальным примером проекций;
 он не демонстрирует всю миграцию.
@@ -128,6 +193,12 @@ Domain проверяет команду и создаёт следующее с
 Не реализуйте отсутствующую опциональную механику пустым обработчиком: отсутствие
 hook позволяет общему адаптеру вернуть нейтральный результат без проекции позиции.
 
+Если `event()` зависит только от `type`, `actor` и `params` события, укажите
+`metadata.eventInputs: 'facts'`. SDK передаёт форматтеру эти три поля после
+проверки видимости и переиспользует описание одинаковых фактов внутри одной
+версии пака и языка. Журнал и проигрыватель сохраняют исходные `id` и `revision`.
+Форматтеры, которым нужны эти поля, используют полное событие по умолчанию.
+
 Измеряйте только нужные эффекту элементы. Не чередуйте запись стилей и повторные
 измерения всей сцены; геометрия окна инвалидируется при изменении окна/масштаба.
 Группы выполняет общий PlanPlayer; все конечные эффекты возвращают обещание
@@ -180,12 +251,87 @@ entity либо zone. Ссылки проверяются относительн
 Общий web layout переносит topology в ключ измерения поля, отдельно от резерва
 руки; слоты field/hand получают data-scene-zone для привязки DOM к сцене.
 
+### Слоты, привязанные к носителю
+
+Профиль `anchored-board-v1` подключается через `sdkFeatures`. Сцена
+`family: 'board'` объявляет `anchoredLayout: {field, label}`, основную зону
+`kind: 'board'` и `geometry.columns` / `geometry.rows`. Объект в основной
+зоне занимает адрес `{zone, cell}`. Зона `kind: 'slots'` объявляет
+`anchor: EntityRef` носителя и `capacity`. Её объекты занимают адреса
+`{zone, index}`. Оба индекса отсчитываются от нуля.
+
+Профиль поддерживает один уровень вложенности, одну зону слотов на носитель и
+публичные изображения `visual: {kind: 'tile', a, b, label}` и
+`visual: {kind: 'token', value, label}`. При перемещении носителя хост
+использует одну анимацию с теми же вложенными изображениями. Пак определяет
+доступные команды и результат перемещения. Хост проверяет существование
+носителя, адреса, вместимость и соответствие команд разрешённой проекции.
+Погрузку, начисление очков и перемещение показывает [пример «Перевозка
+груза»](../examples/anchored-cargo/README.md).
+
+`anchored-orientation-v1` добавляет `orientation` к объекту основной
+зоны поля. Значения `0–3` означают четверти оборота по часовой стрелке.
+Слоты сохраняют свои локальные индексы вместе с содержимым. При повороте на
+месте хост анимирует носитель без копии разметки. При переносе с поворотом
+тайл и груз летят вместе в одном визуальном слое. Правила задают итоговую
+ориентацию и доступность действия.
+
+### Смешанные лотки
+
+Профиль `mixed-inventory-v1` указывается в `sdkFeatures`. Сцена передаёт
+`geometry`, список зон `inventoryLayout.zones` в порядке показа и обычные
+`zones`, `objects`, `interactions`. В лотке `kind: 'inventory'` задаются
+подпись, число предметов и `visibility: 'public' | 'owner'`. Для
+`visibility: 'owner'` требуется место владельца `owner`.
+
+Карты, кости домино и фишки занимают слоты `index` от нуля. Поле
+`visual.kind` выбирает штатное изображение. Для действий указывайте
+`{entity: ref}` и используйте команды из той же проекции. Идентичность,
+видимость и результат переноса остаются в правилах.
+
+В проекции без доступа к чужому лотку передаётся его `count`. Такой лоток
+не содержит объектов, их ID или доступных команд. Это проверяется для текущих
+и промежуточных кадров, в том числе на Столе. См. [пример «Кладовая»](../examples/mixed-inventory/README.md).
+
+`inventory-views-v1` добавляет `inventoryLayout.overviews`. Каждый обзор
+имеет свой `id`, подпись `label` и список `views`. Представление
+`{id, ref, role}` ссылается на уже видимый предмет. Роль `detail` показывает
+изображение, а `summary` — подпись. Ключ представления управляет его
+отображением. Игровой `EntityRef` предмета остаётся адресом основного
+компонента, доступных действий и анимации. Один предмет можно показать
+несколько раз, пока он остаётся доступен в проекции.
+
+`inventory-slots-v1` позволяет задать `slots` в зоне лотка. Подписи списка
+одновременно определяют его вместимость и стабильные индексы. `count` остаётся
+числом занятых мест. Привязка `kind: 'move'` связывает уже видимый
+`source: {entity: ref}` со свободным `target: {zone, index}`. Правила предлагают
+допустимые назначения. Хост использует их для выбора с клавиатуры, касания и
+перетаскивания. Чужой закрытый лоток по-прежнему показывает только количество.
+
+### Закрытые решения с общим дедлайном
+
+`shared/domain/decision-window.js` хранит планы и версии участников в модели
+правил. `Definition.decisionWindow` возвращает описание участников, их
+готовность и версии. Выборы до раскрытия выдаёт только `Definition.project`
+для их владельца. Команды, которые их записывают, получают
+`visibility: 'private'`, поэтому их нет на Столе.
+
+Хост передаёт игровое время через `Definition.advance(position, now)`.
+`scene.clock` отображает тот же дедлайн, а `advance` решает исход при его
+достижении. Оба пути раскрытия могут использовать один переход правил и одно
+публичное событие. Порядок показа, звук и запись истории остаются у хоста.
+[Пример «Закрытый сигнал»](../examples/sealed-signal/README.md) соединяет
+общий кубик, частные команды, окно решений и часы.
+
 ## Authorized board geometry lifecycle
 
 Motion capture receives the viewer-authorized initial SceneModel. Only objects
 in zones with `kind: 'board'` are board movers; arbitrary EntityRef namespaces
 are supported. CSS names and `checker-`/`token-` prefixes are not classification.
 Dedicated `scene.plan` playback owns its geometry and bypasses this adapter.
+For phase audio, add `{id, kind: 'sound', sounds: ['cue-id']}` to that group's
+cues. Declare pack-specific IDs in the sound catalog. The host runs the cue
+with the visual group and cancels it with the same presentation context.
 
 The surface-local `stage(snapshot, {exclude})` port holds surviving board objects
 at their captured positions before their movement event. Repeated staging first
@@ -196,6 +342,14 @@ measurement. Dice-only cues preserve the held board; starting the board movement
 marks the boundary so redraw cannot rewind it. Cancellation restores staging and
 cancels the active surface flight, including ordinary non-route movement.
 Resize/scroll discards stale screen-coordinate reserves.
+
+For an anchored slot handoff, expose an authorized `kind: 'move'` binding
+from `{entity: cargoRef}` to `{zone: receiverSlots, index: 0}`. The source
+must already occupy an anchored slot and the destination must be vacant.
+Keep the cargo reference stable and change its address in the next scene.
+The motion surface reads the old visible pose if the carrier or slot
+address changes. With simultaneous carrier travel, the cargo gets one
+independent flight and the carrier clone retains its other occupants.
 
 Field scenes also retain tile artwork and public object creation/removal.
 Per-event checkpoints use the contract below; specialized routes and reveals

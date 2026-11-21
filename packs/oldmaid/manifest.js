@@ -4,11 +4,14 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["oldmaid"] = {
   "id": "oldmaid",
-  "version": "0.4.1",
-  "name": "Акулина",
+  "version": "0.4.5",
+  "name": {
+    "key": "oldmaid.meta.name"
+  },
   "category": "cards",
-  "estimatedDuration": "10–20 мин",
-  "tagline": "Разбирай пары. Берегись последней дамы.",
+  "tagline": {
+    "key": "manifest.tagline"
+  },
   "capabilities": {
     "hands": true,
     "surfaces": [
@@ -21,81 +24,146 @@
   "view": "view.js",
   "styles": "styles.css",
   "sharedUi": true,
-  "settings": [
-    {
-      "key": "deck",
-      "label": "Колода",
-      "default": "36",
-      "options": [
-        {
-          "value": "36",
-          "label": "36",
-          "preview": {
-            "count": 35
-          },
-          "description": "36 без дамы треф: в игре 35 карт."
+  "settings": {
+    "fields": [
+      {
+        "key": "preset",
+        "label": {
+          "key": "oldmaid.book.text.18"
         },
-        {
-          "value": "52",
-          "label": "52",
-          "preview": {
-            "count": 51
-          },
-          "description": "52 без дамы треф: в игре 51 карта."
-        }
-      ],
-      "help": "В игре 35 или 51 карта: из исходной колоды 36 или 52 карты убрана дама треф.",
-      "control": "select",
-      "preview": {
-        "kind": "cards"
-      }
-    },
-    {
-      "key": "drawFrom",
-      "label": "Брать карту",
-      "default": "any",
-      "options": [
-        {
-          "value": "any",
-          "label": "У любого",
-          "description": "Одну карту у любого с картами.",
-          "preview": {
-            "ids": [
-              "setting-draw-any"
-            ]
+        "options": [
+          {
+            "value": "classic",
+            "label": {
+              "key": "oldmaid.meta.classic"
+            }
           }
+        ],
+        "control": "select",
+        "default": "classic",
+        "kind": "preset",
+        "valueType": "string"
+      },
+      {
+        "key": "deck",
+        "label": {
+          "key": "settings.deck.label"
         },
-        {
-          "value": "next",
-          "label": "У следующего",
-          "description": "У следующего по кругу с картами.",
-          "preview": {
-            "ids": [
-              "setting-draw-next"
-            ]
+        "default": "36",
+        "options": [
+          {
+            "value": "36",
+            "preview": {
+              "count": 35
+            },
+            "description": {
+              "key": "settings.deck.options.36.description"
+            }
+          },
+          {
+            "value": "52",
+            "preview": {
+              "count": 51
+            },
+            "description": {
+              "key": "settings.deck.options.52.description"
+            }
           }
-        }
-      ],
-      "help": "Выберите любого соперника с картами либо только следующего по кругу. Пустые руки пропускаются.",
-      "control": "slider",
-      "preview": {
-        "kind": "illustrations"
-      }
-    },
-    {
-      "key": "endMode",
-      "default": "last",
-      "options": [
-        {
-          "value": "winner"
+        ],
+        "help": {
+          "key": "settings.deck.help"
         },
-        {
-          "value": "last"
-        }
-      ],
-      "control": "slider"
-    }
-  ],
+        "control": "select",
+        "preview": {
+          "kind": "cards"
+        },
+        "kind": "option",
+        "valueType": "string"
+      },
+      {
+        "key": "drawFrom",
+        "label": {
+          "key": "settings.drawFrom.label"
+        },
+        "default": "any",
+        "options": [
+          {
+            "value": "any",
+            "label": {
+              "key": "settings.drawFrom.options.any.label"
+            },
+            "description": {
+              "key": "settings.drawFrom.options.any.description"
+            },
+            "preview": {
+              "ids": [
+                "setting-draw-any"
+              ]
+            }
+          },
+          {
+            "value": "next",
+            "label": {
+              "key": "settings.drawFrom.options.next.label"
+            },
+            "description": {
+              "key": "settings.drawFrom.options.next.description"
+            },
+            "preview": {
+              "ids": [
+                "setting-draw-next"
+              ]
+            }
+          }
+        ],
+        "help": {
+          "key": "settings.drawFrom.help"
+        },
+        "control": "slider",
+        "preview": {
+          "kind": "illustrations"
+        },
+        "kind": "option",
+        "valueType": "string"
+      },
+      {
+        "key": "endMode",
+        "default": "last",
+        "options": [
+          {
+            "value": "winner"
+          },
+          {
+            "value": "last"
+          }
+        ],
+        "control": "slider",
+        "kind": "standard",
+        "valueType": "string"
+      }
+    ],
+    "groups": [
+      {
+        "label": {
+          "key": "settings.groups.deck-drawFrom.label"
+        },
+        "fields": [
+          "deck",
+          "drawFrom"
+        ],
+        "placement": "main"
+      },
+      {
+        "label": {
+          "key": "settings.groups.endMode.label"
+        },
+        "fields": [
+          "endMode"
+        ],
+        "placement": "end"
+      }
+    ]
+  },
   "engineApi": 4,
   "stateVersion": 4,
   "viewApi": 3,
@@ -134,151 +202,19 @@
     ],
     "locales": {
       "ru": [
-        "locales/ru/game.json"
+        "lang/ru.json"
       ]
     }
   },
-  "ruleGroups": [
-    {
-      "label": "Карты и ход",
-      "fields": [
-        "deck",
-        "drawFrom"
-      ]
-    },
-    {
-      "label": "Завершение",
-      "fields": [
-        "endMode"
-      ],
-      "end": true
-    }
-  ],
   "skinFamilies": [
     "card-face",
     "card-back"
   ],
-  "presetSetting": {
-    "label": "Режим",
-    "options": [
-      {
-        "value": "classic",
-        "label": "Классика"
-      }
-    ]
-  },
   "sharedAssetPacks": [
     "standard-deck",
     "mini-split-deck"
   ],
-  "releases": [
-    {
-      "version": "0.4.0",
-      "changes": [
-        "Стабильный выпуск: обновлены правила, интерфейс и параметры игры."
-      ]
-    },
-    {
-      "version": "0.3.5",
-      "changes": [
-        "Стабильный выпуск: обновлены правила, интерфейс и параметры игры."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.20",
-      "changes": [
-        "Синхронизированы общие компоненты с исправлениями чтения индексов, перекрытия карт и обновления оформления; правила игры не менялись."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.19",
-      "changes": [
-        "Первый ход, места за столом и завершение используют стандартные подписи приложения; в артах первого хода — контурная 1 в кружке.",
-        "Стол и стулья в рассадке и Акулине — один компонент. Уточнены схемы шестёрок Лудо и унифицированы рамки режимов Дурака; убраны верхние подписи джокеров."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.18",
-      "changes": [
-        "Параметры используют простые стандартные значки приложения с более толстыми линиями. Во всех композициях один общий силуэт игрока без дополнительных линий торса.",
-        "При композиции SVG сохраняются полные атрибуты толщины, прозрачности и идентичности; стандартный контур масштабируется целиком."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.17",
-      "changes": [
-        "Исправлена разметка Пексесо, упрощён выбор чужой руки Акулины, увеличено поле ЗиЛ."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.16",
-      "changes": [
-        "Параметры игры снабжены понятными иллюстрациями из игровых компонентов и короткими пояснениями выбранных вариантов."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.15",
-      "changes": [
-        "Общие игровые ассеты сохраняют пропорции рамок, скруглений и толщины в игре, миниатюрах, правилах, параметрах и анимациях. Убраны вторые фиксированные рамки и тени поверх SVG."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.14",
-      "changes": [
-        "Скругления карт и общих фигур масштабируются вместе с компонентами."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.13",
-      "changes": [
-        "Сокращены пояснения параметров; выбранные варианты читаются компактнее."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.12",
-      "changes": [
-        "Исходные колоды 36 и 52 показаны с реальным количеством 35 и 51 карт после удаления дамы треф.",
-        "Короткие пояснения уточняют выбор соперника и условия завершения партии."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.9",
-      "changes": [
-        "Общий SDK допускает до 64 ленивых публичных кадров; одновременно готовится только текущий и следующий кадр."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.8",
-      "changes": [
-        "Обновлён общий SDK поэтапной подготовки публичных кадров; правила игры сохранены."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.7",
-      "changes": [
-        "Обновлены общие компоненты отображения карточных мастей и жетонов."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.6",
-      "changes": [
-        "Угловые номиналы поверх рамки, единое выравнивание индексов и узкая «10» с прежним шрифтом.",
-        "Уточнены безопасные области номиналов и мастей при перекрытии карт."
-      ]
-    },
-    {
-      "version": "0.3.4",
-      "changes": [
-        "Обновлён общий компонент пустого карточного слота; правила игры не изменены."
-      ]
-    },
-    {
-      "version": "0.3.3",
-      "changes": [
-        "Короткие правила: абзацы, списки, таблицы и иллюстрации игровых элементов и интерфейса."
-      ]
-    }
-  ],
+  "releases": [],
   "sdkFeatures": [
     "local-input-v1",
     "turn-order-v1",
@@ -286,6 +222,11 @@
     "standard-parameter-ui-v1",
     "isolated-execution-v1"
   ],
-  "execution": "isolated-v1"
+  "execution": "isolated-v1",
+  "defaultLanguage": "ru",
+  "estimatedDurationMin": [
+    10,
+    20
+  ]
 };
 })(globalThis);

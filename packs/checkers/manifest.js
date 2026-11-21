@@ -4,10 +4,11 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["checkers"] = {
   "id": "checkers",
-  "version": "0.6.1",
+  "version": "0.6.5-preview.1",
   "category": "board",
-  "estimatedDuration": "15–30 мин",
-  "tagline": "Бери шашки и пробивайся в дамки.",
+  "tagline": {
+    "key": "manifest.tagline"
+  },
   "capabilities": {
     "hands": false,
     "surfaces": [
@@ -19,7 +20,9 @@
   "rules": "rules.js",
   "view": "view.js",
   "styles": "styles.css",
-  "name": "Шашки",
+  "name": {
+    "key": "checkers.meta.name"
+  },
   "engineApi": 4,
   "stateVersion": 1,
   "viewApi": 3,
@@ -50,139 +53,88 @@
     ],
     "locales": {
       "ru": [
-        "locales/ru/game.json"
+        "lang/ru.json"
       ]
     }
   },
   "sharedUi": true,
-  "ruleGroups": [
-    {
-      "label": "Начальная расстановка",
-      "fields": [
-        "preset"
-      ]
-    }
-  ],
-  "presetSetting": {
-    "label": "Шашек у игрока",
-    "control": "slider",
-    "options": [
-      {
-        "value": "quick",
-        "label": "8",
-        "preview": {
-          "ids": [
-            "setting-pieces-8"
-          ]
-        },
-        "description": "По 8 шашек у каждого игрока."
-      },
-      {
-        "value": "classic",
-        "label": "12",
-        "preview": {
-          "ids": [
-            "setting-pieces-12"
-          ]
-        },
-        "description": "По 12 шашек у каждого игрока."
-      }
-    ],
-    "help": "Начальное число шашек у каждого игрока на доске 8 × 8. Правила ходов, дамок и обязательного взятия одинаковы.",
-    "preview": {
-      "kind": "illustrations"
-    }
-  },
   "skinFamilies": [
     "checker",
     "board"
   ],
-  "releases": [
-    {
-      "version": "0.6.0",
-      "changes": [
-        "Стабильный выпуск: обновлены правила, интерфейс и параметры игры."
-      ]
-    },
-    {
-      "version": "0.5.5",
-      "changes": [
-        "Стабильный выпуск: обновлены правила, интерфейс и параметры игры."
-      ]
-    },
-    {
-      "version": "0.5.5-preview.16",
-      "changes": [
-        "Синхронизированы общие компоненты с исправлениями чтения индексов, перекрытия карт и обновления оформления; правила игры не менялись."
-      ]
-    },
-    {
-      "version": "0.5.5-preview.15",
-      "changes": [
-        "При композиции SVG сохраняются полные атрибуты толщины, прозрачности и идентичности; стандартный контур масштабируется целиком."
-      ]
-    },
-    {
-      "version": "0.5.5-preview.14",
-      "changes": [
-        "Параметры игры снабжены понятными иллюстрациями из игровых компонентов и короткими пояснениями выбранных вариантов."
-      ]
-    },
-    {
-      "version": "0.5.5-preview.13",
-      "changes": [
-        "Общие игровые ассеты сохраняют пропорции рамок, скруглений и толщины в игре, миниатюрах, правилах, параметрах и анимациях. Убраны вторые фиксированные рамки и тени поверх SVG."
-      ]
-    },
-    {
-      "version": "0.5.5-preview.12",
-      "changes": [
-        "Скругления карт и общих фигур масштабируются вместе с компонентами."
-      ]
-    },
-    {
-      "version": "0.5.5-preview.9",
-      "changes": [
-        "Общий SDK допускает до 64 ленивых публичных кадров; одновременно готовится только текущий и следующий кадр."
-      ]
-    },
-    {
-      "version": "0.5.5-preview.8",
-      "changes": [
-        "Обновлён общий SDK поэтапной подготовки публичных кадров; правила игры сохранены."
-      ]
-    },
-    {
-      "version": "0.5.5-preview.7",
-      "changes": [
-        "Обновлены общие компоненты отображения карточных мастей и жетонов."
-      ]
-    },
-    {
-      "version": "0.5.5-preview.6",
-      "changes": [
-        "Обновлён общий каталог оформления и сведения о версии пака. Правила и игровой процесс не изменены."
-      ]
-    },
-    {
-      "version": "0.5.4",
-      "changes": [
-        "Обновлён общий компонент пустого карточного слота; правила игры не изменены."
-      ]
-    },
-    {
-      "version": "0.5.3",
-      "changes": [
-        "Короткие правила: абзацы, списки, таблицы и иллюстрации игровых элементов и интерфейса."
-      ]
-    }
-  ],
+  "releases": [],
   "sdkFeatures": [
     "local-input-v1",
     "turn-order-v1",
     "parameter-illustrations-v1",
     "isolated-execution-v1"
   ],
-  "execution": "isolated-v1"
+  "execution": "isolated-v1",
+  "defaultLanguage": "ru",
+  "estimatedDurationMin": [
+    15,
+    30
+  ],
+  "settings": {
+    "fields": [
+      {
+        "key": "preset",
+        "label": {
+          "key": "settings.preset.label"
+        },
+        "control": "slider",
+        "options": [
+          {
+            "value": "quick",
+            "label": {
+              "key": "checkers.presets.quick"
+            },
+            "preview": {
+              "ids": [
+                "setting-pieces-8"
+              ]
+            },
+            "description": {
+              "key": "settings.preset.options.quick.description"
+            }
+          },
+          {
+            "value": "classic",
+            "label": {
+              "key": "checkers.presets.classic"
+            },
+            "preview": {
+              "ids": [
+                "setting-pieces-12"
+              ]
+            },
+            "description": {
+              "key": "settings.preset.options.classic.description"
+            }
+          }
+        ],
+        "help": {
+          "key": "settings.preset.help"
+        },
+        "preview": {
+          "kind": "illustrations"
+        },
+        "default": "classic",
+        "kind": "preset",
+        "valueType": "string"
+      }
+    ],
+    "groups": [
+      {
+        "label": {
+          "key": "settings.groups.preset.label"
+        },
+        "fields": [
+          "preset"
+        ],
+        "placement": "main"
+      }
+    ]
+  }
 };
 })(globalThis);

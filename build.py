@@ -117,7 +117,7 @@ def main():
     source_art = {manifest.parent / item["source"] for manifest in asset_manifests
                   for item in json.loads(manifest.read_text(encoding="utf-8")).get("items", [])
                   if item.get("source")}
-    asset_sources = sorted(path for folder in ("assets", "components", "templates", "sounds", "locales", "domain", "asset-packs")
+    asset_sources = sorted(path for folder in ("assets", "components", "templates", "sounds", "locales", "domain", "presentation", "asset-packs")
                            for path in (ROOT / "shared" / folder).rglob("*") if path.is_file() and path not in source_art)
     asset_archive = output / f"playroom-shared-assets-{VERSION}.zip"
     write_zip(asset_archive, [(path.relative_to(ROOT / "shared").as_posix(), path.read_bytes()) for path in asset_sources])

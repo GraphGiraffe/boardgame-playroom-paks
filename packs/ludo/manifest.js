@@ -4,11 +4,14 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["ludo"] = {
   "id": "ludo",
-  "version": "0.4.1",
-  "name": "Лудо",
+  "version": "0.4.5-preview.4",
+  "name": {
+    "key": "ludo.meta.name"
+  },
   "category": "board",
-  "estimatedDuration": "20–40 мин",
-  "tagline": "Выведи фишки, обойди круг и доберись домой.",
+  "tagline": {
+    "key": "manifest.tagline"
+  },
   "capabilities": {
     "hands": false,
     "surfaces": [
@@ -51,200 +54,351 @@
       "teams": true
     }
   ],
-  "settings": [
-    {
-      "key": "diceCount",
-      "label": "Количество кубиков",
-      "default": "2",
-      "options": [
-        {
-          "value": "1",
-          "label": "1",
-          "description": "Бросается один кубик."
+  "settings": {
+    "fields": [
+      {
+        "key": "preset",
+        "label": {
+          "key": "ludo.book.text.24"
         },
-        {
-          "value": "2",
-          "label": "2",
-          "description": "Два кубика, каждый — отдельный ход."
+        "control": "slider",
+        "options": [
+          {
+            "value": "classic",
+            "label": {
+              "key": "ludo.presets.classic"
+            },
+            "preview": {
+              "kind": "teams",
+              "teamSizes": [
+                1,
+                1,
+                1,
+                1
+              ]
+            },
+            "description": {
+              "key": "settings.preset.options.classic.description"
+            }
+          },
+          {
+            "value": "teams",
+            "label": {
+              "key": "ludo.presets.teams"
+            },
+            "preview": {
+              "kind": "teams",
+              "teamSizes": [
+                2,
+                2
+              ]
+            },
+            "description": {
+              "key": "settings.preset.options.teams.description"
+            }
+          }
+        ],
+        "help": {
+          "key": "settings.preset.help"
         },
-        {
-          "value": "3",
-          "label": "3",
-          "description": "Три кубика, каждый — отдельный ход."
+        "presentation": "mode",
+        "default": "classic",
+        "kind": "preset",
+        "valueType": "string"
+      },
+      {
+        "key": "diceCount",
+        "label": {
+          "key": "settings.diceCount.label"
+        },
+        "default": "2",
+        "options": [
+          {
+            "value": "1",
+            "description": {
+              "key": "settings.diceCount.options.1.description"
+            }
+          },
+          {
+            "value": "2",
+            "description": {
+              "key": "settings.diceCount.options.2.description"
+            }
+          },
+          {
+            "value": "3",
+            "description": {
+              "key": "settings.diceCount.options.3.description"
+            }
+          }
+        ],
+        "help": {
+          "key": "settings.diceCount.help"
+        },
+        "control": "slider",
+        "preview": {
+          "kind": "dice"
+        },
+        "kind": "option",
+        "valueType": "string"
+      },
+      {
+        "key": "sixReroll",
+        "label": {
+          "key": "settings.sixReroll.label"
+        },
+        "default": "on",
+        "options": [
+          {
+            "value": "off",
+            "label": {
+              "common": "none"
+            },
+            "description": {
+              "key": "settings.sixReroll.options.off.description"
+            },
+            "preview": {
+              "ids": [
+                "setting-six-reroll-off"
+              ]
+            }
+          },
+          {
+            "value": "on",
+            "label": {
+              "common": "yes"
+            },
+            "description": {
+              "key": "settings.sixReroll.options.on.description"
+            },
+            "preview": {
+              "ids": [
+                "setting-six-reroll-on"
+              ]
+            }
+          }
+        ],
+        "help": {
+          "key": "settings.sixReroll.help"
+        },
+        "control": "slider",
+        "preview": {
+          "kind": "illustrations"
+        },
+        "kind": "option",
+        "valueType": "string"
+      },
+      {
+        "key": "guaranteedExit",
+        "label": {
+          "key": "settings.guaranteedExit.label"
+        },
+        "default": "on",
+        "options": [
+          {
+            "value": "off",
+            "label": {
+              "common": "none"
+            },
+            "description": {
+              "key": "settings.guaranteedExit.options.off.description"
+            },
+            "preview": {
+              "kind": "illustrations",
+              "ids": [
+                "setting-guaranteed-exit-off"
+              ]
+            }
+          },
+          {
+            "value": "on",
+            "label": {
+              "common": "yes"
+            },
+            "description": {
+              "key": "settings.guaranteedExit.options.on.description"
+            },
+            "preview": {
+              "kind": "illustrations",
+              "ids": [
+                "setting-guaranteed-exit-on"
+              ]
+            }
+          }
+        ],
+        "help": {
+          "key": "settings.guaranteedExit.help"
+        },
+        "control": "slider",
+        "preview": {
+          "kind": "illustrations",
+          "ids": [
+            "setting-guaranteed-exit-on"
+          ]
+        },
+        "kind": "option",
+        "valueType": "string"
+      },
+      {
+        "key": "startPawn",
+        "label": {
+          "key": "settings.startPawn.label"
+        },
+        "default": "off",
+        "options": [
+          {
+            "value": "off",
+            "label": {
+              "common": "none"
+            },
+            "description": {
+              "key": "settings.startPawn.options.off.description"
+            },
+            "preview": {
+              "kind": "illustrations",
+              "ids": [
+                "setting-start-pawn-off"
+              ]
+            }
+          },
+          {
+            "value": "on",
+            "label": {
+              "common": "yes"
+            },
+            "description": {
+              "key": "settings.startPawn.options.on.description"
+            },
+            "preview": {
+              "kind": "illustrations",
+              "ids": [
+                "setting-start-pawn-on"
+              ]
+            }
+          }
+        ],
+        "help": {
+          "key": "settings.startPawn.help"
+        },
+        "control": "slider",
+        "preview": {
+          "kind": "illustrations",
+          "ids": [
+            "setting-start-pawn-off"
+          ]
+        },
+        "kind": "option",
+        "valueType": "string"
+      },
+      {
+        "key": "endMode",
+        "default": "round",
+        "options": [
+          {
+            "value": "winner"
+          },
+          {
+            "value": "round"
+          },
+          {
+            "value": "last"
+          }
+        ],
+        "control": "slider",
+        "kind": "standard",
+        "valueType": "string"
+      },
+      {
+        "key": "maxRounds",
+        "label": {
+          "key": "settings.maxRounds.label"
+        },
+        "default": "0",
+        "help": {
+          "key": "settings.maxRounds.help"
+        },
+        "options": [
+          {
+            "value": "3"
+          },
+          {
+            "value": "5"
+          },
+          {
+            "value": "10"
+          },
+          {
+            "value": "20"
+          },
+          {
+            "value": "50"
+          },
+          {
+            "description": {
+              "key": "settings.maxRounds.options.0.description"
+            },
+            "value": "0",
+            "label": {
+              "common": "infinity"
+            }
+          }
+        ],
+        "control": "slider",
+        "preview": {
+          "kind": "symbol",
+          "icon": "clock"
+        },
+        "kind": "option",
+        "valueType": "string",
+        "optionDefaults": {
+          "description": {
+            "key": "settings.maxRounds.optionDefaults.description"
+          }
         }
-      ],
-      "help": "Кубики бросаются вместе, но каждый используется отдельно. Одной фишкой можно использовать несколько кубиков.",
-      "control": "slider",
-      "preview": {
-        "kind": "dice"
       }
-    },
-    {
-      "key": "sixReroll",
-      "label": "Переброс шестёрок",
-      "default": "on",
-      "options": [
-        {
-          "value": "off",
-          "label": "Нет",
-          "description": "Шестёрки не дают переброса.",
-          "preview": {
-            "ids": [
-              "setting-six-reroll-off"
-            ]
-          }
+    ],
+    "groups": [
+      {
+        "label": {
+          "key": "ludo.book.text.24"
         },
-        {
-          "value": "on",
-          "label": "Да",
-          "description": "Переброс сыгранных шестёрок.",
-          "preview": {
-            "ids": [
-              "setting-six-reroll-on"
-            ]
-          }
-        }
-      ],
-      "help": "После использования доступных ходов перебрасываются только кубики с шестёрками. Остальные не перебрасываются.",
-      "control": "slider",
-      "preview": {
-        "kind": "illustrations"
+        "fields": [
+          "preset"
+        ],
+        "placement": "main"
+      },
+      {
+        "label": {
+          "key": "settings.groups.diceCount-sixReroll.label"
+        },
+        "fields": [
+          "diceCount",
+          "sixReroll"
+        ],
+        "placement": "main"
+      },
+      {
+        "label": {
+          "key": "settings.groups.guaranteedExit-startPawn.label"
+        },
+        "fields": [
+          "guaranteedExit",
+          "startPawn"
+        ],
+        "placement": "main"
+      },
+      {
+        "label": {
+          "key": "settings.groups.endMode-maxRounds.label"
+        },
+        "fields": [
+          "endMode",
+          "maxRounds"
+        ],
+        "placement": "end"
       }
-    },
-    {
-      "key": "guaranteedExit",
-      "label": "Выход после 3 неудач",
-      "default": "on",
-      "options": [
-        {
-          "value": "off",
-          "label": "Нет",
-          "description": "Для выхода с базы нужна шестёрка.",
-          "preview": {
-            "kind": "illustrations",
-            "ids": [
-              "setting-guaranteed-exit-off"
-            ]
-          }
-        },
-        {
-          "value": "on",
-          "label": "Да",
-          "description": "После трёх неудач — выход любым кубиком.",
-          "preview": {
-            "kind": "illustrations",
-            "ids": [
-              "setting-guaranteed-exit-on"
-            ]
-          }
-        }
-      ],
-      "help": "Если все незавершённые фишки на базе, после трёх неудачных наборов одну можно вывести любым кубиком.",
-      "control": "slider",
-      "preview": {
-        "kind": "illustrations",
-        "ids": [
-          "setting-guaranteed-exit-on"
-        ]
-      }
-    },
-    {
-      "key": "startPawn",
-      "label": "Фишка на старте",
-      "default": "off",
-      "options": [
-        {
-          "value": "off",
-          "label": "Нет",
-          "description": "Все четыре фишки начинают на базе.",
-          "preview": {
-            "kind": "illustrations",
-            "ids": [
-              "setting-start-pawn-off"
-            ]
-          }
-        },
-        {
-          "value": "on",
-          "label": "Да",
-          "description": "Одна фишка сразу на старте.",
-          "preview": {
-            "kind": "illustrations",
-            "ids": [
-              "setting-start-pawn-on"
-            ]
-          }
-        }
-      ],
-      "help": "В начале партии у каждого игрока одна фишка сразу стоит на стартовой клетке; остальные остаются на базе.",
-      "control": "slider",
-      "preview": {
-        "kind": "illustrations",
-        "ids": [
-          "setting-start-pawn-off"
-        ]
-      }
-    },
-    {
-      "key": "endMode",
-      "default": "round",
-      "options": [
-        {
-          "value": "winner"
-        },
-        {
-          "value": "round"
-        },
-        {
-          "value": "last"
-        }
-      ],
-      "control": "slider"
-    },
-    {
-      "key": "maxRounds",
-      "label": "Лимит раундов",
-      "default": "0",
-      "help": "Раунд — полный круг от первого игрока. При достижении предела все заканчивают текущий круг. Если ещё никто не финишировал, сравниваются фишки дома (в командах — сумма команды); равенство означает общее место.",
-      "options": [
-        {
-          "value": "3",
-          "label": "3",
-          "description": "После круга сравнят число фишек дома."
-        },
-        {
-          "value": "5",
-          "label": "5",
-          "description": "После круга сравнят число фишек дома."
-        },
-        {
-          "value": "10",
-          "label": "10",
-          "description": "После круга сравнят число фишек дома."
-        },
-        {
-          "value": "20",
-          "label": "20",
-          "description": "После круга сравнят число фишек дома."
-        },
-        {
-          "value": "50",
-          "label": "50",
-          "description": "После круга сравнят число фишек дома."
-        },
-        {
-          "value": "0",
-          "label": "∞",
-          "description": "Без ограничения числа раундов."
-        }
-      ],
-      "control": "slider",
-      "preview": {
-        "kind": "symbol",
-        "icon": "clock"
-      }
-    }
-  ],
+    ]
+  },
   "sourceModules": {
     "rules": [
       "domain/board.js",
@@ -259,7 +413,7 @@
     ],
     "locales": {
       "ru": [
-        "locales/ru/game.json"
+        "lang/ru.json"
       ]
     }
   },
@@ -274,13 +428,17 @@
       "teams": [
         {
           "id": "blue",
-          "label": "синяя",
+          "label": {
+            "key": "ludo.view.blue"
+          },
           "color": "#668fad",
           "colorRole": "side.blue"
         },
         {
           "id": "red",
-          "label": "красная",
+          "label": {
+            "key": "ludo.view.red"
+          },
           "color": "#ce735d",
           "colorRole": "side.red"
         }
@@ -291,198 +449,10 @@
     "token-layout",
     "end-policy"
   ],
-  "ruleGroups": [
-    {
-      "label": "Режим",
-      "fields": [
-        "preset"
-      ]
-    },
-    {
-      "label": "Кубики",
-      "fields": [
-        "diceCount",
-        "sixReroll"
-      ]
-    },
-    {
-      "label": "Выход с базы",
-      "fields": [
-        "guaranteedExit",
-        "startPawn"
-      ]
-    },
-    {
-      "label": "Завершение",
-      "fields": [
-        "endMode",
-        "maxRounds"
-      ],
-      "end": true
-    }
-  ],
-  "presetSetting": {
-    "label": "Режим",
-    "control": "slider",
-    "options": [
-      {
-        "value": "classic",
-        "label": "Обычный",
-        "preview": {
-          "kind": "teams",
-          "teamSizes": [
-            1,
-            1,
-            1,
-            1
-          ]
-        },
-        "description": "Каждый за себя: 2–4 игрока."
-      },
-      {
-        "value": "teams",
-        "label": "Командный",
-        "preview": {
-          "kind": "teams",
-          "teamSizes": [
-            2,
-            2
-          ]
-        },
-        "description": "Две команды по двое; после финиша помогают партнёру."
-      }
-    ],
-    "help": "Обычный: каждый играет за себя, 2–4 игрока. Командный: две команды по два игрока; после финиша своих фишек игрок помогает партнёру.",
-    "presentation": "mode"
-  },
   "skinFamilies": [
     "die"
   ],
-  "releases": [
-    {
-      "version": "0.4.0",
-      "changes": [
-        "Стабильный выпуск: обновлены правила, интерфейс и параметры игры."
-      ]
-    },
-    {
-      "version": "0.3.7",
-      "changes": [
-        "Стабильный выпуск: обновлены правила, интерфейс и параметры игры."
-      ]
-    },
-    {
-      "version": "0.3.7-preview.23",
-      "changes": [
-        "Синхронизированы общие компоненты с исправлениями чтения индексов, перекрытия карт и обновления оформления; правила игры не менялись."
-      ]
-    },
-    {
-      "version": "0.3.7-preview.22",
-      "changes": [
-        "Иллюстрации параметров сохраняют размер компонентов между вариантами; постоянная область арта центрирует изображение по обеим осям без растягивания."
-      ]
-    },
-    {
-      "version": "0.3.7-preview.21",
-      "changes": [
-        "В обеих иллюстрациях переброса шестёрок показана обычная грань кубика с шестью точками вместо цифры."
-      ]
-    },
-    {
-      "version": "0.3.7-preview.20",
-      "changes": [
-        "Перед срубанием фишка зависает над клеткой; после возврата соперников на базы занимает конечную позицию. Требуется arrival-departures-v1."
-      ]
-    },
-    {
-      "version": "0.3.7-preview.19",
-      "changes": [
-        "Первый ход, места за столом и завершение используют стандартные подписи приложения; в артах первого хода — контурная 1 в кружке.",
-        "Стол и стулья в рассадке и Акулине — один компонент. Уточнены схемы шестёрок Лудо и унифицированы рамки режимов Дурака; убраны верхние подписи джокеров."
-      ]
-    },
-    {
-      "version": "0.3.7-preview.18",
-      "changes": [
-        "При композиции SVG сохраняются полные атрибуты толщины, прозрачности и идентичности; стандартный контур масштабируется целиком."
-      ]
-    },
-    {
-      "version": "0.3.7-preview.17",
-      "changes": [
-        "Параметры игры снабжены понятными иллюстрациями из игровых компонентов и короткими пояснениями выбранных вариантов."
-      ]
-    },
-    {
-      "version": "0.3.7-preview.16",
-      "changes": [
-        "Общие игровые ассеты сохраняют пропорции рамок, скруглений и толщины в игре, миниатюрах, правилах, параметрах и анимациях. Убраны вторые фиксированные рамки и тени поверх SVG."
-      ]
-    },
-    {
-      "version": "0.3.7-preview.15",
-      "changes": [
-        "Скругления карт и общих фигур масштабируются вместе с компонентами."
-      ]
-    },
-    {
-      "version": "0.3.7-preview.14",
-      "changes": [
-        "Сокращены пояснения параметров; выбранные варианты читаются компактнее."
-      ]
-    },
-    {
-      "version": "0.3.7-preview.13",
-      "changes": [
-        "Режимы наглядно показывают самостоятельную и командную игру; количество кубиков отображается настоящими кубиками.",
-        "Добавлены короткие пояснения выбранных параметров."
-      ]
-    },
-    {
-      "version": "0.3.7-preview.10",
-      "changes": [
-        "Общий SDK допускает до 64 ленивых публичных кадров; одновременно готовится только текущий и следующий кадр."
-      ]
-    },
-    {
-      "version": "0.3.7-preview.9",
-      "changes": [
-        "Обновлён общий SDK поэтапной подготовки публичных кадров; правила игры сохранены."
-      ]
-    },
-    {
-      "version": "0.3.7-preview.8",
-      "changes": [
-        "Явное расположение карточек игроков и уточнённые зоны управления."
-      ]
-    },
-    {
-      "version": "0.3.7-preview.7",
-      "changes": [
-        "Убрана подложка кубиков; используется привязка карточек к базам."
-      ]
-    },
-    {
-      "version": "0.3.7-preview.6",
-      "changes": [
-        "Обновлён общий каталог оформления и сведения о версии пака. Правила и игровой процесс не изменены."
-      ]
-    },
-    {
-      "version": "0.3.6",
-      "changes": [
-        "Обновлён общий компонент пустого карточного слота; правила игры не изменены."
-      ]
-    },
-    {
-      "version": "0.3.5",
-      "changes": [
-        "Короткие правила: абзацы, списки, таблицы и иллюстрации игровых элементов и интерфейса.",
-        "Принятый объёмный дизайн фишек с белой обводкой верхней поверхности."
-      ]
-    }
-  ],
+  "releases": [],
   "sdkFeatures": [
     "local-input-v1",
     "turn-order-v1",
@@ -491,6 +461,11 @@
     "arrival-departures-v1",
     "isolated-execution-v1"
   ],
-  "execution": "isolated-v1"
+  "execution": "isolated-v1",
+  "defaultLanguage": "ru",
+  "estimatedDurationMin": [
+    20,
+    40
+  ]
 };
 })(globalThis);

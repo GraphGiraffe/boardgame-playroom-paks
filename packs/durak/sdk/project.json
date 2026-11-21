@@ -6,6 +6,9 @@
     "rules.js"
   ],
   "presentation": [
+    "shared/presentation/asset.js",
+    "shared/presentation/card-face-asset.js",
+    "shared/presentation/card-asset.js",
     "presentation/scene.js"
   ],
   "helpers": [],

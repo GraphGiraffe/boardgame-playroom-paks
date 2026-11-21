@@ -1,9 +1,10 @@
 {
   "id": "domino",
-  "version": "0.6.1",
+  "version": "0.6.6-preview.1",
   "category": "board",
-  "estimatedDuration": "10–15 мин",
-  "tagline": "Соединяй числа и считай ходы соперников.",
+  "tagline": {
+    "key": "manifest.tagline"
+  },
   "capabilities": {
     "hands": true,
     "surfaces": [
@@ -15,7 +16,9 @@
   "rules": "rules.js",
   "view": "view.js",
   "styles": "styles.css",
-  "name": "Домино",
+  "name": {
+    "key": "domino.meta.name"
+  },
   "engineApi": 4,
   "stateVersion": 1,
   "viewApi": 3,
@@ -45,167 +48,150 @@
     ],
     "locales": {
       "ru": [
-        "locales/ru/game.json"
+        "lang/ru.json"
       ]
     }
   },
   "sharedUi": true,
-  "settings": [
-    {
-      "key": "endMode",
-      "default": "winner",
-      "options": [
-        {
-          "value": "winner"
-        },
-        {
-          "value": "last"
-        }
-      ],
-      "control": "slider"
-    }
-  ],
+  "settings": "settings.json",
   "sharedDomain": [
-    "end-policy"
+    "end-policy",
+    "tile-visibility",
+    "tile-connection"
   ],
-  "ruleGroups": [
-    {
-      "label": "Раздача",
-      "fields": [
-        "preset"
-      ]
-    },
-    {
-      "label": "Завершение",
-      "fields": [
-        "endMode"
-      ],
-      "end": true
-    }
-  ],
-  "presetSetting": {
-    "label": "Костей на руке",
-    "control": "slider",
-    "options": [
-      {
-        "value": "quick",
-        "label": "5",
-        "preview": {
-          "ids": [
-            "setting-hand-5"
-          ]
-        },
-        "description": "По 5 костей на старте."
-      },
-      {
-        "value": "classic",
-        "label": "7",
-        "preview": {
-          "ids": [
-            "setting-hand-7"
-          ]
-        },
-        "description": "По 7 костей на старте."
-      }
-    ],
-    "help": "Число костей у каждого игрока при начальной раздаче. Набор и правила цепочки сохраняются.",
-    "preview": {
-      "kind": "illustrations"
-    }
-  },
   "skinFamilies": [
     "domino"
   ],
   "releases": [
     {
+      "version": "0.6.2",
+      "changes": [
+        {
+          "key": "manifest.releases.0.changes.0"
+        }
+      ]
+    },
+    {
       "version": "0.6.0",
       "changes": [
-        "Стабильный выпуск: обновлены правила, интерфейс и параметры игры."
+        {
+          "key": "manifest.releases.1.changes.0"
+        }
       ]
     },
     {
       "version": "0.5.6",
       "changes": [
-        "Стабильный выпуск: обновлены правила, интерфейс и параметры игры."
+        {
+          "key": "manifest.releases.1.changes.0"
+        }
       ]
     },
     {
       "version": "0.5.6-preview.18",
       "changes": [
-        "Синхронизированы общие компоненты с исправлениями чтения индексов, перекрытия карт и обновления оформления; правила игры не менялись."
+        {
+          "key": "manifest.releases.3.changes.0"
+        }
       ]
     },
     {
       "version": "0.5.6-preview.17",
       "changes": [
-        "Первый ход, места за столом и завершение используют стандартные подписи приложения; в артах первого хода — контурная 1 в кружке.",
-        "Стол и стулья в рассадке и Акулине — один компонент. Уточнены схемы шестёрок Лудо и унифицированы рамки режимов Дурака; убраны верхние подписи джокеров."
+        {
+          "key": "manifest.releases.4.changes.0"
+        },
+        {
+          "key": "manifest.releases.4.changes.1"
+        }
       ]
     },
     {
       "version": "0.5.6-preview.16",
       "changes": [
-        "При композиции SVG сохраняются полные атрибуты толщины, прозрачности и идентичности; стандартный контур масштабируется целиком."
+        {
+          "key": "manifest.releases.5.changes.0"
+        }
       ]
     },
     {
       "version": "0.5.6-preview.15",
       "changes": [
-        "Параметры игры снабжены понятными иллюстрациями из игровых компонентов и короткими пояснениями выбранных вариантов."
+        {
+          "key": "manifest.releases.6.changes.0"
+        }
       ]
     },
     {
       "version": "0.5.6-preview.14",
       "changes": [
-        "Общие игровые ассеты сохраняют пропорции рамок, скруглений и толщины в игре, миниатюрах, правилах, параметрах и анимациях. Убраны вторые фиксированные рамки и тени поверх SVG."
+        {
+          "key": "manifest.releases.7.changes.0"
+        }
       ]
     },
     {
       "version": "0.5.6-preview.13",
       "changes": [
-        "Скругления карт и общих фигур масштабируются вместе с компонентами."
+        {
+          "key": "manifest.releases.8.changes.0"
+        }
       ]
     },
     {
       "version": "0.5.6-preview.10",
       "changes": [
-        "Общий SDK допускает до 64 ленивых публичных кадров; одновременно готовится только текущий и следующий кадр."
+        {
+          "key": "manifest.releases.9.changes.0"
+        }
       ]
     },
     {
       "version": "0.5.6-preview.9",
       "changes": [
-        "Обновлён общий SDK поэтапной подготовки публичных кадров; правила игры сохранены."
+        {
+          "key": "manifest.releases.10.changes.0"
+        }
       ]
     },
     {
       "version": "0.5.6-preview.8",
       "changes": [
-        "Счётчики базара и стола перенесены в общую строку статуса без растягивания."
+        {
+          "key": "manifest.releases.11.changes.0"
+        }
       ]
     },
     {
       "version": "0.5.6-preview.7",
       "changes": [
-        "Убрана дополнительная бежевая подложка поля."
+        {
+          "key": "manifest.releases.12.changes.0"
+        }
       ]
     },
     {
       "version": "0.5.6-preview.6",
       "changes": [
-        "Обновлён общий каталог оформления и сведения о версии пака. Правила и игровой процесс не изменены."
+        {
+          "key": "manifest.releases.13.changes.0"
+        }
       ]
     },
     {
       "version": "0.5.5",
       "changes": [
-        "Обновлён общий компонент пустого карточного слота; правила игры не изменены."
+        {
+          "key": "manifest.releases.14.changes.0"
+        }
       ]
     },
     {
       "version": "0.5.4",
       "changes": [
-        "Короткие правила: абзацы, списки, таблицы и иллюстрации игровых элементов и интерфейса."
+        {
+          "key": "manifest.releases.15.changes.0"
+        }
       ]
     }
   ],
@@ -216,5 +202,10 @@
     "standard-parameter-ui-v1",
     "isolated-execution-v1"
   ],
-  "execution": "isolated-v1"
+  "execution": "isolated-v1",
+  "defaultLanguage": "ru",
+  "estimatedDurationMin": [
+    10,
+    15
+  ]
 }

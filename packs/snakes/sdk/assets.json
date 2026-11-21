@@ -1,0 +1,7 @@
+{
+  "assets/cover.webp": {
+    "license": "Existing PlayRoom artwork; see repository LICENSING.md",
+    "source": "Existing cover from snakes 0.6.0; published pack SHA256 c4c4ae87de91a50e02eb1c68da0280f08364de469e67b194c556146184d315dc; source master in Git da58f6c",
+    "sha256": "5d1c8ba5ef57d0247b5f667d012a65cbc4b6cddca3a40e57ba8606ca75424b68"
+  }
+}

@@ -4,10 +4,11 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["durak"] = {
   "id": "durak",
-  "version": "0.7.1",
+  "version": "0.7.8-preview.1",
   "category": "cards",
-  "estimatedDuration": "10–20 мин",
-  "tagline": "Отбивайся, подкидывай и избавляйся от карт.",
+  "tagline": {
+    "key": "manifest.tagline"
+  },
   "capabilities": {
     "hands": true,
     "surfaces": [
@@ -19,7 +20,9 @@
   "rules": "rules.js",
   "view": "view.js",
   "styles": "styles.css",
-  "name": "Дурак",
+  "name": {
+    "key": "durak.meta.name"
+  },
   "sharedUi": true,
   "engineApi": 4,
   "stateVersion": 4,
@@ -41,126 +44,228 @@
       "teams": false
     }
   ],
-  "settings": [
-    {
-      "key": "variant",
-      "label": "Режим",
-      "default": "throwin",
-      "options": [
-        {
-          "value": "simple",
-          "label": "Простой",
-          "description": "По 5 карт; после захода не подкидывают.",
-          "preview": {
-            "ids": [
-              "setting-variant-simple"
-            ]
-          }
+  "settings": {
+    "fields": [
+      {
+        "key": "preset",
+        "label": {
+          "key": "durak.book.text.43"
         },
-        {
-          "value": "throwin",
-          "label": "Подкидной",
-          "description": "По 6 карт; подкидывают значения со стола.",
-          "preview": {
-            "ids": [
-              "setting-variant-throwin"
-            ]
+        "options": [
+          {
+            "value": "classic",
+            "label": {
+              "key": "durak.meta.classic"
+            }
           }
-        },
-        {
-          "value": "transfer",
-          "label": "Переводной",
-          "description": "То же значение — перевод до защиты.",
-          "preview": {
-            "ids": [
-              "setting-variant-transfer"
-            ]
-          }
-        }
-      ],
-      "help": "Простой: по пять карт, заранее составленный заход из одной карты, пары с третьей или двух пар с пятой, без подкидывания. Подкидной: по шесть, можно подкидывать достоинства со стола. Переводной: дополнительно можно перевести атаку до первой защиты.",
-      "control": "slider",
-      "preview": {
-        "kind": "illustrations"
+        ],
+        "control": "select",
+        "default": "classic",
+        "kind": "preset",
+        "valueType": "string"
       },
-      "presentation": "mode"
-    },
-    {
-      "key": "deck",
-      "label": "Колода",
-      "default": "54",
-      "options": [
-        {
-          "value": "36",
-          "label": "36 карт",
-          "description": "От шестёрок до тузов, без джокеров."
+      {
+        "key": "variant",
+        "label": {
+          "key": "durak.book.text.43"
         },
-        {
-          "value": "52",
-          "label": "52 карты",
-          "description": "От двоек до тузов, без джокеров."
-        },
-        {
-          "value": "54",
-          "label": "54 карты",
-          "description": "52 обычные карты и два джокера."
-        }
-      ],
-      "help": "36 карт — от шестёрок до тузов; 52 — от двоек до тузов; 54 — те же 52 и два джокера. Масти и число карт не меняют выбранный вариант боя.",
-      "control": "select",
-      "preview": {
-        "kind": "cards"
-      }
-    },
-    {
-      "key": "jokerMode",
-      "label": "Джокеры",
-      "default": "color",
-      "options": [
-        {
-          "value": "color",
-          "label": "По цвету",
-          "description": "Старший джокер — цвета козыря.",
-          "preview": {
-            "ids": [
-              "setting-jokerMode-color"
-            ]
+        "default": "throwin",
+        "options": [
+          {
+            "value": "simple",
+            "label": {
+              "key": "durak.book.text.6"
+            },
+            "description": {
+              "key": "settings.variant.options.simple.description"
+            },
+            "preview": {
+              "ids": [
+                "setting-variant-simple"
+              ]
+            }
+          },
+          {
+            "value": "throwin",
+            "label": {
+              "key": "settings.variant.options.throwin.label"
+            },
+            "description": {
+              "key": "settings.variant.options.throwin.description"
+            },
+            "preview": {
+              "ids": [
+                "setting-variant-throwin"
+              ]
+            }
+          },
+          {
+            "value": "transfer",
+            "label": {
+              "key": "settings.variant.options.transfer.label"
+            },
+            "description": {
+              "key": "settings.variant.options.transfer.description"
+            },
+            "preview": {
+              "ids": [
+                "setting-variant-transfer"
+              ]
+            }
           }
+        ],
+        "help": {
+          "key": "settings.variant.help"
         },
-        {
-          "value": "universal",
-          "label": "Универсальные",
-          "description": "Оба бьют обычные; красный сильнее.",
-          "preview": {
-            "ids": [
-              "setting-jokerMode-universal"
-            ]
-          }
-        }
-      ],
-      "visibleWhen": {
-        "deck": "54"
+        "control": "slider",
+        "preview": {
+          "kind": "illustrations"
+        },
+        "presentation": "mode",
+        "kind": "option",
+        "valueType": "string"
       },
-      "help": "Только для колоды 54. «По цвету»: джокер цвета козыря старше всех; другой бьёт некозырные карты своего цвета и сам бьётся козырем. «Универсальные»: оба бьют обычные карты, красный бьёт чёрного.",
-      "control": "slider",
-      "preview": {
-        "kind": "illustrations"
-      }
-    },
-    {
-      "key": "endMode",
-      "default": "last",
-      "options": [
-        {
-          "value": "winner"
+      {
+        "key": "deck",
+        "label": {
+          "key": "settings.deck.label"
         },
-        {
-          "value": "last"
-        }
-      ],
-      "control": "slider"
-    }
-  ],
+        "default": "54",
+        "options": [
+          {
+            "value": "36",
+            "label": {
+              "key": "settings.deck.options.36.label"
+            },
+            "description": {
+              "key": "settings.deck.options.36.description"
+            }
+          },
+          {
+            "value": "52",
+            "label": {
+              "key": "settings.deck.options.52.label"
+            },
+            "description": {
+              "key": "settings.deck.options.52.description"
+            }
+          },
+          {
+            "value": "54",
+            "label": {
+              "key": "settings.deck.options.54.label"
+            },
+            "description": {
+              "key": "settings.deck.options.54.description"
+            }
+          }
+        ],
+        "help": {
+          "key": "settings.deck.help"
+        },
+        "control": "select",
+        "preview": {
+          "kind": "cards"
+        },
+        "kind": "option",
+        "valueType": "string"
+      },
+      {
+        "key": "jokerMode",
+        "label": {
+          "key": "settings.jokerMode.label"
+        },
+        "default": "color",
+        "options": [
+          {
+            "value": "color",
+            "label": {
+              "key": "durak.book.text.45"
+            },
+            "description": {
+              "key": "settings.jokerMode.options.color.description"
+            },
+            "preview": {
+              "ids": [
+                "setting-jokerMode-color"
+              ]
+            }
+          },
+          {
+            "value": "universal",
+            "label": {
+              "key": "durak.book.text.47"
+            },
+            "description": {
+              "key": "settings.jokerMode.options.universal.description"
+            },
+            "preview": {
+              "ids": [
+                "setting-jokerMode-universal"
+              ]
+            }
+          }
+        ],
+        "visibleWhen": {
+          "deck": "54"
+        },
+        "help": {
+          "key": "settings.jokerMode.help"
+        },
+        "control": "slider",
+        "preview": {
+          "kind": "illustrations"
+        },
+        "kind": "option",
+        "valueType": "string"
+      },
+      {
+        "key": "endMode",
+        "default": "last",
+        "options": [
+          {
+            "value": "winner"
+          },
+          {
+            "value": "last"
+          }
+        ],
+        "control": "slider",
+        "kind": "standard",
+        "valueType": "string"
+      }
+    ],
+    "groups": [
+      {
+        "label": {
+          "key": "settings.groups.variant.label"
+        },
+        "fields": [
+          "variant"
+        ],
+        "placement": "main"
+      },
+      {
+        "label": {
+          "key": "settings.groups.deck-jokerMode.label"
+        },
+        "fields": [
+          "deck",
+          "jokerMode"
+        ],
+        "placement": "main"
+      },
+      {
+        "label": {
+          "key": "settings.groups.endMode.label"
+        },
+        "fields": [
+          "endMode"
+        ],
+        "placement": "end"
+      }
+    ]
+  },
   "legacyPresets": {
     "quick": {
       "variant": "simple",
@@ -195,175 +300,19 @@
     ],
     "locales": {
       "ru": [
-        "locales/ru/game.json"
+        "lang/ru.json"
       ]
     }
   },
-  "ruleGroups": [
-    {
-      "label": "Правила",
-      "fields": [
-        "variant"
-      ]
-    },
-    {
-      "label": "Карты",
-      "fields": [
-        "deck",
-        "jokerMode"
-      ]
-    },
-    {
-      "label": "Завершение",
-      "fields": [
-        "endMode"
-      ],
-      "end": true
-    }
-  ],
   "skinFamilies": [
     "card-face",
     "card-back"
   ],
-  "presetSetting": {
-    "label": "Режим",
-    "options": [
-      {
-        "value": "classic",
-        "label": "Выбранные правила"
-      }
-    ]
-  },
   "sharedAssetPacks": [
     "standard-deck",
     "mini-split-deck"
   ],
-  "releases": [
-    {
-      "version": "0.7.0",
-      "changes": [
-        "Стабильный выпуск: обновлены правила, интерфейс и параметры игры."
-      ]
-    },
-    {
-      "version": "0.6.7",
-      "changes": [
-        "Стабильный выпуск: обновлены правила, интерфейс и параметры игры."
-      ]
-    },
-    {
-      "version": "0.6.7-preview.23",
-      "changes": [
-        "Синхронизированы общие компоненты с исправлениями чтения индексов, перекрытия карт и обновления оформления; правила игры не менялись."
-      ]
-    },
-    {
-      "version": "0.6.7-preview.22",
-      "changes": [
-        "Иллюстрации параметров сохраняют размер компонентов между вариантами; постоянная область арта центрирует изображение по обеим осям без растягивания."
-      ]
-    },
-    {
-      "version": "0.6.7-preview.21",
-      "changes": [
-        "Первый ход, места за столом и завершение используют стандартные подписи приложения; в артах первого хода — контурная 1 в кружке.",
-        "Стол и стулья в рассадке и Акулине — один компонент. Уточнены схемы шестёрок Лудо и унифицированы рамки режимов Дурака; убраны верхние подписи джокеров."
-      ]
-    },
-    {
-      "version": "0.6.7-preview.20",
-      "changes": [
-        "Параметры используют простые стандартные значки приложения с более толстыми линиями. Во всех композициях один общий силуэт игрока без дополнительных линий торса.",
-        "При композиции SVG сохраняются полные атрибуты толщины, прозрачности и идентичности; стандартный контур масштабируется целиком."
-      ]
-    },
-    {
-      "version": "0.6.7-preview.19",
-      "changes": [
-        "Уточнены действия в режимах и сила джокеров Дурака; завершение использует общий endMode без второго имени."
-      ]
-    },
-    {
-      "version": "0.6.7-preview.18",
-      "changes": [
-        "Параметры игры снабжены понятными иллюстрациями из игровых компонентов и короткими пояснениями выбранных вариантов."
-      ]
-    },
-    {
-      "version": "0.6.7-preview.17",
-      "changes": [
-        "Общие игровые ассеты сохраняют пропорции рамок, скруглений и толщины в игре, миниатюрах, правилах, параметрах и анимациях. Убраны вторые фиксированные рамки и тени поверх SVG."
-      ]
-    },
-    {
-      "version": "0.6.7-preview.16",
-      "changes": [
-        "Скругления карт и общих фигур масштабируются вместе с компонентами."
-      ]
-    },
-    {
-      "version": "0.6.7-preview.15",
-      "changes": [
-        "Выбор режима представлен одной крупной карточкой с наглядными вариантами.",
-        "Сокращены пояснения параметров; выбранные варианты читаются компактнее."
-      ]
-    },
-    {
-      "version": "0.6.7-preview.14",
-      "changes": [
-        "Размеры колоды показаны картами с точным количеством; выбранные варианты игры, джокеров и завершения сопровождаются короткими пояснениями."
-      ]
-    },
-    {
-      "version": "0.6.7-preview.11",
-      "changes": [
-        "Общий SDK допускает до 64 ленивых публичных кадров; одновременно готовится только текущий и следующий кадр."
-      ]
-    },
-    {
-      "version": "0.6.7-preview.10",
-      "changes": [
-        "Обновлён общий SDK поэтапной подготовки публичных кадров; правила игры сохранены."
-      ]
-    },
-    {
-      "version": "0.6.7-preview.9",
-      "changes": [
-        "Исправлены отступы и обрезание элементов в адаптивной компоновке."
-      ]
-    },
-    {
-      "version": "0.6.7-preview.8",
-      "changes": [
-        "Козырная масть увеличена и выровнена по центру жетона."
-      ]
-    },
-    {
-      "version": "0.6.7-preview.7",
-      "changes": [
-        "Увеличены масти, колода и карта козыря раздвинуты."
-      ]
-    },
-    {
-      "version": "0.6.7-preview.6",
-      "changes": [
-        "Угловые номиналы поверх рамки, единое выравнивание индексов и узкая «10» с прежним шрифтом.",
-        "Уточнены безопасные области номиналов и мастей при перекрытии карт."
-      ]
-    },
-    {
-      "version": "0.6.6",
-      "changes": [
-        "Обновлён общий компонент пустого карточного слота; правила игры не изменены."
-      ]
-    },
-    {
-      "version": "0.6.5",
-      "changes": [
-        "Короткие правила: абзацы, списки, таблицы и иллюстрации игровых элементов и интерфейса."
-      ]
-    }
-  ],
+  "releases": [],
   "sdkFeatures": [
     "local-input-v1",
     "turn-order-v1",
@@ -372,6 +321,11 @@
     "standard-parameter-ui-v1",
     "isolated-execution-v1"
   ],
-  "execution": "isolated-v1"
+  "execution": "isolated-v1",
+  "defaultLanguage": "ru",
+  "estimatedDurationMin": [
+    10,
+    20
+  ]
 };
 })(globalThis);

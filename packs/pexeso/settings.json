@@ -1,0 +1,116 @@
+{
+  "fields": [
+    {
+      "key": "preset",
+      "label": {
+        "key": "settings.preset.label"
+      },
+      "control": "slider",
+      "options": [
+        {
+          "value": "easy",
+          "label": {
+            "key": "pexeso.presets.easy"
+          },
+          "description": {
+            "key": "settings.preset.options.easy.description"
+          },
+          "preview": {
+            "kind": "cards",
+            "count": 16
+          }
+        },
+        {
+          "value": "medium",
+          "label": {
+            "key": "pexeso.presets.medium"
+          },
+          "description": {
+            "key": "settings.preset.options.medium.description"
+          },
+          "preview": {
+            "kind": "cards",
+            "count": 24
+          }
+        },
+        {
+          "value": "hard",
+          "label": {
+            "key": "pexeso.presets.hard"
+          },
+          "description": {
+            "key": "settings.preset.options.hard.description"
+          },
+          "preview": {
+            "kind": "cards",
+            "count": 36
+          }
+        }
+      ],
+      "help": {
+        "key": "settings.preset.help"
+      },
+      "kind": "preset",
+      "valueType": "string",
+      "default": "easy"
+    },
+    {
+      "key": "deck",
+      "label": {
+        "key": "pexeso.book.text.2"
+      },
+      "default": "cartoon",
+      "options": [
+        {
+          "value": "cartoon",
+          "label": {
+            "key": "pexeso.book.text.4"
+          },
+          "description": {
+            "key": "settings.deck.options.cartoon.description"
+          },
+          "preview": {
+            "ids": [
+              "setting-deck-cartoon"
+            ]
+          }
+        },
+        {
+          "value": "52",
+          "label": {
+            "key": "settings.deck.options.52.label"
+          },
+          "description": {
+            "key": "settings.deck.options.52.description"
+          },
+          "preview": {
+            "ids": [
+              "setting-deck-playing"
+            ]
+          }
+        }
+      ],
+      "help": {
+        "key": "settings.deck.help"
+      },
+      "control": "select",
+      "preview": {
+        "kind": "illustrations"
+      },
+      "kind": "option",
+      "valueType": "string"
+    }
+  ],
+  "groups": [
+    {
+      "label": {
+        "key": "settings.groups.preset-deck.label"
+      },
+      "fields": [
+        "preset",
+        "deck"
+      ],
+      "placement": "main"
+    }
+  ]
+}

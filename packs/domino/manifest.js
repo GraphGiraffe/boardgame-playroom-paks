@@ -4,10 +4,11 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["domino"] = {
   "id": "domino",
-  "version": "0.6.1",
+  "version": "0.6.6-preview.1",
   "category": "board",
-  "estimatedDuration": "10–15 мин",
-  "tagline": "Соединяй числа и считай ходы соперников.",
+  "tagline": {
+    "key": "manifest.tagline"
+  },
   "capabilities": {
     "hands": true,
     "surfaces": [
@@ -19,7 +20,9 @@
   "rules": "rules.js",
   "view": "view.js",
   "styles": "styles.css",
-  "name": "Домино",
+  "name": {
+    "key": "domino.meta.name"
+  },
   "engineApi": 4,
   "stateVersion": 1,
   "viewApi": 3,
@@ -49,170 +52,105 @@
     ],
     "locales": {
       "ru": [
-        "locales/ru/game.json"
+        "lang/ru.json"
       ]
     }
   },
   "sharedUi": true,
-  "settings": [
-    {
-      "key": "endMode",
-      "default": "winner",
-      "options": [
-        {
-          "value": "winner"
-        },
-        {
-          "value": "last"
-        }
-      ],
-      "control": "slider"
-    }
-  ],
-  "sharedDomain": [
-    "end-policy"
-  ],
-  "ruleGroups": [
-    {
-      "label": "Раздача",
-      "fields": [
-        "preset"
-      ]
-    },
-    {
-      "label": "Завершение",
-      "fields": [
-        "endMode"
-      ],
-      "end": true
-    }
-  ],
-  "presetSetting": {
-    "label": "Костей на руке",
-    "control": "slider",
-    "options": [
+  "settings": {
+    "fields": [
       {
-        "value": "quick",
-        "label": "5",
-        "preview": {
-          "ids": [
-            "setting-hand-5"
-          ]
+        "key": "preset",
+        "label": {
+          "key": "settings.preset.label"
         },
-        "description": "По 5 костей на старте."
+        "control": "slider",
+        "options": [
+          {
+            "value": "quick",
+            "label": {
+              "key": "domino.presets.quick"
+            },
+            "preview": {
+              "ids": [
+                "setting-hand-5"
+              ]
+            },
+            "description": {
+              "key": "settings.preset.options.quick.description"
+            }
+          },
+          {
+            "value": "classic",
+            "label": {
+              "key": "domino.presets.classic"
+            },
+            "preview": {
+              "ids": [
+                "setting-hand-7"
+              ]
+            },
+            "description": {
+              "key": "settings.preset.options.classic.description"
+            }
+          }
+        ],
+        "help": {
+          "key": "settings.preset.help"
+        },
+        "preview": {
+          "kind": "illustrations"
+        },
+        "default": "classic",
+        "kind": "preset",
+        "valueType": "string"
       },
       {
-        "value": "classic",
-        "label": "7",
-        "preview": {
-          "ids": [
-            "setting-hand-7"
-          ]
-        },
-        "description": "По 7 костей на старте."
+        "key": "endMode",
+        "default": "winner",
+        "options": [
+          {
+            "value": "winner"
+          },
+          {
+            "value": "last"
+          }
+        ],
+        "control": "slider",
+        "kind": "standard",
+        "valueType": "string"
       }
     ],
-    "help": "Число костей у каждого игрока при начальной раздаче. Набор и правила цепочки сохраняются.",
-    "preview": {
-      "kind": "illustrations"
-    }
+    "groups": [
+      {
+        "label": {
+          "key": "settings.groups.preset.label"
+        },
+        "fields": [
+          "preset"
+        ],
+        "placement": "main"
+      },
+      {
+        "label": {
+          "key": "settings.groups.endMode.label"
+        },
+        "fields": [
+          "endMode"
+        ],
+        "placement": "end"
+      }
+    ]
   },
+  "sharedDomain": [
+    "end-policy",
+    "tile-visibility",
+    "tile-connection"
+  ],
   "skinFamilies": [
     "domino"
   ],
-  "releases": [
-    {
-      "version": "0.6.0",
-      "changes": [
-        "Стабильный выпуск: обновлены правила, интерфейс и параметры игры."
-      ]
-    },
-    {
-      "version": "0.5.6",
-      "changes": [
-        "Стабильный выпуск: обновлены правила, интерфейс и параметры игры."
-      ]
-    },
-    {
-      "version": "0.5.6-preview.18",
-      "changes": [
-        "Синхронизированы общие компоненты с исправлениями чтения индексов, перекрытия карт и обновления оформления; правила игры не менялись."
-      ]
-    },
-    {
-      "version": "0.5.6-preview.17",
-      "changes": [
-        "Первый ход, места за столом и завершение используют стандартные подписи приложения; в артах первого хода — контурная 1 в кружке.",
-        "Стол и стулья в рассадке и Акулине — один компонент. Уточнены схемы шестёрок Лудо и унифицированы рамки режимов Дурака; убраны верхние подписи джокеров."
-      ]
-    },
-    {
-      "version": "0.5.6-preview.16",
-      "changes": [
-        "При композиции SVG сохраняются полные атрибуты толщины, прозрачности и идентичности; стандартный контур масштабируется целиком."
-      ]
-    },
-    {
-      "version": "0.5.6-preview.15",
-      "changes": [
-        "Параметры игры снабжены понятными иллюстрациями из игровых компонентов и короткими пояснениями выбранных вариантов."
-      ]
-    },
-    {
-      "version": "0.5.6-preview.14",
-      "changes": [
-        "Общие игровые ассеты сохраняют пропорции рамок, скруглений и толщины в игре, миниатюрах, правилах, параметрах и анимациях. Убраны вторые фиксированные рамки и тени поверх SVG."
-      ]
-    },
-    {
-      "version": "0.5.6-preview.13",
-      "changes": [
-        "Скругления карт и общих фигур масштабируются вместе с компонентами."
-      ]
-    },
-    {
-      "version": "0.5.6-preview.10",
-      "changes": [
-        "Общий SDK допускает до 64 ленивых публичных кадров; одновременно готовится только текущий и следующий кадр."
-      ]
-    },
-    {
-      "version": "0.5.6-preview.9",
-      "changes": [
-        "Обновлён общий SDK поэтапной подготовки публичных кадров; правила игры сохранены."
-      ]
-    },
-    {
-      "version": "0.5.6-preview.8",
-      "changes": [
-        "Счётчики базара и стола перенесены в общую строку статуса без растягивания."
-      ]
-    },
-    {
-      "version": "0.5.6-preview.7",
-      "changes": [
-        "Убрана дополнительная бежевая подложка поля."
-      ]
-    },
-    {
-      "version": "0.5.6-preview.6",
-      "changes": [
-        "Обновлён общий каталог оформления и сведения о версии пака. Правила и игровой процесс не изменены."
-      ]
-    },
-    {
-      "version": "0.5.5",
-      "changes": [
-        "Обновлён общий компонент пустого карточного слота; правила игры не изменены."
-      ]
-    },
-    {
-      "version": "0.5.4",
-      "changes": [
-        "Короткие правила: абзацы, списки, таблицы и иллюстрации игровых элементов и интерфейса."
-      ]
-    }
-  ],
+  "releases": [],
   "sdkFeatures": [
     "local-input-v1",
     "turn-order-v1",
@@ -220,6 +158,11 @@
     "standard-parameter-ui-v1",
     "isolated-execution-v1"
   ],
-  "execution": "isolated-v1"
+  "execution": "isolated-v1",
+  "defaultLanguage": "ru",
+  "estimatedDurationMin": [
+    10,
+    15
+  ]
 };
 })(globalThis);

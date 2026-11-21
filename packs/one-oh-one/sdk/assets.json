@@ -1,0 +1,292 @@
+{
+  "assets/cover.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "9b935f1d4506fb78202c55aad80679406226f2494fcad4c46a983f4f9fad03c6"
+  },
+  "assets/elements-blue-10.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "011b1c36cc60983d1e81779bad90dd6385893e12f4b1c4d47c33acdaeeb35415"
+  },
+  "assets/elements-blue-2.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "12fa605c51f8d3e3bfb7e56bfe9e8fd17d651a40cca6437c4d5c1bf564392c2f"
+  },
+  "assets/elements-blue-3.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "42e21eac3b3b6a8907bd6b6af74061781d9a8e9cbf1854044aac744a0d6f7132"
+  },
+  "assets/elements-blue-4.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "d59462243595849207c94a9358b8efbeec21a1c80b1707e70d3a0f228fbe09e1"
+  },
+  "assets/elements-blue-5.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "61af03ed71c1f31037816c5ba2461765c866369464efec4e50fde324d87a85af"
+  },
+  "assets/elements-blue-6cover.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "a3ce1e379503882d86b44ca3389c96f0689387453563e25683c235c3e7ff41ac"
+  },
+  "assets/elements-blue-6penalty.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "38443f13c20649d3098660c155ca1b04686a99335b3657cad4bccdc4e2bd5a8d"
+  },
+  "assets/elements-blue-7.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "7b89503e29cad33f06e87a1078a1be57272967f681a766523737fae2c4557124"
+  },
+  "assets/elements-blue-8.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "ca0b0b5a92224d8da272adb1c646217d9153749110c89b47d6064b0fb02ee79c"
+  },
+  "assets/elements-blue-9.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "a29d5c8927f6e068566bbc51a53827cbc8374fda586e5444175cbd92a846a041"
+  },
+  "assets/elements-blue-A.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "4f81c12ca27186265fa3536f6ab63a6b2c86044ede71c1ab89f3a5b4add17ed8"
+  },
+  "assets/elements-blue-J.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "203ecb8b33e19a0794e4c2bd53057f18c707dadb5901127a79cafa8faaac65e6"
+  },
+  "assets/elements-blue-K.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "69c9bc1150f8fa6ddbbf29a3647d3caab420c8d49a3a449f0f69674115aa3fe8"
+  },
+  "assets/elements-blue-Q.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "daa6ddf84b5c700640cdf9862bb54cb36528633fd91d99a96089908ede97b247"
+  },
+  "assets/elements-green-10.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "9615dcdf3d2cfc334fd485a2f4a46355288243a67fff94e6546f83619620617a"
+  },
+  "assets/elements-green-2.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "f13dfcb6eac5c8953c2f1df48a607f316b12ca20398a17696eaa8ee50ca10aa2"
+  },
+  "assets/elements-green-3.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "581019e1c9eb8bfe49d4f06d92987bed160b5254607c1568935f30bbbd273ee1"
+  },
+  "assets/elements-green-4.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "2923c511f064d840ad6aebb24a104f327c7a244d972fb61e7f7dde402b1f0b60"
+  },
+  "assets/elements-green-5.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "a3e0744aa1a9cac207b75aef7fc493ce0a5280dfb9db662e7731117009e2c26f"
+  },
+  "assets/elements-green-6cover.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "b300b49f0fe678cceae940c0fe94827dda3454fc1953bdc01926158f18fe2a84"
+  },
+  "assets/elements-green-6penalty.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "c459e676deefab7f8694911eccf5c46e1797e2551c48e4b11e8e5adbeb2ab13c"
+  },
+  "assets/elements-green-7.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "18d2c1b8c7fb31114f0acda24a3e3ee8572a77f74d607a2e8c253e2ab8e71d51"
+  },
+  "assets/elements-green-8.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "a2380c05998b4167b98623b8214a54d1cde71ca1363a2b96da2c7c774e026f1b"
+  },
+  "assets/elements-green-9.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "5c739159e8a195bbcd2886fa97c4565ea92b820010731094b57d583422ff9fa8"
+  },
+  "assets/elements-green-A.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "bbd0d439c03a56bbc001411add6b3362f3b7cfa8651181b6babf066d8430f42e"
+  },
+  "assets/elements-green-J.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "5c4fde230057dc4ead075e7f9d1c14bb6760c57bacafb3d42bb3f67fdb0a6dae"
+  },
+  "assets/elements-green-K.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "13e3399adbd72b53effa48988e2f6085bc3db0f96e17ad4dcee30087b5dc2420"
+  },
+  "assets/elements-green-Q.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "18e47c86cec619e6ae6b9a0e1b3b832b0abe83fba15adef7aad7cc0fcced55cf"
+  },
+  "assets/elements-red-10.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "8c287fbe50fe5758616e5284a379b8850fc3d8a3a226bc09ce40b3a071f639b2"
+  },
+  "assets/elements-red-2.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "83deafdd326bd53499a62f4283a99b33085fa8afc0049fd30588c55d32c3011f"
+  },
+  "assets/elements-red-3.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "4f60aad8e8525844a54a3cd496aa79f10fe1061d87a6a2f61dd4c94a43af5b95"
+  },
+  "assets/elements-red-4.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "5066990fa47d67fae2b701afc46f215e202e38c8d47f2509d87a6eed510b1d99"
+  },
+  "assets/elements-red-5.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "3a9deb33508a2a249bfea270eeec6d604831739756a6c8821deb0ce0fe7ec94a"
+  },
+  "assets/elements-red-6cover.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "fab534d0cbebc36e0910486a7864297f4da1a0083b432f15d844703b1ebcde4a"
+  },
+  "assets/elements-red-6penalty.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "4a90ea5e12e3cf4ea4d334d863f2b2a21efdb7193fc4caaac59872e185e34087"
+  },
+  "assets/elements-red-7.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "423c0b33c316d71b5b6ee30f38465d62450a6479a900635c8a69606e91509848"
+  },
+  "assets/elements-red-8.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "df482a2bfe065d42e74c835e02463075206631857962faf840b057f128a2d855"
+  },
+  "assets/elements-red-9.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "898404394ecb6548d9297c9f96226470883021fe2ebbf7ac8089aa6b36ccf366"
+  },
+  "assets/elements-red-A.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "48f1f6328f8b7926a5112ddaee92756dabe02229fcf0b6673c51b35db89e454d"
+  },
+  "assets/elements-red-J.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "b4747bfdc99745e9b66cce4491448765be50e95165b4012ff1b262cb15326134"
+  },
+  "assets/elements-red-K.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "1951069eaa172091d41b9407e856ad76cae6b2d4a78c57a38ee2e047620c105b"
+  },
+  "assets/elements-red-Q.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "e3227bf0f47612ff795bd99deb37a90cf29edcc8522aef86c238c25ad25e6837"
+  },
+  "assets/elements-yellow-10.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "aeab88a30b6d651ba0c15754d6909398bba0ac5ad4241d10e75587d079116443"
+  },
+  "assets/elements-yellow-2.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "64ad78bfd6d2fe7e838067e8748c64d25f678b0a1003a7e91ff1875d89509989"
+  },
+  "assets/elements-yellow-3.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "89e17c6353c349453e23aea4d3b566f23f417bc012fd47d790acc48627f86b5f"
+  },
+  "assets/elements-yellow-4.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "2fe6b982362128106629db6d8ded54477dcd6d56f3d181222a8ce01652791443"
+  },
+  "assets/elements-yellow-5.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "4b408a08244f52441267ea599f7a8f1632db1871e596d122d9d1d12ed6ef2719"
+  },
+  "assets/elements-yellow-6cover.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "74f383dc118c97f0ecc8c0ad4b585fee561c1ffe15153d82b9d8376d22666734"
+  },
+  "assets/elements-yellow-6penalty.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "2c2eacde661d759bc9d47423f28576efa881d1da97204d27a0620329f3f96f5d"
+  },
+  "assets/elements-yellow-7.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "7bec9b384506da1d6dd721e6c956a729d0531dd0279c44d34b2985736599b1e6"
+  },
+  "assets/elements-yellow-8.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "1992ff615afc51f0236606f7e00176d2d98b7b69a9efa5a915502687b8e08d0c"
+  },
+  "assets/elements-yellow-9.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "c2e146dc2f7a831f8558a18933e61feb9c362ead0b681e480b3661b3e1057b0b"
+  },
+  "assets/elements-yellow-A.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "a4d2c67f74a9a2efbf8fba92e318ec38d24f9408c97f2bc4d7661ae4cfd606ce"
+  },
+  "assets/elements-yellow-J.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "26c48a9adcd5c98f37c17182d25f0f52c7c285d91aa22dc580657ea9195ead1c"
+  },
+  "assets/elements-yellow-K.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "b9f57d0da932221b17729da7f64a2baac38c9db95a58d728f3489d9977f9e1c7"
+  },
+  "assets/elements-yellow-Q.webp": {
+    "source": "PlayRoom 101 original card composition",
+    "license": "See repository LICENSING.md",
+    "sha256": "525af031f0dd4bfbe3f9640ef3898edaed6099b5554aa7637dd94fd06d9478e4"
+  },
+  "assets/mau.wav": {
+    "source": "eSpeak NG Russian voice, locally synthesized Mau",
+    "license": "See repository LICENSING.md",
+    "sha256": "b18fe11738fcb3711c6ceb10e15d741f094257d9f75f2634cbe6b1938975f637"
+  }
+}

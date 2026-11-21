@@ -1,0 +1,7 @@
+{
+  "assets/cover.webp": {
+    "license": "Existing PlayRoom artwork; see repository LICENSING.md",
+    "source": "Existing cover from domino 0.6.0; published pack SHA256 1da63916bf4025e07f7a4d3666897a96827665321c825ea2687febb18e926eb7; source master in Git da58f6c",
+    "sha256": "f28a909eb0ee0e54708b77b65eff5a80ff8e10b4f2260e751cc6611d1ce56bef"
+  }
+}

@@ -5,6 +5,7 @@
     "rules.js"
   ],
   "presentation": [
+    "shared/presentation/solitaire.js",
     "presentation/scene.js"
   ],
   "helpers": [],

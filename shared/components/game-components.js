@@ -12,6 +12,20 @@ function entityKey(ref){
  if(!ref||typeof ref!=='object'||Array.isArray(ref)||Object.keys(ref).some(key=>!['namespace','id'].includes(key)))throw Error('ENTITY_REF_INVALID');
  const value=entityRef(ref.namespace,ref.id);return value.namespace+'-'+value.id;
 }
+// API3's stable five-column path. Sequence order is never reversed: only
+// the visual direction folds, keeping the opening piece as the centre anchor.
+function foldedChainLayout(count,anchorIndex=0,columns=5){
+ if(!Number.isInteger(count)||count<1||count>256||!Number.isInteger(anchorIndex)||anchorIndex<0||anchorIndex>=count||!Number.isInteger(columns)||columns<3||columns>16)throw Error('CHAIN_LAYOUT_INVALID');
+ const anchor=anchorIndex+1,start=Math.floor(columns/2)-anchor,minRow=Math.floor(start/columns);
+ const positions=Array.from({length:count+2},(_,index)=>{const step=start+index,rawRow=Math.floor(step/columns),slot=((step%columns)+columns)%columns,column=Math.abs(rawRow%2)?columns-1-slot:slot,row=rawRow-minRow;return {row,column,reverse:!!Math.abs(rawRow%2),x:(column+.5)*500/columns,y:row*100+50};});
+ const rows=positions.at(-1).row+1,path=positions.reduce((line,p,index)=>{if(!index)return `M${p.x} ${p.y}`;const previous=positions[index-1];if(previous.row===p.row)return `${line} L${p.x} ${p.y}`;const bend=p.column===0?-15:515;return `${line} C${bend} ${previous.y} ${bend} ${p.y} ${p.x} ${p.y}`;},'');
+ return {rows,positions,path,anchorRow:positions[anchor].row};
+}
+function foldedChainOffset(row,rows,height,rowHeight){
+ if(!Number.isInteger(row)||row<0||!Number.isInteger(rows)||rows<=row||![height,rowHeight].every(Number.isFinite)||height<0||rowHeight<=0)throw Error('CHAIN_VIEWPORT_INVALID');
+ const ideal=height/2-(row+.5)*rowHeight,shift=ideal<0?Math.ceil(-ideal/rowHeight):ideal+rows*rowHeight>height?-Math.ceil((ideal+rows*rowHeight-height)/rowHeight):0;
+ return Math.max(0,ideal+shift*rowHeight);
+}
 function validMetric(value,{requireId=false,requireLabel=false,localized=false}={}){
  const record=item=>item!==null&&typeof item==='object'&&!Array.isArray(item);
  const identifier=id=>typeof id==='string'&&/^[a-z][a-z0-9-]{0,63}$/.test(id);
@@ -81,11 +95,14 @@ const checkerArt=(king,movable)=>`<svg class="checker-art" viewBox="0 0 100 100"
 const dots={0:[],1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8],7:[0,2,3,4,5,6,8],8:[0,1,2,3,5,6,7,8],9:[0,1,2,3,4,5,6,7,8]};
 
  const pipPlaces=Object.freeze({1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]});
- function dieArt(value,{frame='flat'}={}){if(value!==null&&value!==undefined&&(!Number.isInteger(value)||value<0||value>1000))throw Error('DIE_VALUE_INVALID');
+ function dieArt(value,{frame='flat',faceUrl,faceLabel}={}){if(value!==null&&value!==undefined&&(!Number.isInteger(value)||value<0||value>1000))throw Error('DIE_VALUE_INVALID');
   const raised=frame==='raised',dots=pipPlaces[value]||[];
+  // The host resolves a validated pack image to a Blob URL before rendering.
+  const image=typeof faceUrl==='string'&&faceUrl.startsWith('blob:');
   const body=raised?'<rect x="3" y="7" width="54" height="50" rx="11" fill="var(--die-side,#c6c9b2)"/><rect class="piece-contour" x="3" y="3" width="54" height="50" rx="11" fill="var(--die-face,#fffbed)" stroke="var(--die-rim,#ede9d4)" stroke-width="2"/>':'<g transform="scale(1.1111111111)"><rect class="piece-contour" x="2" y="2" width="50" height="50" rx="10" fill="var(--die-face,#fffbed)" stroke="var(--die-rim,#c5cebc)" stroke-width="3"/></g>';
-  const mark=value>6?'<text x="30" y="30" text-anchor="middle" dominant-baseline="central" fill="var(--die-mark,currentColor)" font-family="system-ui,sans-serif" font-size="22" font-weight="800">'+value+'</text>':dots.map(i=>'<circle cx="'+((raised?18:14)+i%3*(raised?12:16))+'" cy="'+((raised?17:14)+Math.floor(i/3)*(raised?12:16))+'" r="'+(raised?3.7:4)+'" fill="var(--die-mark,'+(raised?'#456750':'currentColor')+')"/>').join('');
-  return '<svg class="'+(raised?'shared-die-art is-raised':'shared-die-art')+'" viewBox="0 0 60 60" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">'+body+mark+'</svg>';
+  const mark=image?'<image href="'+esc(faceUrl)+'" x="13" y="'+(raised?11:13)+'" width="34" height="34" preserveAspectRatio="xMidYMid meet"/>':value>6?'<text x="30" y="30" text-anchor="middle" dominant-baseline="central" fill="var(--die-mark,currentColor)" font-family="system-ui,sans-serif" font-size="22" font-weight="800">'+value+'</text>':dots.map(i=>'<circle cx="'+((raised?18:14)+i%3*(raised?12:16))+'" cy="'+((raised?17:14)+Math.floor(i/3)*(raised?12:16))+'" r="'+(raised?3.7:4)+'" fill="var(--die-mark,'+(raised?'#456750':'currentColor')+')"/>').join('');
+  const label=faceLabel?' data-face-label="'+esc(faceLabel)+'"':'';
+  return '<svg class="'+(raised?'shared-die-art is-raised':'shared-die-art')+'" viewBox="0 0 60 60" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false"'+label+'>'+body+mark+'</svg>';
  }
  function dominoFace(a,b,rotation=0){
   const marks=(value,y)=>`<g data-domino-half="${y?'lower':'upper'}">${(dots[value]||dots[9]).map(i=>`<circle cx="${14+i%3*10}" cy="${y+11+Math.floor(i/3)*10}" r="4" fill="var(--color-material-domino-ink,#365f4c)"/>`).join('')}</g>`;
@@ -174,9 +191,28 @@ const dots={0:[],1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,
   const crownArt=crown?'<svg x="42" y="10" width="23" height="19" viewBox="0 0 40 32" preserveAspectRatio="xMidYMid meet"><path d="m3 10 8 7L20 2l9 15 8-7-5 20H8Z" fill="var(--color-material-card-crown,#c9a44f)"/></svg>':'';
   return cardFrame(V.viewport({width:70,height:98,className:'piece-art standard-card-print'+(inlineIndex?' inline-index-face':''),attrs:'aria-hidden="true" focusable="false"',content:mark+crownArt}),{foreground:cardIndexInk({rank,suit,compact:compact===true,inlineIndex})});
  }
+ // The renderer and author audit resolve the same installed logical files.
+ // Older bundles can place a print outside the canonical runtime directory.
+ function characterAssetFiles(files,character){
+  if(!files||typeof character!=='string'||!character)return null;
+  const suffix='/'+character+'.svg';
+  const find=style=>{
+   const set='characters-'+style,canonical='assets/shared-packs/'+set+'/runtime'+suffix;
+   if(files.has(canonical))return canonical;
+   for(const file of files.keys())if(file.includes('/'+set+'/')&&file.endsWith(suffix))return file;
+  };
+  const minimal=find('minimal'),simple=find('simple');
+  // Either print can be the only one included in the author's resource profile.
+  return minimal||simple?{minimal,simple}:null;
+ }
  function characterFace({character='',characterSources={},source=''}={}, {variant='minimal'}={}){
-  const uri=characterSources[variant]||characterSources.minimal||source;
-  return cardFrame(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 140" preserveAspectRatio="xMidYMid meet" aria-hidden="true" data-character-style="${esc(variant)}" data-character-id="${esc(character)}"><image href="${esc(uri)}" x="4" y="20" width="92" height="96" preserveAspectRatio="xMidYMid meet"/></svg>`);
+  let style=variant;
+  if(!characterSources[style]){
+   if(characterSources.minimal)style='minimal';
+   else if(characterSources.simple)style='simple';
+  }
+  const uri=characterSources[style]||source;
+  return cardFrame(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 140" preserveAspectRatio="xMidYMid meet" aria-hidden="true" data-character-style="${esc(style)}" data-character-id="${esc(character)}"><image href="${esc(uri)}" x="4" y="20" width="92" height="96" preserveAspectRatio="xMidYMid meet"/></svg>`);
  }
  // A type owns geometry/rendering operations. Asset variants and pack rules specialize it.
  const pieceTypes=Object.freeze({
@@ -192,13 +228,13 @@ const dots={0:[],1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,
   board:params=>`<svg viewBox="0 0 ${params.columns||8} ${params.rows||8}" preserveAspectRatio="xMidYMid meet" aria-hidden="true">${boardCells(params.columns||8,params.rows||8).map(cell=>`<rect x="${cell.column}" y="${cell.row}" width="1" height="1" fill="var(--color-material-board-${cell.dark?'dark':'light'},${cell.dark?'#84a187':'#e6e5ca'})"/>`).join('')}</svg>`});
  class AssetResolver {
   constructor({catalog={},skins={},palette={},renderers={},skinFor=null}={}){this.skinFor=skinFor;this.catalog=JSON.parse(JSON.stringify(catalog));this.skins={...skins};this.palette={...palette};this.renderers={...defaultRenderers,...renderers};}
-  resolve(family,params={}){const spec=Object.hasOwn(this.catalog,family)?this.catalog[family]:null;if(!spec)throw Error('ASSET_FAMILY_UNKNOWN');const requested=this.skinFor?.(family,params.packId)||this.skins[family]||spec.default,variant=spec.variants.includes(requested)?requested:spec.default;return Object.freeze({family,type:spec.type||null,variant,stacking:spec.stacking?.[variant]||pieceTypes[spec.type]?.stacking||null,missing:variant!==requested,ratio:spec.ratio||null,materials:Object.freeze(Object.fromEntries(Object.entries(spec.materials||{}).map(([name,slot])=>[name,this.palette[slot]||null])))});}
+  resolve(family,params={}){const spec=Object.hasOwn(this.catalog,family)?this.catalog[family]:null;if(!spec)throw Error('ASSET_FAMILY_UNKNOWN');const requested=(family==='card-face'&&spec.variants.includes(params.faceVariant)?params.faceVariant:null)||this.skinFor?.(family,params.packId)||this.skins[family]||spec.default,variant=spec.variants.includes(requested)?requested:spec.default;return Object.freeze({family,type:spec.type||null,variant,stacking:spec.stacking?.[variant]||pieceTypes[spec.type]?.stacking||null,missing:variant!==requested,ratio:spec.ratio||null,materials:Object.freeze(Object.fromEntries(Object.entries(spec.materials||{}).map(([name,slot])=>[name,this.palette[slot]||null])))});}
   uri(family,uri){if(typeof uri!=='string'||!uri.startsWith('data:image/svg+xml;'))return uri;const index=uri.indexOf(',');let svg=uri.slice(index+1);if(uri.slice(0,index).includes(';base64'))return uri;svg=decodeURIComponent(svg);for(const [source,slot]of Object.entries(this.catalog[family]?.replaceColors||{}))svg=svg.replaceAll(source,this.palette[slot]||source);return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);}
   render(family,params={}){
-   if(family==='card-back'&&params.backUrls){
+   if(family==='card-back'&&(params.backUrls||params.backUrlForSet)){
     const face=this.resolve('card-face',params).variant;
     const set=params.assetSet||(['mini-split','mini-split-four-color'].includes(face)?'mini-split-deck':'standard-deck');
-    params={...params,backUrl:params.backUrls[set]||params.backUrl};
+    params={...params,backUrl:params.backUrlForSet?.(set)||params.backUrls?.[set]||params.backUrl};
    }
    const resolved=this.resolve(family,params),renderer=this.renderers[family+':'+resolved.variant]||this.renderers[family];
    if(typeof renderer!=='function')throw Error('ASSET_RENDERER_MISSING');
@@ -222,13 +258,55 @@ const dots={0:[],1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,
    return /^<svg\b/.test(markup)?V.normalize(markup):markup;
   }
  }
- function createHelpers(H,source){
-function cardDescriptor(value,attrs='disabled',extra=''){
-  const tag=attrs==='disabled'?'span':'button',hidden=!value||value.hidden;
+ const layoutPolicy=(function(){
+ 'use strict';
+ const fields=Object.freeze(['fieldAspect','fieldSizing','actionPlacement','fieldDropZone','actionReserve','showTurn','hidePlayers','layout']);
+ const seats=new Set(['north','north-west','north-east','west','east','south-west','south-east','south']);
+ const record=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
+ function check(condition,code){if(!condition)throw Object.assign(Error(code),{code});}
+ function validate(value,playerCount){
+  check(value.fieldAspect===undefined||Number.isFinite(value.fieldAspect)&&value.fieldAspect>0&&value.fieldAspect<=10,'LAYOUT_ASPECT_INVALID');
+  check(value.fieldSizing===undefined||['fit','content','scroll'].includes(value.fieldSizing),'LAYOUT_SIZING_INVALID');
+  check(!(['content','scroll'].includes(value.fieldSizing)&&value.fieldAspect!==undefined),'LAYOUT_ASPECT_SIZING_CONFLICT');
+  check(value.actionPlacement===undefined||value.actionPlacement==='header-landscape','LAYOUT_ACTION_PLACEMENT_INVALID');
+  for(const key of ['fieldDropZone','actionReserve','showTurn','hidePlayers'])check(value[key]===undefined||typeof value[key]==='boolean','LAYOUT_FLAG_INVALID');
+  check(!value.hidePlayers||playerCount===1,'LAYOUT_SOLO_INVALID');
+  const layout=value.layout||{};
+  check(record(layout)&&Object.keys(layout).every(key=>['focus','seats','duplicateSelf','wideHand','overrides'].includes(key)),'LAYOUT_POLICY_INVALID');
+  check(layout.focus===undefined||['hands','field','balanced'].includes(layout.focus),'LAYOUT_FOCUS_INVALID');
+  for(const key of ['duplicateSelf','wideHand'])check(layout[key]===undefined||typeof layout[key]==='boolean','LAYOUT_FLAG_INVALID');
+  check(layout.seats===undefined||Array.isArray(layout.seats)&&layout.seats.length===playerCount&&layout.seats.every(seat=>seats.has(seat)),'LAYOUT_SEATS_INVALID');
+  const overrides=layout.overrides||{};
+  check(record(overrides)&&Object.keys(overrides).every(key=>['fieldColumns','opponentsAlign','playerIndicators','mirrorIndicators'].includes(key)),'LAYOUT_OVERRIDES_INVALID');
+  check(overrides.fieldColumns===undefined||overrides.fieldColumns===3,'LAYOUT_COLUMNS_INVALID');
+  check(overrides.opponentsAlign===undefined||['start','end'].includes(overrides.opponentsAlign),'LAYOUT_ALIGN_INVALID');
+  check(overrides.playerIndicators===undefined||overrides.playerIndicators==='below-avatar','LAYOUT_INDICATORS_INVALID');
+  check(overrides.mirrorIndicators===undefined||typeof overrides.mirrorIndicators==='boolean','LAYOUT_MIRROR_INVALID');
+  return value;
+ }
+ function options(scene,playerCount){const value=Object.fromEntries(fields.filter(key=>scene[key]!==undefined).map(key=>[key,scene[key]]));validate(value,playerCount);return value;}
+ return Object.freeze({fields,validate,options});
+})();
+ // Physical back of a 4:7 tile, retained from the original component.
+ function dominoBackArt(){return V.viewport({width:48,height:84,className:'piece-art domino-back-surface',attrs:'data-piece-type="domino" aria-hidden="true"',content:'<rect x=".5" y="1.5" width="47" height="82" rx="7" fill="var(--color-material-domino-side,#c4c7b3)"/><rect x=".5" y=".5" width="47" height="81" rx="7" fill="var(--color-material-domino-face,#fffbed)" stroke="var(--color-material-domino-ink,#365f4c)"/><rect x="2" y="2" width="44" height="78" rx="5.5" fill="var(--color-material-domino-ink,#365f4c)"/><rect x="3" y="3" width="42" height="76" rx="4.5" fill="none" stroke="var(--color-material-domino-face,#fffbed)" stroke-opacity=".35"/>'});}
+ // The original raised mark token; shared by ruled grid games and rulebook art.
+ function markTokenArt(mark){
+  if(mark===null||mark===undefined||mark==='')return '';
+  const C=root.PlayroomComponents;if(!C)throw Error('SDK_COMPONENT_UNAVAILABLE');
+  const content=mark==='X'?'<path d="M30 25 70 65M70 25 30 65"/>':mark==='O'?'<circle cx="50" cy="45" r="24"/>':V.text(String(mark),{x:50,y:45,size:40,fill:'currentColor',attrs:'stroke="none"'});
+  return C.roundTokenArt().replace('class="round-token-art','style="display:block;width:84%;height:84%;--round-token-fill:var(--color-material-card-face,#fff9e6)" class="mark-token-art round-token-art').replace('</svg>','<g fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round">'+content+'</g></svg>');
+ }
+ function standardCardIdentity(value){
+  const hidden=!value||value.hidden;
   const rank=hidden?'':value.joker?globalThis.PlayroomMessages.text("ui.game-components.2f0a8ec85914"):({14:globalThis.PlayroomMessages.text("ui.game-components.7614b90a1064"),13:globalThis.PlayroomMessages.text("ui.game-components.130b874a5c04"),12:globalThis.PlayroomMessages.text("ui.game-components.55cea60d6cce"),11:globalThis.PlayroomMessages.text("ui.game-components.8b7b577aa31e")})[value.rank]||value.rank,suit=hidden?'':value.suit||'';
   const red=!hidden&&(value.color==='red'||suit==='♥'||suit==='♦');
   const label=hidden?globalThis.PlayroomMessages.text("ui.game-components.c13a6680430c"):value.joker?globalThis.PlayroomMessages.text("ui.game-components.232b69813cbf",{p0:String(red?globalThis.PlayroomMessages.text("ui.game-components.21b4d916f326"):globalThis.PlayroomMessages.text("ui.game-components.1ca9b6b05dfc"))}):`${rank} ${suit}`;
 
+  return {hidden,rank,suit,red,label};
+ }
+ function createHelpers(H,source){
+function cardDescriptor(value,attrs='disabled',extra=''){
+  const tag=attrs==='disabled'?'span':'button',{hidden,rank,suit,red,label}=standardCardIdentity(value);
   return {tag,className:`shared-card ${hidden?'shared-card-back':''} ${red?'shared-red':''} ${extra}`,attrs:tag==='button'?attrs:'',entity:!hidden&&value.id?entityKey(entityRef('card',value.id)):null,label,family:hidden?'card-back':'card-face',params:{rank,suit,hidden,...(!hidden&&value?.compact===true?{compact:true}:{}),crown:!!value?.crown,backUrl:hidden?source('card-back',value?.assetSet):'',...(hidden?{assetSet:value?.assetSet,backUrls:Object.fromEntries((value?.assetSet?[value.assetSet]:['standard-deck','mini-split-deck']).map(set=>[set,source('card-back',set)]))}:{})}};
  }
 function renderCard({tag,className,attrs,entity,label,family,params}){
@@ -247,5 +325,5 @@ const cover=content=>H.svg(`<ellipse data-cover-shadow cx="151" cy="158" rx="112
   const die=(value,attrs='disabled',extra='')=>'<button class="shared-die '+extra+(/\bdisabled\b/.test(attrs)?'':' is-playable')+(/aria-pressed="true"/.test(attrs)?' is-selected':'')+'" '+attrs+' aria-label="'+globalThis.PlayroomMessages.text("ui.game-components.c21f8ac4292c")+H.esc(value||globalThis.PlayroomMessages.text("ui.game-components.22c66b66eaa1"))+'">'+H.assetArt('die',{value},()=>dieArt(value))+'</button>';
   return Object.freeze({entityRef,entityKey,validMetric,actionSelector,handLayout,tokenStrip,pieceIndicators,rotationController,button:options=>button(options,{icon:H.icon}),card,cardDescriptor,renderCard,cardSlot,die,cover,checkerArt:(king,movable)=>H.assetArt('checker',{king,movable},()=>checkerArt(king,movable)),dominoFace:(a,b,rotation=0)=>H.assetArt('domino',{a,b,rotation},()=>dominoFace(a,b,rotation)),shipSilhouette:size=>H.assetArt('ship',{size},()=>shipSilhouette(size)),scoreTable:params=>H.assetArt('score-table',params,()=>scoreTable(params)),boardCells,dieArt:(value,params={})=>H.assetArt('die',{value,...params},()=>dieArt(value,params)),bubbleClass});
  }
- return Object.freeze({vector:V,entityRef,entityKey,validMetric,actionSelector,handLayout,tokenStrip,pieceIndicators:V.render(pieceIndicators),rotationController,button,art,publicFrames,countBadge,shipSilhouette:V.render(shipSilhouette),checkerArt:V.render(checkerArt),dominoFace,dieArt:V.render(dieArt),boardCells,bubbleClass,scoreTable,createHelpers,AssetResolver,defaultRenderers,pieceTypes,cardFrame:V.render(cardFrame),cardIndexInk:V.render(cardIndexInk),cardFace:V.render(cardFace),cardBack:V.render(cardBack),characterFace:V.render(characterFace),scoreBadge});
+ return Object.freeze({foldedChainLayout,foldedChainOffset,dominoBackArt,layoutPolicy,markTokenArt,vector:V,entityRef,entityKey,validMetric,actionSelector,handLayout,tokenStrip,pieceIndicators:V.render(pieceIndicators),rotationController,button,art,publicFrames,countBadge,standardCardIdentity,shipSilhouette:V.render(shipSilhouette),checkerArt:V.render(checkerArt),dominoFace,dieArt:V.render(dieArt),boardCells,bubbleClass,scoreTable,createHelpers,AssetResolver,defaultRenderers,pieceTypes,cardFrame:V.render(cardFrame),cardIndexInk:V.render(cardIndexInk),cardFace:V.render(cardFace),cardBack:V.render(cardBack),characterAssetFiles,characterFace:V.render(characterFace),scoreBadge});
 });

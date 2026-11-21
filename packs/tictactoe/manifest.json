@@ -1,10 +1,13 @@
 {
   "id": "tictactoe",
-  "version": "0.4.1",
-  "name": "Крестики-нолики",
+  "version": "0.4.4-preview.1",
+  "name": {
+    "key": "tictactoe.meta.name"
+  },
   "category": "board",
-  "estimatedDuration": "2–5 мин",
-  "tagline": "Займи три клетки в линию раньше соперника.",
+  "tagline": {
+    "key": "manifest.tagline"
+  },
   "capabilities": {
     "hands": false,
     "surfaces": [
@@ -47,93 +50,116 @@
     ],
     "locales": {
       "ru": [
-        "locales/ru/game.json"
+        "lang/ru.json"
       ]
     }
   },
   "skinFamilies": [
     "board"
   ],
-  "presetSetting": {
-    "label": "Режим",
-    "options": [
-      {
-        "value": "classic",
-        "label": "Классика"
-      }
-    ]
-  },
   "releases": [
+    {
+      "version": "0.4.2",
+      "changes": [
+        {
+          "key": "manifest.releases.0.changes.0"
+        }
+      ]
+    },
     {
       "version": "0.4.0",
       "changes": [
-        "Стабильный выпуск: обновлены правила, интерфейс и параметры игры."
+        {
+          "key": "manifest.releases.1.changes.0"
+        }
       ]
     },
     {
       "version": "0.3.6",
       "changes": [
-        "Стабильный выпуск: обновлены правила, интерфейс и параметры игры."
+        {
+          "key": "manifest.releases.1.changes.0"
+        }
       ]
     },
     {
       "version": "0.3.6-preview.14",
       "changes": [
-        "Синхронизированы общие компоненты с исправлениями чтения индексов, перекрытия карт и обновления оформления; правила игры не менялись."
+        {
+          "key": "manifest.releases.3.changes.0"
+        }
       ]
     },
     {
       "version": "0.3.6-preview.13",
       "changes": [
-        "При композиции SVG сохраняются полные атрибуты толщины, прозрачности и идентичности; стандартный контур масштабируется целиком."
+        {
+          "key": "manifest.releases.4.changes.0"
+        }
       ]
     },
     {
       "version": "0.3.6-preview.12",
       "changes": [
-        "Общие игровые ассеты сохраняют пропорции рамок, скруглений и толщины в игре, миниатюрах, правилах, параметрах и анимациях. Убраны вторые фиксированные рамки и тени поверх SVG."
+        {
+          "key": "manifest.releases.5.changes.0"
+        }
       ]
     },
     {
       "version": "0.3.6-preview.11",
       "changes": [
-        "Скругления карт и общих фигур масштабируются вместе с компонентами."
+        {
+          "key": "manifest.releases.6.changes.0"
+        }
       ]
     },
     {
       "version": "0.3.6-preview.8",
       "changes": [
-        "Общий SDK допускает до 64 ленивых публичных кадров; одновременно готовится только текущий и следующий кадр."
+        {
+          "key": "manifest.releases.7.changes.0"
+        }
       ]
     },
     {
       "version": "0.3.6-preview.7",
       "changes": [
-        "Обновлён общий SDK поэтапной подготовки публичных кадров; правила игры сохранены."
+        {
+          "key": "manifest.releases.8.changes.0"
+        }
       ]
     },
     {
       "version": "0.3.6-preview.6",
       "changes": [
-        "Крестики и нолики показаны общими объёмными жетонами."
+        {
+          "key": "manifest.releases.9.changes.0"
+        }
       ]
     },
     {
       "version": "0.3.6-preview.5",
       "changes": [
-        "Обновлён общий каталог оформления и сведения о версии пака. Правила и игровой процесс не изменены."
+        {
+          "key": "manifest.releases.10.changes.0"
+        }
       ]
     },
     {
       "version": "0.3.5",
       "changes": [
-        "Обновлён общий компонент пустого карточного слота; правила игры не изменены."
+        {
+          "key": "manifest.releases.11.changes.0"
+        }
       ]
     },
     {
       "version": "0.3.4",
       "changes": [
-        "Короткие правила: абзацы, списки, таблицы и иллюстрации игровых элементов и интерфейса."
+        {
+          "key": "manifest.releases.12.changes.0"
+        }
       ]
     }
   ],
@@ -142,5 +168,11 @@
     "turn-order-v1",
     "isolated-execution-v1"
   ],
-  "execution": "isolated-v1"
+  "execution": "isolated-v1",
+  "defaultLanguage": "ru",
+  "estimatedDurationMin": [
+    2,
+    5
+  ],
+  "settings": "settings.json"
 }

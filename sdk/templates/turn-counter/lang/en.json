@@ -1,0 +1,13 @@
+{
+  "meta.name": "Counter __PACK_ID__",
+  "meta.description": "A minimal standalone pack example.",
+  "preset.label": "Mode",
+  "preset.classic": "Classic",
+  "settings.target.label": "Target",
+  "settings.target.help": "The first player to reach the selected target wins.",
+  "groups.end.label": "End of game",
+  "rules.goal": "Take turns increasing the counter. Reach the selected target to win.",
+  "actions.increment": "+1",
+  "events.incremented": "Counter increased",
+  "release.current": "Initial example version."
+}

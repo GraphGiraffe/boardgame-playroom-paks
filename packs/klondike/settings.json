@@ -1,0 +1,326 @@
+{
+  "fields": [
+    {
+      "key": "preset",
+      "label": {
+        "key": "settings.preset.label"
+      },
+      "options": [
+        {
+          "value": "classic",
+          "label": {
+            "common": "classic"
+          }
+        }
+      ],
+      "kind": "preset",
+      "valueType": "string",
+      "control": "select",
+      "default": "classic"
+    },
+    {
+      "key": "draw",
+      "label": {
+        "key": "settings.draw.label"
+      },
+      "default": "3",
+      "options": [
+        {
+          "value": "1",
+          "description": {
+            "key": "settings.draw.options.1.description"
+          }
+        },
+        {
+          "value": "3",
+          "description": {
+            "key": "settings.draw.options.3.description"
+          }
+        }
+      ],
+      "control": "slider",
+      "help": {
+        "key": "settings.draw.help"
+      },
+      "preview": {
+        "kind": "cards"
+      },
+      "kind": "option",
+      "valueType": "string"
+    },
+    {
+      "key": "scoring",
+      "label": {
+        "key": "settings.scoring.label"
+      },
+      "default": "standard",
+      "options": [
+        {
+          "value": "standard",
+          "label": {
+            "key": "settings.scoring.options.standard.label"
+          },
+          "description": {
+            "key": "settings.scoring.options.standard.description"
+          },
+          "preview": {
+            "kind": "symbol",
+            "icon": "trophy"
+          }
+        },
+        {
+          "value": "none",
+          "label": {
+            "key": "settings.scoring.options.none.label"
+          },
+          "description": {
+            "key": "settings.scoring.options.none.description"
+          },
+          "preview": {
+            "kind": "symbol",
+            "icon": "close"
+          }
+        },
+        {
+          "value": "vegas",
+          "label": {
+            "key": "settings.scoring.options.vegas.label"
+          },
+          "description": {
+            "key": "settings.scoring.options.vegas.description"
+          },
+          "preview": {
+            "kind": "symbol",
+            "icon": "cards"
+          }
+        }
+      ],
+      "control": "slider",
+      "help": {
+        "key": "settings.scoring.help"
+      },
+      "preview": {
+        "kind": "symbol",
+        "icon": "trophy"
+      },
+      "kind": "option",
+      "valueType": "string"
+    },
+    {
+      "key": "undo",
+      "label": {
+        "key": "settings.undo.label"
+      },
+      "default": "last",
+      "options": [
+        {
+          "value": "off",
+          "label": {
+            "common": "off"
+          },
+          "description": {
+            "key": "settings.undo.options.off.description"
+          },
+          "preview": {
+            "kind": "symbol",
+            "icon": "close"
+          }
+        },
+        {
+          "value": "last",
+          "label": {
+            "key": "settings.undo.options.last.label"
+          },
+          "description": {
+            "key": "settings.undo.options.last.description"
+          },
+          "preview": {
+            "kind": "symbol",
+            "icon": "undo"
+          }
+        },
+        {
+          "value": "history",
+          "label": {
+            "key": "settings.undo.options.history.label"
+          },
+          "description": {
+            "key": "settings.undo.options.history.description"
+          },
+          "preview": {
+            "kind": "symbol",
+            "icon": "history"
+          }
+        }
+      ],
+      "control": "slider",
+      "help": {
+        "key": "settings.undo.help"
+      },
+      "preview": {
+        "kind": "symbol",
+        "icon": "undo"
+      },
+      "kind": "option",
+      "valueType": "string"
+    },
+    {
+      "key": "maxPasses",
+      "label": {
+        "key": "settings.maxPasses.label"
+      },
+      "default": "0",
+      "options": [
+        {
+          "value": "1"
+        },
+        {
+          "value": "3"
+        },
+        {
+          "value": "0",
+          "label": {
+            "common": "infinity"
+          },
+          "description": {
+            "key": "settings.maxPasses.options.0.description"
+          }
+        }
+      ],
+      "control": "slider",
+      "help": {
+        "key": "settings.maxPasses.help"
+      },
+      "preview": {
+        "kind": "symbol",
+        "icon": "refresh"
+      },
+      "inactiveWhen": {
+        "scoring": "vegas"
+      },
+      "inactivePresentation": {
+        "preview": {
+          "kind": "symbol",
+          "icon": "lock"
+        },
+        "description": {
+          "key": "settings.maxPasses.inactivePresentation.description"
+        }
+      },
+      "kind": "option",
+      "valueType": "string",
+      "optionDefaults": {
+        "description": {
+          "key": "settings.maxPasses.optionDefaults.description"
+        }
+      }
+    },
+    {
+      "key": "autoFlip",
+      "label": {
+        "key": "settings.autoFlip.label"
+      },
+      "default": "auto",
+      "options": [
+        {
+          "value": "manual",
+          "label": {
+            "common": "manual"
+          },
+          "description": {
+            "key": "settings.autoFlip.options.manual.description"
+          },
+          "preview": {
+            "kind": "symbol",
+            "icon": "hand"
+          }
+        },
+        {
+          "value": "auto",
+          "label": {
+            "common": "auto"
+          },
+          "description": {
+            "key": "settings.autoFlip.options.auto.description"
+          },
+          "preview": {
+            "kind": "symbol",
+            "icon": "bot"
+          }
+        }
+      ],
+      "control": "slider",
+      "help": {
+        "key": "settings.autoFlip.help"
+      },
+      "preview": {
+        "kind": "symbol",
+        "icon": "hand"
+      },
+      "kind": "option",
+      "valueType": "string"
+    },
+    {
+      "key": "autoCollect",
+      "label": {
+        "key": "settings.autoCollect.label"
+      },
+      "default": "button",
+      "options": [
+        {
+          "value": "off",
+          "label": {
+            "common": "off"
+          },
+          "description": {
+            "key": "settings.autoCollect.options.off.description"
+          },
+          "preview": {
+            "kind": "symbol",
+            "icon": "close"
+          }
+        },
+        {
+          "value": "button",
+          "label": {
+            "key": "settings.autoCollect.options.button.label"
+          },
+          "description": {
+            "key": "settings.autoCollect.options.button.description"
+          },
+          "preview": {
+            "kind": "symbol",
+            "icon": "hand"
+          }
+        }
+      ],
+      "control": "slider",
+      "help": {
+        "key": "settings.autoCollect.help"
+      },
+      "preview": {
+        "kind": "symbol",
+        "icon": "hand"
+      },
+      "kind": "option",
+      "valueType": "string"
+    }
+  ],
+  "groups": [
+    {
+      "label": {
+        "key": "settings.groups.preset-draw-scoring-undo-maxPasses-autoFlip-autoCollect.label"
+      },
+      "fields": [
+        "preset",
+        "draw",
+        "scoring",
+        "undo",
+        "maxPasses",
+        "autoFlip",
+        "autoCollect"
+      ],
+      "placement": "main"
+    }
+  ]
+}

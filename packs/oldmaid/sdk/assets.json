@@ -1,0 +1,7 @@
+{
+  "assets/cover.webp": {
+    "license": "Existing PlayRoom artwork; see repository LICENSING.md",
+    "source": "Existing cover from oldmaid 0.4.0; published pack SHA256 23aa2a50eecf2d192f65c81b75b417dcd15737a9a88b33fc8de40440beb725c5; source master in Git da58f6c",
+    "sha256": "90c7aaf7c378e6e9e848ab58ea61c9baa00ccbe1c5156384cb160f734aef1784"
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "id": "anchored-cargo",
+  "version": "0.3.0",
+  "engineApi": 4,
+  "viewApi": 3,
+  "stateVersion": 2,
+  "sourceModules": {
+    "rules": [
+      "domain/game.js"
+    ],
+    "view": [
+      "presentation/scene.js"
+    ],
+    "locales": {
+      "ru": [
+        "lang/ru.json"
+      ],
+      "en": [
+        "lang/en.json"
+      ]
+    }
+  },
+  "name": {
+    "key": "meta.name"
+  },
+  "execution": "isolated-v1",
+  "sdkFeatures": [
+    "isolated-execution-v1",
+    "anchored-board-v1",
+    "anchored-orientation-v1"
+  ],
+  "rules": "rules.js",
+  "view": "view.js",
+  "styles": "styles.css",
+  "tagline": {
+    "key": "meta.description"
+  },
+  "releases": [
+    {
+      "version": "0.3.0",
+      "changes": [{"key": "release.handoff"}]
+    },
+    {
+      "version": "0.2.0",
+      "changes": [{"key": "release.orientation"}]
+    },
+    {
+      "version": "0.1.0",
+      "changes": [
+        {
+          "key": "release.current"
+        }
+      ]
+    }
+  ],
+  "defaultLanguage": "ru",
+  "tags": [
+    "pieces"
+  ],
+  "capabilities": {
+    "surfaces": [
+      "combined",
+      "table",
+      "player"
+    ]
+  },
+  "playModes": [
+    {
+      "id": "individual",
+      "players": [
+        2
+      ],
+      "teams": false
+    }
+  ]
+}

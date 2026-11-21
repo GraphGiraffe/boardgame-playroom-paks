@@ -1,0 +1,238 @@
+{
+  "fields": [
+    {
+      "key": "preset",
+      "label": {
+        "key": "spider.book.text.17"
+      },
+      "options": [
+        {
+          "value": "classic",
+          "label": {
+            "common": "classic"
+          }
+        }
+      ],
+      "kind": "preset",
+      "valueType": "string",
+      "control": "select",
+      "default": "classic"
+    },
+    {
+      "key": "suits",
+      "label": {
+        "key": "settings.suits.label"
+      },
+      "default": "1",
+      "options": [
+        {
+          "value": "1",
+          "description": {
+            "key": "settings.suits.options.1.description"
+          },
+          "preview": {
+            "ids": [
+              "setting-suits-1"
+            ]
+          }
+        },
+        {
+          "value": "2",
+          "description": {
+            "key": "settings.suits.options.2.description"
+          },
+          "preview": {
+            "ids": [
+              "setting-suits-2"
+            ]
+          }
+        },
+        {
+          "value": "4",
+          "description": {
+            "key": "settings.suits.options.4.description"
+          },
+          "preview": {
+            "ids": [
+              "setting-suits-4"
+            ]
+          }
+        }
+      ],
+      "control": "slider",
+      "help": {
+        "key": "settings.suits.help"
+      },
+      "preview": {
+        "kind": "illustrations"
+      },
+      "kind": "option",
+      "valueType": "string"
+    },
+    {
+      "key": "scoring",
+      "label": {
+        "key": "settings.scoring.label"
+      },
+      "default": "standard",
+      "options": [
+        {
+          "value": "standard",
+          "label": {
+            "key": "settings.scoring.options.standard.label"
+          },
+          "description": {
+            "key": "settings.scoring.options.standard.description"
+          },
+          "preview": {
+            "icon": "trophy"
+          }
+        },
+        {
+          "value": "none",
+          "label": {
+            "key": "settings.scoring.options.none.label"
+          },
+          "description": {
+            "key": "settings.scoring.options.none.description"
+          },
+          "preview": {
+            "kind": "symbol",
+            "icon": "close"
+          }
+        }
+      ],
+      "control": "slider",
+      "help": {
+        "key": "settings.scoring.help"
+      },
+      "preview": {
+        "kind": "symbol"
+      },
+      "kind": "option",
+      "valueType": "string"
+    },
+    {
+      "key": "undo",
+      "label": {
+        "key": "settings.undo.label"
+      },
+      "default": "last",
+      "options": [
+        {
+          "value": "off",
+          "label": {
+            "common": "off"
+          },
+          "description": {
+            "key": "settings.undo.options.off.description"
+          },
+          "preview": {
+            "kind": "symbol",
+            "icon": "close"
+          }
+        },
+        {
+          "value": "last",
+          "label": {
+            "key": "spider.book.text.19"
+          },
+          "description": {
+            "key": "settings.undo.options.last.description"
+          },
+          "preview": {
+            "icon": "undo"
+          }
+        },
+        {
+          "value": "history",
+          "label": {
+            "key": "spider.book.text.21"
+          },
+          "description": {
+            "key": "settings.undo.options.history.description"
+          },
+          "preview": {
+            "icon": "history"
+          }
+        }
+      ],
+      "control": "slider",
+      "help": {
+        "key": "settings.undo.help"
+      },
+      "preview": {
+        "kind": "symbol"
+      },
+      "kind": "option",
+      "valueType": "string"
+    },
+    {
+      "key": "emptyDeal",
+      "label": {
+        "key": "settings.emptyDeal.label"
+      },
+      "default": "forbid",
+      "options": [
+        {
+          "value": "forbid",
+          "label": {
+            "key": "settings.emptyDeal.options.forbid.label"
+          },
+          "description": {
+            "key": "settings.emptyDeal.options.forbid.description"
+          },
+          "preview": {
+            "ids": [
+              "setting-empty-forbid"
+            ]
+          },
+          "shortLabel": {
+            "key": "settings.emptyDeal.options.forbid.shortLabel"
+          }
+        },
+        {
+          "value": "allow",
+          "label": {
+            "key": "settings.emptyDeal.options.allow.label"
+          },
+          "description": {
+            "key": "settings.emptyDeal.options.allow.description"
+          },
+          "preview": {
+            "ids": [
+              "setting-empty-allow"
+            ]
+          },
+          "shortLabel": {
+            "key": "settings.emptyDeal.options.allow.shortLabel"
+          }
+        }
+      ],
+      "control": "slider",
+      "help": {
+        "key": "settings.emptyDeal.help"
+      },
+      "preview": {
+        "kind": "illustrations"
+      },
+      "kind": "option",
+      "valueType": "string"
+    }
+  ],
+  "groups": [
+    {
+      "label": {
+        "key": "settings.groups.preset-suits-scoring-undo-emptyDeal.label"
+      },
+      "fields": [
+        "preset",
+        "suits",
+        "scoring",
+        "undo",
+        "emptyDeal"
+      ],
+      "placement": "main"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "assets/cover.webp": {
+    "license": "Existing PlayRoom artwork; see repository LICENSING.md",
+    "source": "Existing cover from gofish 0.4.0; published pack SHA256 0221a50cbe50093fca5cd973b50bcb696efb29a6db09e48257463718bc77ac58; source master in Git da58f6c",
+    "sha256": "523bbab0d240aee74c969523c5bc5dc3f834bb9804a62aeda0c907a7c380c79f"
+  }
+}

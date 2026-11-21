@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PlayRoom SDK project",
+  "type": "object",
+  "required": [
+    "contractVersion",
+    "rules",
+    "presentation"
+  ],
+  "definitions": {
+    "modules": {
+      "type": "array",
+      "uniqueItems": true,
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "pattern": "\\.js$"
+      }
+    }
+  },
+  "properties": {
+    "contractVersion": {
+      "const": 1
+    },
+    "checkTypes": {
+      "type": "boolean"
+    },
+    "options": {
+      "type": "object"
+    },
+    "origin": {
+      "type": "object"
+    },
+    "assetItems": {
+      "description": "Keep only the listed item IDs from each resolved shared asset pack. Explicit files and dependencies retain their own declarations.",
+      "type": "object",
+      "maxProperties": 512,
+      "propertyNames": { "pattern": "^[a-z][a-z0-9-]*$" },
+      "additionalProperties": {
+        "type": "array",
+        "maxItems": 512,
+        "uniqueItems": true,
+        "items": { "type": "string", "minLength": 1 }
+      }
+    },
+    "rules": {
+      "$ref": "#/definitions/modules"
+    },
+    "helpers": {
+      "$ref": "#/definitions/modules"
+    },
+    "support": {
+      "$ref": "#/definitions/modules"
+    },
+    "presentation": {
+      "$ref": "#/definitions/modules"
+    },
+    "types": {
+      "type": "array",
+      "maxItems": 512,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "\\.d\\.ts$"
+      }
+    }
+  }
+}

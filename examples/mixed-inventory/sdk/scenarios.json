@@ -1,0 +1,14 @@
+{
+  "contractVersion": 1,
+  "scenarios": [{
+    "id": "reveal-only-the-stored-item",
+    "options": {"playerCount": 2, "firstPlayer": 0, "preset": "classic", "rng": 1},
+    "steps": [
+      {"actor": 1, "command": {"type": "store", "item": "card", "slot": 0}, "reject": true},
+      {"actor": 0, "command": {"type": "store", "item": "tile", "slot": 2}, "reject": true},
+      {"actor": 0, "command": {"type": "store", "item": "tile", "slot": 1}, "expect": {"turn": 1}, "expectPublic": {"data.counts": [2,3], "data.own": [], "data.ownRank": null, "data.stored.0.rank": null, "data.stored.0.slot": 1}},
+      {"actor": 1, "command": {"type": "store", "item": "card", "slot": 1}, "reject": true},
+      {"actor": 1, "command": {"type": "store", "item": "card", "slot": 0}, "expect": {"status": "finished", "winners": [1]}, "expectPublic": {"data.counts": [2,2], "data.own": [], "data.ownRank": null, "data.stored.1.rank": 7, "data.stored.1.slot": 0}}
+    ]
+  }]
+}

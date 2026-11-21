@@ -1,0 +1,19 @@
+{
+  "meta.name": "Sealed Signal",
+  "meta.description": "Two players make private decisions based on a shared die.",
+  "preset.classic": "Sealed decision",
+  "rules.goal": "Both players have 20 seconds. Claim scores the die if the other player does not claim it. Yield scores one point. A missing choice scores zero.",
+  "choice.hold": "Yield",
+  "choice.claim": "Claim",
+  "choice.none": "Pass",
+  "prompt.window": "Sealed choice · {ready} of 2 ready",
+  "prompt.selected": "Your choice: {choice}",
+  "prompt.reveal": "Reveal: {a} · {b}",
+  "event.committed": "A player made a sealed decision",
+  "event.ready": "Both decisions were revealed",
+  "event.timeout": "Time expired and the decisions were revealed",
+  "clock.label": "Decision time",
+  "dice.stimulus": "Shared die",
+  "score.points": "Points",
+  "release.current": "Demonstrates private decisions and a deadline."
+}

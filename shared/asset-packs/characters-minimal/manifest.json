@@ -2,7 +2,7 @@
   "format": "playroom-asset-pack",
   "formatVersion": 1,
   "id": "characters-minimal",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "name": "Стандартные персонажи",
   "canvas": [
     256,
@@ -416,11 +416,5 @@
       "file": "runtime/hexagon-purple.svg",
       "sha256": "3f97b04cd0540fa4cf3ca8f75d31a01dd9452836b49c3dfed4f29844e5858feb"
     }
-  ],
-  "files": [
-    "renderer.js"
-  ],
-  "scripts": [
-    "renderer.js"
   ]
 }

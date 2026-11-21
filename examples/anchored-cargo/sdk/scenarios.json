@@ -1,0 +1,27 @@
+{
+  "contractVersion": 1,
+  "scenarios": [
+    {
+      "id": "load-travel-deliver",
+      "options": {"playerCount": 2, "firstPlayer": 0, "preset": "classic", "rng": 1},
+      "steps": [
+        {"actor": 0, "command": {"type": "rotate"}, "reject": true},
+        {"actor": 0, "command": {"type": "load", "slot": 0}, "expect": {"data.loaded": 1, "data.points": [1, 0]}},
+        {"actor": 0, "command": {"type": "rotate"}, "expect": {"data.cell": 0, "data.loaded": 1, "data.orientation": 1, "turn": 0}},
+        {"actor": 0, "command": {"type": "travel", "cell": 1}, "expect": {"data.cell": 1, "data.loaded": 1, "data.orientation": 2, "turn": 1}},
+        {"actor": 1, "command": {"type": "load", "slot": 1}, "expect": {"data.loaded": 2, "data.points": [1, 1]}},
+        {"actor": 1, "command": {"type": "travel", "cell": 2}, "expect": {"data.cell": 2, "data.loaded": 2, "data.orientation": 3, "status": "finished", "winners": [0, 1]}}
+      ]
+    },
+    {
+      "id": "pass-to-second-carrier",
+      "options": {"playerCount": 2, "firstPlayer": 0, "preset": "handoff", "rng": 1},
+      "steps": [
+        {"actor": 0, "command": {"type": "transfer"}, "reject": true},
+        {"actor": 0, "command": {"type": "load", "slot": 0}, "expect": {"data.loaded": 1}},
+        {"actor": 0, "command": {"type": "transfer"}, "expect": {"data.transferred": true, "data.points": [1, 0]}},
+        {"actor": 0, "command": {"type": "transfer"}, "reject": true}
+      ]
+    }
+  ]
+}

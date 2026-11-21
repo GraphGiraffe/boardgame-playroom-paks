@@ -4,11 +4,14 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["gofish"] = {
   "id": "gofish",
-  "version": "0.4.1",
-  "name": "Спроси рыбу",
+  "version": "0.4.5",
+  "name": {
+    "key": "gofish.meta.name"
+  },
   "category": "cards",
-  "estimatedDuration": "10–20 мин",
-  "tagline": "Спрашивай ранги — собирай четвёрки.",
+  "tagline": {
+    "key": "manifest.tagline"
+  },
   "capabilities": {
     "hands": true,
     "surfaces": [
@@ -26,30 +29,75 @@
     "standard-deck",
     "mini-split-deck"
   ],
-  "settings": [
-    {
-      "key": "deck",
-      "label": "Колода",
-      "default": "52",
-      "options": [
-        {
-          "value": "36",
-          "label": "36 карт",
-          "description": "6–Т: 9 квартетов, без джокеров."
+  "settings": {
+    "fields": [
+      {
+        "key": "preset",
+        "label": {
+          "key": "settings.preset.label"
         },
-        {
-          "value": "52",
-          "label": "52 карты",
-          "description": "2–Т: 13 квартетов, без джокеров."
-        }
-      ],
-      "help": "36 карт — девять достоинств от шестёрки до туза, 9 квартетов. 52 карты — тринадцать достоинств от двойки до туза, 13 квартетов. В обоих вариантах джокеров нет.",
-      "control": "select",
-      "preview": {
-        "kind": "cards"
+        "options": [
+          {
+            "value": "classic",
+            "label": {
+              "key": "gofish.meta.classic"
+            }
+          }
+        ],
+        "control": "select",
+        "default": "classic",
+        "kind": "preset",
+        "valueType": "string"
+      },
+      {
+        "key": "deck",
+        "label": {
+          "key": "gofish.book.text.20"
+        },
+        "default": "52",
+        "options": [
+          {
+            "value": "36",
+            "label": {
+              "key": "gofish.book.text.22"
+            },
+            "description": {
+              "key": "settings.deck.options.36.description"
+            }
+          },
+          {
+            "value": "52",
+            "label": {
+              "key": "gofish.book.text.24"
+            },
+            "description": {
+              "key": "settings.deck.options.52.description"
+            }
+          }
+        ],
+        "help": {
+          "key": "settings.deck.help"
+        },
+        "control": "select",
+        "preview": {
+          "kind": "cards"
+        },
+        "kind": "option",
+        "valueType": "string"
       }
-    }
-  ],
+    ],
+    "groups": [
+      {
+        "label": {
+          "key": "settings.groups.deck.label"
+        },
+        "fields": [
+          "deck"
+        ],
+        "placement": "main"
+      }
+    ]
+  },
   "engineApi": 4,
   "stateVersion": 2,
   "viewApi": 3,
@@ -86,123 +134,25 @@
     ],
     "locales": {
       "ru": [
-        "locales/ru/game.json"
+        "lang/ru.json"
       ]
     }
   },
-  "ruleGroups": [
-    {
-      "label": "Карты",
-      "fields": [
-        "deck"
-      ]
-    }
-  ],
   "skinFamilies": [
     "card-face",
     "card-back"
   ],
-  "presetSetting": {
-    "label": "Режим",
-    "options": [
-      {
-        "value": "classic",
-        "label": "Классика"
-      }
-    ]
-  },
-  "releases": [
-    {
-      "version": "0.4.0",
-      "changes": [
-        "Стабильный выпуск: обновлены правила, интерфейс и параметры игры."
-      ]
-    },
-    {
-      "version": "0.3.5",
-      "changes": [
-        "Стабильный выпуск: обновлены правила, интерфейс и параметры игры."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.17",
-      "changes": [
-        "Синхронизированы общие компоненты с исправлениями чтения индексов, перекрытия карт и обновления оформления; правила игры не менялись."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.16",
-      "changes": [
-        "При композиции SVG сохраняются полные атрибуты толщины, прозрачности и идентичности; стандартный контур масштабируется целиком."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.15",
-      "changes": [
-        "Общие игровые ассеты сохраняют пропорции рамок, скруглений и толщины в игре, миниатюрах, правилах, параметрах и анимациях. Убраны вторые фиксированные рамки и тени поверх SVG."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.14",
-      "changes": [
-        "Скругления карт и общих фигур масштабируются вместе с компонентами."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.13",
-      "changes": [
-        "Сокращены пояснения параметров; выбранные варианты читаются компактнее."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.12",
-      "changes": [
-        "Размер колоды показан картами с точным количеством; выбранный вариант кратко объясняет состав квартетов."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.9",
-      "changes": [
-        "Общий SDK допускает до 64 ленивых публичных кадров; одновременно готовится только текущий и следующий кадр."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.8",
-      "changes": [
-        "Обновлён общий SDK поэтапной подготовки публичных кадров; правила игры сохранены."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.7",
-      "changes": [
-        "Обновлены общие компоненты отображения карточных мастей и жетонов."
-      ]
-    },
-    {
-      "version": "0.3.5-preview.6",
-      "changes": [
-        "Угловые номиналы поверх рамки, единое выравнивание индексов и узкая «10» с прежним шрифтом.",
-        "Уточнены безопасные области номиналов и мастей при перекрытии карт."
-      ]
-    },
-    {
-      "version": "0.3.4",
-      "changes": [
-        "Обновлён общий компонент пустого карточного слота; правила игры не изменены."
-      ]
-    },
-    {
-      "version": "0.3.3",
-      "changes": [
-        "Короткие правила: абзацы, списки, таблицы и иллюстрации игровых элементов и интерфейса."
-      ]
-    }
-  ],
+  "releases": [],
   "sdkFeatures": [
     "local-input-v1",
     "turn-order-v1",
     "isolated-execution-v1"
   ],
-  "execution": "isolated-v1"
+  "execution": "isolated-v1",
+  "defaultLanguage": "ru",
+  "estimatedDurationMin": [
+    10,
+    20
+  ]
 };
 })(globalThis);

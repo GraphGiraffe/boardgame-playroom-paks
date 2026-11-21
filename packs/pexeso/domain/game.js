@@ -1,8 +1,10 @@
 // Pure memory game. Bot knowledge contains only publicly revealed card IDs.
 (function(root,factory){
-  if(typeof module==='object'&&module.exports)module.exports=factory;
-  root.PlayroomPackDefinitionFactory=factory;
-})(globalThis,function(ports,Deck){
+  const visibility=root.PlayroomPackDomain?.tileVisibility||(typeof require==='function'?require('../../../shared/domain/tile-visibility.js'):null);
+  const create=(ports,deck)=>factory(ports,deck,visibility);
+  if(typeof module==='object'&&module.exports)module.exports=create;
+  root.PlayroomPackDefinitionFactory=create;
+})(globalThis,function(ports,Deck,visibility){
   'use strict';
   const characters=['crescent','triangle','square','circle','star','rectangle','diamond','hexagon'];
   const colors=['red','orange','yellow','green','blue','purple'];
@@ -14,7 +16,6 @@
     return palette.flatMap((_,round)=>shapes.map((shape,index)=>shape+'-'+palette[(index+round)%palette.length]));
   }
   const pair=card=>card?.character|| (card.joker?'joker':`${card.rank}-${['♥','♦'].includes(card.suit)?'red':'black'}`);
-  const clone=value=>JSON.parse(JSON.stringify(value));
   const fact=(name,actor,params={})=>({type:'pexeso.'+name,actor,params,visibility:{kind:'public'}});
   function create({playerCount,firstPlayer,preset,rng,options={}}){
     const size=options.deck==null||options.deck==='cartoon'?96:[36,52,54].includes(Number(options.deck))?Number(options.deck):52;
@@ -44,19 +45,24 @@
   function actions(position,actor){
     if(position.status!=='playing'||actor!==position.turn)return [];
     const d=position.data;
-    return d.board.flatMap((_,index)=>!d.matched.includes(index)&&(d.phase==='reveal'||!d.flipped.includes(index))?
+    const unavailable=new Set(d.matched);
+    if(d.phase!=='reveal')for(const index of d.flipped)unavailable.add(index);
+    return d.board.flatMap((_,index)=>!unavailable.has(index)?
       [{command:{type:'flip',index},visibility:'public'}]:[]);
   }
   function reduce(position,actor,action){
-    const next=clone(position),d=next.data,events=[];
-    if(d.phase==='reveal'){d.flipped=[];d.phase='first';}
+    const previous=position.data;
+    // Cards keep their identity and order while a flip updates the two slots
+    // and the public memory. Copy scoring only when the pair actually matches.
+    const d={...previous,flipped:previous.phase==='reveal'?[]:previous.flipped.slice(),seen:{...previous.seen}};
+    const next={...position,data:d},events=[];
     d.flipped.push(action.index);d.seen[action.index]=d.board[action.index].id;
     events.push(fact('flipped',actor,{index:action.index}));
     if(d.flipped.length===1)d.phase='second';
     else{
       const [i,j]=d.flipped;
       if(pair(d.board[i])===pair(d.board[j])){
-        d.matched.push(i,j);d.scores[actor]++;d.flipped=[];d.phase='first';events.push(fact('matched',actor));
+        d.matched=[...d.matched,i,j];d.scores=d.scores.slice();d.scores[actor]++;d.flipped=[];d.phase='first';events.push(fact('matched',actor));
         if(d.matched.length===d.board.length){
           const high=Math.max(...d.scores),winners=d.scores.flatMap((value,index)=>value===high?[index]:[]);
           next.status='finished';next.winners=winners.length===position.playerCount?[]:winners;
@@ -70,9 +76,8 @@
     return {position:next,events,turnEnded:action.type==='flip'&&position.data.phase==='second'};
   }
   function project(position){
-    const d=clone(position.data);
-    d.board=d.board.map((card,index)=>d.matched.includes(index)||d.flipped.includes(index)?card:{hidden:true});
-    delete d.seen;return d;
+    const {seen,board,...visible}=position.data;
+    return {...visible,board:visibility.revealIndices(board,visible.matched,visible.flipped)};
   }
   function observe(position){return {seen:{...position.data.seen}};}
   function bot(projection,actor,commands,memory,context={}){

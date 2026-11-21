@@ -1,0 +1,25 @@
+{
+  "contractVersion": 1,
+  "scenarios": [
+    {
+      "id": "both-before-deadline",
+      "options": {"playerCount": 2, "firstPlayer": 0, "preset": "classic", "rng": 4},
+      "steps": [
+        {"actor": 1, "command": {"type": "choose", "choice": "claim"}, "expect": {"status": "playing"}, "expectPublic": {"data.selected": null, "data.reveal": null, "decisionWindow.ready": [1], "actions": []}},
+        {"actor": 1, "command": {"type": "choose", "choice": "hold"}, "reject": true},
+        {"actor": 0, "command": {"type": "choose", "choice": "hold"}, "expect": {"status": "finished", "data.reveal.scores": [1, 5]}, "expectPublic": {"data.reveal.reason": "ready", "data.reveal.choices": ["hold", "claim"]}}
+      ]
+    },
+    {
+      "id": "deadline-with-one-choice",
+      "options": {"playerCount": 2, "firstPlayer": 0, "preset": "classic", "rng": 4},
+      "steps": [
+        {"actor": 0, "command": {"type": "choose", "choice": "claim"}, "expectPublic": {"data.reveal": null, "decisionWindow.ready": [0]}},
+        {"advance": 19999, "expect": {"status": "playing"}},
+        {"advance": 20000, "expect": {"revision": 2, "status": "finished"}, "expectPublic": {"data.reveal.reason": "timeout", "data.reveal.choices": ["claim", null], "data.reveal.scores": [5, 0]}},
+        {"actor": 1, "command": {"type": "choose", "choice": "hold"}, "reject": true},
+        {"advance": 20001, "expect": {"revision": 2, "status": "finished"}}
+      ]
+    }
+  ]
+}

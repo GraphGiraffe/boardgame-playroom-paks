@@ -1,0 +1,7 @@
+{
+  "assets/cover.webp": {
+    "license": "Existing PlayRoom artwork; see repository LICENSING.md",
+    "source": "Existing cover from ludo 0.4.0; published pack SHA256 ea41b86f71c1056accfd05f229ac83ddcde25a1a883d142b35afb2f6dde6cc1d; source master in Git da58f6c",
+    "sha256": "2e9c21fdbdd1ecbb42c49f9430e3c9f546d03c658e5ad3710b2cb5fa4018cd81"
+  }
+}

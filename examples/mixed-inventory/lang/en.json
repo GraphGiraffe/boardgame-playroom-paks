@@ -1,0 +1,17 @@
+{
+  "meta.name": "Storeroom",
+  "meta.description": "Choose items from personal trays.",
+  "preset.classic": "One item per player",
+  "rules.goal": "Each player stores one item in the shared tray. A card earns three points, a domino earns two, and a token earns one. The highest score wins.",
+  "actions.card": "Store the card",
+  "actions.tile": "Store the domino",
+  "actions.token": "Store the token",
+  "events.stored": "Item stored",
+  "view.tray": "Storeroom",
+  "view.slot": "Empty slot {number}",
+  "view.overview": "Item overview",
+  "view.hand": "Player {seat}'s tray",
+  "view.card": "Card, rank {rank}",
+  "view.tile": "Domino 1–2",
+  "view.token": "Token 1"
+}

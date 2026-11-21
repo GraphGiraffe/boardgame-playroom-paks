@@ -1,5 +1,6 @@
 """Canonical offline pack compiler. No app checkout, network or Web UI dependency."""
 import base64
+from copy import deepcopy
 import hashlib
 import json
 import mimetypes
@@ -53,7 +54,7 @@ def validate_parameter_previews(manifest, label):
     if not isinstance(settings, list) or not isinstance(preset, dict):
         raise ValueError(f"Некорректная иллюстрация параметра: {label}")
     sdk = manifest.get("sdkFeatures", [])
-    if (not isinstance(sdk, list) or len(sdk) > 16 or any(not isinstance(f, str) or f not in {"local-input-v1", "turn-order-v1", "parameter-previews-v2", "parameter-illustrations-v1", "standard-parameter-ui-v1", "arrival-departures-v1", "concurrent-reactions-v1", "player-status-v1", "isolated-execution-v1"} for f in sdk) or len(set(sdk)) != len(sdk)):
+    if (not isinstance(sdk, list) or len(sdk) > 16 or any(not isinstance(f, str) or f not in {"die-faces-v1", "local-input-v1", "turn-order-v1", "parameter-previews-v2", "parameter-illustrations-v1", "standard-parameter-ui-v1", "arrival-departures-v1", "concurrent-reactions-v1", "player-status-v1", "isolated-execution-v1", "anchored-board-v1", "mixed-inventory-v1", "inventory-views-v1", "inventory-slots-v1", "anchored-orientation-v1"} for f in sdk) or len(set(sdk)) != len(sdk)):
         raise ValueError(f"Неподдерживаемая возможность SDK: {label}")
     if any(isinstance(f, dict) and (f.get("presentation") == "mode" or "inactiveWhen" in f or "inactivePresentation" in f) for f in settings) and "parameter-previews-v2" not in sdk:
         raise ValueError(f"Требуется SDK parameter-previews-v2: {label}")
@@ -215,6 +216,11 @@ def validate_manifest(manifest, label):
             or any(not isinstance(name, str) or not re.fullmatch(r"[a-z][a-z0-9-]{0,63}", name) for name in modules)
             or len(set(modules)) != len(modules)):
         raise ValueError(f"Некорректные sharedDomain: {label}")
+    if 'estimatedDurationMin' in manifest:
+        duration = manifest['estimatedDurationMin']
+        if isinstance(duration, list):
+            if len(duration) != 2 or any(type(n) not in (int,float) or not math.isfinite(n) or n < 0 for n in duration) or duration[0] > duration[1]: raise ValueError('PACK_DURATION_INVALID')
+        elif type(duration) not in (int,float) or not math.isfinite(duration) or duration < 0: raise ValueError('PACK_DURATION_INVALID')
     validate_parameter_previews(manifest, label)
     return manifest
 
@@ -228,13 +234,132 @@ def validate_asset(files, name):
     elif Path(name).suffix.lower() not in TEXT_EXTENSIONS:
         raise ValueError(f"Двоичный ресурс должен быть data URL: {name}")
 
+COMMON_LABELS = frozenset(('yes', 'no', 'on', 'off', 'auto', 'manual', 'infinity', 'none', 'allowed', 'forbidden', 'classic', 'game-options'))
+
+
+def parameter_options(field):
+    """Expand only at validation/runtime boundaries; keep range compact on disk."""
+    bounded = field.get('range')
+    if bounded is not None:
+        if not isinstance(bounded, dict) or set(bounded) != {'min', 'max', 'step'} or 'options' in field:
+            raise ValueError('PACK_SETTINGS_RANGE_INVALID')
+        lo, hi, step = (bounded[key] for key in ('min', 'max', 'step'))
+        if any(type(n) is not int or abs(n) > MAX_SAFE_INTEGER for n in (lo, hi, step)) or step <= 0 or hi < lo or hi-lo > MAX_SAFE_INTEGER or (hi-lo) % step or (hi-lo)//step >= 256:
+            raise ValueError('PACK_SETTINGS_RANGE_INVALID')
+        return [{'value': value} for value in range(lo, hi+1, step)]
+    return field.get('options')
+
+
+def expanded_parameter(field):
+    field = dict(field)
+    options = parameter_options(field)
+    defaults = field.pop('optionDefaults', {})
+    if not isinstance(defaults, dict) or set(defaults) - {'description'}:
+        raise ValueError('PACK_SETTINGS_DEFAULTS_INVALID')
+    if options is not None:
+        field['options'] = [{key: value for key, value in {**defaults, **option}.items() if key != 'description' or value is not None} for option in options]
+    field.pop('range', None)
+    return field
+
+
+def compact_parameter(field):
+    field = dict(field)
+    options = [dict(option) for option in field.get('options', [])]
+    if not options:
+        return field
+    descriptions = [option.get('description') for option in options]
+    identities = [json_text(value) for value in descriptions if value is not None]
+    if identities:
+        repeated = max(dict.fromkeys(identities), key=identities.count)
+        if identities.count(repeated) > 1:
+            description = parse_json(repeated)
+            field['optionDefaults'] = {'description': description}
+            for option in options:
+                if option.get('description') == description: option.pop('description', None)
+                elif 'description' not in option: option['description'] = None
+    field['options'] = options
+    values = [option.get('value') for option in options]
+    if len(values) >= 5 and all(type(value) is int for value in values) and all(set(option) == {'value'} for option in options):
+        step = values[1]-values[0]
+        if step > 0 and all(b-a == step for a,b in zip(values, values[1:])):
+            field['range'] = {'min': values[0], 'max': values[-1], 'step': step}
+            del field['options']
+    return field
+
+
+def source_catalogs(pack, manifest):
+    catalogs = {}
+    for locale, names in manifest.get('sourceModules', {}).get('locales', {}).items():
+        if not re.fullmatch(r'[a-z]{2,3}(?:-[A-Za-z0-9]{2,8})*', locale) or not isinstance(names, list) or len(names) > 32:
+            raise ValueError('SDK_LOCALES_INVALID')
+        catalog = {}
+        for name in names:
+            value = parse_json(local_file(pack, name).read_text(encoding='utf-8'))
+            if not isinstance(value, dict) or set(value) & set(catalog) or any(not isinstance(text, str) for text in value.values()):
+                raise ValueError('SDK_LOCALES_INVALID')
+            catalog.update(value)
+        catalogs[locale] = catalog
+    return catalogs
+
+
+def resolve_pack_text(value, catalogs, locale='ru', fallback='ru'):
+    """Resolve inert references for validation/runtime without changing wire metadata."""
+    if isinstance(value, list):
+        return [resolve_pack_text(item, catalogs, locale, fallback) for item in value]
+    if not isinstance(value, dict):
+        return value
+    if set(value) == {'common'}:
+        if value['common'] not in COMMON_LABELS: raise ValueError('PACK_COMMON_TEXT_INVALID')
+        return value['common']
+    if isinstance(value.get('key'), str) and set(value) <= {'key', 'params'}:
+        key = value['key']
+        text = catalogs.get(locale, {}).get(key, catalogs.get(fallback, {}).get(key))
+        if not isinstance(text, str):
+            raise ValueError('PACK_LANG_REFERENCE_MISSING: ' + key)
+        params = value.get('params', {})
+        if not isinstance(params, dict):
+            raise ValueError('PACK_LANG_REFERENCE_INVALID')
+        return re.sub(r'\{([A-Za-z][A-Za-z0-9_]*)\}', lambda match: str(resolve_pack_text(params[match[1]], catalogs, locale, fallback)) if match[1] in params else match[0], text)
+    return {key: resolve_pack_text(item, catalogs, locale, fallback) for key, item in value.items()}
+
+
+PACK_TEXT_FIELDS = frozenset({'name', 'shortName', 'shortLabel', 'tagline', 'estimatedDuration',
+                              'label', 'description', 'help', 'caption', 'title', 'text',
+                              'placeholder', 'scoreLabel', 'changes'})
+RULEBOOK_TEXT_FIELDS = PACK_TEXT_FIELDS | {'children', 'headers', 'items', 'rows'}
+
+
+def collect_pack_text(value, catalogs, prefix='manifest', display=False, language='ru', text_fields=PACK_TEXT_FIELDS):
+    """Only display fields become references; IDs, option values and paths stay stable."""
+    if isinstance(value, str):
+        if not display or not value:
+            return value
+        catalog = catalogs.setdefault(language, {})
+        if prefix in catalog and catalog[prefix] != value:
+            raise ValueError('PACK_LANG_KEY_COLLISION: ' + prefix)
+        catalog[prefix] = value
+        return {'key': prefix}
+    if isinstance(value, list):
+        return [collect_pack_text(item, catalogs, prefix + '.' + str(index), display, language, text_fields)
+                for index, item in enumerate(value)]
+    if not isinstance(value, dict):
+        return value
+    if isinstance(value.get('key'), str) and set(value) <= {'key', 'params'}:
+        return value
+    return {key: collect_pack_text(item, catalogs, prefix + '.' + str(key), key in text_fields, language, text_fields)
+            for key, item in value.items()}
+
+
 def validate_bundle(bundle, label, raw=None):
     text = json_text(bundle) if raw is None else raw
     if len(text.encode("utf-8")) > MAX_PACK_BYTES:
         raise ValueError(f"Пак больше 4 MB (4 000 000 байт): {label}")
-    if not isinstance(bundle, dict) or bundle.get("format") != "playroom-pack" or not number_equals(bundle.get("formatVersion"), 1):
+    if not isinstance(bundle, dict) or bundle.get("format") != "playroom-pack" or not any(number_equals(bundle.get("formatVersion"), version) for version in (1, 2)):
         raise ValueError(f"Некорректный формат пака: {label}")
-    manifest = validate_manifest(bundle.get("manifest"), label)
+    manifest = bundle.get("manifest")
+    validate_manifest(runtime_manifest(resolve_pack_text(manifest, bundle.get("lang", bundle.get("sdk", {}).get("catalogs", {})), fallback=manifest.get("defaultLanguage", "ru"))), label)
+    if number_equals(bundle['formatVersion'], 2) and manifest.get('execution') != 'isolated-v1':
+        raise ValueError('SDK_ISOLATED_PAYLOAD_INVALID')
     files = bundle.get("files")
     if not isinstance(files, dict) or len(files) > MAX_PACK_FILES:
         raise ValueError(f"Нет files или в паке больше 128 файлов: {label}")
@@ -251,10 +376,20 @@ def validate_bundle(bundle, label, raw=None):
     if manifest.get("execution") == "isolated-v1":
         if any(files.get(name) != marker for name, marker in ISOLATED_MARKERS.items()):
             raise ValueError("SDK_ISOLATED_ENTRYPOINT_INVALID")
-        expected = {*ISOLATED_MARKERS, 'sdk/source.json', *(['sounds.js'] if manifest.get('sounds') else [])}
+        structured = number_equals(bundle['formatVersion'], 2)
+        expected = {*ISOLATED_MARKERS, *([] if structured else ['sdk/source.json']), *(['sounds.js'] if manifest.get('sounds') else [])}
         if set(files) != expected or manifest.get('sounds') and files.get('sounds.js') != ISOLATED_SOUNDS_MARKER:
             raise ValueError('SDK_ISOLATED_ENTRYPOINT_INVALID')
-        validate_isolated_payload(parse_json(files.get("sdk/source.json", "null")), manifest)
+        if structured:
+            source = bundle.get('sdk')
+            if not isinstance(source, dict) or 'manifest' in source or 'lang' in bundle and 'catalogs' in source:
+                raise ValueError('SDK_ISOLATED_PAYLOAD_INVALID')
+            source = {**source, 'manifest': manifest, **({'catalogs': bundle['lang']} if 'lang' in bundle else {})}
+        else:
+            if 'sdk' in bundle:
+                raise ValueError('SDK_ISOLATED_PAYLOAD_INVALID')
+            source = parse_json(files.get('sdk/source.json', 'null'))
+        validate_isolated_payload(source, manifest)
     css = files["styles.css"]
     if re.search(r"(?:#app\b|\.(?:table-shell|table-header|player-strip|game-layout-slot|app-game-layout|own-hand|hand-track|opponent-hands|scene-actions|piece-count|player-hand|player-panel|player-info|player-details|player-badges|mini-hand|hand-heading|hand-tools|opponent-hand|opponent-label|is-open-hand)(?![-\w]))", re.sub(r"/\*[\s\S]*?\*/", "", css)):
         raise ValueError(f"Компоновка общих элементов принадлежит приложению: {label}")
@@ -285,8 +420,32 @@ def local_file(root, name):
         raise ValueError(f"Нет локального файла пака: {name}")
     return result
 
+def read_source_manifest(pack, *, source_manifest=None):
+    manifest = (parse_json(local_file(pack, 'manifest.json').read_text(encoding='utf-8'))
+                if source_manifest is None else deepcopy(source_manifest))
+    source_modules = manifest.get('sourceModules', {})
+    has_module_reference = 'settings' in source_modules
+    if has_module_reference and 'settings' in manifest:
+        raise ValueError('SDK_SETTINGS_SOURCE_INVALID')
+    settings = manifest.get('settings')
+    settings_file = source_modules.pop('settings') if has_module_reference else settings if isinstance(settings, str) else None
+    if has_module_reference or settings_file is not None:
+        if not isinstance(settings_file, str) or not settings_file.endswith('.json') or settings_file == 'manifest.json':
+            raise ValueError('SDK_SETTINGS_SOURCE_INVALID')
+        settings_path = local_file(pack, settings_file)
+        if settings_path.stat().st_size > 4 * 1024 * 1024:
+            raise ValueError('SDK_FILE_LIMIT: ' + settings_file)
+        settings = parse_json(settings_path.read_text(encoding='utf-8'))
+        if not isinstance(settings, dict) or not isinstance(settings.get('fields'), list) or not isinstance(settings.get('groups'), list):
+            raise ValueError('PACK_SETTINGS_INVALID: ' + settings_file)
+        # Replace the value in place to preserve packed bytes from inline sources.
+        manifest['settings'] = settings
+    return manifest, settings_file
+
+
 def read_manifest(pack):
-    manifest = validate_manifest(parse_json(local_file(pack, "manifest.json").read_text(encoding="utf-8")), pack.name)
+    manifest, _ = read_source_manifest(pack)
+    validate_manifest(runtime_manifest(resolve_pack_text(manifest, source_catalogs(pack, manifest), fallback=manifest.get("defaultLanguage", "ru"))), pack.name)
     if manifest["id"] != pack.name:
         raise ValueError(f"ID и имя папки различаются: {pack.name}")
     for filename in ENTRY_POINTS.values():
@@ -445,16 +604,23 @@ ISOLATED_MARKERS = {
 ISOLATED_SOUNDS_MARKER = '// PlayRoom isolated-v1: sound metadata executes only in the guest VM.\n'
 MAX_SOURCE_BYTES = 12 * 1024 * 1024
 MAX_RESOURCE_BYTES = 2_000_000
-MAX_RESOURCES = 256
+MAX_SDK_FILES = 512
 
 
-def _sdk_scripts(root, names, prefix='', suffix='.js'):
-    if (not isinstance(names, list) or len(names) > 64
+def _sdk_scripts(root, names, prefix='', suffix='.js', shared_presentation=None):
+    if (not isinstance(names, list) or len(names) > MAX_SDK_FILES
             or any(not isinstance(n, str) or not n.endswith(suffix) for n in names) or len(set(names)) != len(names)):
+        if suffix == '.d.ts':
+            raise ValueError('SDK_TYPES_INVALID: sdk/project.json (types)')
         raise ValueError('SDK_MODULES_INVALID')
     result = []
     for name in names:
-        file = local_file(root, name)
+        # Keep the logical path in the artifact so independently installed packs
+        # can run the selected presentation module without a shared checkout.
+        if shared_presentation is not None and name.startswith('shared/presentation/'):
+            file = local_file(shared_presentation, name.removeprefix('shared/'))
+        else:
+            file = local_file(root, name)
         if file.stat().st_size > 4 * 1024 * 1024:
             raise ValueError('SDK_FILE_LIMIT: ' + name)
         result.append({'file': prefix + name, 'source': file.read_text(encoding='utf-8')})
@@ -509,47 +675,76 @@ def isolated_source_hash(payload):
     identity = {'resourceClosure': payload.get('resourceClosure', {}),
                 'assets': [{key: value for key, value in row.items() if key != 'data'} for row in payload.get('assets', [])],
                 'providers': payload['sources'].get('providers', [])}
+    # Keep the v1 identity of closures that fit before the host budget increased.
+    closure = identity['resourceClosure']
+    budget = closure.get('budget', {})
+    if budget.get('maxAssets') == MAX_SDK_FILES and len(identity['assets']) <= 256:
+        identity['resourceClosure'] = {**closure, 'budget': {**budget, 'maxAssets': 256}}
     digest.update(('\0resources-v1\0' + json.dumps(_resource_identity(identity), ensure_ascii=False, separators=(',', ':'), allow_nan=False)).encode('utf-8', errors='backslashreplace'))
     return digest.hexdigest()
 
 
-def isolated_source_payload(pack, shared=None):
+def _sdk_support_names(descriptor, manifest, sources):
+    # Older projects declare support in the view list. Loading and final
+    # bundle validation must derive the same ordered list, including sounds.
+    if 'support' in descriptor:
+        return descriptor['support']
+    loaded = {row['file'] for kind in ('dependencies', 'rules', 'helpers', 'presentation', 'types')
+              for row in sources[kind]}
+    names = [name for name in manifest.get('sourceModules', {}).get('view', []) if name not in loaded]
+    if manifest.get('sounds'):
+        names.append('sounds.js')
+    return names
+
+
+def _asset_item_selections(descriptor):
+    selections = descriptor.get('assetItems', {})
+    if not isinstance(selections, dict) or len(selections) > MAX_SDK_FILES:
+        raise ValueError('SDK_ASSET_ITEMS_INVALID: sdk/project.json')
+    result = {}
+    for name, items in selections.items():
+        if (not re.fullmatch(r'[a-z][a-z0-9-]*', name) or not isinstance(items, list)
+                or len(items) > MAX_SDK_FILES or any(not isinstance(item, str) or not item for item in items)):
+            raise ValueError('SDK_ASSET_ITEMS_INVALID: sdk/project.json (' + name + ')')
+        requested = set(items)
+        if len(requested) != len(items):
+            raise ValueError('SDK_ASSET_ITEMS_INVALID: sdk/project.json (' + name + ')')
+        result[name] = requested
+    return result
+
+
+def isolated_source_payload(pack, shared=None, *, source_manifest=None):
     """Complete source/asset closure. Additional presentation remains inert data."""
     pack = Path(pack).resolve(strict=True)
     shared = Path(shared).resolve(strict=True) if shared else Path(__file__).resolve().parent
-    manifest = validate_manifest(parse_json(local_file(pack, 'manifest.json').read_text(encoding='utf-8')), pack.name)
+    manifest, settings_file = read_source_manifest(pack, source_manifest=source_manifest)
+    source_modules = manifest.get('sourceModules', {})
     descriptor = parse_json(local_file(pack, 'sdk/project.json').read_text(encoding='utf-8'))
-    if not number_equals(descriptor.get('contractVersion'), 1) or not isinstance(descriptor.get('presentation'), list):
+    if not number_equals(descriptor.get('contractVersion'), 1):
         raise ValueError('SDK_DESCRIPTOR_REQUIRED')
+    item_selections = _asset_item_selections(descriptor)
+    for field in ('rules', 'helpers', 'support', 'presentation'):
+        if field not in descriptor and field in ('helpers', 'support'):
+            continue
+        names = descriptor.get(field)
+        if (not isinstance(names, list) or len(names) > MAX_SDK_FILES
+                or any(not isinstance(name, str) or not name.endswith('.js') for name in names)
+                or len(set(names)) != len(names)):
+            raise ValueError(f'SDK_MODULES_INVALID: sdk/project.json ({field})')
     dependencies = []
     for name in manifest.get('sharedDomain', []):
         dependencies += _sdk_scripts(shared, ['domain/' + name + '.js'], 'shared/')
     sources = {'dependencies': dependencies,
                'rules': _sdk_scripts(pack, descriptor.get('rules')),
                'helpers': _sdk_scripts(pack, descriptor.get('helpers', [])),
-               'presentation': _sdk_scripts(pack, descriptor.get('presentation')),
+               'presentation': _sdk_scripts(pack, descriptor.get('presentation'), shared_presentation=shared),
                'types': _sdk_scripts(pack, descriptor.get('types', []), suffix='.d.ts')}
-    if (any(not row['file'].startswith('presentation/') for row in sources['presentation'])
+    if (any(not row['file'].startswith(('presentation/', 'shared/presentation/')) for row in sources['presentation'])
             or any(not row['file'].startswith('domain/') for row in sources['helpers'])):
         raise ValueError('SDK_MODULES_INVALID')
-    catalogs = {}
-    source_modules = manifest.get('sourceModules', {})
-    for locale, names in source_modules.get('locales', {}).items():
-        if not re.fullmatch(r'[a-z]{2,3}(?:-[A-Za-z0-9]{2,8})*', locale) or not isinstance(names, list) or len(names) > 32:
-            raise ValueError('SDK_LOCALES_INVALID')
-        catalog = {}
-        for name in names:
-            value = parse_json(local_file(pack, name).read_text(encoding='utf-8'))
-            if not isinstance(value, dict) or set(value) & set(catalog) or any(not isinstance(text, str) for text in value.values()):
-                raise ValueError('SDK_LOCALES_INVALID')
-            catalog.update(value)
-        catalogs[locale] = catalog
-    loaded = {row['file'] for rows in sources.values() for row in rows}
-    support_names = descriptor.get('support')
-    if support_names is None:
-        support_names = [name for name in source_modules.get('view', []) if name not in loaded]
-        if manifest.get('sounds'):
-            support_names.append('sounds.js')
+    catalogs = source_catalogs(pack, manifest)
+    validate_manifest(runtime_manifest(resolve_pack_text(manifest, catalogs, fallback=manifest.get('defaultLanguage', 'ru'))), pack.name)
+    support_names = _sdk_support_names(descriptor, manifest, sources)
     support = []
     for row in _sdk_scripts(pack, support_names):
         name = row['file']
@@ -563,7 +758,7 @@ def isolated_source_payload(pack, shared=None):
     assets, providers, data_files, asset_packs, documentation = [], [], [], [], []
     seen = set()
     def add_resource(root, relative, name):
-        if name in seen:
+        if name in seen or (root == pack and relative == settings_file):
             return
         seen.add(name)
         file = local_file(root, relative)
@@ -619,12 +814,29 @@ def isolated_source_payload(pack, shared=None):
             include_asset_pack(dep['id'], dep['version'])
         visiting.remove(name)
         included[name] = spec['version']
-        asset_packs.append({'manifest': spec, 'prefix': 'assets/shared-packs/' + name + '/'})
+        prefix = 'assets/shared-packs/' + name + '/'
+        row = {'manifest': spec, 'prefix': prefix}
+        if name in item_selections:
+            # Keep explicit files and dependency contracts. Only the catalog's
+            # item artwork is narrowed by the author's project-wide selection.
+            items = spec.get('items', [])
+            if not isinstance(items, list):
+                raise ValueError('SDK_ASSET_PACK_INVALID')
+            requested = item_selections[name]
+            retained = [item for item in items if isinstance(item, dict) and item.get('id') in requested]
+            if len(retained) != len(requested) or len({item['id'] for item in retained}) != len(requested):
+                raise ValueError('SDK_ASSET_ITEM_UNKNOWN: ' + name)
+            spec = {**spec, 'items': retained}
+            row = {**row, 'manifest': spec, 'availableItems': len(items)}
+        asset_packs.append(row)
         for filename in dict.fromkeys([*spec.get('files', []), *spec.get('scripts', []), *spec.get('styles', []), *(item['file'] for item in spec.get('items', []) if 'file' in item)]):
-            add_resource(root, filename, 'assets/shared-packs/' + name + '/' + filename)
+            add_resource(root, filename, prefix + filename)
     for name in manifest.get('sharedAssetPacks', []):
         include_asset_pack(name)
-    if len(assets) > MAX_RESOURCES or sum(item['bytes'] for item in assets) > MAX_RESOURCE_BYTES:
+    for name in item_selections:
+        if name not in included:
+            raise ValueError('SDK_ASSET_ITEMS_PACK_UNUSED: ' + name)
+    if len(assets) > MAX_SDK_FILES or sum(item['bytes'] for item in assets) > MAX_RESOURCE_BYTES:
         raise ValueError('SDK_ASSET_TOTAL_LIMIT')
     core_source_bytes = source_bytes
     sources['providers'] = providers
@@ -633,7 +845,7 @@ def isolated_source_payload(pack, shared=None):
         raise ValueError('SDK_SOURCE_LIMIT')
     closure = {'sourceBytes': source_bytes, 'assetPacks': asset_packs, 'data': data_files, 'documentation': documentation,
                'budget': {'assetBytes': sum(item['bytes'] for item in assets), 'assetCount': len(assets),
-                          'maxAssetBytes': MAX_RESOURCE_BYTES, 'maxAssets': MAX_RESOURCES}}
+                          'maxAssetBytes': MAX_RESOURCE_BYTES, 'maxAssets': MAX_SDK_FILES}}
     books = {}
     for locale, name in source_modules.get('rulebooks', {}).items():
         books[locale] = compile_rulebook_markdown(local_file(pack, name).read_text(encoding='utf-8'))
@@ -653,13 +865,14 @@ def validate_isolated_payload(payload, manifest):
     descriptor, sources = payload.get('descriptor'), payload.get('sources')
     if not isinstance(descriptor, dict) or not number_equals(descriptor.get('contractVersion'), 1) or not isinstance(sources, dict):
         raise ValueError('SDK_ISOLATED_DESCRIPTOR_INVALID')
+    _asset_item_selections(descriptor)
     if not {'dependencies', 'rules', 'helpers', 'presentation', 'types'} <= set(sources):
         raise ValueError('SDK_ISOLATED_SOURCES_INVALID')
     if set(sources) - {'dependencies', 'rules', 'helpers', 'presentation', 'types', 'support', 'providers'}:
         raise ValueError('SDK_ISOLATED_SOURCES_INVALID')
     source_bytes = 0
     for kind, rows in sources.items():
-        if not isinstance(rows, list) or len(rows) > (256 if kind == 'providers' else 64):
+        if not isinstance(rows, list) or len(rows) > MAX_SDK_FILES:
             raise ValueError('SDK_MODULES_INVALID')
         paths = set()
         for row in rows:
@@ -670,8 +883,11 @@ def validate_isolated_payload(payload, manifest):
             if length > 4 * 1024 * 1024:
                 raise ValueError('SDK_FILE_LIMIT')
             source_bytes += length
-        if kind in {'rules', 'helpers', 'presentation', 'types', 'support'} and [row['file'] for row in rows] != descriptor.get(kind, []):
+        if kind in {'rules', 'helpers', 'presentation', 'types'} and [row['file'] for row in rows] != descriptor.get(kind, []):
             raise ValueError('SDK_DESCRIPTOR_SOURCE_MISMATCH')
+    expected_support = _sdk_support_names(descriptor, manifest, sources)
+    if [row['file'] for row in sources.get('support', [])] != expected_support:
+        raise ValueError('SDK_DESCRIPTOR_SOURCE_MISMATCH')
     if source_bytes > MAX_SOURCE_BYTES:
         raise ValueError('SDK_SOURCE_LIMIT')
     catalogs = payload.get('catalogs')
@@ -680,7 +896,7 @@ def validate_isolated_payload(payload, manifest):
     if payload.get('sourceHash') != isolated_source_hash(payload):
         raise ValueError('SDK_ISOLATED_SOURCE_HASH')
     assets = payload.get('assets', [])
-    if not isinstance(assets, list) or len(assets) > MAX_RESOURCES:
+    if not isinstance(assets, list) or len(assets) > MAX_SDK_FILES:
         raise ValueError('SDK_ASSET_TOTAL_LIMIT')
     total, names = 0, set()
     for item in assets:
@@ -704,14 +920,200 @@ def validate_isolated_payload(payload, manifest):
     return payload
 
 
-def build_isolated_pack(pack, shared=None):
-    payload = isolated_source_payload(pack, shared)
-    manifest = payload['manifest']
-    files = {**ISOLATED_MARKERS, 'sdk/source.json': json_text(payload)}
-    # sounds.js is an inert structural marker. The actual cues stay guest-side.
+def runtime_manifest(manifest):
+    """Decode one public settings block for the existing runtime ports."""
+    if not isinstance(manifest, dict):
+        return manifest
+    result = dict(manifest)
+    block = manifest.get('settings', [])
+    if isinstance(block, dict):
+        if set(block) != {'fields', 'groups'} or not isinstance(block['fields'], list) or not isinstance(block['groups'], list):
+            raise ValueError('PACK_SETTINGS_INVALID')
+        fields = block['fields']
+        keys = [field.get('key') for field in fields if isinstance(field, dict)]
+        if len(keys) != len(fields) or len(keys) != len(set(keys)) or len(keys) > 64:
+            raise ValueError('PACK_SETTINGS_INVALID')
+        for field in fields:
+            if field.get('kind') not in ('preset', 'option', 'standard') or field.get('control') not in ('slider', 'select') or field.get('valueType') not in ('string', 'boolean', 'integer', 'number') or any(key in field for key in ('min', 'max', 'step')):
+                raise ValueError('PACK_SETTINGS_INVALID')
+            normalized = parameter_field(field, field['kind'])
+            if normalized['valueType'] != field['valueType']:
+                raise ValueError('PACK_SETTINGS_INVALID')
+        used = set()
+        for group in block['groups']:
+            if not isinstance(group, dict) or group.get('placement') not in ('main', 'end') or not isinstance(group.get('fields'), list) or any(key not in keys or key in used for key in group['fields']) or len(group['fields']) != len(set(group['fields'])):
+                raise ValueError('PACK_SETTINGS_GROUP_INVALID')
+            used.update(group['fields'])
+        result['ruleGroups'] = [{**{key: value for key, value in group.items() if key != 'placement'}, **({'end': True} if group.get('placement') == 'end' else {})} for group in block['groups']]
+    else:
+        fields = block
+    if not isinstance(fields, list):
+        return result
+    presets = [field for field in fields if isinstance(field, dict) and field.get('kind') == 'preset']
+    if presets:
+        if len(presets) != 1 or presets[0].get('key') != 'preset' or 'presetSetting' in manifest:
+            raise ValueError('PACK_SETTINGS_INVALID')
+        result['presetSetting'] = {key: value for key, value in presets[0].items() if key not in ('key', 'kind', 'valueType')}
+    result['settings'] = [{key: value for key, value in field.items() if key not in ('kind', 'valueType')}
+                          for field in fields if field not in presets]
+    result['settings'] = [expanded_parameter(field) for field in result['settings']]
+    if 'presetSetting' in result: result['presetSetting'] = expanded_parameter(result['presetSetting'])
+    return result
+
+
+def parameter_field(field, kind='option', default=None):
+    """One representation for enums, discrete sliders and bounded ranges."""
+    field = dict(field)
+    options = parameter_options(field)
+    if not options and all(key in field for key in ('min', 'max')):
+        lo, hi, step = field['min'], field['max'], field.get('step', 1)
+        if any(isinstance(n, bool) or not isinstance(n, int) for n in (lo, hi, step)) or step <= 0 or hi < lo or (hi - lo) // step > 255:
+            raise ValueError('PACK_SETTINGS_INVALID')
+        options = [{'value': value} for value in range(lo, hi + 1, step)]
+    if not isinstance(options, list) or not options or len(options) > 256:
+        raise ValueError('PACK_SETTINGS_INVALID')
+    value = field.get('default', default)
+    def value_type(item):
+        return 'boolean' if isinstance(item, bool) else 'integer' if isinstance(item, int) else 'number' if isinstance(item, float) else 'string' if isinstance(item, str) else None
+    value_kind = value_type(value)
+    if 'unit' in field and (field['unit'] not in ('s','min','h') or any(isinstance(option.get('value'), bool) or not isinstance(option.get('value'), (str,int,float)) or not re.fullmatch(r'-?\d+(?:\.\d+)?', str(option['value'])) for option in options)):
+        raise ValueError('PACK_SETTINGS_UNIT_INVALID')
+    if value_kind is None or any(not isinstance(option, dict) or value_type(option.get('value')) != value_kind for option in options):
+        raise ValueError('PACK_SETTINGS_INVALID')
+    if not any(type(option['value']) is type(value) and option['value'] == value for option in options):
+        raise ValueError('PACK_SETTINGS_DEFAULT_INVALID')
+    normalized = {**{key: item for key, item in field.items() if key not in ('min', 'max', 'step')},
+                  'kind': kind, 'valueType': value_kind, 'control': field.get('control', 'select'), 'default': value}
+    if 'range' not in normalized: normalized['options'] = options
+    return normalized
+
+
+def distribution_manifest(manifest, default_preset=None):
+    result = runtime_manifest(manifest)
+    fields = []
+    if 'presetSetting' in result:
+        preset = result.pop('presetSetting')
+        values = [option['value'] for option in preset.get('options', [])]
+        default_preset = default_preset if default_preset in values else 'classic' if 'classic' in values else values[0] if values else None
+        fields.append(compact_parameter(parameter_field({'key': 'preset', **preset}, 'preset', default_preset)))
+    for field in result.get('settings', []):
+        fields.append(compact_parameter(parameter_field(field, 'standard' if field.get('key') in ('firstPlayerMode', 'seatOrder', 'endMode') else 'option')))
+    keys = [field['key'] for field in fields]
+    if len(keys) != len(set(keys)) or len(keys) > 64:
+        raise ValueError('PACK_SETTINGS_INVALID')
+    groups, used = [], set()
+    for group in result.pop('ruleGroups', []):
+        references = group.get('fields')
+        if not isinstance(references, list) or len(references) != len(set(references)) or any(key not in keys or key in used for key in references):
+            raise ValueError('PACK_SETTINGS_GROUP_INVALID')
+        used.update(references)
+        groups.append({**{key: value for key, value in group.items() if key != 'end'}, 'placement': 'end' if group.get('end') else 'main'})
+    remaining = [field['key'] for field in fields if field['kind'] != 'preset' and field.get('presentation') != 'mode' and field['key'] not in used]
+    if remaining:
+        groups.append({'label': {'common':'game-options'}, 'fields': remaining, 'placement': 'main'})
+    result['settings'] = {'fields': fields, 'groups': groups}
+    return result
+
+
+def distribution_metadata(value, production=True, catalogs=None, language="ru"):
+    """Compact installable metadata; full author history stays in source files."""
+    if isinstance(value, list):
+        return [distribution_metadata(item, production, catalogs, language) for item in value]
+    if not isinstance(value, dict):
+        return value
+    result = {key: distribution_metadata(item, production, catalogs, language) for key, item in value.items()}
+    version = value.get('version')
+    if isinstance(version, str) and isinstance(value.get('releases'), list):
+        current = next((item for item in value['releases']
+                        if isinstance(item, dict) and item.get('version') == version), None)
+        changes, remaining = [], 320
+        if current and (not production or '-' not in version.split('+', 1)[0]):
+            for text in current.get('changes', []):
+                reference = text if isinstance(text, dict) and ('key' in text or 'common' in text) else None
+                if reference:
+                    text = resolve_pack_text(reference, catalogs or {}, language, language)
+                if not isinstance(text, str) or not text.strip():
+                    continue
+                text = ' '.join(text.split())
+                limit = min(160, remaining)
+                if len(text) > limit:
+                    text = text[:limit - 1].rsplit(' ', 1)[0].rstrip() + '…'
+                if reference and 'key' in reference:
+                    catalogs[language][reference['key']] = text
+                changes.append(reference or text)
+                remaining -= len(text)
+                if len(changes) == 3 or remaining < 16:
+                    break
+        result['releases'] = [{'version': version, 'changes': changes}] if changes else []
+    return result
+
+
+def isolated_distribution(payload):
+    """One structured SDK object and one manifest, without nested JSON strings."""
+    # Only the output catalogs are edited in place. Keep immutable media
+    # strings and source modules by reference until final serialization.
+    catalogs = {locale: dict(messages) for locale, messages in payload['catalogs'].items()}
+    sources = payload['sources']
+    resources = payload['resourceClosure']
+    providers = sources.get('providers', [])
+    if providers:
+        # Providers belong to source export. The isolated player loads the
+        # host's renderers and only runs the declared guest entry points.
+        omitted = {provider['file'] for provider in providers}
+        asset_packs = []
+        for row in resources['assetPacks']:
+            prefix, spec = row['prefix'], dict(row['manifest'])
+            for field in ('files', 'scripts', 'styles'):
+                if field in spec:
+                    spec[field] = [file for file in spec[field] if prefix + file not in omitted]
+                    if not spec[field]:
+                        del spec[field]
+            if 'items' in spec:
+                spec['items'] = [item for item in spec['items'] if 'file' not in item or prefix + item['file'] not in omitted]
+            asset_packs.append({**row, 'manifest': spec})
+        sources = {kind: rows for kind, rows in sources.items() if kind != 'providers'}
+        resources = {**resources, 'sourceBytes': payload['sourceBytes'], 'assetPacks': asset_packs}
+    payload = {**payload, 'sources': sources, 'resourceClosure': resources}
+    language = payload['manifest'].get('defaultLanguage', 'ru')
+    payload = distribution_metadata(payload, '-' not in payload['manifest']['version'].split('+', 1)[0], catalogs, language)
+    payload['catalogs'] = catalogs
+    payload['manifest'] = distribution_manifest(payload['manifest'], payload.get('descriptor', {}).get('options', {}).get('preset'))
+    payload['manifest'] = collect_pack_text(payload['manifest'], catalogs, language=language)
+    payload['manifest']['defaultLanguage'] = payload['manifest'].get('defaultLanguage', 'ru')
+    resources = payload.get('resourceClosure', {})
+    books = resources.pop('rulebooks', None)
+    payload['resourceClosure'] = collect_pack_text(resources, catalogs, 'resources', language=language)
+    if books is not None:
+        # Each document has its own language, even if the manifest uses another default.
+        payload['resourceClosure']['rulebooks'] = {
+            locale: collect_pack_text(book, catalogs, 'resources.rulebooks.' + locale,
+                                      language=locale, text_fields=RULEBOOK_TEXT_FIELDS)
+            for locale, book in books.items()
+        }
+    used = set()
+    def references(value):
+        if isinstance(value, dict):
+            if isinstance(value.get('key'), str) and set(value) <= {'key', 'params'}: used.add(value['key'])
+            for item in value.values(): references(item)
+        elif isinstance(value, list):
+            for item in value: references(item)
+    references(payload['manifest'])
+    references(payload['resourceClosure'])
+    for catalog in catalogs.values():
+        for key in list(catalog):
+            if key.startswith(('manifest.', 'resources.')) and key not in used: del catalog[key]
+    payload['sourceHash'] = isolated_source_hash(payload)
+    manifest = payload.pop('manifest')
+    lang = payload.pop('catalogs')
+    files = dict(ISOLATED_MARKERS)
     if manifest.get('sounds'):
         files['sounds.js'] = ISOLATED_SOUNDS_MARKER
-    return validate_bundle({'format': 'playroom-pack', 'formatVersion': 1, 'manifest': manifest, 'files': files}, pack.name)
+    return {'format': 'playroom-pack', 'formatVersion': 2, 'manifest': manifest, 'lang': lang, 'sdk': payload, 'files': files}
+
+
+def build_isolated_pack(pack, shared=None, *, source_manifest=None):
+    payload = isolated_source_payload(pack, shared, source_manifest=source_manifest)
+    return validate_bundle(isolated_distribution(payload), pack.name)
 
 
 def build_pack(pack, shared=None):
@@ -722,14 +1124,20 @@ def build_pack(pack, shared=None):
 
     shared = Path(shared) if shared else Path(__file__).resolve().parent
     manifest = read_manifest(pack)
+    settings_file = spec.get('settings')
+    if not isinstance(settings_file, str):
+        settings_file = spec.get('sourceModules', {}).get('settings')
     files = {}
     for path in pack_files(pack, manifest):
+        name = path.relative_to(pack).as_posix()
+        if name == settings_file:
+            continue
         if path.suffix.lower() in TEXT_EXTENSIONS:
             value = path.read_text(encoding="utf-8")
         else:
             mime = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
             value = f"data:{mime};base64," + base64.b64encode(path.read_bytes()).decode("ascii")
-        files[path.relative_to(pack).as_posix()] = value
+        files[name] = value
     modules = manifest.get("sharedDomain", [])
     if modules:
         domain = shared / "domain"
@@ -789,4 +1197,4 @@ def build_pack(pack, shared=None):
         files["view.js"] = "\n".join([*asset_scripts, files["view.js"]])
     if asset_styles:
         files["styles.css"] = "\n".join([*asset_styles, files["styles.css"]])
-    return validate_bundle({"format": "playroom-pack", "formatVersion": 1, "manifest": manifest, "files": files}, pack.name)
+    return validate_bundle({"format": "playroom-pack", "formatVersion": 1, "manifest": distribution_metadata(manifest, '-' not in manifest['version'].split('+', 1)[0]), "files": files}, pack.name)

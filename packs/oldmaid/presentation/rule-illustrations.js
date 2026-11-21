@@ -4,7 +4,7 @@
  function create({card:renderCard,linksSVG}={}){
   const C=root.PlayroomShared,H=root.PlayroomViews.helpers,R=C.rulebookArt();
   const source=typeof require==='function'&&!root.PlayroomPack;
-  const tr=H.translator(source?{ru:require('../locales/ru/game.json')}:root.PlayroomPackResources.locales);
+  const tr=H.translator(source?{ru:require('../lang/ru.json')}:root.PlayroomPackResources.locales);
   const t=key=>tr.format({key:'oldmaid.book.art-label.'+key,params:{}});
   const card=value=>(renderCard||C.card)({...value,id:'rule-example'});
   // The exact shared seating diagram shows one source and the receiving seat.

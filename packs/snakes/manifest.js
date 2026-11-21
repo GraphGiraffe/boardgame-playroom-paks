@@ -4,10 +4,11 @@
   root.PlayroomCatalog ||= {};
   root.PlayroomCatalog["snakes"] = {
   "id": "snakes",
-  "version": "0.6.2",
+  "version": "0.6.6-preview.1",
   "category": "board",
-  "estimatedDuration": "5–15 мин",
-  "tagline": "Лестницы поднимают. Змеи возвращают назад.",
+  "tagline": {
+    "key": "manifest.tagline"
+  },
   "capabilities": {
     "hands": false,
     "surfaces": [
@@ -19,7 +20,9 @@
   "rules": "rules.js",
   "view": "view.js",
   "styles": "styles.css",
-  "name": "Змеи и лестницы",
+  "name": {
+    "key": "snakes.meta.name"
+  },
   "engineApi": 4,
   "stateVersion": 3,
   "viewApi": 3,
@@ -53,7 +56,7 @@
     ],
     "locales": {
       "ru": [
-        "locales/ru/game.json"
+        "lang/ru.json"
       ]
     }
   },
@@ -61,268 +64,197 @@
     "token-layout",
     "end-policy"
   ],
-  "settings": [
-    {
-      "key": "boardSize",
-      "label": "Размер поля",
-      "default": "100",
-      "help": "Выберите финиш на клетке 64 или 100. При этом «Простой» остаётся игрой с одним кубиком, а «ЗиЛ+» — с двумя кубиками и особыми клетками.",
-      "options": [
-        {
-          "value": "64",
-          "label": "64",
-          "preview": {
-            "ids": [
-              "setting-board-64"
-            ]
-          },
-          "description": "8×8 клеток; финиш — 64."
-        },
-        {
-          "value": "100",
-          "label": "100",
-          "preview": {
-            "ids": [
-              "setting-board-100"
-            ]
-          },
-          "description": "10×10 клеток; финиш — 100."
-        }
-      ],
-      "control": "slider",
-      "preview": {
-        "kind": "illustrations"
-      }
-    },
-    {
-      "key": "endMode",
-      "default": "round",
-      "options": [
-        {
-          "value": "winner"
-        },
-        {
-          "value": "round"
-        },
-        {
-          "value": "last"
-        }
-      ],
-      "control": "slider"
-    },
-    {
-      "key": "maxRounds",
-      "label": "Лимит раундов",
-      "default": "0",
-      "help": "Раунд — полный круг от первого игрока. При достижении предела все заканчивают текущий круг. Если ещё никто не финишировал, сравниваются позиции фишек; равенство означает общее место.",
-      "options": [
-        {
-          "value": "3",
-          "label": "3",
-          "description": "Лимит — 3 полных кругов игроков."
-        },
-        {
-          "value": "5",
-          "label": "5",
-          "description": "Лимит — 5 полных кругов игроков."
-        },
-        {
-          "value": "10",
-          "label": "10",
-          "description": "Лимит — 10 полных кругов игроков."
-        },
-        {
-          "value": "20",
-          "label": "20",
-          "description": "Лимит — 20 полных кругов игроков."
-        },
-        {
-          "value": "50",
-          "label": "50",
-          "description": "Лимит — 50 полных кругов игроков."
-        },
-        {
-          "value": "0",
-          "label": "∞",
-          "description": "Без ограничения числа раундов."
-        }
-      ],
-      "control": "slider",
-      "preview": {
-        "kind": "symbol",
-        "icon": "clock"
-      }
-    }
-  ],
-  "ruleGroups": [
-    {
-      "label": "Поле и правила",
-      "fields": [
-        "preset",
-        "boardSize"
-      ]
-    },
-    {
-      "label": "Завершение",
-      "fields": [
-        "endMode",
-        "maxRounds"
-      ],
-      "end": true
-    }
-  ],
-  "presetSetting": {
-    "label": "Режим",
-    "control": "slider",
-    "options": [
+  "settings": {
+    "fields": [
       {
-        "value": "classic",
-        "label": "Простой",
-        "preview": {
-          "kind": "illustrations",
-          "ids": [
-            "setting-mode-classic"
-          ]
+        "key": "preset",
+        "label": {
+          "key": "snakes.book.text.2"
         },
-        "description": "Один кубик; змеи и лестницы."
+        "control": "slider",
+        "options": [
+          {
+            "value": "classic",
+            "label": {
+              "key": "snakes.presets.classic"
+            },
+            "preview": {
+              "kind": "illustrations",
+              "ids": [
+                "setting-mode-classic"
+              ]
+            },
+            "description": {
+              "key": "settings.preset.options.classic.description"
+            }
+          },
+          {
+            "value": "plus",
+            "label": {
+              "key": "snakes.presets.plus"
+            },
+            "preview": {
+              "kind": "illustrations",
+              "ids": [
+                "setting-mode-plus"
+              ]
+            },
+            "description": {
+              "key": "settings.preset.options.plus.description"
+            }
+          }
+        ],
+        "help": {
+          "key": "settings.preset.help"
+        },
+        "default": "classic",
+        "kind": "preset",
+        "valueType": "string"
       },
       {
-        "value": "plus",
-        "label": "ЗиЛ+",
-        "preview": {
-          "kind": "illustrations",
-          "ids": [
-            "setting-mode-plus"
-          ]
+        "key": "boardSize",
+        "label": {
+          "key": "settings.boardSize.label"
         },
-        "description": "Два кубика; особые клетки и эффекты."
+        "default": "100",
+        "help": {
+          "key": "settings.boardSize.help"
+        },
+        "options": [
+          {
+            "value": "64",
+            "preview": {
+              "ids": [
+                "setting-board-64"
+              ]
+            },
+            "description": {
+              "key": "settings.boardSize.options.64.description"
+            }
+          },
+          {
+            "value": "100",
+            "preview": {
+              "ids": [
+                "setting-board-100"
+              ]
+            },
+            "description": {
+              "key": "settings.boardSize.options.100.description"
+            }
+          }
+        ],
+        "control": "slider",
+        "preview": {
+          "kind": "illustrations"
+        },
+        "kind": "option",
+        "valueType": "string"
+      },
+      {
+        "key": "endMode",
+        "default": "round",
+        "options": [
+          {
+            "value": "winner"
+          },
+          {
+            "value": "round"
+          },
+          {
+            "value": "last"
+          }
+        ],
+        "control": "slider",
+        "kind": "standard",
+        "valueType": "string"
+      },
+      {
+        "key": "maxRounds",
+        "label": {
+          "key": "settings.maxRounds.label"
+        },
+        "default": "0",
+        "help": {
+          "key": "settings.maxRounds.help"
+        },
+        "options": [
+          {
+            "value": "3",
+            "description": {
+              "key": "settings.maxRounds.options.3.description"
+            }
+          },
+          {
+            "value": "5",
+            "description": {
+              "key": "settings.maxRounds.options.5.description"
+            }
+          },
+          {
+            "value": "10",
+            "description": {
+              "key": "settings.maxRounds.options.10.description"
+            }
+          },
+          {
+            "value": "20",
+            "description": {
+              "key": "settings.maxRounds.options.20.description"
+            }
+          },
+          {
+            "value": "50",
+            "description": {
+              "key": "settings.maxRounds.options.50.description"
+            }
+          },
+          {
+            "value": "0",
+            "label": {
+              "common": "infinity"
+            },
+            "description": {
+              "key": "settings.maxRounds.options.0.description"
+            }
+          }
+        ],
+        "control": "slider",
+        "preview": {
+          "kind": "symbol",
+          "icon": "clock"
+        },
+        "kind": "option",
+        "valueType": "string"
       }
     ],
-    "help": "Простой: один кубик, змеи и лестницы. ЗиЛ+: два кубика на выбор, особые клетки и эффекты на следующий ход. ЗиЛ+: остановка на занятой клетке меняет фишки местами после полного перехода по змее или лестнице."
+    "groups": [
+      {
+        "label": {
+          "key": "settings.groups.preset-boardSize.label"
+        },
+        "fields": [
+          "preset",
+          "boardSize"
+        ],
+        "placement": "main"
+      },
+      {
+        "label": {
+          "key": "settings.groups.endMode-maxRounds.label"
+        },
+        "fields": [
+          "endMode",
+          "maxRounds"
+        ],
+        "placement": "end"
+      }
+    ]
   },
   "skinFamilies": [
     "die"
   ],
-  "releases": [
-    {
-      "version": "0.6.1",
-      "changes": [
-        "Исправлены параметры подписи броска: отсутствующий индекс кубика больше не создаёт NaN."
-      ]
-    },
-    {
-      "version": "0.6.0",
-      "changes": [
-        "Стабильный выпуск: обновлены правила, интерфейс и параметры игры."
-      ]
-    },
-    {
-      "version": "0.5.7",
-      "changes": [
-        "Стабильный выпуск: обновлены правила, интерфейс и параметры игры."
-      ]
-    },
-    {
-      "version": "0.5.7-preview.20",
-      "changes": [
-        "Синхронизированы общие компоненты с исправлениями чтения индексов, перекрытия карт и обновления оформления; правила игры не менялись.",
-        "Кнопки изменения кубика помещаются в узкой области управления."
-      ]
-    },
-    {
-      "version": "0.5.7-preview.19",
-      "changes": [
-        "Иллюстрации параметров сохраняют размер компонентов между вариантами; постоянная область арта центрирует изображение по обеим осям без растягивания."
-      ]
-    },
-    {
-      "version": "0.5.7-preview.18",
-      "changes": [
-        "ЗиЛ+: остановка на занятой клетке обменивает фишки местами после змей и лестниц. Обмен подсвечивается; сдвинутая фишка не активирует эффекты. Новая схема состояния 3; требуется arrival-departures-v1."
-      ]
-    },
-    {
-      "version": "0.5.7-preview.17",
-      "changes": [
-        "Первый ход, места за столом и завершение используют стандартные подписи приложения; в артах первого хода — контурная 1 в кружке.",
-        "Стол и стулья в рассадке и Акулине — один компонент. Уточнены схемы шестёрок Лудо и унифицированы рамки режимов Дурака; убраны верхние подписи джокеров."
-      ]
-    },
-    {
-      "version": "0.5.7-preview.16",
-      "changes": [
-        "При композиции SVG сохраняются полные атрибуты толщины, прозрачности и идентичности; стандартный контур масштабируется целиком."
-      ]
-    },
-    {
-      "version": "0.5.7-preview.15",
-      "changes": [
-        "Исправлена разметка Пексесо, упрощён выбор чужой руки Акулины, увеличено поле ЗиЛ."
-      ]
-    },
-    {
-      "version": "0.5.7-preview.14",
-      "changes": [
-        "Параметры игры снабжены понятными иллюстрациями из игровых компонентов и короткими пояснениями выбранных вариантов."
-      ]
-    },
-    {
-      "version": "0.5.7-preview.13",
-      "changes": [
-        "Общие игровые ассеты сохраняют пропорции рамок, скруглений и толщины в игре, миниатюрах, правилах, параметрах и анимациях. Убраны вторые фиксированные рамки и тени поверх SVG."
-      ]
-    },
-    {
-      "version": "0.5.7-preview.12",
-      "changes": [
-        "Скругления карт и общих фигур масштабируются вместе с компонентами."
-      ]
-    },
-    {
-      "version": "0.5.7-preview.11",
-      "changes": [
-        "Простой режим показывает один кубик, ЗиЛ+ — два; короткие пояснения отражают наличие особых клеток."
-      ]
-    },
-    {
-      "version": "0.5.7-preview.8",
-      "changes": [
-        "Общий SDK допускает до 64 ленивых публичных кадров; одновременно готовится только текущий и следующий кадр."
-      ]
-    },
-    {
-      "version": "0.5.7-preview.7",
-      "changes": [
-        "Обновлён общий SDK поэтапной подготовки публичных кадров; правила игры сохранены."
-      ]
-    },
-    {
-      "version": "0.5.7-preview.6",
-      "changes": [
-        "Убраны обрезавшиеся тень и рамка поля."
-      ]
-    },
-    {
-      "version": "0.5.7-preview.5",
-      "changes": [
-        "Обновлён общий каталог оформления и сведения о версии пака. Правила и игровой процесс не изменены."
-      ]
-    },
-    {
-      "version": "0.5.6",
-      "changes": [
-        "Обновлён общий компонент пустого карточного слота; правила игры не изменены."
-      ]
-    },
-    {
-      "version": "0.5.5",
-      "changes": [
-        "Короткие правила: абзацы, списки, таблицы и иллюстрации игровых элементов и интерфейса.",
-        "Принятый объёмный дизайн фишек с белой обводкой верхней поверхности.",
-        "Поправка ±1 даёт движение 0–7 клеток. Нулевой ход не запускает клетку повторно; второй кубик и дубль используют исходные значения."
-      ]
-    }
-  ],
+  "releases": [],
   "sdkFeatures": [
     "local-input-v1",
     "turn-order-v1",
@@ -331,6 +263,11 @@
     "arrival-departures-v1",
     "isolated-execution-v1"
   ],
-  "execution": "isolated-v1"
+  "execution": "isolated-v1",
+  "defaultLanguage": "ru",
+  "estimatedDurationMin": [
+    5,
+    15
+  ]
 };
 })(globalThis);

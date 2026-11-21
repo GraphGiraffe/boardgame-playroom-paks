@@ -1,0 +1,22 @@
+{
+  "contractVersion": 1,
+  "checkTypes": false,
+  "rules": [
+    "domain/game.js"
+  ],
+  "presentation": [
+    "shared/presentation/asset.js",
+    "shared/presentation/die-asset.js",
+    "presentation/scene.js"
+  ],
+  "options": {
+    "playerCount": 2,
+    "firstPlayer": 0,
+    "preset": "classic",
+    "rng": 1
+  },
+  "origin": {
+    "operation": "new",
+    "template": "turn-counter"
+  }
+}

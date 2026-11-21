@@ -1,0 +1,7 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PlayRoom SDK locale catalog",
+  "description": "Map stable message keys to translated strings. Use {placeholder} for message parameters.",
+  "type": "object",
+  "additionalProperties": { "type": "string" }
+}

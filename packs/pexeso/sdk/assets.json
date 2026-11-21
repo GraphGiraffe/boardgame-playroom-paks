@@ -1,0 +1,7 @@
+{
+  "assets/cover.webp": {
+    "license": "Existing PlayRoom artwork; see repository LICENSING.md",
+    "source": "Existing cover from pexeso 0.4.0; published pack SHA256 f7d5e7b4be09f285b844f9adb7c57452c7bf3f75d7703a5f0e9d07ac2056837d; source master in Git da58f6c",
+    "sha256": "b63ec4e1d75f3198b037e6ea3c98eb6a5e8da20c704498e45067ca12096b6f61"
+  }
+}

@@ -1,0 +1,298 @@
+{
+  "fields": [
+    {
+      "key": "size",
+      "kind": "option",
+      "control": "slider",
+      "valueType": "string",
+      "label": {
+        "key": "settings.size"
+      },
+      "default": "36",
+      "options": [
+        {
+          "value": "36",
+          "label": {
+            "key": "settings.size.36"
+          }
+        },
+        {
+          "value": "52",
+          "label": {
+            "key": "settings.size.52"
+          }
+        }
+      ]
+    },
+    {
+      "key": "hand",
+      "kind": "option",
+      "control": "slider",
+      "valueType": "string",
+      "label": {
+        "key": "settings.hand"
+      },
+      "default": "5",
+      "options": [
+        {
+          "value": "5",
+          "label": {
+            "key": "settings.hand.5"
+          },
+          "preview": {
+            "kind": "cards",
+            "count": 5
+          }
+        },
+        {
+          "value": "7",
+          "label": {
+            "key": "settings.hand.7"
+          },
+          "preview": {
+            "kind": "cards",
+            "count": 7
+          }
+        }
+      ]
+    },
+    {
+      "key": "skin",
+      "kind": "option",
+      "control": "slider",
+      "valueType": "string",
+      "label": {
+        "key": "settings.skin"
+      },
+      "default": "elements",
+      "options": [
+        {
+          "value": "elements",
+          "label": {
+            "key": "settings.skin.elements"
+          }
+        },
+        {
+          "value": "playing",
+          "label": {
+            "key": "settings.skin.playing"
+          }
+        }
+      ]
+    },
+    {
+      "key": "six",
+      "kind": "option",
+      "control": "slider",
+      "valueType": "string",
+      "label": {
+        "key": "settings.six"
+      },
+      "default": "penalty",
+      "options": [
+        {
+          "value": "penalty",
+          "label": {
+            "key": "settings.six.penalty"
+          }
+        },
+        {
+          "value": "cover",
+          "label": {
+            "key": "settings.six.cover"
+          }
+        }
+      ]
+    },
+    {
+      "key": "transfer",
+      "kind": "option",
+      "control": "slider",
+      "valueType": "string",
+      "label": {
+        "key": "settings.transfer"
+      },
+      "default": "off",
+      "options": [
+        {
+          "value": "off",
+          "label": {
+            "key": "settings.transfer.off"
+          }
+        },
+        {
+          "value": "last",
+          "label": {
+            "key": "settings.transfer.last"
+          }
+        },
+        {
+          "value": "sum",
+          "label": {
+            "key": "settings.transfer.sum"
+          }
+        }
+      ]
+    },
+    {
+      "key": "mix",
+      "kind": "option",
+      "control": "slider",
+      "valueType": "string",
+      "label": {
+        "key": "settings.mix"
+      },
+      "default": "off",
+      "options": [
+        {
+          "value": "off",
+          "label": {
+            "key": "settings.mix.off"
+          }
+        },
+        {
+          "value": "on",
+          "label": {
+            "key": "settings.mix.on"
+          }
+        }
+      ]
+    },
+    {
+      "key": "afterDraw",
+      "kind": "option",
+      "control": "slider",
+      "valueType": "string",
+      "label": {
+        "key": "settings.afterDraw"
+      },
+      "default": "play",
+      "options": [
+        {
+          "value": "play",
+          "label": {
+            "key": "settings.afterDraw.play"
+          }
+        },
+        {
+          "value": "pass",
+          "label": {
+            "key": "settings.afterDraw.pass"
+          }
+        }
+      ]
+    },
+    {
+      "key": "queen",
+      "kind": "option",
+      "control": "slider",
+      "valueType": "string",
+      "label": {
+        "key": "settings.queen"
+      },
+      "default": "suit",
+      "options": [
+        {
+          "value": "suit",
+          "label": {
+            "key": "settings.queen.suit"
+          }
+        },
+        {
+          "value": "any",
+          "label": {
+            "key": "settings.queen.any"
+          }
+        }
+      ]
+    },
+    {
+      "key": "mauMode",
+      "kind": "option",
+      "control": "slider",
+      "valueType": "string",
+      "label": {
+        "key": "settings.mauMode"
+      },
+      "default": "manual",
+      "options": [
+        {
+          "value": "manual",
+          "label": {
+            "key": "settings.mauMode.manual"
+          },
+          "preview": {
+            "kind": "declaration",
+            "actor": "human",
+            "label": {
+              "key": "mau.speech.mau"
+            }
+          }
+        },
+        {
+          "value": "auto",
+          "label": {
+            "key": "settings.mauMode.auto"
+          },
+          "preview": {
+            "kind": "declaration",
+            "actor": "bot",
+            "label": {
+              "key": "mau.speech.mau"
+            }
+          }
+        }
+      ],
+      "preview": {
+        "kind": "declaration",
+        "label": {
+          "key": "mau.speech.mau"
+        }
+      }
+    },
+    {
+      "key": "end",
+      "kind": "option",
+      "control": "slider",
+      "valueType": "string",
+      "label": {
+        "key": "settings.end"
+      },
+      "default": "first",
+      "options": [
+        {
+          "value": "first",
+          "label": {
+            "key": "settings.end.first"
+          }
+        },
+        {
+          "value": "last",
+          "label": {
+            "key": "settings.end.last"
+          }
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "label": {
+        "key": "settings.rules"
+      },
+      "fields": [
+        "size",
+        "hand",
+        "skin",
+        "six",
+        "transfer",
+        "mix",
+        "afterDraw",
+        "queen",
+        "mauMode",
+        "end"
+      ],
+      "placement": "main"
+    }
+  ]
+}

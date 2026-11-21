@@ -1,0 +1,7 @@
+{
+  "assets/cover.webp": {
+    "license": "Existing PlayRoom artwork; see repository LICENSING.md",
+    "source": "Existing cover from durak 0.7.0; published pack SHA256 f70edacaced901fc4936b82cb6f0bebd7c262bd72c5a1efa9490fb27325c9647; source master in Git da58f6c",
+    "sha256": "ed1ae396ede4f33de5797bcde6c7f1244f81b84d12cf898f6b07a4f02f54ef43"
+  }
+}
